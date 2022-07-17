@@ -1,4 +1,4 @@
-package com.d108.sduty.ui.main
+package com.d108.sduty.ui.main.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
