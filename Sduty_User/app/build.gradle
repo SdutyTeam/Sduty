@@ -82,5 +82,7 @@ dependencies {
     // Sendbird Calls
     implementation 'com.sendbird.sdk:sendbird-calls:1.6.0'
 
-
+    //Solapi
+    implementation 'net.nurigo:sdk:4.1.4'
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.0")
 }

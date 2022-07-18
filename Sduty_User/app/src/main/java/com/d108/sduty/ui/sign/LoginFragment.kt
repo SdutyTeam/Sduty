@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.d108.sduty.R
+import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.databinding.FragmentLoginBinding
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.ui.MainActivity
@@ -27,6 +28,11 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import net.nurigo.sdk.message.model.Message
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest
 
 private const val TAG ="LoginFragment"
 class LoginFragment : Fragment() {
@@ -109,6 +115,10 @@ class LoginFragment : Fragment() {
             }
             btnJoin.setOnClickListener {
                 parentFragmentManager.beginTransaction().replace(R.id.frame_main, JoinFragment()).addToBackStack(null).commit()
+            }
+            btnSendSms.setOnClickListener{
+//                signViewModel.sendOTP("01037449555")
+                signViewModel.sendOTP("01049177914")
             }
         }
     }

@@ -5,12 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.User
 import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.nurigo.sdk.message.model.Message
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest
 import java.lang.Exception
 
 private const val TAG ="SignViewModel"
@@ -142,4 +145,18 @@ class SignViewModel: ViewModel() {
             }
         }
     }
+
+    fun sendOTP(phoneNum: String){
+        val code = (100000..999999).random()
+        val message = Message(
+            from = "01049177914",
+            to = phoneNum,
+            text = "[Sduty] 인증 번호[${code}]를 입력해 주세요. "
+        )
+        viewModelScope.launch(Dispatchers.IO){
+            ApplicationClass.messageService.sendOne(SingleMessageSendingRequest(message))
+        }
+
+    }
+
 }
