@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import net.nurigo.sdk.message.model.Message
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest
 
+//첫화면 - 로그인 / ID, PW 입력, 로그인 , 카카오, 네이버 로그인, 아이디/비밀번호 찾기, 회원가입 하기
 private const val TAG ="LoginFragment"
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding

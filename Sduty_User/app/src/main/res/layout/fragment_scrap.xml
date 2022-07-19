@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- @ 내 게시물/ 스크랩 탭레이아웃 아래 프래그먼트로 구성? 마이 페이지 리사이클러 뷰 재사용? 스크랩 -  -->
 <layout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

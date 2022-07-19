@@ -1,4 +1,4 @@
-package com.d108.sduty.ui.main.mypage
+package com.d108.sduty.ui.main.mypage.setting
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,22 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.d108.sduty.R
-import com.d108.sduty.databinding.FragmentSettingBinding
+import com.d108.sduty.databinding.FragmentQuestionBinding
 
-
-private const val TAG = "SettingFragment"
-class SettingFragment : Fragment() {
-    private lateinit var binding: FragmentSettingBinding
+// 1:1 문의 - 문의 내역 조회, 1:1 문의 등록
+private const val TAG ="QuestionFragment"
+class QuestionFragment : Fragment() {
+    private lateinit var binding: FragmentQuestionBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSettingBinding.inflate(inflater, container, false)
+        binding = FragmentQuestionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
+
 }

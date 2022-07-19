@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 프로필 등록 - 프로필 사진, 별명, 직업, 관심 분야, 생년월일, 자기소개-->
+<!--게시물 사진 꾸미기 - 타임스탬프, 텍스트 컬러, 템플릿 선택, 공유, 저장-->
 <layout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.sign.ProfileRegistFragment">
+        tools:context=".ui.main.home.PostDecoFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <TextView

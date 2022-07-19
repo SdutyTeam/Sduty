@@ -14,6 +14,8 @@ import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.utils.movePage
 import com.d108.sduty.utils.showToast
 
+//회원가입 페이지 / 이메일 아이디로 가입, 카카오로 가입, 네이버로 가입
+private const val TAG ="JoinFragment"
 class JoinFragment : Fragment() {
     private lateinit var binding: FragmentJoinBinding
     private val signViewModel: SignViewModel by viewModels()

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
     app:startDestination="@id/loginFragment">
     <fragment
@@ -8,27 +9,69 @@
         android:name="com.d108.sduty.ui.sign.LoginFragment"
         android:label="LoginFragment" >
         <action
-            android:id="@+id/action_loginFragment_to_termsFragment"
-            app:destination="@id/termsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/joinFragment"
-        android:name="com.d108.sduty.ui.sign.JoinFragment"
-        android:label="JoinFragment" >
+            android:id="@+id/action_loginFragment_to_joinFragment"
+            app:destination="@id/joinFragment" />
         <action
-            android:id="@+id/action_joinFragment_to_profileRegistFragment"
-            app:destination="@id/profileRegistFragment" />
+            android:id="@+id/action_loginFragment_to_timeLineFragment2"
+            app:destination="@id/timeLineFragment" />
     </fragment>
     <fragment
         android:id="@+id/termsFragment"
         android:name="com.d108.sduty.ui.sign.TermsFragment"
         android:label="TermsFragment" >
         <action
-            android:id="@+id/action_termsFragment_to_joinFragment"
-            app:destination="@id/joinFragment" />
+            android:id="@+id/action_termsFragment_to_joinRegistFragment"
+            app:destination="@id/joinRegistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinFragment"
+        android:name="com.d108.sduty.ui.sign.JoinFragment"
+        android:label="JoinFragment" >
+        <action
+            android:id="@+id/action_joinFragment_to_termsFragment"
+            app:destination="@id/termsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinRegistFragment"
+        android:name="com.d108.sduty.ui.sign.JoinRegistFragment"
+        android:label="JoinRegistFragment" >
+        <action
+            android:id="@+id/action_joinRegistFragment_to_profileRegistFragment"
+            app:destination="@id/profileRegistFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileRegistFragment"
         android:name="com.d108.sduty.ui.sign.ProfileRegistFragment"
-        android:label="ProfileRegistFragment" />
+        android:label="ProfileRegistFragment" >
+        <action
+            android:id="@+id/action_profileRegistFragment_to_timeLineFragment23"
+            app:destination="@id/timeLineFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/timeLineFragment"
+        android:name="com.d108.sduty.ui.main.home.TimeLineFragment"
+        android:label="fragment_time_line"
+        tools:layout="@layout/fragment_time_line" >
+        <action
+            android:id="@+id/action_timeLineFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+        <action
+            android:id="@+id/action_timeLineFragment_to_postRegisterFragment"
+            app:destination="@id/postRegisterFragment" />
+        <action
+            android:id="@+id/action_timeLineFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.d108.sduty.ui.main.mypage.MyPageFragment"
+        android:label="MyPageFragment" />
+    <fragment
+        android:id="@+id/postRegisterFragment"
+        android:name="com.d108.sduty.ui.main.home.PostRegisterFragment"
+        android:label="PostRegisterFragment" />
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.d108.sduty.ui.main.home.PostDetailFragment"
+        android:label="PostDetailFragment" />
 </navigation>

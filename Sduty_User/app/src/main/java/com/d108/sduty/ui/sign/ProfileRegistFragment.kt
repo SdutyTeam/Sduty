@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
 
+//프로필 등록 - 프로필 사진, 별명, 직업, 관심 분야, 생년월일, 자기소개
 private const val TAG = "ProfileRegistFragment"
 class ProfileRegistFragment : Fragment() {
     private lateinit var binding: FragmentProfileRegistBinding
