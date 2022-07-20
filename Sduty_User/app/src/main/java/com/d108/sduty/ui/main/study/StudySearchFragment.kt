@@ -6,18 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.d108.sduty.R
-import com.d108.sduty.databinding.FragmentStudyDetailBinding
+import com.d108.sduty.databinding.FragmentStudySearchBinding
 
-// 스터디 상세 -
-private const val TAG = "StudyDetailFragment"
-class StudyDetailFragment : Fragment() {
-    private lateinit var binding: FragmentStudyDetailBinding
+// 스터디 검색 - 스터디 명, 카테고리 별 검색
+private const val TAG = "StudySearchFragment"
+class StudySearchFragment : Fragment() {
+    private lateinit var binding: FragmentStudySearchBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentStudyDetailBinding.inflate(inflater, container, false)
+        binding = FragmentStudySearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 

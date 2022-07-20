@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--사용자 프로필 - 사용자 닉네임, 프로필 사진, 숫자 표시(게시물, 팔로우, 팔로워),
+한줄소개, 잔디그래프,게시물(그리드+스크롤) , 더 보기, 업적-->
 <layout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.study.StudyDetailFragment">
+        tools:context=".ui.main.home.UserProfileFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <TextView

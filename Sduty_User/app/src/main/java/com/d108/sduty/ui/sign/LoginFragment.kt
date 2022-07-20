@@ -121,6 +121,10 @@ class LoginFragment : Fragment() {
 //                signViewModel.sendOTP("01037449555")
                 signViewModel.sendOTP("01049177914")
             }
+            btnAuthCode.setOnClickListener{
+                signViewModel.checkOTP(etAuthCode.text.toString())
+            }
+
         }
     }
 

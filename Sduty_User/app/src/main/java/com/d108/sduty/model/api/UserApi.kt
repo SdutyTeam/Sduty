@@ -1,5 +1,6 @@
 package com.d108.sduty.model.api
 
+import com.d108.sduty.model.dto.AuthCode
 import com.d108.sduty.model.dto.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -26,9 +27,16 @@ interface UserApi {
     @POST("/user/naver")
     suspend fun naverLogin(@Body token: String): Response<User>
 
-    @POST("user/kakao/join")
+    @POST("/user/kakao/join")
     suspend fun kakaoJoin(@Body token: String): Response<User>
 
-    @POST("user/naver/join")
+    @POST("/user/naver/join")
     suspend fun naverJoin(@Body token: String): Response<User>
+
+    @POST("/user/auth")
+    suspend fun sendAuthCode(@Body authCode: AuthCode): Response<Void>
+
+    @POST("/user/auth/check")
+    suspend fun checkAuthCode(@Body authCode: AuthCode): Response<Void>
+
 }

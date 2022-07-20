@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.AuthCode
 import com.d108.sduty.model.dto.User
 import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
@@ -146,6 +147,9 @@ class SignViewModel: ViewModel() {
         }
     }
 
+    private val _authCode = MutableLiveData<AuthCode>()
+    val authCode: LiveData<AuthCode>
+        get() = _authCode
     fun sendOTP(phoneNum: String){
         val code = (100000..999999).random()
         val message = Message(
@@ -154,7 +158,26 @@ class SignViewModel: ViewModel() {
             text = "[Sduty] 인증 번호[${code}]를 입력해 주세요. "
         )
         viewModelScope.launch(Dispatchers.IO){
+            _authCode.postValue(AuthCode(code.toString(), phoneNum))
             ApplicationClass.messageService.sendOne(SingleMessageSendingRequest(message))
+        }
+    }
+
+    private val _isSucceedAuth = MutableLiveData<Boolean>()
+    val isSucceedAuth : LiveData<Boolean>
+        get() = _isSucceedAuth
+    fun checkOTP(inputCode: String){
+        viewModelScope.launch(Dispatchers.IO){
+            val code = authCode.value
+            code!!.authcode = inputCode
+            Retrofit.userApi.checkAuthCode(code).let {
+                if(it.code() == 401){
+                    _isSucceedAuth.postValue(false)
+                }
+                else if(it.isSuccessful){
+                    _isSucceedAuth.postValue(true)
+                }
+            }
         }
 
     }

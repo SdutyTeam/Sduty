@@ -88,6 +88,23 @@
                 app:layout_constraintTop_toBottomOf="@id/btn_join"
                 />
 
+            <EditText
+                android:id="@+id/et_auth_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/btn_send_sms"
+                android:hint="인증번호"
+                />
+
+            <Button
+                android:id="@+id/btn_auth_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="인증번호 확인"
+                app:layout_constraintTop_toBottomOf="@id/et_auth_code"
+                />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
