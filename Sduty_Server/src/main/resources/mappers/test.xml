@@ -15,4 +15,17 @@
 		select count(id) from t_user where id = #{id}
 	</select>
 	
+	<insert id="insertAuthInfo" parameterType="AuthInfo">
+		insert into t_auth(authcode, phone, expire_time) values(#{authcode}, #{phone}, date_add(now(), INTERVAL 3 MINUTE));
+	</insert>
+	<update id="updateAuthInfo" parameterType="AuthInfo">
+		update t_auth set authcode = #{authcode}, expire_time = date_add(now(), INTERVAL 3 MINUTE);
+	</update>
+	<select id="selectAuthInfo" resultType="AuthInfo" parameterType="String">
+		select * from t_auth where phone = #{phone}
+	</select>
+	<delete id="deleteAuthInfo" parameterType="AuthInfo">
+		delete from t_auth where phone = #{phone};
+	</delete>
+	
 </mapper>

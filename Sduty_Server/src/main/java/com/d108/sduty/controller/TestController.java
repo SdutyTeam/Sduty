@@ -1,9 +1,11 @@
 package com.d108.sduty.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.dbcp2.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.d108.sduty.dto.AuthInfo;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.service.KakaoLoginService;
 import com.d108.sduty.service.NaverLoginService;
 import com.d108.sduty.service.TestService;
+import com.d108.sduty.utils.TimeCompare;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -136,6 +140,49 @@ public class TestController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
 	}
+	
+	@PostMapping("/auth")
+	public ResponseEntity<?> authTest(@RequestBody AuthInfo authInfo){
+		tService.deleteAuthInfo(authInfo);
+		int result = tService.insertAuthInfo(authInfo);
+		if(result > 0) {
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT); 
+	}
+	
+	@PostMapping("/auth/check")
+	public ResponseEntity<?> getAuthCode(@RequestBody AuthInfo authInfo){
+		AuthInfo selectedCode = tService.selectAuthInfo(authInfo.getPhone());
+		System.out.println(selectedCode);
+		System.out.println(new Date(System.currentTimeMillis()));
+		if(selectedCode != null) {
+			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) {
+				if(TimeCompare.compare(selectedCode.getExpire_time())) {
+					//tService.deleteAuthInfo(authInfo);
+					System.out.println("success");
+					return new ResponseEntity<Void>(HttpStatus.OK);
+				}
+			}
+		}
+		System.out.println("fail");
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	
 
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
