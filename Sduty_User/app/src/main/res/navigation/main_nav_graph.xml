@@ -12,7 +12,7 @@
             android:id="@+id/action_loginFragment_to_joinFragment"
             app:destination="@id/joinFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_timeLineFragment2"
+            android:id="@+id/action_loginFragment_to_timeLineFragment"
             app:destination="@id/timeLineFragment" />
     </fragment>
     <fragment
@@ -22,6 +22,10 @@
         <action
             android:id="@+id/action_termsFragment_to_joinRegistFragment"
             app:destination="@id/joinRegistFragment" />
+        <argument
+            android:name="route"
+            app:argType="integer"
+            />
     </fragment>
     <fragment
         android:id="@+id/joinFragment"
@@ -38,13 +42,17 @@
         <action
             android:id="@+id/action_joinRegistFragment_to_profileRegistFragment"
             app:destination="@id/profileRegistFragment" />
+        <argument
+            android:name="route"
+            app:argType="integer"
+            />
     </fragment>
     <fragment
         android:id="@+id/profileRegistFragment"
         android:name="com.d108.sduty.ui.sign.ProfileRegistFragment"
         android:label="ProfileRegistFragment" >
         <action
-            android:id="@+id/action_profileRegistFragment_to_timeLineFragment23"
+            android:id="@+id/action_profileRegistFragment_to_timeLineFragment"
             app:destination="@id/timeLineFragment" />
     </fragment>
     <fragment

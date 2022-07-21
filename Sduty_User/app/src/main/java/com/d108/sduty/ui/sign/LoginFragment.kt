@@ -4,20 +4,17 @@ import android.Manifest
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
-import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.databinding.FragmentLoginBinding
-import com.d108.sduty.model.dto.User
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
-import com.d108.sduty.utils.movePage
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
 import com.gun0912.tedpermission.PermissionListener
@@ -28,11 +25,6 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import net.nurigo.sdk.message.model.Message
-import net.nurigo.sdk.message.request.SingleMessageSendingRequest
 
 //첫화면 - 로그인 / ID, PW 입력, 로그인 , 카카오, 네이버 로그인, 아이디/비밀번호 찾기, 회원가입 하기
 private const val TAG ="LoginFragment"
@@ -65,7 +57,8 @@ class LoginFragment : Fragment() {
         signViewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){
                 true ->{
-                    (activity as AppCompatActivity).movePage(R.id.frame_main, PreviewFragment())
+//                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
+                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, PreviewFragment()).commit()
                 }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }
@@ -115,7 +108,7 @@ class LoginFragment : Fragment() {
                 naverLogin()
             }
             btnJoin.setOnClickListener {
-                parentFragmentManager.beginTransaction().replace(R.id.frame_main, JoinFragment()).addToBackStack(null).commit()
+                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment())
             }
             btnSendSms.setOnClickListener{
 //                signViewModel.sendOTP("01037449555")
@@ -177,10 +170,7 @@ class LoginFragment : Fragment() {
 
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
-                Toast.makeText(context,
-                    "모든 권한을 허용해야 이용이 가능합니다.",
-                    Toast.LENGTH_SHORT)
-                    .show()
+                requireActivity().showToast("모든 권한을 허용해야 이용이 가능합니다.")
                 requireActivity().finish()
             }
 

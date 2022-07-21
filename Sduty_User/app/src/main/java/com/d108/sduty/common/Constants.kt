@@ -18,6 +18,11 @@ const val REQUEST_CODE_PERMISSIONS = 1
 const val REQUEST_CODE_AUDIO_RECORD_PERMISSION = 2
 const val RESULT_ENTER_FAIL = 3
 
+const val COMMON_JOIN = 0
+const val KAKAO_JOIN = 1
+const val NAVER_JOIN = 2
+
+
 enum class PAGE{
     LOGIN, JOIN, PREVIEW
 }

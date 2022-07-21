@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import android.util.TypedValue
 import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 import android.view.WindowInsetsController
@@ -19,8 +20,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import com.d108.sduty.R
 import com.sendbird.calls.AudioDevice
+import java.lang.Exception
 
 fun Activity.hideKeyboard() {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
@@ -65,9 +70,9 @@ fun AudioDevice.toReadableString(): String {
     }
 }
 
-fun AppCompatActivity.movePage(@IdRes containerViewId: Int, fragment: Fragment){
-    supportFragmentManager.beginTransaction().replace(containerViewId, fragment).commit()
+fun navigateBack(activity: Activity){
+    Navigation.findNavController(activity, R.id.frame_main).popBackStack()
 }
-fun AppCompatActivity.movePageWithBackStack(@IdRes containerViewId: Int, fragment: Fragment){
-    supportFragmentManager.beginTransaction().replace(containerViewId, fragment).commit()
+fun NavController.safeNavigate(action: NavDirections){
+    navigate(action)
 }
