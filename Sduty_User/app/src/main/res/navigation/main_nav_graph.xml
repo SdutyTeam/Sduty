@@ -34,6 +34,13 @@
         <action
             android:id="@+id/action_joinFragment_to_termsFragment"
             app:destination="@id/termsFragment" />
+        <argument
+            android:name="flag"
+            app:argType="integer"/>
+        <argument
+            android:name="token"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
     <fragment
         android:id="@+id/joinRegistFragment"
