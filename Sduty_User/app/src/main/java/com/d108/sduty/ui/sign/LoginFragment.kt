@@ -3,10 +3,14 @@ package com.d108.sduty.ui.sign
 import android.Manifest
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -29,6 +33,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import java.util.regex.Pattern
 
 //첫화면 - 로그인 / ID, PW 입력, 로그인 , 카카오, 네이버 로그인, 아이디/비밀번호 찾기, 회원가입 하기
 private const val TAG ="LoginFragment"
@@ -36,6 +41,8 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by viewModels()
     private val joinViewModel: JoinViewModel by viewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -89,7 +96,6 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun initView() {
@@ -114,6 +120,26 @@ class LoginFragment : Fragment() {
                     COMMON_JOIN))
             }
 
+            var filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[a-zA-Z0-9]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(15))
+            etId.filters = filter
+
+            filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[a-zA-Z0-9!@#$%^&*]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(20))
+
+            etPw.filters = filter
         }
     }
 
