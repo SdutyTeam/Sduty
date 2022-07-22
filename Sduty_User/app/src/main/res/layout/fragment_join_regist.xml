@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 회원가입 - 정보입력 / 이름, 이메일, 아이디, 비밀번호, 비밀번호 확인, 휴대폰 번호, 인증-->
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.sign.JoinRegistFragment">
+        tools:context=".ui.sign.JoinRegistFragment"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_top"
@@ -33,46 +36,314 @@
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
+            app:layout_constraintBottom_toTopOf="@id/common_bottom"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/const_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp">
+
+                <TextView
+                    android:id="@+id/tv_title_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="이름"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+                <EditText
+                    android:id="@+id/et_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/textview_regular"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_name"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_title_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="이메일"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/et_name"
+                    android:layout_marginVertical="10dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/textview_regular"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_email"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tv_email_at"
+                    android:layout_marginEnd="10dp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_email_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginVertical="10dp"
+
+                    android:gravity="center"
+                    android:text="\@"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_email" />
+
+                <Spinner
+                    android:id="@+id/spinner_email"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintTop_toTopOf="@id/tv_email_at"
+                    app:layout_constraintStart_toEndOf="@id/tv_email_at"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_title_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="아이디"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_email_at"
+                    android:layout_marginVertical="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_title_id_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="중복된 아이디입니다"
+                    android:textColor="@color/red_300"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_email_at"
+                    app:layout_constraintEnd_toStartOf="@id/iv_id_error"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="10dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_id_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/stat_notify_error"
+                    app:layout_constraintTop_toTopOf="@id/tv_title_id"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/red_300" />
+
+                <EditText
+                    android:id="@+id/et_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/textview_regular"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_id"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_title_pw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/et_id"
+                    android:layout_marginVertical="10dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_pw"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/textview_regular"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_pw"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_title_pw_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호 확인"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/et_pw"
+                    android:layout_marginVertical="10dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_pw_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/textview_regular"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_pw_confirm"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_title_pw_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호가 일치하지 않습니다"
+                    android:textColor="@color/red_300"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="@id/iv_pw_error"
+                    app:layout_constraintEnd_toStartOf="@id/iv_pw_error"
+                    android:layout_marginHorizontal="5dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_pw_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/stat_notify_error"
+                    app:layout_constraintTop_toTopOf="@id/tv_title_pw_confirm"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/red_300" />
+
+                <TextView
+                    android:id="@+id/tv_title_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="휴대폰 번호"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/et_pw_confirm"
+                    android:layout_marginVertical="10dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_phone_front"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/textview_regular"
+                    android:layout_marginVertical="10dp"
+                    android:text="010"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_phone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_phone_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="-"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="@id/et_phone_front"
+                    app:layout_constraintBottom_toBottomOf="@id/et_phone_front"
+                    app:layout_constraintStart_toEndOf="@id/et_phone_front"
+                    android:layout_marginHorizontal="10dp"
+                    android:gravity="center"
+                    />
+
+                <EditText
+                    android:id="@+id/et_phone_end"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintTop_toTopOf="@id/et_phone_front"
+                    app:layout_constraintStart_toEndOf="@id/tv_phone_bar"
+                    app:layout_constraintEnd_toStartOf="@id/btn_send_sms"
+                    android:background="@drawable/textview_regular"
+                    android:layout_marginHorizontal="10dp"
+                    />
+
+                <Button
+                    android:id="@+id/btn_send_sms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="인증"
+                    app:layout_constraintTop_toTopOf="@id/et_phone_end"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/const_field_authcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/et_phone_front"
+                    android:layout_marginVertical="10dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_auth_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="휴대폰 인증번호"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_title_auth_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="인증 되었습니다"
+                        android:textColor="@color/red_300"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toTopOf="@id/tv_auth_code"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginHorizontal="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/et_auth_code"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_auth_code"
+                        android:hint="인증번호 입력"
+                        android:background="@drawable/textview_regular"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btn_auth_code"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginVertical="10dp"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_auth_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="인증번호 확인"
+                        app:layout_constraintTop_toTopOf="@id/et_auth_code"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/const_top"
+            android:id="@+id/common_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/common_top">
-
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
             <Button
-                android:id="@+id/btn_send_sms"
+                android:id="@+id/btn_accept"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="문자 보내기"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="동의 후 본인 인증"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
-
-            <EditText
-                android:id="@+id/et_auth_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/btn_send_sms"
-                android:hint="인증번호"
-                />
-
-            <Button
-                android:id="@+id/btn_auth_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="인증번호 확인"
-                app:layout_constraintTop_toBottomOf="@id/et_auth_code"
-                />
-
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

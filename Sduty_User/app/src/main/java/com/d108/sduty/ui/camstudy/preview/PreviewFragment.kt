@@ -13,13 +13,11 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentPreviewBinding
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.camstudy.room.RoomActivity
-import com.d108.sduty.ui.viewmodel.UserViewModel
 import com.d108.sduty.utils.Status
 import com.google.common.util.concurrent.ListenableFuture
 import com.sendbird.calls.SendBirdCall
