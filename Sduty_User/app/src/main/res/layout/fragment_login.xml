@@ -160,7 +160,7 @@
             android:id="@+id/const_btn_login_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/const_input_field"
+            app:layout_constraintTop_toBottomOf="@id/const_find_info_field"
             android:layout_marginVertical="50dp"
             >
 
