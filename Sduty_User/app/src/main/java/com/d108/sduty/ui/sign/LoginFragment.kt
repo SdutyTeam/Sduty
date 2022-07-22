@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentLoginBinding
-import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
+import com.d108.sduty.ui.sign.viewmodel.SignViewModel
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
@@ -109,13 +109,6 @@ class LoginFragment : Fragment() {
             }
             btnJoin.setOnClickListener {
                 findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment())
-            }
-            btnSendSms.setOnClickListener{
-//                signViewModel.sendOTP("01037449555")
-                signViewModel.sendOTP("01049177914")
-            }
-            btnAuthCode.setOnClickListener{
-                signViewModel.checkOTP(etAuthCode.text.toString())
             }
 
         }
