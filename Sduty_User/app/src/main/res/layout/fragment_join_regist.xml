@@ -1,18 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 회원가입 - 정보입력 / 이름, 이메일, 아이디, 비밀번호, 비밀번호 확인, 휴대폰 번호, 인증-->
-<layout>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.sign.JoinRegistFragment">
 
-
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/common_top"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/common_top_back"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/icon_back"
+                />
+
+            <TextView
+                android:id="@+id/common_top_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="회원 가입"
+                android:textSize="18sp"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/const_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/common_top">
+
+
+            <Button
+                android:id="@+id/btn_send_sms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="문자 보내기"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <EditText
+                android:id="@+id/et_auth_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/btn_send_sms"
+                android:hint="인증번호"
+                />
+
+            <Button
+                android:id="@+id/btn_auth_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="인증번호 확인"
+                app:layout_constraintTop_toBottomOf="@id/et_auth_code"
+                />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
