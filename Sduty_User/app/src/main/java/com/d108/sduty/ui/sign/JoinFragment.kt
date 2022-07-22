@@ -36,6 +36,19 @@ class JoinFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        initViewModel()
+    }
+
+    private fun initViewModel(){
+        viewModel.isJoinSucced.observe(viewLifecycleOwner){
+            when(it) {
+                true -> requireContext().showToast("가입이 완료되었습니다. 로그인해 주세요")
+            }
+        }
+    }
+
+    private fun initView() {
         binding.apply {
             btnJoinId.setOnClickListener {
                 findNavController().safeNavigate(JoinFragmentDirections.actionJoinFragmentToTermsFragment(COMMON_JOIN))
@@ -45,14 +58,6 @@ class JoinFragment : Fragment() {
             }
             btnJoinNaver.setOnClickListener {
                 findNavController().safeNavigate(JoinFragmentDirections.actionJoinFragmentToTermsFragment(NAVER_JOIN))
-            }
-        }
-    }
-
-    private fun initViewModel(){
-        viewModel.isJoinSucced.observe(viewLifecycleOwner){
-            when(it) {
-                true -> requireContext().showToast("가입이 완료되었습니다. 로그인해 주세요")
             }
         }
     }
