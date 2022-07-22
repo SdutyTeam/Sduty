@@ -157,16 +157,17 @@ public class TestController {
 		System.out.println(selectedCode);
 		System.out.println(new Date(System.currentTimeMillis()));
 		if(selectedCode != null) {
-			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) {
-				if(TimeCompare.compare(selectedCode.getExpire_time())) {
-					//tService.deleteAuthInfo(authInfo);
-					System.out.println("success");
-					return new ResponseEntity<Void>(HttpStatus.OK);
+			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) { // 인증코드 비교
+				if(TimeCompare.compare(selectedCode.getExpire_time())) { // 인증 만료시간 확인
+					tService.deleteAuthInfo(authInfo);					
+					return new ResponseEntity<Void>(HttpStatus.OK); // 인증완료
+				}
+				else {
+					return new ResponseEntity<Void>(HttpStatus.GONE); // 인증시간 만료
 				}
 			}
-		}
-		System.out.println("fail");
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}		
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
 	
 	

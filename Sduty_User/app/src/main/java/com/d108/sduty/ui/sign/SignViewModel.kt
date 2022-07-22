@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.AuthCode
+import com.d108.sduty.model.dto.AuthInfo
 import com.d108.sduty.model.dto.User
-import com.kakao.sdk.user.UserApi
-import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.nurigo.sdk.message.model.Message
@@ -147,32 +145,54 @@ class SignViewModel: ViewModel() {
         }
     }
 
-    private val _authCode = MutableLiveData<AuthCode>()
-    val authCode: LiveData<AuthCode>
-        get() = _authCode
-    fun sendOTP(phoneNum: String){
-        val code = (100000..999999).random()
+
+    private val _authInfo = MutableLiveData<AuthInfo>()
+    val authInfo: LiveData<AuthInfo>
+        get() = _authInfo
+
+    private val _isSucceedSendAuthInfo = MutableLiveData<Boolean>()
+    val isSucceedSendAuthInfo : LiveData<Boolean>
+        get() = _isSucceedSendAuthInfo
+
+    fun sendOTP(userPhoneNum: String){
+        val authCode = (100000..999999).random()
         val message = Message(
             from = "01049177914",
-            to = phoneNum,
-            text = "[Sduty] 인증 번호[${code}]를 입력해 주세요. "
+            to = userPhoneNum,
+            text = "[Sduty] 인증 번호[${authCode}]를 입력해 주세요. "
         )
         viewModelScope.launch(Dispatchers.IO){
-            _authCode.postValue(AuthCode(code.toString(), phoneNum))
-            ApplicationClass.messageService.sendOne(SingleMessageSendingRequest(message))
+            val newAuthInfo = AuthInfo(authCode.toString(), userPhoneNum)
+            _authInfo.postValue(newAuthInfo)
+            ApplicationClass.messageService.sendOne(SingleMessageSendingRequest(message)) // SMS 보냄
+            Retrofit.userApi.sendAuthInfo(newAuthInfo).let {
+                if(it.code() == 200){
+                    _isSucceedSendAuthInfo.postValue(true)
+                }else{
+                    _isSucceedSendAuthInfo.postValue(false)
+                }
+            }
         }
     }
 
     private val _isSucceedAuth = MutableLiveData<Boolean>()
     val isSucceedAuth : LiveData<Boolean>
         get() = _isSucceedAuth
+    private val _toastMsg = MutableLiveData<String>()
+    val toastMsg : LiveData<String>
+        get() = _toastMsg
     fun checkOTP(inputCode: String){
         viewModelScope.launch(Dispatchers.IO){
-            val code = authCode.value
+            val code = authInfo.value
             code!!.authcode = inputCode
             Retrofit.userApi.checkAuthCode(code).let {
                 if(it.code() == 401){
                     _isSucceedAuth.postValue(false)
+                    _toastMsg.postValue("인증번호가 일치하지 않습니다.")
+                }
+                else if(it.code() == 410){
+                    _isSucceedAuth.postValue(false)
+                    _toastMsg.postValue("인증 시간이 만료되었습니다.")
                 }
                 else if(it.isSuccessful){
                     _isSucceedAuth.postValue(true)
