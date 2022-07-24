@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="MyStudyVM"
+            type="com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel" />
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/background_200"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        >
+
+        <TextView
+            android:id="@+id/mygroup_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="그룹 이름"
+            android:textStyle="bold"
+            />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/mygroup_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="그룹 카테고리"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" ㆍ "/>
+
+            <TextView
+                android:id="@+id/mygroup_job"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="직업"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/mygroup_people_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="15/20명"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" ㆍ "/>
+
+            <TextView
+                android:id="@+id/mygroup_leader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="방장 별명"
+                />
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</layout>

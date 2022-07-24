@@ -2,17 +2,22 @@
 <!--스터디 - 가입된 스터디 목록(스터디 이름, 카테고리/직업, 참여/제한 인원, 방장 별명), 스터디 상세보기 이동, 스터디 등록, 스터디 검색-->
 <layout>
 
+    <data>
+        <variable
+            name="MyStudyVM"
+            type="com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel" />
+    </data>
+
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.study.StudyFragment">
+        tools:context=".ui.main.study.MyStudyFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mystudy_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="match_parent"/>
 
     </FrameLayout>
 </layout>
