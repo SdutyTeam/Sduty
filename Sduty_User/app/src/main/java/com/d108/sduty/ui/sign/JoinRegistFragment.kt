@@ -17,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.common.COMMON_JOIN
+import com.d108.sduty.common.KAKAO_JOIN
+import com.d108.sduty.common.NAVER_JOIN
 import com.d108.sduty.databinding.FragmentJoinRegistBinding
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
@@ -38,13 +40,13 @@ class JoinRegistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentJoinRegistBinding.inflate(inflater, container, false)
-        initViewModel()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViewModel()
         initView()
     }
 
@@ -75,7 +77,7 @@ class JoinRegistFragment : Fragment() {
                 viewModel.checkOTP(etAuthCode.text.toString())
             }
             btnJoin.setOnClickListener {
-                checkJoinForm()
+                join()
             }
             etPw.addTextChangedListener(object : TextWatcher{
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -136,31 +138,28 @@ class JoinRegistFragment : Fragment() {
         }
     }
 
-    private fun checkJoinForm(){
+    private fun join(){
         binding.apply {
             val id = etId.text.toString()
             val pw = etPw.text.toString()
             val name = etName.text.toString()
             val tel = "${etPhoneFront.text}${etPhoneEnd.text}"
-            var email = ""
-            if(spinnerEmail.selectedItemPosition == mailList.size - 1){
-                email = "${etEmail.text}@${etEmailEnd.text}"
+            val email = if(spinnerEmail.selectedItemPosition == mailList.size - 1){
+                "${etEmail.text}@${etEmailEnd.text}"
             }else{
-                email = "${etEmail.text}@${spinnerEmail.selectedItem}"
+                "${etEmail.text}@${spinnerEmail.selectedItem}"
             }
-            Log.d(TAG, "checkJoinForm: $email")
-            Log.d(TAG, "checkJoinForm: $tel")
-
-            when(args.route) {
-                COMMON_JOIN -> {
-
-                    if (
-                        viewModel.isSucceedAuth.value as Boolean){
-
-                    }else{
-                        requireContext().showToast("모든 항목을 입력해 주세요")
-                    }
-
+            if(args.route == COMMON_JOIN) {
+                if(id.isEmpty() || pw.isEmpty() || name.isEmpty() || tel.isEmpty() || email.isEmpty()){
+                    requireContext().showToast("모든 항목을 입력해 주세요.")
+                }else{
+                    viewModel.join(User(id, pw, name, tel, email))
+                }
+            }else{
+                if(name.isEmpty() || tel.isEmpty() || email.isEmpty()){
+                    requireContext().showToast("모든 항목을 입력해 주세요.")
+                }else{
+                    viewModel.join(User(email, email, name, tel, email))
                 }
             }
         }
