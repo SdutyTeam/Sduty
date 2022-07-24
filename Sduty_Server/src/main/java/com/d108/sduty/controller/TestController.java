@@ -50,7 +50,7 @@ public class TestController {
 	}
 
 	@ApiOperation(value = "회원가입 > id 중복확인 > 200/401 리턴", response = HttpStatus.class)
-	@GetMapping("/{id}")
+	@GetMapping("/join/{id}")
 	public ResponseEntity<?> isUsedId(@PathVariable String id){
 		int result = tService.isUsedId(id);
 		if(result > 0) {			
@@ -115,31 +115,31 @@ public class TestController {
 		}		
 	}
 	
-	@PostMapping("/kakao/join")
-	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
-		Map<String, Object> userInfo = kService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user = new User(email, "", nickname, email);
-		int result = tService.insertUser(user);
-		if(result > 0) {
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-	}
-	
-	@PostMapping("/naver/join")
-	public ResponseEntity<?> naverJoin(@RequestBody String token){
-		Map<String, Object> userInfo = nService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user = new User(email, "", nickname, email);
-		int result = tService.insertUser(user);
-		if(result > 0) {
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-	}
+//	@PostMapping("/kakao/join")
+//	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
+//		Map<String, Object> userInfo = kService.getUserInfo(token);
+//		String email = userInfo.get("email").toString();
+//		String nickname = userInfo.get("nickname").toString();
+//		User user = new User(email, "", nickname, email);
+//		int result = tService.insertUser(user);
+//		if(result > 0) {
+//			return new ResponseEntity<User>(user, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
+//	}
+//	
+//	@PostMapping("/naver/join")
+//	public ResponseEntity<?> naverJoin(@RequestBody String token){
+//		Map<String, Object> userInfo = nService.getUserInfo(token);
+//		String email = userInfo.get("email").toString();
+//		String nickname = userInfo.get("nickname").toString();
+//		User user = new User(email, "", nickname, email);
+//		int result = tService.insertUser(user);
+//		if(result > 0) {
+//			return new ResponseEntity<User>(user, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
+//	}
 	
 	@PostMapping("/auth")
 	public ResponseEntity<?> authTest(@RequestBody AuthInfo authInfo){
@@ -157,16 +157,17 @@ public class TestController {
 		System.out.println(selectedCode);
 		System.out.println(new Date(System.currentTimeMillis()));
 		if(selectedCode != null) {
-			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) {
-				if(TimeCompare.compare(selectedCode.getExpire_time())) {
-					//tService.deleteAuthInfo(authInfo);
-					System.out.println("success");
-					return new ResponseEntity<Void>(HttpStatus.OK);
+			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) { // 인증코드 비교
+				if(TimeCompare.compare(selectedCode.getExpire_time())) { // 인증 만료시간 확인
+					tService.deleteAuthInfo(authInfo);					
+					return new ResponseEntity<Void>(HttpStatus.OK); // 인증완료
+				}
+				else {
+					return new ResponseEntity<Void>(HttpStatus.GONE); // 인증시간 만료
 				}
 			}
-		}
-		System.out.println("fail");
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}		
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
 	
 	

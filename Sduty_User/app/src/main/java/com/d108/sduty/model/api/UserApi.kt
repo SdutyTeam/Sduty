@@ -1,6 +1,6 @@
 package com.d108.sduty.model.api
 
-import com.d108.sduty.model.dto.AuthCode
+import com.d108.sduty.model.dto.AuthInfo
 import com.d108.sduty.model.dto.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -13,7 +13,7 @@ interface UserApi {
     suspend fun login(@Body user: User): Response<User>
 
     @GET("/user/join/{id}")
-    suspend fun getUsedId(@Path("id")id: String): Response<Boolean>
+    suspend fun getUsedId(@Path("id")id: String): Response<Void>
 
     @POST("/user/join")
     suspend fun join(@Body user: User): Response<Void>
@@ -34,9 +34,9 @@ interface UserApi {
     suspend fun naverJoin(@Body token: String): Response<User>
 
     @POST("/user/auth")
-    suspend fun sendAuthCode(@Body authCode: AuthCode): Response<Void>
+    suspend fun sendAuthInfo(@Body authInfo: AuthInfo): Response<Void>
 
     @POST("/user/auth/check")
-    suspend fun checkAuthCode(@Body authCode: AuthCode): Response<Void>
+    suspend fun checkAuthCode(@Body authInfo: AuthInfo): Response<Void>
 
 }

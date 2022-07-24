@@ -1,19 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 첫화면 - 로그인 / ID, PW 입력, 로그인 , 카카오, 네이버 로그인, 아이디/비밀번호 찾기, 회원가입 하기-->
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.sign.LoginFragment">
+        tools:context=".ui.sign.LoginFragment"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/common_top"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/common_top_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:text="로그인"
+                android:textSize="18sp"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/const_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
+            android:layout_marginVertical="20dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_login_logo"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/const_btn_sns_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/const_top"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginVertical="30dp"
             >
 
             <Button
@@ -35,8 +77,8 @@
                 app:layout_constraintStart_toEndOf="@id/btn_kakao_login"
                 android:src="@drawable/icon_naver_login"
                 />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/const_input_field"
@@ -49,20 +91,78 @@
                 android:id="@+id/et_id"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="50dp"
+                android:layout_marginVertical="20dp"
+                android:hint="ID"
+                android:background="@drawable/textview_regular"
+                android:singleLine="true"
+                />
             <EditText
                 android:id="@+id/et_pw"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/et_id"/>
+                android:layout_height="50dp"
+                app:layout_constraintTop_toBottomOf="@id/et_id"
+                android:layout_marginVertical="20dp"
+                android:background="@drawable/textview_regular"
+                android:singleLine="true"
+                android:inputType="textPassword"
+                android:hint="PW"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/const_find_info_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/const_input_field"
+            android:layout_marginVertical="20dp"
+            >
+
+            <TextView
+                android:id="@+id/tv_find_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아이디 찾기"
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/divider_vertical"
+                android:layout_marginHorizontal="10dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/divider_vertical"
+                style="@style/divider"
+                android:layout_width="1dp"
+                android:layout_height="20dp"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_find_pw"
+                 />
+
+            <TextView
+                android:id="@+id/tv_find_pw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비밀번호 찾기"
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/const_btn_login_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/const_input_field">
+            app:layout_constraintTop_toBottomOf="@id/const_find_info_field"
+            android:layout_marginVertical="50dp"
+            >
 
             <Button
                 android:id="@+id/btn_login"
@@ -79,31 +179,6 @@
                 android:text="회원가입"
                 app:layout_constraintTop_toBottomOf="@id/btn_login"
                 />
-
-            <Button
-                android:id="@+id/btn_send_sms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="문자 보내기"
-                app:layout_constraintTop_toBottomOf="@id/btn_join"
-                />
-
-            <EditText
-                android:id="@+id/et_auth_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/btn_send_sms"
-                android:hint="인증번호"
-                />
-
-            <Button
-                android:id="@+id/btn_auth_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="인증번호 확인"
-                app:layout_constraintTop_toBottomOf="@id/et_auth_code"
-                />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

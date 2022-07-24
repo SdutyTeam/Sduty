@@ -3,6 +3,7 @@ package com.d108.sduty.ui.sign
 import android.Manifest
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
+import com.d108.sduty.common.COMMON_JOIN
+import com.d108.sduty.common.KAKAO_JOIN
+import com.d108.sduty.common.NAVER_JOIN
 import com.d108.sduty.databinding.FragmentLoginBinding
-import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
+import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
+import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
@@ -25,12 +30,15 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import java.util.regex.Pattern
 
 //첫화면 - 로그인 / ID, PW 입력, 로그인 , 카카오, 네이버 로그인, 아이디/비밀번호 찾기, 회원가입 하기
 private const val TAG ="LoginFragment"
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
-    private val signViewModel: SignViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
+    private val joinViewModel: JoinViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,41 +59,38 @@ class LoginFragment : Fragment() {
 
 
     private fun initViewModel(){
-        signViewModel.user.observe(viewLifecycleOwner){
+        viewModel.user.observe(viewLifecycleOwner){
             requireContext().showToast("${it.name}님 반갑습니다.")
         }
-        signViewModel.isLoginSucceed.observe(viewLifecycleOwner){
+        viewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){
                 true ->{
 //                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
-                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, PreviewFragment()).commit()
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(COMMON_JOIN))
                 }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }
         }
-        signViewModel.isExistKakaoAccount.observe(viewLifecycleOwner){
+        viewModel.isExistKakaoAccount.observe(viewLifecycleOwner){
             when(it){
                 false -> {
                     val listener = DialogInterface.OnClickListener { _, _ ->
-                        signViewModel.kakaoJoin()
+                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
+                            KAKAO_JOIN, viewModel.token.value.toString()))
                     }
                     requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
                 }
             }
         }
-        signViewModel.isExistNaverAccount.observe(viewLifecycleOwner){
+        viewModel.isExistNaverAccount.observe(viewLifecycleOwner){
             when(it){
                 false -> {
                     val listener = DialogInterface.OnClickListener { _, _ ->
-                        signViewModel.naverJoin()
+                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
+                            NAVER_JOIN, viewModel.token.value.toString()))
                     }
                     requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
                 }
-            }
-        }
-        signViewModel.isJoinSucced.observe(viewLifecycleOwner){
-            when(it) {
-                true -> requireContext().showToast("가입이 완료되었습니다. 로그인해 주세요")
             }
         }
     }
@@ -96,9 +101,9 @@ class LoginFragment : Fragment() {
                 val id = binding.etId.text.toString()
                 val pw = binding.etPw.text.toString()
                 if(id.isEmpty() || pw.isEmpty()){
-
+                    requireContext().showToast("아이디와 비밀번호를 모두 입력해 주세요.")
                 }else{
-                    signViewModel.login(id, pw)
+                    viewModel.login(id, pw)
                 }
             }
             btnKakaoLogin.setOnClickListener {
@@ -108,24 +113,38 @@ class LoginFragment : Fragment() {
                 naverLogin()
             }
             btnJoin.setOnClickListener {
-                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment())
-            }
-            btnSendSms.setOnClickListener{
-//                signViewModel.sendOTP("01037449555")
-                signViewModel.sendOTP("01049177914")
-            }
-            btnAuthCode.setOnClickListener{
-                signViewModel.checkOTP(etAuthCode.text.toString())
+                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
+                    COMMON_JOIN))
             }
 
+            var filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[a-zA-Z0-9]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(15))
+            etId.filters = filter
+
+            filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[a-zA-Z0-9!@#$%^&*]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(20))
+
+            etPw.filters = filter
         }
     }
 
     private fun naverLogin() {
         val oauthLoginCallback = object : OAuthLoginCallback {
             override fun onSuccess() {
-                signViewModel.naverLogin(NaverIdLoginSDK.getAccessToken()!!)
-                signViewModel.setAccessToken(NaverIdLoginSDK.getAccessToken()!!)
+                viewModel.naverLogin(NaverIdLoginSDK.getAccessToken()!!)
+                viewModel.setAccessToken(NaverIdLoginSDK.getAccessToken()!!)
             }
             override fun onFailure(httpStatus: Int, message: String) {
             }
@@ -142,8 +161,8 @@ class LoginFragment : Fragment() {
             if (error != null) {
                 Log.e(TAG, "카카오계정으로 로그인 실패", error)
             } else if (token != null) {
-                signViewModel.kakaoLogin(token.accessToken)
-                signViewModel.setAccessToken(token.accessToken)
+                viewModel.kakaoLogin(token.accessToken)
+                viewModel.setAccessToken(token.accessToken)
             }
         }
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
@@ -155,8 +174,8 @@ class LoginFragment : Fragment() {
                     }
                     UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
                 } else if (token != null) {
-                    signViewModel.kakaoLogin(token.accessToken)
-                    signViewModel.setAccessToken(token.accessToken)
+                    viewModel.kakaoLogin(token.accessToken)
+                    viewModel.setAccessToken(token.accessToken)
                 }
             }
         } else {

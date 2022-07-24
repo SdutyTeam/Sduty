@@ -14,6 +14,12 @@
         <action
             android:id="@+id/action_loginFragment_to_timeLineFragment"
             app:destination="@id/timeLineFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_termsFragment"
+            app:destination="@id/termsFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_profileRegistFragment"
+            app:destination="@id/profileRegistFragment" />
     </fragment>
     <fragment
         android:id="@+id/termsFragment"
@@ -26,6 +32,10 @@
             android:name="route"
             app:argType="integer"
             />
+        <argument
+            android:name="token"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
     <fragment
         android:id="@+id/joinFragment"
@@ -34,6 +44,9 @@
         <action
             android:id="@+id/action_joinFragment_to_termsFragment"
             app:destination="@id/termsFragment" />
+        <argument
+            android:name="flag"
+            app:argType="integer"/>
     </fragment>
     <fragment
         android:id="@+id/joinRegistFragment"
@@ -46,6 +59,13 @@
             android:name="route"
             app:argType="integer"
             />
+        <argument
+            android:name="token"
+            app:argType="string"
+            android:defaultValue=""/>
+        <action
+            android:id="@+id/action_joinRegistFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileRegistFragment"
