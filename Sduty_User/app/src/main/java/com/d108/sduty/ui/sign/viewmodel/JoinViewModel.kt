@@ -1,11 +1,15 @@
 package com.d108.sduty.ui.sign.viewmodel
 
+import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.common.ApplicationClass
+import com.d108.sduty.common.COMMON_JOIN
+import com.d108.sduty.common.KAKAO_JOIN
+import com.d108.sduty.common.NAVER_JOIN
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.AuthInfo
 import com.d108.sduty.model.dto.User
@@ -43,36 +47,53 @@ class JoinViewModel: ViewModel() {
         }
     }
 
-    fun kakaoJoin(){
+    private val _isUsedId = MutableLiveData<Boolean>(false)
+    val isUsedId: LiveData<Boolean>
+        get() = _isUsedId
+    fun getUsedId(id: String){
         viewModelScope.launch(Dispatchers.IO){
-            try {
-                Retrofit.userApi.kakaoJoin(accessToken.value.toString()).let {
-                    if(it.isSuccessful && it.body() != null){
-                        _isJoinSucced.postValue(true)
-                    }else{
-                        _isJoinSucced.postValue(false)
-                    }
+            Retrofit.userApi.getUsedId(id).let {
+                if(it.code() == 401){
+                    _isUsedId.postValue(false)
+                }else if(it.code() == 200){
+                    _isUsedId.postValue(true)
+                }else{
+                    Log.d(TAG, "getUsedId: ${it.code()}")
                 }
-            }catch (e: Exception){
-                Log.d(TAG, "kakaoJoin: ${e.message}")
             }
         }
     }
-    fun naverJoin(){
-        viewModelScope.launch(Dispatchers.IO){
-            try {
-                Retrofit.userApi.naverJoin(accessToken.value.toString()).let {
-                    if(it.isSuccessful && it.body() != null){
-                        _isJoinSucced.postValue(true)
-                    }else{
-                        _isJoinSucced.postValue(false)
-                    }
-                }
-            }catch (e: Exception){
-                Log.d(TAG, "kakaoJoin: ${e.message}")
-            }
-        }
-    }
+//
+//    fun kakaoJoin(){
+//        viewModelScope.launch(Dispatchers.IO){
+//            try {
+//                Retrofit.userApi.kakaoJoin(accessToken.value.toString()).let {
+//                    if(it.isSuccessful && it.body() != null){
+//                        _isJoinSucced.postValue(true)
+//                    }else{
+//                        _isJoinSucced.postValue(false)
+//                    }
+//                }
+//            }catch (e: Exception){
+//                Log.d(TAG, "kakaoJoin: ${e.message}")
+//            }
+//        }
+//    }
+//    fun naverJoin(){
+//        viewModelScope.launch(Dispatchers.IO){
+//            try {
+//                Retrofit.userApi.naverJoin(accessToken.value.toString()).let {
+//                    if(it.isSuccessful && it.body() != null){
+//                        _isJoinSucced.postValue(true)
+//                    }else{
+//                        _isJoinSucced.postValue(false)
+//                    }
+//                }
+//            }catch (e: Exception){
+//                Log.d(TAG, "kakaoJoin: ${e.message}")
+//            }
+//        }
+//    }
 
 
     private val _authInfo = MutableLiveData<AuthInfo>()
@@ -104,12 +125,12 @@ class JoinViewModel: ViewModel() {
         }
     }
 
-    private val _isSucceedAuth = MutableLiveData<Boolean>()
+    private val _isSucceedAuth = MutableLiveData<Boolean>(false)
     val isSucceedAuth : LiveData<Boolean>
         get() = _isSucceedAuth
-    private val _toastMsg = MutableLiveData<String>()
-    val toastMsg : LiveData<String>
-        get() = _toastMsg
+    private val _authMsg = MutableLiveData<String>("")
+    val authMsg : LiveData<String>
+        get() = _authMsg
     fun checkOTP(inputCode: String){
         viewModelScope.launch(Dispatchers.IO){
             val code = authInfo.value
@@ -117,18 +138,62 @@ class JoinViewModel: ViewModel() {
             Retrofit.userApi.checkAuthCode(code).let {
                 if(it.code() == 401){
                     _isSucceedAuth.postValue(false)
-                    _toastMsg.postValue("인증번호가 일치하지 않습니다.")
+                    _authMsg.postValue("인증번호가 일치하지 않습니다.")
                 }
                 else if(it.code() == 410){
                     _isSucceedAuth.postValue(false)
-                    _toastMsg.postValue("인증 시간이 만료되었습니다.")
+                    _authMsg.postValue("인증 시간이 만료되었습니다.")
                 }
                 else if(it.isSuccessful){
                     _isSucceedAuth.postValue(true)
                 }
             }
         }
+    }
 
+    private val _isWrongPW = MutableLiveData<Boolean>()
+    val isWrongPW: LiveData<Boolean>
+        get() = _isWrongPW
+    fun checkPW(pw1: String, pw2: String){
+        _isWrongPW.value = pw1 != pw2
+    }
+
+    private val _isShortPW = MutableLiveData<Boolean>(false)
+    val isShortPW: LiveData<Boolean>
+        get() = _isShortPW
+    fun checkPWLength(pw: String){
+        Log.d(TAG, "checkPWLength: ${pw.length}")
+        _isShortPW.value = pw.length < 8
+    }
+
+
+    private val _isSocialJoin = MutableLiveData<Boolean>()
+    val isSocialJoin : LiveData<Boolean>
+        get() = _isSocialJoin
+    private val _isNaverJoin = MutableLiveData<Boolean>(false)
+    val isNaverJoin : LiveData<Boolean>
+        get() = _isNaverJoin
+
+    fun setJoinFlag(joinFlag: Int){
+        when(joinFlag){
+            COMMON_JOIN ->{
+                _isSocialJoin.value = false
+            }
+            KAKAO_JOIN ->{
+                _isSocialJoin.value = true
+            }
+            NAVER_JOIN ->{
+                _isSocialJoin.value = true
+                _isNaverJoin.value = true
+            }
+        }
+    }
+
+    private val _isSelfInputEmail = MutableLiveData<Boolean>()
+    val isSelfInputEmail: LiveData<Boolean>
+        get() = _isSelfInputEmail
+    fun setSelfInput(){
+        _isSelfInputEmail.postValue(true)
     }
 
 }

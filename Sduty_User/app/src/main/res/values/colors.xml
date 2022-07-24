@@ -13,6 +13,7 @@
     <color name="background_500">#2c2c2c</color>
     <color name="background_300">#a8a8a8</color>
     <color name="error">#e53157</color>
+    <color name="green">#57F52B</color>
     <color name="onlight_04">#1e000000</color>
     <color name="secondary_300">#2eba9f</color>
     <color name="overlay_01">#8c000000</color>

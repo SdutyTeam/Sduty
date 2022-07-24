@@ -31,10 +31,19 @@ class TermsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+    }
+
+    private fun initView() {
         binding.apply {
             btnAccept.setOnClickListener {
                 // todo: 약관 동의 체크
-                findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route))
+                when(args.route){
+                    COMMON_JOIN -> findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route))
+                    KAKAO_JOIN -> findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route, args.token))
+                    NAVER_JOIN -> findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route, args.token))
+                }
+
             }
         }
     }

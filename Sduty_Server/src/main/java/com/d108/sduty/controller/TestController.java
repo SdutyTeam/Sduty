@@ -50,7 +50,7 @@ public class TestController {
 	}
 
 	@ApiOperation(value = "회원가입 > id 중복확인 > 200/401 리턴", response = HttpStatus.class)
-	@GetMapping("/{id}")
+	@GetMapping("/join/{id}")
 	public ResponseEntity<?> isUsedId(@PathVariable String id){
 		int result = tService.isUsedId(id);
 		if(result > 0) {			
@@ -115,31 +115,31 @@ public class TestController {
 		}		
 	}
 	
-	@PostMapping("/kakao/join")
-	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
-		Map<String, Object> userInfo = kService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user = new User(email, "", nickname, email);
-		int result = tService.insertUser(user);
-		if(result > 0) {
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-	}
-	
-	@PostMapping("/naver/join")
-	public ResponseEntity<?> naverJoin(@RequestBody String token){
-		Map<String, Object> userInfo = nService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user = new User(email, "", nickname, email);
-		int result = tService.insertUser(user);
-		if(result > 0) {
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-	}
+//	@PostMapping("/kakao/join")
+//	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
+//		Map<String, Object> userInfo = kService.getUserInfo(token);
+//		String email = userInfo.get("email").toString();
+//		String nickname = userInfo.get("nickname").toString();
+//		User user = new User(email, "", nickname, email);
+//		int result = tService.insertUser(user);
+//		if(result > 0) {
+//			return new ResponseEntity<User>(user, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
+//	}
+//	
+//	@PostMapping("/naver/join")
+//	public ResponseEntity<?> naverJoin(@RequestBody String token){
+//		Map<String, Object> userInfo = nService.getUserInfo(token);
+//		String email = userInfo.get("email").toString();
+//		String nickname = userInfo.get("nickname").toString();
+//		User user = new User(email, "", nickname, email);
+//		int result = tService.insertUser(user);
+//		if(result > 0) {
+//			return new ResponseEntity<User>(user, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
+//	}
 	
 	@PostMapping("/auth")
 	public ResponseEntity<?> authTest(@RequestBody AuthInfo authInfo){
