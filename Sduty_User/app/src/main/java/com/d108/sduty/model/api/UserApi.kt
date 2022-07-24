@@ -13,7 +13,7 @@ interface UserApi {
     suspend fun login(@Body user: User): Response<User>
 
     @GET("/user/join/{id}")
-    suspend fun getUsedId(@Path("id")id: String): Response<Boolean>
+    suspend fun getUsedId(@Path("id")id: String): Response<Void>
 
     @POST("/user/join")
     suspend fun join(@Body user: User): Response<Void>

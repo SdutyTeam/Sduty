@@ -3,14 +3,11 @@ package com.d108.sduty.ui.sign
 import android.Manifest
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputFilter
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -69,7 +66,7 @@ class LoginFragment : Fragment() {
             when(it){
                 true ->{
 //                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
-                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, PreviewFragment()).commit()
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(COMMON_JOIN))
                 }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }
@@ -78,7 +75,7 @@ class LoginFragment : Fragment() {
             when(it){
                 false -> {
                     val listener = DialogInterface.OnClickListener { _, _ ->
-                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
+                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
                             KAKAO_JOIN, viewModel.token.value.toString()))
                     }
                     requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
@@ -89,7 +86,7 @@ class LoginFragment : Fragment() {
             when(it){
                 false -> {
                     val listener = DialogInterface.OnClickListener { _, _ ->
-                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
+                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
                             NAVER_JOIN, viewModel.token.value.toString()))
                     }
                     requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
