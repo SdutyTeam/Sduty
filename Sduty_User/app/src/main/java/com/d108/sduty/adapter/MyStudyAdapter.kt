@@ -33,9 +33,7 @@ class MyStudyAdapter(var list: List<String>) : RecyclerView.Adapter<MyStudyAdapt
         TODO("Not yet implemented")
     }
 
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getItemCount(): Int = myStudyList.size
 
     interface ClickListener{
         fun onClick(view: View, position: Int)
