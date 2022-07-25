@@ -72,15 +72,11 @@ public class TestController {
 	@PostMapping("/kakao")
 	public ResponseEntity<?> kakaoLogin(@RequestBody String token){
 		Map<String, Object> userInfo = kService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
+		String email = userInfo.get("email").toString();		
 		User user= tService.selectUser(email);
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}else {
-//			회원가입
-//			User newUser = new User(email, "", nickname, email);
-//			tService.insertUser(newUser);
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 	}
@@ -88,15 +84,11 @@ public class TestController {
 	@PostMapping("/naver")
 	public ResponseEntity<?> naverLogin(@RequestBody String token){
 		Map<String, Object> userInfo = nService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user= tService.selectUser(email);
+		String email = userInfo.get("email").toString();		
+		User user= tService.selectUser(email);				
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}else {
-//			회원가입
-//			User newUser = new User(email, "", nickname, email);
-//			tService.insertUser(newUser);
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}		
 	}
@@ -118,9 +110,10 @@ public class TestController {
 	public ResponseEntity<?> naverJoin(@RequestBody String token){
 		Map<String, Object> userInfo = nService.getUserInfo(token);
 		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user = new User(email, "", nickname, email);
-		int result = tService.insertUser(user);
+		String name = userInfo.get("name").toString();
+		String mobile = userInfo.get("mobile").toString().replace("-", "");		
+		User user = new User(email, "", name, mobile, email);
+//		int result = tService.insertUser(user);// User 정보만 보내주고 /join으로 카카오, 네이버 둘 다 가입
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
