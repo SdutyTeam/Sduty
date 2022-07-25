@@ -47,12 +47,12 @@ class LoginViewModel: ViewModel() {
         get() = _isExistKakaoAccount
 
     fun kakaoLogin(token: String){
+        Log.d(TAG, "kakaoLogin: $token")
         viewModelScope.launch(Dispatchers.IO){
-            Log.d(TAG, "kakaoLogin: ")
             Retrofit.userApi.kakaoLogin(token).let {
                 if(it.code() == 401){ // UNAUTHORIZED
                     _isExistKakaoAccount.postValue(false)
-                    Log.d(TAG, "kakaoLogin: ${it}")
+                    Log.d(TAG, "kakaoLogin: ${it.code()}")
 
                 }else if(it.isSuccessful && it.body() != null){
                     _user.postValue(it.body())
