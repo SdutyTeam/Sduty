@@ -149,5 +149,5 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
 	
-	
 }
+
