@@ -9,15 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
+import com.d108.sduty.common.NAVER_JOIN
 import com.d108.sduty.databinding.FragmentTermsBinding
 import com.d108.sduty.databinding.FragmentTimerBinding
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
+import com.d108.sduty.ui.sign.LoginFragmentDirections
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.convertTimeLongToString
+import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.showToast
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.timer
 
 private const val TAG = "TimerFragment"
 class TimerFragment : Fragment() {
@@ -78,10 +84,7 @@ class TimerFragment : Fragment() {
                     }
                 }
                 false -> {
-                    binding.apply {
-                        btnReturnToday.text = "오늘($today) 로 돌아가기"
-                        btnReturnToday.visibility = View.INVISIBLE
-                    }
+                    binding.btnReturnToday.visibility = View.INVISIBLE
                 }
             }
         }
@@ -90,6 +93,11 @@ class TimerFragment : Fragment() {
     }
 
     private fun initViewModel(){
+        // 토스트 메시지 출력
+        timerViewModel.toastMessage.observe(viewLifecycleOwner){ message ->
+            requireContext().showToast(message)
+        }
+
         binding.apply {
             // 날짜 선택
             commonSelectedDate.setOnClickListener {
