@@ -72,8 +72,7 @@ public class TestController {
 	@PostMapping("/kakao")
 	public ResponseEntity<?> kakaoLogin(@RequestBody String token){
 		Map<String, Object> userInfo = kService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
+		String email = userInfo.get("email").toString();		
 		User user= tService.selectUser(email);
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
@@ -88,8 +87,7 @@ public class TestController {
 	@PostMapping("/naver")
 	public ResponseEntity<?> naverLogin(@RequestBody String token){
 		Map<String, Object> userInfo = nService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
+		String email = userInfo.get("email").toString();		
 		User user= tService.selectUser(email);
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
@@ -118,9 +116,10 @@ public class TestController {
 	public ResponseEntity<?> naverJoin(@RequestBody String token){
 		Map<String, Object> userInfo = nService.getUserInfo(token);
 		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user = new User(email, "", nickname, email);
-		int result = tService.insertUser(user);
+		String name = userInfo.get("name").toString();
+		String mobile = userInfo.get("mobile").toString();		
+		User user = new User(email, "", name, mobile, email);
+//		int result = tService.insertUser(user);
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
@@ -139,12 +138,12 @@ public class TestController {
 	
 	@PostMapping("/auth/check")
 	public ResponseEntity<?> getAuthCode(@RequestBody AuthInfo authInfo){
-		AuthInfo selectedCode = tService.selectAuthInfo(authInfo.getPhone());
+		AuthInfo selectedCode = tService.selectAuthInfo(authInfo.getTel());
 		System.out.println(selectedCode);
 		System.out.println(new Date(System.currentTimeMillis()));
 		if(selectedCode != null) {
-			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) { // 인증코드 비교
-				if(TimeCompare.compare(selectedCode.getExpire_time())) { // 인증 만료시간 확인
+			if(selectedCode.getCode().equals(authInfo.getCode())) { // 인증코드 비교
+				if(TimeCompare.compare(selectedCode.getExpire())) { // 인증 만료시간 확인
 					tService.deleteAuthInfo(authInfo);					
 					return new ResponseEntity<Void>(HttpStatus.OK); // 인증완료
 				}
