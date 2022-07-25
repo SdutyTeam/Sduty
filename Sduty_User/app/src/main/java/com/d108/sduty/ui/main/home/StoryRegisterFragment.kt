@@ -3,8 +3,11 @@ package com.d108.sduty.ui.main.home
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
+import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
 
 //게시물 등록 - 글 내용입력, 이미지 추가/ 미리보기, 카메라 or 이미지 선택, 태그 선택
@@ -21,5 +24,15 @@ class StoryRegisterFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.apply {
+        }
+    }
+
+    fun showDisclosurePopup(v: View) {
+        val popup = PopupMenu(requireContext(), v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.disclosure_menu, popup.menu)
+        popup.show()
     }
 }
