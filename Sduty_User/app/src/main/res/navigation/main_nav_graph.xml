@@ -125,7 +125,7 @@
             app:destination="@id/postRegisterFragment" />
     </fragment>
     <fragment
-        android:id="@+id/studyFragment"
+        android:id="@+id/myStudyFragment"
         android:name="com.d108.sduty.ui.main.study.MyStudyFragment"
         android:label="StudyFragment" >
         <action

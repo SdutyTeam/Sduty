@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--스터디 - 가입된 스터디 목록(스터디 이름, 카테고리/직업, 참여/제한 인원, 방장 별명), 스터디 상세보기 이동, 스터디 등록, 스터디 검색-->
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -8,16 +11,64 @@
             type="com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel" />
     </data>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.study.MyStudyFragment">
+        tools:context=".ui.sign.JoinFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mystudy_list"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/common_top"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/common_top_back"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/icon_back"
+                />
+
+            <TextView
+                android:id="@+id/common_top_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="내가 가입한 스터디"
+                android:textSize="18sp"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/common_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/common_top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.main.study.MyStudyFragment">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mystudy_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 </layout>
