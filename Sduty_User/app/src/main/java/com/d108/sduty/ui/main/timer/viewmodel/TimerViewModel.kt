@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Report
+import com.d108.sduty.utils.convertTimeStringToDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,15 +29,14 @@ class TimerViewModel : ViewModel() {
     // TODO: userSeq 입력 필요
     // 날짜 선택
     fun selectDate(strDate: String){
-        val simpleDateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale("ko", "KR"))
         // 날짜를 Date 타입으로 변환
-        val selectedDate = simpleDateFormat.parse(strDate)
+        val selectedDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
         getReportList(0, selectedDate)
     }
 
     // TODO: API 작성 필요
     // 선택된 날짜의 리포트 목록을 요청
-    fun getReportList(userSeq : Int, selectedDate : Date){
+    private fun getReportList(userSeq : Int, selectedDate : Date){
         CoroutineScope(Dispatchers.IO).launch{
             Retrofit.timerApi.getReportList(userSeq, selectedDate).let{
                 // 사용자 리포트

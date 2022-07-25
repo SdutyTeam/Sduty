@@ -1,31 +1,21 @@
 package com.d108.sduty.utils
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.DialogInterface
-import android.content.pm.PackageManager
-import android.os.Build
-import android.util.Log
 import android.util.TypedValue
-import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.IdRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import com.d108.sduty.R
 import com.sendbird.calls.AudioDevice
-import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun Activity.hideKeyboard() {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
@@ -75,4 +65,15 @@ fun navigateBack(activity: Activity){
 }
 fun NavController.safeNavigate(action: NavDirections){
     navigate(action)
+}
+
+// 시간 변환 메서드
+fun convertTimeStringToDate(str: String, format: String): Date {
+    val simpleDateFormat = SimpleDateFormat(format, Locale("ko", "KR"))
+    return simpleDateFormat.parse(str)
+}
+
+fun convertTimeLongToString(date: Date, format: String): String {
+    val simpleDateFormat = SimpleDateFormat(format, Locale("ko", "KR"))
+    return simpleDateFormat.format(date)
 }

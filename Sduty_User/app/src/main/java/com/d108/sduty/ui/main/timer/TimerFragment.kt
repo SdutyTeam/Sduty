@@ -15,6 +15,7 @@ import com.d108.sduty.databinding.FragmentTimerBinding
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.convertTimeLongToString
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,23 +45,14 @@ class TimerFragment : Fragment() {
 
         // 첫 화면을 설정한다.
         initView()
-
-        binding.apply {
-            // 날짜 선택
-            commonSelectedDate.setOnClickListener {
-                showDatePicker()
-            }
-        }
-
-
+        // 뷰모델 초기화
+        initViewModel()
     }
 
     // 화면 초기화
     private fun initView(){
         // 오늘 날짜로 변경
-        val curDate = Date(System.currentTimeMillis())
-        val simpleDateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale("ko", "KR"))
-        val today = simpleDateFormat.format(curDate)
+        val today = convertTimeLongToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
         binding.commonSelectedDate.text = today
         //timerViewModel.selectDate(today)
@@ -79,6 +71,11 @@ class TimerFragment : Fragment() {
     }
 
     private fun initViewModel(){
-
+        binding.apply {
+            // 날짜 선택
+            commonSelectedDate.setOnClickListener {
+                showDatePicker()
+            }
+        }
     }
 }
