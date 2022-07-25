@@ -84,11 +84,11 @@
             android:id="@+id/action_timeLineFragment_to_myPageFragment"
             app:destination="@id/myPageFragment" />
         <action
-            android:id="@+id/action_timeLineFragment_to_postRegisterFragment"
-            app:destination="@id/postRegisterFragment" />
+            android:id="@+id/action_timeLineFragment_to_storyRegisterFragment"
+            app:destination="@id/storyRegisterFragment" />
         <action
-            android:id="@+id/action_timeLineFragment_to_postDetailFragment"
-            app:destination="@id/postDetailFragment" />
+            android:id="@+id/action_timeLineFragment_to_storyDetailFragment"
+            app:destination="@id/storyDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
@@ -101,31 +101,31 @@
             android:id="@+id/action_myPageFragment_to_scrapFragment"
             app:destination="@id/scrapFragment" />
         <action
-            android:id="@+id/action_myPageFragment_to_postDetailFragment"
-            app:destination="@id/postDetailFragment" />
+            android:id="@+id/action_myPageFragment_to_storyDetailFragment"
+            app:destination="@id/storyDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/postRegisterFragment"
-        android:name="com.d108.sduty.ui.main.home.PostRegisterFragment"
-        android:label="PostRegisterFragment" >
+        android:id="@+id/storyRegisterFragment"
+        android:name="com.d108.sduty.ui.main.home.StoryRegisterFragment"
+        android:label="StoryRegisterFragment" >
         <action
-            android:id="@+id/action_postRegisterFragment_to_postDecoFragment"
-            app:destination="@id/postDecoFragment" />
+            android:id="@+id/action_storyRegisterFragment_to_storyDecoFragment"
+            app:destination="@id/storyDecoFragment" />
     </fragment>
     <fragment
-        android:id="@+id/postDetailFragment"
-        android:name="com.d108.sduty.ui.main.home.PostDetailFragment"
-        android:label="PostDetailFragment" />
+        android:id="@+id/storyDetailFragment"
+        android:name="com.d108.sduty.ui.main.home.StoryDetailFragment"
+        android:label="StoryDetailFragment" />
     <fragment
         android:id="@+id/timerFragment"
         android:name="com.d108.sduty.ui.main.timer.TimerFragment"
         android:label="TimerFragment" >
         <action
-            android:id="@+id/action_timerFragment_to_postRegisterFragment"
-            app:destination="@id/postRegisterFragment" />
+            android:id="@+id/action_timerFragment_to_storyRegisterFragment"
+            app:destination="@id/storyRegisterFragment" />
     </fragment>
     <fragment
-        android:id="@+id/myStudyFragment"
+        android:id="@+id/studyFragment"
         android:name="com.d108.sduty.ui.main.study.MyStudyFragment"
         android:label="StudyFragment" >
         <action
@@ -155,9 +155,9 @@
         android:name="com.d108.sduty.ui.camstudy.preview.PreviewFragment"
         android:label="PreviewFragment" />
     <fragment
-        android:id="@+id/postDecoFragment"
-        android:name="com.d108.sduty.ui.main.home.PostDecoFragment"
-        android:label="PostDecoFragment" />
+        android:id="@+id/storyDecoFragment"
+        android:name="com.d108.sduty.ui.main.home.StoryDecoFragment"
+        android:label="StoryDecoFragment" />
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.SettingFragment"
@@ -167,7 +167,7 @@
         android:name="com.d108.sduty.ui.main.mypage.ScrapFragment"
         android:label="ScrapFragment" >
         <action
-            android:id="@+id/action_scrapFragment_to_postDetailFragment"
-            app:destination="@id/postDetailFragment" />
+            android:id="@+id/action_scrapFragment_to_storyDetailFragment"
+            app:destination="@id/storyDetailFragment" />
     </fragment>
 </navigation>

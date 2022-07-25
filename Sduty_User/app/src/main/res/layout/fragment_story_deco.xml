@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--// 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩-->
+<!--게시물 사진 꾸미기 - 타임스탬프, 텍스트 컬러, 템플릿 선택, 공유, 저장-->
 <layout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.home.PostDetailFragment">
+        tools:context=".ui.main.home.StoryDecoFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <TextView
