@@ -1,7 +1,7 @@
 package com.d108.sduty.model.dto
 
 data class Task(
-    var seq : Int,
+    var userSeq : Int,
     var title : String,
     var content : String,
     var startTime : String,

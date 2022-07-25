@@ -15,35 +15,40 @@ import java.util.*
 
 private const val TAG = "TimerViewModel"
 class TimerViewModel : ViewModel() {
+    // 토스트 메시지
+    private val _toastMessage = MutableLiveData<String>()
+    val toastMessage : LiveData<String>
+        get() = _toastMessage
+
     // 사용자가 선택한 날짜
-    private val _selectedDate = MutableLiveData<Date>()
-    val selectedDate : LiveData<Date>
+    private val _selectedDate = MutableLiveData<String>()
+    val selectedDate : LiveData<String>
         get() = _selectedDate
 
-    // TODO: Report DTO 작성 필요
-    // 선택된 날짜의 리포트 목록
-    private val _reportList = MutableLiveData<List<Report>>()
-    val reportList : LiveData<List<Report>>
+    // 선택된 날짜의 리포트
+    private val _reportList = MutableLiveData<Report>()
+    val reportList : LiveData<Report>
         get() = _reportList
 
     // TODO: userSeq 입력 필요
-    // 날짜 선택
+    // 사용자가 날짜 선택
     fun selectDate(strDate: String){
-        // 날짜를 Date 타입으로 변환
         val selectedDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
-        getReportList(0, selectedDate)
+        getReportOfSelectedDate(0, selectedDate)
     }
 
-    // TODO: API 작성 필요
-    // 선택된 날짜의 리포트 목록을 요청
-    private fun getReportList(userSeq : Int, selectedDate : Date){
+    /* API */
+
+    // 선택된 날짜의 리포트를 요청
+    private fun getReportOfSelectedDate(userSeq : Int, selectedDate : Date){
         CoroutineScope(Dispatchers.IO).launch{
-            Retrofit.timerApi.getReportList(userSeq, selectedDate).let{
+            Retrofit.timerApi.getReport(userSeq, selectedDate).let{
                 // 사용자 리포트
                 if(it.isSuccessful && it.body() != null){
-
+                    _reportList.postValue(it.body())
                 } else {
                     // 못 받았을 때
+                    _toastMessage.postValue("서버에서 리포트를 받아오는데 실패했습니다.")
                 }
             }
         }

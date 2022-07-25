@@ -26,6 +26,8 @@ class TimerFragment : Fragment() {
     private val mainViewModel : MainViewModel by activityViewModels()
     private val timerViewModel : TimerViewModel by viewModels()
 
+    private lateinit var today : String
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainViewModel.displayBottomNav(true)
@@ -45,14 +47,15 @@ class TimerFragment : Fragment() {
 
         // 첫 화면을 설정한다.
         initView()
-        // 뷰모델 초기화
+        // 뷰모델 초기화한다.
         initViewModel()
+
     }
 
     // 화면 초기화
     private fun initView(){
-        // 오늘 날짜로 변경
-        val today = convertTimeLongToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
+        // 오늘 날짜
+        today = convertTimeLongToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
         binding.commonSelectedDate.text = today
         //timerViewModel.selectDate(today)
@@ -65,6 +68,22 @@ class TimerFragment : Fragment() {
             val selectedDate = "${year}년 ${month + 1}월 ${day}일"
             binding.commonSelectedDate.text = selectedDate
             //timerViewModel.selectDate(selectedDate)
+
+            //
+            when(selectedDate != today){
+                true -> {
+                    binding.apply {
+                        btnReturnToday.text = "오늘($today) 로 돌아가기"
+                        btnReturnToday.visibility = View.VISIBLE
+                    }
+                }
+                false -> {
+                    binding.apply {
+                        btnReturnToday.text = "오늘($today) 로 돌아가기"
+                        btnReturnToday.visibility = View.INVISIBLE
+                    }
+                }
+            }
         }
         // 다이얼로그 출력
         DatePickerDialog(requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
@@ -75,6 +94,13 @@ class TimerFragment : Fragment() {
             // 날짜 선택
             commonSelectedDate.setOnClickListener {
                 showDatePicker()
+            }
+
+            // 오늘 날짜로 돌아가기
+            btnReturnToday.setOnClickListener {
+                commonSelectedDate.text = today
+                btnReturnToday.visibility = View.INVISIBLE
+                //timerViewModel.selectDate(today)
             }
         }
     }
