@@ -9,7 +9,7 @@
         android:icon="@drawable/icon_schedule"
         android:title="Timer"/>
     <item
-        android:id="@+id/studyFragment"
+        android:id="@+id/myStudyFragment"
         android:icon="@drawable/icon_group_2"
         android:title="Study"/>
     <item

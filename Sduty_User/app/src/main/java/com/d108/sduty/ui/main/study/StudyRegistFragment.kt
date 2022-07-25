@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.SpinnerAdapter
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
 
@@ -23,6 +25,11 @@ class StudyRegistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val data:Array<String> = resources.getStringArray(R.array.array_people)
+        val adapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, data)
+        binding.spinnerPeople.adapter = adapter
+
     }
 
 }
