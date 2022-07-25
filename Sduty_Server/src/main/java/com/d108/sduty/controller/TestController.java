@@ -77,9 +77,6 @@ public class TestController {
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}else {
-//			회원가입
-//			User newUser = new User(email, "", nickname, email);
-//			tService.insertUser(newUser);
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 	}
@@ -92,9 +89,6 @@ public class TestController {
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}else {
-//			회원가입
-//			User newUser = new User(email, "", nickname, email);
-//			tService.insertUser(newUser);
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}		
 	}

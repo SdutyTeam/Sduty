@@ -46,7 +46,7 @@ public class NaverLoginServiceImpl implements NaverLoginService {
 			String name = naver_account.getAsJsonObject().get("name").getAsString();
 			String email = naver_account.getAsJsonObject().get("email").getAsString();
 			String mobile = naver_account.getAsJsonObject().get("mobile").getAsString();
-			
+			System.out.println(naver_account);
 			Map<String, Object> userInfo = new HashMap<String, Object>();
 			userInfo.put("name", name);
 			userInfo.put("email", email);
