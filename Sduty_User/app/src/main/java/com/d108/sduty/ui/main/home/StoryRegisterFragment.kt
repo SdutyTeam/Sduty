@@ -1,10 +1,15 @@
 package com.d108.sduty.ui.main.home
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.widget.addTextChangedListener
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
 import com.d108.sduty.utils.showToast
@@ -22,6 +27,28 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStoryRegisterBinding.inflate(inflater, container, false)
+        binding.apply {
+            etWrite.addTextChangedListener(object : TextWatcher {
+                // 입력이 끝날 때 동작
+                override fun afterTextChanged(p0: Editable?) {}
+                // 입력하기 전에 동작
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                // 타이핑되는 텍스트에 변화가 있으면 동작
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    tvWordLength.text = "${etWrite.length()} / 200"
+                    if (etWrite.length() > 200) {
+                        requireContext().showToast("최대 200자까지 입력 가능합니다.")
+                        etWrite.setTextColor(Color.RED)
+                        tvWordLength.setTextColor(Color.RED)
+                    }
+                    else {
+                        etWrite.setTextColor(Color.BLACK)
+                        tvWordLength.setTextColor(Color.BLACK)
+                    }
+                }
+            })
+        }
+
         return binding.root
     }
 

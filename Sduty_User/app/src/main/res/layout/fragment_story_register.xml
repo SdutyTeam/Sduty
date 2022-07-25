@@ -74,16 +74,27 @@
             android:id="@+id/et_write"
             android:layout_width="0dp"
             android:layout_height="120dp"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/common_top"/>
+        <!--android:maxLength="200"-->
+
+        <TextView
+            android:id="@+id/tv_word_length"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textSize="16sp"
+            android:text="글자 수 200자 제한"
+            app:layout_constraintTop_toBottomOf="@id/et_write"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_write"
+            app:layout_constraintTop_toBottomOf="@id/tv_word_length"
             app:layout_constraintBottom_toTopOf="@id/layout_tag">
 
             <!-- 이미지 추가 버튼 : 갤러리의 이미지를 가져올 수 있다. -->
