@@ -21,6 +21,16 @@ public class User {
 		super();
 	}
 
+	
+	public User(String id, String pass, String name, String email) {
+		super();
+		this.id = id;
+		this.pass = pass;
+		this.name = name;
+		this.email = email;
+	}
+
+
 	public User(String id, String pass, String name, String tel, String email) {
 		super();
 		this.id = id;

@@ -68,21 +68,7 @@ public class TestController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
-	
-	@ApiOperation(value = "test> List<String>리턴", response = User.class)
-	@GetMapping("/test")
-	public ResponseEntity<?> test(){
-		List<String> list = new ArrayList<String>();
-		list.add("권용준");
-		list.add("김남희");
-		list.add("김정윤");
-		list.add("정봉진");
-		list.add("최영희");
-		list.add("편예린");
 		
-		return new ResponseEntity<List<String>>(list, HttpStatus.OK);
-	}
-	
 	@PostMapping("/kakao")
 	public ResponseEntity<?> kakaoLogin(@RequestBody String token){
 		Map<String, Object> userInfo = kService.getUserInfo(token);
@@ -115,31 +101,31 @@ public class TestController {
 		}		
 	}
 	
-//	@PostMapping("/kakao/join")
-//	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
-//		Map<String, Object> userInfo = kService.getUserInfo(token);
-//		String email = userInfo.get("email").toString();
-//		String nickname = userInfo.get("nickname").toString();
-//		User user = new User(email, "", nickname, email);
-//		int result = tService.insertUser(user);
-//		if(result > 0) {
-//			return new ResponseEntity<User>(user, HttpStatus.OK);
-//		}
-//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-//	}
-//	
-//	@PostMapping("/naver/join")
-//	public ResponseEntity<?> naverJoin(@RequestBody String token){
-//		Map<String, Object> userInfo = nService.getUserInfo(token);
-//		String email = userInfo.get("email").toString();
-//		String nickname = userInfo.get("nickname").toString();
-//		User user = new User(email, "", nickname, email);
-//		int result = tService.insertUser(user);
-//		if(result > 0) {
-//			return new ResponseEntity<User>(user, HttpStatus.OK);
-//		}
-//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-//	}
+	@PostMapping("/kakao/join")
+	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
+		Map<String, Object> userInfo = kService.getUserInfo(token);
+		String email = userInfo.get("email").toString();
+		String name = userInfo.get("name").toString();
+		User user = new User(email, "", name, email);
+//		int result = tService.insertUser(user);  // User 정보만 보내주고 /join으로 카카오, 네이버 둘 다 가입
+		if(user != null) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
+	}
+	
+	@PostMapping("/naver/join")
+	public ResponseEntity<?> naverJoin(@RequestBody String token){
+		Map<String, Object> userInfo = nService.getUserInfo(token);
+		String email = userInfo.get("email").toString();
+		String nickname = userInfo.get("nickname").toString();
+		User user = new User(email, "", nickname, email);
+		int result = tService.insertUser(user);
+		if(user != null) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
+	}
 	
 	@PostMapping("/auth")
 	public ResponseEntity<?> authTest(@RequestBody AuthInfo authInfo){
