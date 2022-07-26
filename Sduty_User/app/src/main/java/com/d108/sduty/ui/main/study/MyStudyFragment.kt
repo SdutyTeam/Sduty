@@ -16,10 +16,12 @@ import com.d108.sduty.databinding.FragmentMyStudyBinding
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.safeNavigate
 
 // 스터디 - 가입된 스터디 목록(스터디 이름, 카테고리/직업, 참여/제한 인원, 방장 별명), 스터디 상세보기 이동, 스터디 등록, 스터디 검색
 private const val TAG ="MyStudyFragment"
 class MyStudyFragment : Fragment() {
+    private lateinit var mainActivity: MainActivity
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentMyStudyBinding
     private val myStudyViewModel: MyStudyViewModel by viewModels()

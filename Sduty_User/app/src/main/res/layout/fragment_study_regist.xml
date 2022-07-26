@@ -136,7 +136,10 @@
                 android:id="@+id/spinner_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:spinnerMode="dropdown"
+                android:gravity="center"/>
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/daily"
             android:layout_width="match_parent"
