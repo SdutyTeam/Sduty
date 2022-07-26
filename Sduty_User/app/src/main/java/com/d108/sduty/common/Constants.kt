@@ -22,6 +22,10 @@ const val COMMON_JOIN = 0
 const val KAKAO_JOIN = 1
 const val NAVER_JOIN = 2
 
+const val JOB_BUTTON = 0
+const val INTEREST_BUTTON = 1
+const val BIRTH_BUTTON = 2
+
 
 enum class PAGE{
     LOGIN, JOIN, PREVIEW
