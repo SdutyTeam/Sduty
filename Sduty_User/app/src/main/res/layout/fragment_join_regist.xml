@@ -80,7 +80,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/textview_regular"
                     android:enabled="@{vm.isNaverJoin? false : true}"
-                    android:text="@{user.name ?? ``}"
+                    android:text="@{user.user_name ?? ``}"
                     app:layout_constraintTop_toBottomOf="@id/tv_title_name"
                     android:singleLine="true"/>
 

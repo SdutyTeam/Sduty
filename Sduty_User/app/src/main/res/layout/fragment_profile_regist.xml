@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 프로필 등록 - 프로필 사진, 별명, 직업, 관심 분야, 생년월일, 자기소개-->
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.d108.sduty.ui.sign.viewmodel.ProfileViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -169,11 +174,12 @@
 
                             <FrameLayout
                                 android:id="@+id/frame_check_job"
-                                android:layout_width="50dp"
+                                android:layout_width="80dp"
                                 android:layout_height="50dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toTopOf="@id/et_job"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                android:onClick="@{() -> vm.setPublicFlag(0)}"
                                 >
                                 <ImageView
                                     android:layout_width="match_parent"
@@ -184,7 +190,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_margin="10dp"
-                                    android:text="전체"
+                                    android:text="@{vm.flagJob == 0 ? `비공개` : vm.flagJob == 1 ? `친구만` : vm.flagJob == 2 ? `전체` : ``}"
                                     android:textSize="16sp"
                                     android:gravity="center"/>
                             </FrameLayout>
@@ -206,11 +212,12 @@
 
                             <FrameLayout
                                 android:id="@+id/frame_check_interest"
-                                android:layout_width="50dp"
+                                android:layout_width="80dp"
                                 android:layout_height="50dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toTopOf="@id/et_interest"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                android:onClick="@{() -> vm.setPublicFlag(1)}"
                                 >
                                 <ImageView
                                     android:layout_width="match_parent"
@@ -221,7 +228,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_margin="10dp"
-                                    android:text="전체"
+                                    android:text="@{vm.flagInterest == 0 ? `비공개` : vm.flagInterest == 1 ? `친구만` : vm.flagInterest == 2 ? `전체` : ``}"
                                     android:textSize="16sp"
                                     android:gravity="center"/>
                             </FrameLayout>
@@ -243,11 +250,12 @@
 
                             <FrameLayout
                                 android:id="@+id/frame_check_birth"
-                                android:layout_width="50dp"
+                                android:layout_width="80dp"
                                 android:layout_height="50dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toTopOf="@id/et_birth"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                android:onClick="@{() -> vm.setPublicFlag(2)}"
                                 >
                                 <ImageView
                                     android:layout_width="match_parent"
@@ -258,7 +266,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_margin="10dp"
-                                    android:text="전체"
+                                    android:text="@{vm.flagBirth == 0 ? `비공개` : vm.flagBirth == 1 ? `친구만` : vm.flagBirth == 2 ? `전체` : ``}"
                                     android:textSize="16sp"
                                     android:gravity="center"/>
                             </FrameLayout>
