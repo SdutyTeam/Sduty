@@ -16,16 +16,16 @@
 	</select>
 	
 	<insert id="insertAuthInfo" parameterType="AuthInfo">
-		insert into Identification(tel, code, expire) values(#{tel}, #{code}, date_add(now(), INTERVAL 3 MINUTE));
+		insert into identification(tel, code, expire) values(#{tel}, #{code}, date_add(now(), INTERVAL 3 MINUTE));
 	</insert>
 	<update id="updateAuthInfo" parameterType="AuthInfo">
-		update Identification set code = #{code}, expire_time = date_add(now(), INTERVAL 3 MINUTE);
+		update identification set code = #{code}, expire_time = date_add(now(), INTERVAL 3 MINUTE);
 	</update>
 	<select id="selectAuthInfo" resultType="AuthInfo" parameterType="String">
-		select * from Identification where tel = #{tel}
+		select * from identification where tel = #{tel}
 	</select>
 	<delete id="deleteAuthInfo" parameterType="AuthInfo">
-		delete from Identification where tel = #{tel};
+		delete from identification where tel = #{tel};
 	</delete>
 	
 </mapper>
