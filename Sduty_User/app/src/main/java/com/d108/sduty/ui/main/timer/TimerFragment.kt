@@ -99,6 +99,9 @@ class TimerFragment : Fragment() {
         }
 
         binding.apply {
+            lifecycleOwner = this@TimerFragment
+            timerVM = timerViewModel
+
             // 날짜 선택
             commonSelectedDate.setOnClickListener {
                 showDatePicker()
