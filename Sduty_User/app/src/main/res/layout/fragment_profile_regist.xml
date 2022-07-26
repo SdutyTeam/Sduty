@@ -5,6 +5,7 @@
         <variable
             name="vm"
             type="com.d108.sduty.ui.sign.viewmodel.ProfileViewModel" />
+        <import type="android.view.View"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -119,6 +120,37 @@
                                 android:layout_marginEnd="10dp"
                                 />
 
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toTopOf="@id/tv_title_agree"
+                                android:visibility="@{vm.isUsedNickname? View.VISIBLE : View.GONE}"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginStart="20dp"
+                                >
+                                <TextView
+                                    android:id="@+id/tv_title_id_error"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:text="중복된 별명입니다"
+
+                                    android:textColor="@color/red_300"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toStartOf="@id/iv_id_error"
+                                    app:layout_constraintTop_toTopOf="parent"/>
+
+                                <ImageView
+                                    android:id="@+id/iv_id_error"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@android:drawable/stat_notify_error"
+                                    app:layout_constraintTop_toTopOf="@id/tv_title_id_error"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:tint="@color/red_300" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
                             <EditText
                                 android:id="@+id/et_nickname"
                                 android:layout_width="0dp"
@@ -136,7 +168,7 @@
 
                             <FrameLayout
                                 android:id="@+id/frame_check"
-                                android:layout_width="50dp"
+                                android:layout_width="80dp"
                                 android:layout_height="50dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toTopOf="@id/et_nickname"
