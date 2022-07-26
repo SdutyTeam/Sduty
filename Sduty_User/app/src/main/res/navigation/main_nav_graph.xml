@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/myStudyFragment">
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.d108.sduty.ui.sign.LoginFragment"
@@ -137,10 +137,6 @@
         android:id="@+id/studyDetailFragment"
         android:name="com.d108.sduty.ui.main.study.StudyDetailFragment"
         android:label="StudyDetailFragment" >
-        <action
-            android:id="@+id/action_studyDetailFragment_to_previewFragment"
-            app:destination="@id/previewFragment" />
-        <action
             android:id="@+id/action_studyDetailFragment_to_studyRegistFragment"
             app:destination="@id/studyRegistFragment" />
     </fragment>

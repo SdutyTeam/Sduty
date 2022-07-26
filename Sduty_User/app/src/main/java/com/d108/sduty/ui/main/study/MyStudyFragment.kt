@@ -60,7 +60,6 @@ class MyStudyFragment : Fragment() {
             dialog.showDialog()
             dialog.setOnClickListener(object : CustomDialog.OnDialogClickListener{
                 override fun onClicked(type: Boolean) {
-                    mainViewModel.displayBottomNav(false)
                     findNavController().safeNavigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyRegistFragment(type))
                 }
 
@@ -77,7 +76,6 @@ class MyStudyFragment : Fragment() {
                 // 스터디 입장 (내 스터디 클릭 이벤트)
                 TODO("Not yet implemented")
             }
-
         }
 
 //        binding.mystudyList.apply {

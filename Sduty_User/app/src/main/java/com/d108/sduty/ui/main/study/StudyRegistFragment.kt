@@ -26,7 +26,6 @@ class StudyRegistFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainViewModel.displayBottomNav(false)
-        Log.d(TAG, "onAttach: ${mainViewModel.visibilityBottomNav.value}")
     }
 
     override fun onCreateView(

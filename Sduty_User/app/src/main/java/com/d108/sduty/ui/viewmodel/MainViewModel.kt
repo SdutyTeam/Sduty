@@ -17,7 +17,7 @@ class MainViewModel: ViewModel() {
         get() = _visibilityBottomNav
     // true ? show : gone
     fun displayBottomNav(hide: Boolean){
-        _visibilityBottomNav.value = hide
+        _visibilityBottomNav.postValue(hide)
     }
 
     private val _user = MutableLiveData<User>()
