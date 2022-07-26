@@ -1,18 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--스터디 검색 - 스터디 명, 카테고리 별 검색-->
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/common_top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.main.study.StudySearchFragment">
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/common_top_back"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:padding="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/icon_back"
+            />
 
-    </FrameLayout>
+        <LinearLayout
+            android:id="@+id/toolbar_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="horizontal"
+            app:titleTextColor="#FFFFFF"
+            tools:ignore="MissingConstraints">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_fragment_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginVertical="10dp"
+                android:layout_weight="1"
+                android:imeOptions="actionDone"
+                android:orientation="vertical"
+                app:iconifiedByDefault="false"
+                app:queryHint="검색어를 입력해주세요."
+                app:searchIcon="@drawable/search">
+
+            </androidx.appcompat.widget.SearchView>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

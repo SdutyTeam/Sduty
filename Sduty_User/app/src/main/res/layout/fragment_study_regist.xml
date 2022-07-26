@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <!-- 스터디 등록 - 스터디 명, 공개 설정, 비밀번호 설정, 최대 인원, 카테고리, 스터디 설명, 일반/캠스터디 설정-->
+<!-- 스터디 등록 - 스터디 명, 공개 설정, 비밀번호 설정, 최대 인원, 카테고리, 스터디 설명, 일반/캠스터디 설정-->
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -75,27 +75,27 @@
                 android:layout_weight="1"/>
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="5">
-
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="비밀번호"
-            android:gravity="center"
-            android:textSize="20sp"/>
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="공백 입력 시 공개 방"
-            android:gravity="center"
-            android:layout_weight="4"/>
-    </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="비밀번호"
+                android:gravity="center"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="공백 입력 시 공개 방"
+                android:gravity="center"
+                android:layout_weight="4"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                 android:id="@+id/spinner_people"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="1"
                 android:gravity="center"/>
         </LinearLayout>
 
@@ -136,12 +136,9 @@
                 android:id="@+id/spinner_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
                 android:spinnerMode="dropdown"
-                android:gravity="center"/>
-        </LinearLayout>
-
         <LinearLayout
+            android:id="@+id/daily"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
