@@ -121,9 +121,9 @@ class TimerFragment : Fragment() {
                 showDatePicker()
             }
 
-            // 하루 공부한 시간
-            timerViewModel.report.observe(viewLifecycleOwner){ report ->
-                tvStopwatch.text = report.totalTime
+            // 공부 시작, 종료
+            ivTimer.setOnClickListener {
+                timerViewModel.useTimer()
             }
 
             // 리포트로 이동
