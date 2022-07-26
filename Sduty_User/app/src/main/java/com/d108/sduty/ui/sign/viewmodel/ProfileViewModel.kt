@@ -26,12 +26,16 @@ class ProfileViewModel: ViewModel() {
     fun checkNickname(nickname: String){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.profileApi.getUsedId(nickname).let {
-                if(it.code() == 401){
-                    _isUsedNickname.postValue(true)
-                }else if(it.code() == 200){
-                    _isUsedNickname.postValue(false)
-                }else{
-                    Log.d(TAG, "checkNickname: ${it}")
+                when {
+                    it.code() == 401 -> {
+                        _isUsedNickname.postValue(true)
+                    }
+                    it.code() == 200 -> {
+                        _isUsedNickname.postValue(false)
+                    }
+                    else -> {
+                        Log.d(TAG, "checkNickname: ${it}")
+                    }
                 }
             }
         }
@@ -66,7 +70,6 @@ class ProfileViewModel: ViewModel() {
         get() = _flagBirth
 
     fun setPublicFlag(clicked: Int){
-        Log.d(TAG, "setPublicFlag: $clicked")
         when(clicked){
             JOB_BUTTON -> {
                 _flagJob.postValue((flagJob.value!! + 1) % 3)

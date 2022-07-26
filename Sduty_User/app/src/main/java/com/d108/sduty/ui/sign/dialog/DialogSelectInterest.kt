@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.d108.sduty.R
 
-private const val TAG ="SelectDialog"
-class SelectDialog : DialogFragment() {
+private const val TAG ="DialogSelectInterest"
+class DialogSelectInterest : DialogFragment() {
 
 }

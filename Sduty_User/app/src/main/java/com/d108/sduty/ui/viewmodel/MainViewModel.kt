@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.model.dto.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +26,13 @@ class MainViewModel: ViewModel() {
         get() = _user
     fun setUserValue(user: User){
         _user.postValue(user)
+    }
+
+    private val _profile = MutableLiveData<Profile>()
+    val profile: LiveData<Profile>
+        get() = _profile
+    fun setProfile(profile: Profile){
+        _profile.postValue(profile)
     }
 
 }
