@@ -29,4 +29,21 @@ class ProfileRegistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
+    private fun initViewModel(){
+
+    }
+
+    private fun initView(){
+        binding.apply {
+            btnSave.setOnClickListener {
+
+            }
+        }
+    }
+
+    private fun save(){
+        binding.apply {
+
+        }
+    }
 }
