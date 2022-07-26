@@ -66,6 +66,10 @@ class MyStudyFragment : Fragment() {
             })
         }
 
+        binding.btnListStudy.setOnClickListener {
+            findNavController().safeNavigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyListFragment())
+        }
+
     }
 
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
@@ -54,6 +55,15 @@ class StudyRegistFragment : Fragment() {
         val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
         binding.spinnerCategory.adapter = categoryAdapter
 
+        binding.commonTopBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainViewModel.displayBottomNav(true)
     }
 
 }
