@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
 
-        binding.mainVM = viewModel
+        binding.apply {
+            lifecycleOwner = this@MainActivity
+            mainVM = viewModel
+        }
     }
 }
