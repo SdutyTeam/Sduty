@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.main.timer.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,15 +59,25 @@ class TimerViewModel : ViewModel() {
     }
 
     private fun startTimer() {
+        Log.d(TAG, "startTimer: ")
         _isRunningTimer.postValue(true)
         timerTask = timer(period = 1000){
             time++
 
-            val hour = time / 60 / 60 / 100
-            val min = time / 60 / 100
-            val sec = time / 100
+            val hour = time / 60 / 60
+            val min = time / 60
+            val sec = time
 
-            _timer.postValue("${hour}:${min}:${sec}")
+            Log.d(TAG, "startTimer: ${time}")
+
+            _timer.postValue("${setTimeFormat(hour)}:${setTimeFormat(min)}:${setTimeFormat(sec)}")
+        }
+    }
+
+    private fun setTimeFormat(time: Int): String{
+        return when(time < 10){
+            true -> "0${time}"
+            false -> time.toString()
         }
     }
 
