@@ -1,26 +1,37 @@
 package com.d108.sduty.ui.main.study
 
+import android.content.Context
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.d108.sduty.R
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.adapter.MyStudyAdapter
 import com.d108.sduty.databinding.FragmentMyStudyBinding
+import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.safeNavigate
 
 // 스터디 - 가입된 스터디 목록(스터디 이름, 카테고리/직업, 참여/제한 인원, 방장 별명), 스터디 상세보기 이동, 스터디 등록, 스터디 검색
 private const val TAG ="MyStudyFragment"
 class MyStudyFragment : Fragment() {
+    private lateinit var mainActivity: MainActivity
+    private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentMyStudyBinding
     private val myStudyViewModel: MyStudyViewModel by viewModels()
 
     private lateinit var myStudyAdapter: MyStudyAdapter
     private var list = listOf<String>()
+
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainViewModel.displayBottomNav(true)
+        mainActivity = context as MainActivity
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +54,19 @@ class MyStudyFragment : Fragment() {
 
         myStudyViewModel.getList()
 
+        binding.btnCreateStudy.setOnClickListener{
+            // Dialog만들기
+            val dialog = CustomDialog(mainActivity)
+            dialog.showDialog()
+            dialog.setOnClickListener(object : CustomDialog.OnDialogClickListener{
+                override fun onClicked(type: Boolean) {
+                    mainViewModel.displayBottomNav(false)
+                    findNavController().safeNavigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyRegistFragment(type))
+                }
+
+            })
+        }
+
     }
 
 
@@ -56,9 +80,9 @@ class MyStudyFragment : Fragment() {
 
         }
 
-        binding.mystudyList.apply {
-            adapter = myStudyAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        }
+//        binding.mystudyList.apply {
+//            adapter = myStudyAdapter
+//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//        }
     }
 }

@@ -112,12 +112,14 @@
             app:destination="@id/postRegisterFragment" />
     </fragment>
     <fragment
-        android:id="@+id/studyFragment"
+        android:id="@+id/myStudyFragment"
         android:name="com.d108.sduty.ui.main.study.MyStudyFragment"
         android:label="StudyFragment" >
         <action
             android:id="@+id/action_myStudyFragment_to_studyRegistFragment"
-            app:destination="@id/studyRegistFragment" />
+            app:destination="@id/studyRegistFragment"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_stop"/>
         <action
             android:id="@+id/action_myStudyFragment_to_studyDetailFragment"
             app:destination="@id/studyDetailFragment" />
@@ -125,7 +127,12 @@
     <fragment
         android:id="@+id/studyRegistFragment"
         android:name="com.d108.sduty.ui.main.study.StudyRegistFragment"
-        android:label="StudyRegistFragment" />
+        android:label="StudyRegistFragment" >
+        <argument
+            android:name="type"
+            app:argType="boolean"
+            />
+    </fragment>
     <fragment
         android:id="@+id/studyDetailFragment"
         android:name="com.d108.sduty.ui.main.study.StudyDetailFragment"
