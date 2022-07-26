@@ -104,6 +104,16 @@ class TimerFragment : Fragment() {
                 showDatePicker()
             }
 
+            // 하루 공부한 시간
+            timerViewModel.report.observe(viewLifecycleOwner){ report ->
+                tvStopwatch.text = report.totalTime
+            }
+
+            // 리포트로 이동
+            fabReport.setOnClickListener {
+                // report 데이터 넘겨주기
+            }
+
             // 오늘 날짜로 돌아가기
             btnReturnToday.setOnClickListener {
                 commonSelectedDate.text = today

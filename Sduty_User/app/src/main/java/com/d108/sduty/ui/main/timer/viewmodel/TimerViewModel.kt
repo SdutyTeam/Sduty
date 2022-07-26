@@ -26,9 +26,9 @@ class TimerViewModel : ViewModel() {
         get() = _selectedDate
 
     // 선택된 날짜의 리포트
-    private val _reportList = MutableLiveData<Report>()
-    val reportList : LiveData<Report>
-        get() = _reportList
+    private val _report = MutableLiveData<Report>()
+    val report : LiveData<Report>
+        get() = _report
 
     // TODO: userSeq 입력 필요
     // 사용자가 날짜 선택
@@ -45,7 +45,7 @@ class TimerViewModel : ViewModel() {
             Retrofit.timerApi.getReport(userSeq, selectedDate).let{
                 // 사용자 리포트
                 if(it.isSuccessful && it.body() != null){
-                    _reportList.postValue(it.body())
+                    _report.postValue(it.body())
                 } else {
                     // 못 받았을 때
                     _toastMessage.postValue("서버에서 리포트를 받아오는데 실패했습니다.")
