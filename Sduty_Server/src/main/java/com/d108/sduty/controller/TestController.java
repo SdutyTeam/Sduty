@@ -40,10 +40,10 @@ public class TestController {
 	@ApiOperation(value = "로그인 > id, pass 확인 > User 리턴", response = User.class)
 	@PostMapping("")
 	public ResponseEntity<?> selectUser(@RequestBody User user){
-		User selectedUser = tService.selectUser(user.getId());
+		User selectedUser = tService.selectUser(user.getUser_id());
 		System.out.println(selectedUser);
-		if(selectedUser.getPass().equals(user.getPass())) {
-			selectedUser.setPass("");
+		if(selectedUser.getUser_pass().equals(user.getUser_pass())) {
+			selectedUser.setUser_pass("");
 			return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -148,6 +148,23 @@ public class TestController {
 		}		
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
+	
+	@GetMapping("/profile/check/{nickname}")
+	public ResponseEntity<?> checkNickName(@PathVariable String nickname){
+		if(true) {
+			// 중복 X 일때 -
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}else {
+			// 중복일 때
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 401
+		}
+	}
+	
+//	@PostMapping("/profile/{user_seq}")
+//	public ResponseEntity<?> insertProfile(@RequestBody Profile profile, @PathVariable String user_seq){
+//		//todo: insert profile
+//		return null;
+//	}
 	
 	
 

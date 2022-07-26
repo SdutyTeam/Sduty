@@ -7,15 +7,15 @@ public interface TestRepo {
 	
 	public int insertUser(User user);
 	
-	public User selectUser(String id);
+	public User selectUser(String user_id);
 	
-	public int isUsedId(String id);
+	public int isUsedId(String user_id);
 	
 	public int insertAuthInfo(AuthInfo authInfo);
 	
 	public int updateAuthInfo(AuthInfo authInfo);
 	
-	public AuthInfo selectAuthInfo(String phone);
+	public AuthInfo selectAuthInfo(String user_tel);
 	
 	public int deleteAuthInfo(AuthInfo authInfo);
 }

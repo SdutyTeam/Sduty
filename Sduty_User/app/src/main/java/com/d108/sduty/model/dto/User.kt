@@ -6,21 +6,22 @@ import java.io.Serializable
 import java.util.*
 
 data class User(
-    var id: String,
-    var pass: String,
-    var name: String,
-    var tel: String,
-    var email: String,
-    var fcm_token: String,
-    var regtime: Date?,
-    var user_public: Boolean
+    var user_seq: Int,
+    var user_id: String,
+    var user_pass: String,
+    var user_name: String,
+    var user_tel: String,
+    var user_email: String,
+    var user_fcm_token: String,
+    var user_regtime: Date?,
+    var user_public: Int
     ){
-    constructor(): this("","","","","","", null,true)
+    constructor(): this(0,"","","","","","", null,1)
     constructor(id: String, password: String):
             this(id, password, "", "", "")
     constructor(id: String, password: String, name: String, tel: String, email: String):
-            this(id, password, name, tel, email, "",null, true)
+            this(0, id, password, name, tel, email, "",null, 1)
     constructor(id: String, password: String, name: String, tel: String, email: String, fcm_token: String):
-            this(id, password, name, tel, email, fcm_token,null, true)
+            this(0,id, password, name, tel, email, fcm_token,null, 1)
     
 }
