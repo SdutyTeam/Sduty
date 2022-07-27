@@ -40,6 +40,7 @@ class DelayDialog : DialogFragment() {
             }
 
             timerViewModel.delayTime.observe(viewLifecycleOwner) { delayTime ->
+                // 20초가 경과하면 종료
                 if(delayTime == 20){
                     TaskDialog().show(requireActivity().supportFragmentManager, "TaskDialog")
 
@@ -53,7 +54,8 @@ class DelayDialog : DialogFragment() {
                 dismiss()
             }
             btnFinish.setOnClickListener {
-                ConfirmDialog().show(requireActivity().supportFragmentManager, "ConfirmDialog")
+                TaskDialog().show(requireActivity().supportFragmentManager, "TaskDialog")
+                dismiss()
             }
         }
     }

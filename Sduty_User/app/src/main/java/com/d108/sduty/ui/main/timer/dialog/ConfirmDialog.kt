@@ -28,7 +28,7 @@ class ConfirmDialog : DialogFragment() {
         binding.apply {
             btnConfirm.setOnClickListener {
                 // DelayDialog 종료
-                val fragment = requireActivity().supportFragmentManager.findFragmentByTag("DelayDialog")
+                val fragment = requireActivity().supportFragmentManager.findFragmentByTag("TaskDialog")
                 requireActivity().supportFragmentManager.beginTransaction().remove(fragment!!).commit()
 
                 // Timer 측정 종료
