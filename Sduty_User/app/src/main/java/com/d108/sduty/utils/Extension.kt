@@ -73,7 +73,7 @@ fun convertTimeStringToDate(str: String, format: String): Date {
     return simpleDateFormat.parse(str)
 }
 
-fun convertTimeLongToString(date: Date, format: String): String {
+fun convertTimeDateToString(date: Date, format: String): String {
     val simpleDateFormat = SimpleDateFormat(format, Locale("ko", "KR"))
     return simpleDateFormat.format(date)
 }
