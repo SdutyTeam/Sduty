@@ -89,14 +89,16 @@ class JoinRegistFragment : Fragment() {
             vm = viewModel
             btnSendSms.setOnClickListener {
                 val tel = "${etPhoneFront.text}${etPhoneEnd.text}"
-                viewModel.sendOTP(tel)
-            }
-            btnAuthCode.setOnClickListener {
-                if("${etPhoneFront.text}${etPhoneEnd.text}".length == 11)
-                    viewModel.checkOTP(etAuthCode.text.toString())
+                if(tel.length == 11)
+                    viewModel.sendOTP(tel)
                 else{
                     requireContext().showToast("정확한 번호를 입력해 주세요")
                 }
+            }
+            btnAuthCode.setOnClickListener {
+
+                    viewModel.checkOTP(etAuthCode.text.toString())
+
             }
             btnJoin.setOnClickListener {
                 join()
