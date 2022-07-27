@@ -22,6 +22,7 @@ private const val TAG ="TemrsDialog"
 class TemrsDialog(var mContext: Context) : DialogFragment() {
     private lateinit var binding: DialogTermsBinding
     private lateinit var inputStream: InputStream
+    lateinit var onClickConfirm: OnClickConfirm
     private lateinit var termsFlag: String
 
     override fun onResume() {
@@ -37,7 +38,7 @@ class TemrsDialog(var mContext: Context) : DialogFragment() {
         val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
         val deviceWidth = size.x
         val deviceHeight = size.y
-        params?.width = (deviceWidth * 0.95).toInt()
+        params?.width = (deviceWidth * 0.9).toInt()
         params?.height = (deviceHeight * 0.95).toInt()
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
@@ -61,7 +62,6 @@ class TemrsDialog(var mContext: Context) : DialogFragment() {
             "terms" -> inputStream = requireContext().assets.open("Terms.txt")
             "privacy" -> inputStream = requireContext().assets.open("PrivacyPolish.txt")
         }
-
         val reader = BufferedReader(InputStreamReader(inputStream))
         while (true) {
             try {
@@ -72,11 +72,16 @@ class TemrsDialog(var mContext: Context) : DialogFragment() {
             stringBuilder.append(string).append("\n")
         }
         inputStream.close()
+
         binding.apply {
             tvText.text = stringBuilder
             btnConfirm.setOnClickListener {
+                onClickConfirm.onClicked(true, termsFlag)
                 dismiss()
             }
         }
+    }
+    interface OnClickConfirm{
+        fun onClicked(confirm: Boolean, flag: String)
     }
 }
