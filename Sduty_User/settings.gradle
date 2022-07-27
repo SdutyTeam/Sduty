@@ -17,6 +17,9 @@ dependencyResolutionManagement {
         maven{
             url "https://repo.sendbird.com/public/maven"
         }
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }
 rootProject.name = "Sduty"
