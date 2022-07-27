@@ -53,6 +53,9 @@ public class TestController {
 	@GetMapping("/join/{id}")
 	public ResponseEntity<?> isUsedId(@PathVariable String id){
 		int result = tService.isUsedId(id);
+System.out.println(id);
+System.out.println(result);
+
 		if(result > 0) {			
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}

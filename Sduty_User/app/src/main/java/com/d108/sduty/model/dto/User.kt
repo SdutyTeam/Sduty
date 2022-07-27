@@ -15,7 +15,7 @@ data class User(
     var user_fcm_token: String,
     var user_regtime: Date?,
     var user_public: Int
-    ){
+){
     constructor(): this(0,"","","","","","", null,1)
     constructor(id: String, password: String):
             this(id, password, "", "", "")
@@ -23,5 +23,5 @@ data class User(
             this(0, id, password, name, tel, email, "",null, 1)
     constructor(id: String, password: String, name: String, tel: String, email: String, fcm_token: String):
             this(0,id, password, name, tel, email, fcm_token,null, 1)
-    
+
 }
