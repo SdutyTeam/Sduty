@@ -43,7 +43,6 @@ class TermsFragment : Fragment() {
                     KAKAO_JOIN -> findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route, args.token))
                     NAVER_JOIN -> findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route, args.token))
                 }
-
             }
         }
     }
