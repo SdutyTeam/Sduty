@@ -92,7 +92,11 @@ class JoinRegistFragment : Fragment() {
                 viewModel.sendOTP(tel)
             }
             btnAuthCode.setOnClickListener {
-                viewModel.checkOTP(etAuthCode.text.toString())
+                if("${etPhoneFront.text}${etPhoneEnd.text}".length == 11)
+                    viewModel.checkOTP(etAuthCode.text.toString())
+                else{
+                    requireContext().showToast("정확한 번호를 입력해 주세요")
+                }
             }
             btnJoin.setOnClickListener {
                 join()
