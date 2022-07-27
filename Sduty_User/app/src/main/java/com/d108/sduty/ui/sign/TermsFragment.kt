@@ -51,14 +51,25 @@ class TermsFragment : Fragment() {
 
             }
             radioSelectAll.setOnClickListener {
-                radioSelectPrivacy.isChecked = true
-                radioSelectTemrs.isChecked = true
+                if(!radioSelectAll.isChecked){
+                    radioSelectPrivacy.isChecked = false
+                    radioSelectTemrs.isChecked = false
+                }else {
+                    radioSelectPrivacy.isChecked = true
+                    radioSelectTemrs.isChecked = true
+                }
             }
             radioSelectPrivacy.setOnClickListener {
-                openDialog("privacy")
+                if(radioSelectPrivacy.isChecked) {
+                    radioSelectPrivacy.isChecked = false
+                    openDialog("privacy")
+                }
             }
             radioSelectTemrs.setOnClickListener {
-                openDialog("terms")
+                if(radioSelectTemrs.isChecked) {
+                    radioSelectTemrs.isChecked = false
+                    openDialog("terms")
+                }
             }
         }
     }
@@ -66,6 +77,14 @@ class TermsFragment : Fragment() {
         TemrsDialog(requireContext()).let {
             it.arguments = bundleOf("flag" to flag)
             it.show(parentFragmentManager.beginTransaction(),"")
+            it.onClickConfirm = object :TemrsDialog.OnClickConfirm{
+                override fun onClicked(confirm: Boolean, flag: String) {
+                    when(flag){
+                        "terms" -> binding.radioSelectTemrs.isChecked = confirm
+                        "privacy" -> binding.radioSelectPrivacy.isChecked = confirm
+                    }
+                }
+            }
         }
     }
 
