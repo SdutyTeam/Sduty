@@ -21,10 +21,6 @@ class StoryDecoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStoryDecoBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val fileUriStr = args.fileUriStr
         if (fileUriStr.equals("")) {
             requireContext().showToast("값이 비어 있습니다!!")
@@ -33,6 +29,14 @@ class StoryDecoFragment : Fragment() {
             binding.apply {
                 imgPreview.setImageURI(Uri.parse(fileUriStr))
             }
+        }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+
         }
     }
 }
