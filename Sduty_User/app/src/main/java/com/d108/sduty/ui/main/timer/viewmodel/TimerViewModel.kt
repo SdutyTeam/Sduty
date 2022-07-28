@@ -50,7 +50,8 @@ class TimerViewModel() : ViewModel() {
     // 사용자가 날짜 선택
     fun selectDate(strDate: String) {
         val selectedDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
-        getReport(0, selectedDate)
+        Log.d(TAG, "selectDate: ${selectedDate}")
+        getReport(1, selectedDate)
     }
 
     // TODO: SharedPreferences 또는 SaveStateViewModel 
@@ -118,8 +119,10 @@ class TimerViewModel() : ViewModel() {
                 // 사용자 리포트
                 if (it.isSuccessful && it.body() != null) {
                     _report.postValue(it.body())
+                    Log.d(TAG, "getReport: ${it.body()}")
                 } else {
                     // 못 받았을 때
+                    Log.d(TAG, "getReport: ${it.errorBody()}")
                     _toastMessage.postValue("서버에서 리포트를 받아오는데 실패했습니다.")
                 }
             }

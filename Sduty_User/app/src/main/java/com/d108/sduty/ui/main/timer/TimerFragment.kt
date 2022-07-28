@@ -56,7 +56,7 @@ class TimerFragment : Fragment() {
         today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
         binding.commonSelectedDate.text = today
-        //timerViewModel.selectDate(today)
+        timerViewModel.selectDate(today)
     }
 
     private fun showDatePicker(){
@@ -65,7 +65,7 @@ class TimerFragment : Fragment() {
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, day ->
             val selectedDate = "${year}년 ${month + 1}월 ${day}일"
             binding.commonSelectedDate.text = selectedDate
-            //timerViewModel.selectDate(selectedDate)
+            timerViewModel.selectDate(selectedDate)
 
             //
             when(selectedDate != today){
@@ -94,7 +94,7 @@ class TimerFragment : Fragment() {
 
             // 하루 공부한 시간
             timerViewModel.report.observe(viewLifecycleOwner){ report ->
-                binding.tvTotalTime.text = report.totalTime
+                binding.tvTotalTime.text = report.total_time
             }
 
             // 시간 변경 시
@@ -136,7 +136,7 @@ class TimerFragment : Fragment() {
             btnReturnToday.setOnClickListener {
                 commonSelectedDate.text = today
                 btnReturnToday.visibility = View.INVISIBLE
-                //timerViewModel.selectDate(today)
+                timerViewModel.selectDate(today)
             }
         }
     }

@@ -1,10 +1,7 @@
 package com.d108.sduty.model.dto
 
-import java.util.*
-
-data class Report (
-    var reportDate: Date,
-    var totalTime: String,
-    var Tasks: List<Task>
-   ){
-}
+data class Report(
+    val report_date: String,
+    val total_time: String,
+    val tasks: List<Task>
+)
