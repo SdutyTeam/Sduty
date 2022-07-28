@@ -152,8 +152,6 @@ System.out.println(result);
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
 	
-<<<<<<< HEAD:Sduty_Server/src/main/java/com/d108/sduty/controller/UserController.java
-=======
 	@GetMapping("/profile/check/{nickname}")
 	public ResponseEntity<?> checkNickName(@PathVariable String nickname){
 		if(true) {
@@ -174,6 +172,5 @@ System.out.println(result);
 	
 
 	
->>>>>>> 12ded53fcc094be6f6f8df42be0b2de4f07c93b4:Sduty_Server/src/main/java/com/d108/sduty/controller/TestController.java
 }
 
