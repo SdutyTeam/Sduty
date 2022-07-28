@@ -18,7 +18,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public void startTask(int userSeq) {
-		User user = reportRepo.findBySeq(userSeq);
+		//profile 수정 후, 구현예정
 		
 	}
 	
@@ -38,6 +38,13 @@ public class ReportServiceImpl implements ReportService {
 		//2. task에 report번호 등록
 		task.setReportSeq(report.getSeq());
 		taskRepo.save(task);
+	}
+
+	@Override
+	public Report getReport(int userSeq, String date) {
+		Report report = reportRepo.findByDateAndOwnerSeq(date, userSeq);
+		System.out.println(report);
+		return report;
 	}
 
 	

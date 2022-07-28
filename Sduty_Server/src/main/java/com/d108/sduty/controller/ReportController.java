@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.d108.sduty.dto.Report;
 import com.d108.sduty.dto.Task;
+import com.d108.sduty.dto.User;
 import com.d108.sduty.service.ReportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 @RestController
@@ -34,6 +37,7 @@ public class ReportController {
 		return new ResponseEntity<Map<String, Object>>(HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "테스크 등록하기")
 	@PostMapping("/tasks")
 	public ResponseEntity<?> regist(@RequestBody ObjectNode reqObject) throws JsonProcessingException, IllegalArgumentException{
 		ObjectMapper mapper = new ObjectMapper();
@@ -44,9 +48,12 @@ public class ReportController {
 		return new ResponseEntity<Map<String, Object>>(HttpStatus.OK);
 	}
 	
+	//총 시간 구현 필요..
 	@GetMapping("/{user_seq}/{date}")
 	public ResponseEntity<?> report(@PathVariable int user_seq, @PathVariable String date){
 		System.out.println(user_seq+", "+date);
+		//Report report = reportService.getReport(user_seq, date);
+		
 		//testcode
 		Map<String, Object> report = new HashMap<String, Object>();
 		//
@@ -59,5 +66,6 @@ public class ReportController {
 		report.put("total_time", "04:29:59");
 		report.put("tasks", tasks);
 		return new ResponseEntity<Map<String, Object>>(report, HttpStatus.OK);
+		//return new ResponseEntity<Report>(report, HttpStatus.OK);
 	}
 }
