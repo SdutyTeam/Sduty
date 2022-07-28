@@ -1,6 +1,6 @@
 package com.d108.sduty.common
 
-const val SERVER_URL = "https://d108.kro.kr:8090" // AWS
+const val SERVER_URL = "http://d108.kro.kr:8090" // AWS
 
 const val SOLAPI_API_KEY = "NCSOR6GTURVMA4XT"
 const val SOLAPI_API_SECRET_KEY = "BENC5C7DNBGXLVJLZLLTN5WB5FSJCDOL"
