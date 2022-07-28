@@ -11,5 +11,8 @@ public interface ReportService {
 	public void startTask(int userSeq);
 	public void registTask(int userSeq, String date, Task task);
 	public Report getReport(int userSeq, String date);
+	public Task getTask(int taskSeq);
+	public Task updateTask(Task task);
+	public void deleteTask(int taskSeq);
 	
 }

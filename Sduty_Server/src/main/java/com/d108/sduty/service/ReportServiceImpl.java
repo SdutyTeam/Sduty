@@ -47,5 +47,19 @@ public class ReportServiceImpl implements ReportService {
 		return report;
 	}
 
+	@Override
+	public Task getTask(int taskSeq) {
+		return taskRepo.findBySeq(taskSeq);
+	}
+
+	@Override
+	public Task updateTask(Task task) {
+		return null;
+	}
+
+	@Override
+	public void deleteTask(int taskSeq) {
+		taskRepo.deleteBySeq(taskSeq);
+	}
 	
 }
