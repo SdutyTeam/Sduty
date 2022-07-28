@@ -37,11 +37,12 @@ class TimerViewModel() : ViewModel() {
     private val _delayTime = MutableLiveData<Int>(0)
     val delayTime: LiveData<Int>
         get() = _delayTime
-    private var delayTask: Timer? = null
 
     private val _isRunningTimer = MutableLiveData<Boolean>(false)
     val isRunningTimer: LiveData<Boolean>
         get() = _isRunningTimer
+
+    private var isDelayingTimer = false
 
     // 시간 측정 시작 시간
     var startTime: String = "00:00:00"
@@ -75,27 +76,21 @@ class TimerViewModel() : ViewModel() {
         _isRunningTimer.value = true
 
         timerTask = timer(period = 1000) {
-            Log.d(TAG, "startTimer: ${timer.value}")
-            Log.d(TAG, "timerTask: ${_isRunningTimer.value}")
-
             _timer.postValue(timer.value!! +1)
+            if(isDelayingTimer){
+                _delayTime.postValue(delayTime.value!! +1)
+            }
         }
     }
 
     // 측정 시간을 유예한다.
     fun delayTimer() {
-        delayTask = timer(period = 1000) {
-
-            when(delayTime.value){
-                20 -> stopTimer()
-                else -> _delayTime.postValue(delayTime.value!! +1)
-            }
-        }
+        isDelayingTimer = true
     }
 
     // 측정을 계속 한다.
     fun resetDelayTimer() {
-        delayTask?.cancel()
+        isDelayingTimer = false
         _delayTime.value = 0
     }
 
@@ -106,8 +101,8 @@ class TimerViewModel() : ViewModel() {
 
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
-        delayTask?.cancel()
         _timer.postValue(0)
+        resetDelayTimer()
     }
 
     /* API */
