@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.d108.sduty.dto.Alarm;
 import com.d108.sduty.dto.Study;
 import com.d108.sduty.dto.Task;
+import com.d108.sduty.dto.User;
 import com.d108.sduty.service.StudyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/study")
@@ -31,6 +34,13 @@ public class StudyController {
 	@Autowired
 	private StudyService studyService;
 	
+	@ApiOperation(value="스터디 전체 조회")
+	@GetMapping("")
+	public ResponseEntity<?> getAllStudy(){
+		return new ResponseEntity<List<Study>>(studyService.getAllStudy(), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "스터디 등록")
 	@PostMapping("")
 	public ResponseEntity<?> registStudy(@RequestBody ObjectNode reqObject){
 		ObjectMapper mapper = new ObjectMapper();
@@ -52,6 +62,7 @@ public class StudyController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "내 스터디 목록")
 	@GetMapping("/{user_seq}")
 	public ResponseEntity<?> myStudyList(@PathVariable int user_seq){
 		System.out.println("내 스터디 목록"+ user_seq);

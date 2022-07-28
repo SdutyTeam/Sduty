@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,15 +20,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ApiModel(value = "Alarm: 스터디 알림 정보", description = "캠스터디 알림 정보")
 public class Alarm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="alarm_seq")
 	private int seq;
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name="alarm_study_seq")
-//	@Column(name="alarm_study_seq")
-//	private Integer studySeq;
 	@Column(name="alarm_time")
 	private String time;
 	private boolean mon;
@@ -38,7 +36,6 @@ public class Alarm {
 	private boolean sat;
 	private boolean sun;
 	
-//	@OneToOne(mappedBy = "alarm")
 	@OneToOne(optional = false)
 	@JoinColumn(name="alarm_study_seq")
 	private Study study;

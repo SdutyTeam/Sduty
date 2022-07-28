@@ -1,5 +1,7 @@
 package com.d108.sduty.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +17,17 @@ public class StudyServiceImpl implements StudyService {
 	private StudyRepo studyRepo;
 	@Autowired
 	private AlarmRepo alarmRepo;
-	
+
+	@Override
+	public List<Study> getAllStudy() {
+		return studyRepo.findAll();
+	}
+
 	@Override
 	public void registStudy(Study study, Alarm alarm) {
-		study.setJoinNumber(1);//방장만 참여
+		study.setJoinNumber(1);// 방장만 참여
 		Study newStudy = studyRepo.save(study);
-		if(alarm!=null) {
+		if (alarm != null) {
 			alarm.setStudy(newStudy);
 			alarmRepo.save(alarm);
 		}
