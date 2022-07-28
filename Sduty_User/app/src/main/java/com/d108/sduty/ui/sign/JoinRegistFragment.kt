@@ -52,17 +52,35 @@ class JoinRegistFragment : Fragment() {
 
     private fun initViewModel() {
         viewModel.apply {
+            setToken(args.token)
+            when(args.route){
+                KAKAO_JOIN -> {                    
+                    kakaoUserInfo()
+                }
+                NAVER_JOIN -> {                    
+                    naverUserInfo()
+                }
+            }
             setJoinFlag(args.route)
+            socialUser.observe(viewLifecycleOwner){
+                binding.user = it
+                Log.d(TAG, "initViewModel: $it")
+            }
             isJoinSucced.observe(viewLifecycleOwner){
                 when(it){
                     true -> {
                         requireContext().showToast("회원 가입이 완료되었습니다.")
-                        findNavController().safeNavigate(JoinRegistFragmentDirections.actionJoinRegistFragmentToLoginFragment())
                     }
                 }
+                findNavController().safeNavigate(JoinRegistFragmentDirections.actionJoinRegistFragmentToProfileRegistFragment())
+            }
+            isSucceedSendAuthInfo.observe(viewLifecycleOwner){
+                binding.vm = viewModel
+            }
+            isSucceedAuth.observe(viewLifecycleOwner){
+                binding.vm = viewModel
             }
         }
-
     }
 
     private fun initView() {
@@ -70,7 +88,7 @@ class JoinRegistFragment : Fragment() {
             lifecycleOwner = this@JoinRegistFragment
             vm = viewModel
             btnSendSms.setOnClickListener {
-                val tel = "${etPhoneFront.text}+${etPhoneEnd.text}"
+                val tel = "${etPhoneFront.text}${etPhoneEnd.text}"
                 viewModel.sendOTP(tel)
             }
             btnAuthCode.setOnClickListener {

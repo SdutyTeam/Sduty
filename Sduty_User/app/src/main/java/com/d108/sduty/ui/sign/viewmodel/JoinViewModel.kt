@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.nurigo.sdk.message.model.Message
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest
+import retrofit2.http.Body
 import java.lang.Exception
 
 private const val TAG ="JoinViewModel"
@@ -24,6 +25,11 @@ class JoinViewModel: ViewModel() {
     private val _accessToken = MutableLiveData<String>()
     val accessToken : LiveData<String>
         get() = _accessToken
+
+    fun setToken(token: String){
+        _accessToken.value = token
+        Log.d(TAG, "setToken: $token")
+    }
 
     private val _isJoinSucced = MutableLiveData<Boolean>()
     val isJoinSucced: LiveData<Boolean>
@@ -63,37 +69,36 @@ class JoinViewModel: ViewModel() {
             }
         }
     }
-//
-//    fun kakaoJoin(){
-//        viewModelScope.launch(Dispatchers.IO){
-//            try {
-//                Retrofit.userApi.kakaoJoin(accessToken.value.toString()).let {
-//                    if(it.isSuccessful && it.body() != null){
-//                        _isJoinSucced.postValue(true)
-//                    }else{
-//                        _isJoinSucced.postValue(false)
-//                    }
-//                }
-//            }catch (e: Exception){
-//                Log.d(TAG, "kakaoJoin: ${e.message}")
-//            }
-//        }
-//    }
-//    fun naverJoin(){
-//        viewModelScope.launch(Dispatchers.IO){
-//            try {
-//                Retrofit.userApi.naverJoin(accessToken.value.toString()).let {
-//                    if(it.isSuccessful && it.body() != null){
-//                        _isJoinSucced.postValue(true)
-//                    }else{
-//                        _isJoinSucced.postValue(false)
-//                    }
-//                }
-//            }catch (e: Exception){
-//                Log.d(TAG, "kakaoJoin: ${e.message}")
-//            }
-//        }
-//    }
+
+    private val _socialUser = MutableLiveData<User>()
+    val socialUser: LiveData<User>
+        get() = _socialUser
+    fun kakaoUserInfo(){
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                Retrofit.userApi.kakaoUserInfo(accessToken.value.toString()).let {
+                    if(it.isSuccessful && it.body() != null){
+                        _socialUser.postValue(it.body() as User)
+                    }
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "kakaoJoin: ${e.message}")
+            }
+        }
+    }
+    fun naverUserInfo(){
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                Retrofit.userApi.naverUserInfo(accessToken.value.toString()).let {
+                    if(it.isSuccessful && it.body() != null){
+                        _socialUser.postValue(it.body() as User)
+                    }
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "kakaoJoin: ${e.message}")
+            }
+        }
+    }
 
 
     private val _authInfo = MutableLiveData<AuthInfo>()
@@ -112,7 +117,7 @@ class JoinViewModel: ViewModel() {
             text = "[Sduty] 인증 번호[${authCode}]를 입력해 주세요. "
         )
         viewModelScope.launch(Dispatchers.IO){
-            val newAuthInfo = AuthInfo(authCode.toString(), userPhoneNum)
+            val newAuthInfo = AuthInfo(userPhoneNum, authCode.toString(), )
             _authInfo.postValue(newAuthInfo)
             ApplicationClass.messageService.sendOne(SingleMessageSendingRequest(message)) // SMS 보냄
             Retrofit.userApi.sendAuthInfo(newAuthInfo).let {
@@ -134,7 +139,8 @@ class JoinViewModel: ViewModel() {
     fun checkOTP(inputCode: String){
         viewModelScope.launch(Dispatchers.IO){
             val code = authInfo.value
-            code!!.authcode = inputCode
+            code!!.code = inputCode
+            Log.d(TAG, "checkOTP: ${authInfo}")
             Retrofit.userApi.checkAuthCode(code).let {
                 if(it.code() == 401){
                     _isSucceedAuth.postValue(false)
@@ -146,6 +152,7 @@ class JoinViewModel: ViewModel() {
                 }
                 else if(it.isSuccessful){
                     _isSucceedAuth.postValue(true)
+                    _authMsg.postValue("인증 되었습니다.")
                 }
             }
         }

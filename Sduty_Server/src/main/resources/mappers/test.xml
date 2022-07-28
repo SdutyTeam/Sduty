@@ -5,27 +5,27 @@
 
 <mapper namespace="com.d108.sduty.repo.TestRepo">
 	<insert id="insertUser" parameterType="User">
-		insert into user(id, pass, name, tel, email) 
-		values(#{id}, #{pass}, #{name}, #{tel}, #{email});
+		insert into user(user_id, user_pass, user_name, user_tel, user_email) 
+		values(#{userId}, #{userPass}, #{userName}, #{userTel}, #{userEmail});
 	</insert>
 	<select id="selectUser" parameterType="String" resultType="User">
-		select * from user where id = #{id}
+		select * from user where user_id = #{userId}
 	</select>
 	<select id="isUsedId" parameterType="String" resultType="Integer">
-		select count(id) from user where id = #{id}
+		select count(user_id) from user where user_id = #{user_id}
 	</select>
 	
 	<insert id="insertAuthInfo" parameterType="AuthInfo">
-		insert into Identification(tel, code, expire) values(#{tel}, #{code}, date_add(now(), INTERVAL 3 MINUTE));
+		insert into identification(tel, code, expire) values(#{tel}, #{code}, date_add(now(), INTERVAL 3 MINUTE));
 	</insert>
 	<update id="updateAuthInfo" parameterType="AuthInfo">
-		update Identification set code = #{code}, expire_time = date_add(now(), INTERVAL 3 MINUTE);
+		update identification set code = #{code}, expire_time = date_add(now(), INTERVAL 3 MINUTE);
 	</update>
 	<select id="selectAuthInfo" resultType="AuthInfo" parameterType="String">
-		select * from Identification where tel = #{tel}
+		select * from identification where tel = #{tel}
 	</select>
 	<delete id="deleteAuthInfo" parameterType="AuthInfo">
-		delete from Identification where tel = #{tel};
+		delete from identification where tel = #{tel};
 	</delete>
 	
 </mapper>

@@ -40,10 +40,10 @@ public class UserController {
 	@ApiOperation(value = "로그인 > id, pass 확인 > User 리턴", response = User.class)
 	@PostMapping("")
 	public ResponseEntity<?> selectUser(@RequestBody User user){
-		User selectedUser = tService.selectUser(user.getId());
+		User selectedUser = tService.selectUser(user.getUser_id());
 		System.out.println(selectedUser);
-		if(selectedUser.getPass().equals(user.getPass())) {
-			selectedUser.setPass("");
+		if(selectedUser.getUser_pass().equals(user.getUser_pass())) {
+			selectedUser.setUser_pass("");
 			return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -53,6 +53,9 @@ public class UserController {
 	@GetMapping("/join/{id}")
 	public ResponseEntity<?> isUsedId(@PathVariable String id){
 		int result = tService.isUsedId(id);
+System.out.println(id);
+System.out.println(result);
+
 		if(result > 0) {			
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
@@ -85,7 +88,7 @@ public class UserController {
 	public ResponseEntity<?> naverLogin(@RequestBody String token){
 		Map<String, Object> userInfo = nService.getUserInfo(token);
 		String email = userInfo.get("email").toString();		
-		User user= tService.selectUser(email);				
+		User user= tService.selectUser(email);
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}else {
@@ -111,9 +114,9 @@ public class UserController {
 		Map<String, Object> userInfo = nService.getUserInfo(token);
 		String email = userInfo.get("email").toString();
 		String name = userInfo.get("name").toString();
-		String mobile = userInfo.get("mobile").toString().replace("-", "");		
+		String mobile = userInfo.get("mobile").toString();		
 		User user = new User(email, "", name, mobile, email);
-//		int result = tService.insertUser(user);// User 정보만 보내주고 /join으로 카카오, 네이버 둘 다 가입
+//		int result = tService.insertUser(user);
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
@@ -132,12 +135,12 @@ public class UserController {
 	
 	@PostMapping("/auth/check")
 	public ResponseEntity<?> getAuthCode(@RequestBody AuthInfo authInfo){
-		AuthInfo selectedCode = tService.selectAuthInfo(authInfo.getPhone());
+		AuthInfo selectedCode = tService.selectAuthInfo(authInfo.getTel());
 		System.out.println(selectedCode);
 		System.out.println(new Date(System.currentTimeMillis()));
 		if(selectedCode != null) {
-			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) { // 인증코드 비교
-				if(TimeCompare.compare(selectedCode.getExpire_time())) { // 인증 만료시간 확인
+			if(selectedCode.getCode().equals(authInfo.getCode())) { // 인증코드 비교
+				if(TimeCompare.compare(selectedCode.getExpire())) { // 인증 만료시간 확인
 					tService.deleteAuthInfo(authInfo);					
 					return new ResponseEntity<Void>(HttpStatus.OK); // 인증완료
 				}
@@ -149,5 +152,28 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
 	
+<<<<<<< HEAD:Sduty_Server/src/main/java/com/d108/sduty/controller/UserController.java
+=======
+	@GetMapping("/profile/check/{nickname}")
+	public ResponseEntity<?> checkNickName(@PathVariable String nickname){
+		if(true) {
+			// 중복 X 일때 -
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}else {
+			// 중복일 때
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 401
+		}
+	}
+	
+//	@PostMapping("/profile/{user_seq}")
+//	public ResponseEntity<?> insertProfile(@RequestBody Profile profile, @PathVariable String user_seq){
+//		//todo: insert profile
+//		return null;
+//	}
+	
+	
+
+	
+>>>>>>> 12ded53fcc094be6f6f8df42be0b2de4f07c93b4:Sduty_Server/src/main/java/com/d108/sduty/controller/TestController.java
 }
 

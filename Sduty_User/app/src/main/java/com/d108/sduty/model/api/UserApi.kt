@@ -28,10 +28,10 @@ interface UserApi {
     suspend fun naverLogin(@Body token: String): Response<User>
 
     @POST("/user/kakao/join")
-    suspend fun kakaoJoin(@Body token: String): Response<User>
+    suspend fun kakaoUserInfo(@Body token: String): Response<User>
 
     @POST("/user/naver/join")
-    suspend fun naverJoin(@Body token: String): Response<User>
+    suspend fun naverUserInfo(@Body token: String): Response<User>
 
     @POST("/user/auth")
     suspend fun sendAuthInfo(@Body authInfo: AuthInfo): Response<Void>

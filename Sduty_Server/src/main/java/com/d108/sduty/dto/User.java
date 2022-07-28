@@ -8,137 +8,126 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "User: 유저 정보", description = "유저 상세 정보")
 public class User {
 	@ApiModelProperty(value = "아이디")
-	private String id;
-	private String pass;
-	private String name;
-	private String tel;	
-	private String email;
-	private String fcm_token;
-	private Date regtime;
-	private boolean user_public;
+	private int user_seq;
+	private String user_id;
+	private String user_pass;
+	private String user_name;
+	private String user_tel;	
+	private String user_email;
+	private String user_fcm_token;
+	private Date user_regtime;
+	private int user_user_public;
 	
-	public User() {
+	public User(int user_seq, String user_id, String user_pass, String user_name, String user_tel, String user_email,
+			String user_fcm_token, Date user_regtime, int user_user_public) {
 		super();
+		this.user_seq = user_seq;
+		this.user_id = user_id;
+		this.user_pass = user_pass;
+		this.user_name = user_name;
+		this.user_tel = user_tel;
+		this.user_email = user_email;
+		this.user_fcm_token = user_fcm_token;
+		this.user_regtime = user_regtime;
+		this.user_user_public = user_user_public;
 	}
-
 	
-	public User(String id, String pass, String name, String email) {
+	public User(String user_id, String user_pass, String user_name, String user_email) {
 		super();
-		this.id = id;
-		this.pass = pass;
-		this.name = name;
-		this.email = email;
+		this.user_id = user_id;
+		this.user_pass = user_pass;
+		this.user_name = user_name;
+		this.user_email = user_email;
 	}
 
-
-	public User(String id, String pass, String name, String tel, String email) {
+	public User(String user_id, String user_pass, String user_name, String user_tel, String user_email) {
 		super();
-		this.id = id;
-		this.pass = pass;
-		this.name = name;
-		this.tel = tel;
-		this.email = email;
+		this.user_id = user_id;
+		this.user_pass = user_pass;
+		this.user_name = user_name;
+		this.user_tel = user_tel;
+		this.user_email = user_email;
 	}
-
-	public User(String id, String pass, String name, String tel, String email, String fcm_token, Date regtime,
-			boolean user_public) {
-		super();
-		this.id = id;
-		this.pass = pass;
-		this.name = name;
-		this.tel = tel;
-		this.email = email;
-		this.fcm_token = fcm_token;
-		this.regtime = regtime;
-		this.user_public = user_public;
+	
+	public int getUser_seq() {
+		return user_seq;
 	}
-
-	public String getId() {
-		return id;
+	public void setUser_seq(int user_seq) {
+		this.user_seq = user_seq;
 	}
-
-	public void setId(String id) {
-		this.id = id;
+	public String getUser_id() {
+		return user_id;
 	}
-
-	public String getPass() {
-		return pass;
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
 	}
-
-	public void setPass(String pass) {
-		this.pass = pass;
+	public String getUser_pass() {
+		return user_pass;
 	}
-
-	public String getName() {
-		return name;
+	public void setUser_pass(String user_pass) {
+		this.user_pass = user_pass;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public String getUser_name() {
+		return user_name;
 	}
-
-	public String getTel() {
-		return tel;
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
+	public String getUser_tel() {
+		return user_tel;
 	}
-
-	public String getEmail() {
-		return email;
+	public void setUser_tel(String user_tel) {
+		this.user_tel = user_tel;
 	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public String getUser_email() {
+		return user_email;
 	}
-
-	public String getFcm_token() {
-		return fcm_token;
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
 	}
-
-	public void setFcm_token(String fcm_token) {
-		this.fcm_token = fcm_token;
+	public String getUser_fcm_token() {
+		return user_fcm_token;
 	}
-
-	public Date getRegtime() {
-		return regtime;
+	public void setUser_fcm_token(String user_fcm_token) {
+		this.user_fcm_token = user_fcm_token;
 	}
-
-	public void setRegtime(Date regtime) {
-		this.regtime = regtime;
+	public Date getUser_regtime() {
+		return user_regtime;
 	}
-
-	public boolean isUser_public() {
-		return user_public;
+	public void setUser_regtime(Date user_regtime) {
+		this.user_regtime = user_regtime;
 	}
-
-	public void setUser_public(boolean user_public) {
-		this.user_public = user_public;
+	public int isUser_user_public() {
+		return user_user_public;
 	}
-
+	public void setUser_user_public(int user_user_public) {
+		this.user_user_public = user_user_public;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("User [id=");
-		builder.append(id);
-		builder.append(", pass=");
-		builder.append(pass);
-		builder.append(", name=");
-		builder.append(name);
-		builder.append(", tel=");
-		builder.append(tel);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", fcm_token=");
-		builder.append(fcm_token);
-		builder.append(", regtime=");
-		builder.append(regtime);
-		builder.append(", user_public=");
-		builder.append(user_public);
+		builder.append("User [user_seq=");
+		builder.append(user_seq);
+		builder.append(", user_id=");
+		builder.append(user_id);
+		builder.append(", user_pass=");
+		builder.append(user_pass);
+		builder.append(", user_name=");
+		builder.append(user_name);
+		builder.append(", user_tel=");
+		builder.append(user_tel);
+		builder.append(", user_email=");
+		builder.append(user_email);
+		builder.append(", user_fcm_token=");
+		builder.append(user_fcm_token);
+		builder.append(", user_regtime=");
+		builder.append(user_regtime);
+		builder.append(", user_user_public=");
+		builder.append(user_user_public);
 		builder.append("]");
 		return builder.toString();
 	}
+	
 	
 	
 }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
@@ -19,6 +20,7 @@ import com.d108.sduty.databinding.FragmentLoginBinding
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
@@ -37,7 +39,7 @@ private const val TAG ="LoginFragment"
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by viewModels()
-    private val joinViewModel: JoinViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -60,13 +62,13 @@ class LoginFragment : Fragment() {
 
     private fun initViewModel(){
         viewModel.user.observe(viewLifecycleOwner){
-            requireContext().showToast("${it.name}님 반갑습니다.")
+            mainViewModel.setUserValue(it)
+            requireContext().showToast("${it.user_name}님 반갑습니다.")
         }
         viewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){
                 true ->{
-//                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(COMMON_JOIN))
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
                 }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }

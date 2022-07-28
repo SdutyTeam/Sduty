@@ -85,4 +85,10 @@ dependencies {
     //Solapi
     implementation 'net.nurigo:sdk:4.1.4'
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.0")
+
+    //원형 이미지
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // ImagePicker
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
 }

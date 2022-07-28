@@ -37,4 +37,8 @@ build/
 
 #generated files
 bin/
+<<<<<<< HEAD
 gen/
+=======
+gen/
+>>>>>>> 12ded53fcc094be6f6f8df42be0b2de4f07c93b4
