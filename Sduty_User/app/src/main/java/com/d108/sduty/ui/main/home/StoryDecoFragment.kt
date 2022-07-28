@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.databinding.FragmentStoryDecoBinding
 import com.d108.sduty.utils.showToast
@@ -36,7 +37,24 @@ class StoryDecoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            // 템플릿 미적용
+            btnDecoNone.setOnClickListener {
+                val layoutParams = imgPreview.layoutParams as FrameLayout.LayoutParams
+                layoutParams.setMargins(0, 0, 0, 0)
+                imgPreview.layoutParams = layoutParams
 
+                tvTime.visibility = View.INVISIBLE
+            }
+            // 기본 템플릿 적용
+            btnDecoBasic.setOnClickListener {
+                val layoutParams = imgPreview.layoutParams as FrameLayout.LayoutParams
+                val density = resources.displayMetrics.density
+                val pixel = (12 * density).toInt()
+                layoutParams.setMargins(pixel, pixel, pixel, pixel)
+                imgPreview.layoutParams = layoutParams
+
+                tvTime.visibility = View.VISIBLE
+            }
         }
     }
 }
