@@ -36,6 +36,71 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/const_contents"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
+            app:layout_constraintBottom_toTopOf="@id/common_bottom"
+            android:layout_marginHorizontal="20dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_join_logo"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginVertical="20dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_title_welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="고객님\n환영합니다"
+                android:textSize="36sp"
+                app:layout_constraintTop_toBottomOf="@id/iv_join_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <RadioButton
+                android:id="@+id/radio_select_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전체 동의"
+                android:textSize="30sp"
+                android:layout_marginVertical="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_welcome"
+                />
+
+                <RadioButton
+                    android:id="@+id/radio_select_temrs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:text="이용 약관"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/radio_select_all"
+                    android:layout_marginVertical="20dp"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_select_privacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/radio_select_temrs"
+                    android:text="개인 정보 처리 방침"/>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_bottom"

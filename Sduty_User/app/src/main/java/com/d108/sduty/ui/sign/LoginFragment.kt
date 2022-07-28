@@ -8,16 +8,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
 import com.d108.sduty.common.COMMON_JOIN
+import com.d108.sduty.common.FIND_ID
 import com.d108.sduty.common.KAKAO_JOIN
 import com.d108.sduty.common.NAVER_JOIN
 import com.d108.sduty.databinding.FragmentLoginBinding
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
+import com.d108.sduty.ui.sign.dialog.DialogFindInfo
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -139,6 +142,19 @@ class LoginFragment : Fragment() {
             }, InputFilter.LengthFilter(20))
 
             etPw.filters = filter
+
+            tvFindId.setOnClickListener{
+                DialogFindInfo(requireContext()).let {
+                    it.arguments = bundleOf("flag" to FIND_ID)
+                    it.show(parentFragmentManager.beginTransaction(),null)
+                }
+            }
+            tvFindPw.setOnClickListener{
+                DialogFindInfo(requireContext()).let {
+                    it.arguments = bundleOf("flag" to FIND_ID)
+                    it.show(parentFragmentManager.beginTransaction(),null)
+                }
+            }
         }
     }
 
