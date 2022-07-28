@@ -12,8 +12,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
+import com.d108.sduty.common.KAKAO_JOIN
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
+import com.d108.sduty.ui.sign.LoginFragmentDirections
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
 import com.github.dhaval2404.imagepicker.ImagePicker
 
@@ -69,9 +73,14 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     // mProfileUri = fileUri
                     binding.apply {
-                        imgStory.setImageURI(fileUri)
+                        //imgStory.setImageURI(fileUri)
                         imgStory.visibility = View.VISIBLE
                         btnAddImg.visibility = View.GONE
+                        val fileUriStr = fileUri.toString()
+                        findNavController().safeNavigate(
+                            StoryRegisterFragmentDirections
+                                .actionStoryRegisterFragmentToStoryDecoFragment(fileUriStr)
+                        )
                     }
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
                     requireContext().showToast(ImagePicker.getError(data))

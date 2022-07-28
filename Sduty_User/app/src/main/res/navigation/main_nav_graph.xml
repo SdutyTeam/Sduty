@@ -199,7 +199,12 @@
     <fragment
         android:id="@+id/storyDecoFragment"
         android:name="com.d108.sduty.ui.main.home.StoryDecoFragment"
-        android:label="StoryDecoFragment" />
+        android:label="StoryDecoFragment">
+        <argument
+            android:name="fileUriStr"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.SettingFragment"
