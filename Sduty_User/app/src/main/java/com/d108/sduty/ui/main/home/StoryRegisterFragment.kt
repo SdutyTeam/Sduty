@@ -44,7 +44,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     tvWordLength.text = "${etWrite.length()} / 200"
                     if (etWrite.length() > 200) {
-                        requireContext().showToast("최대 200자까지 입력 가능합니다.")
+                        //requireContext().showToast("최대 200자까지 입력 가능합니다.")
                         etWrite.setTextColor(Color.RED)
                         tvWordLength.setTextColor(Color.RED)
                     }
