@@ -26,6 +26,8 @@ const val JOB_BUTTON = 0
 const val INTEREST_BUTTON = 1
 const val BIRTH_BUTTON = 2
 
+const val FIND_ID = 0
+const val FIND_PW = 1
 
 enum class PAGE{
     LOGIN, JOIN, PREVIEW
