@@ -17,6 +17,7 @@ import com.d108.sduty.dto.Report;
 import com.d108.sduty.dto.Task;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.service.ReportService;
+import com.d108.sduty.service.TaskService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -30,6 +31,8 @@ public class ReportController {
 	
 	@Autowired
 	private ReportService reportService;
+	@Autowired
+	private TaskService taskService;
 	
 	@PutMapping("/timer/{user_seq}")
 	public ResponseEntity<?> startTimer(@PathVariable int user_seq){
@@ -67,5 +70,11 @@ public class ReportController {
 		report.put("tasks", tasks);
 		return new ResponseEntity<Map<String, Object>>(report, HttpStatus.OK);
 		//return new ResponseEntity<Report>(report, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "테스크 상세조회")
+	@GetMapping("/report/tasks/{task_seq}")
+	public ResponseEntity<?> task(@PathVariable int task_seq){
+		return new ResponseEntity<Task>(taskService.getTask(task_seq), HttpStatus.OK);
 	}
 }
