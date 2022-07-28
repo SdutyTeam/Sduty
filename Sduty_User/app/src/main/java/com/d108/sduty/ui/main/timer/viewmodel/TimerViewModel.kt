@@ -44,7 +44,7 @@ class TimerViewModel() : ViewModel() {
         get() = _isRunningTimer
 
     // 시간 측정 시작 시간
-    private var startTime: String = "00:00:00"
+    var startTime: String = "00:00:00"
 
     // TODO: userSeq 입력 필요
     // 사용자가 날짜 선택
@@ -94,7 +94,7 @@ class TimerViewModel() : ViewModel() {
     }
 
     // 측정을 계속 한다.
-    fun continueTimer() {
+    fun resetDelayTimer() {
         delayTask?.cancel()
         _delayTime.value = 0
     }

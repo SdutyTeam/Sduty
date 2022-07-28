@@ -67,16 +67,19 @@ class TimerFragment : Fragment() {
             binding.commonSelectedDate.text = selectedDate
             timerViewModel.selectDate(selectedDate)
 
-            //
             when(selectedDate != today){
                 true -> {
                     binding.apply {
+                        ivTimer.visibility = View.INVISIBLE
                         btnReturnToday.text = "오늘($today) 로 돌아가기"
                         btnReturnToday.visibility = View.VISIBLE
                     }
                 }
                 false -> {
-                    binding.btnReturnToday.visibility = View.INVISIBLE
+                    binding.apply {
+                        ivTimer.visibility = View.VISIBLE
+                        btnReturnToday.visibility = View.INVISIBLE
+                    }
                 }
             }
         }
@@ -135,6 +138,7 @@ class TimerFragment : Fragment() {
             // 오늘 날짜로 돌아가기
             btnReturnToday.setOnClickListener {
                 commonSelectedDate.text = today
+                ivTimer.visibility = View.VISIBLE
                 btnReturnToday.visibility = View.INVISIBLE
                 timerViewModel.selectDate(today)
             }
