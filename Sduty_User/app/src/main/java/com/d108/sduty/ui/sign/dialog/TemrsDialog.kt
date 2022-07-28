@@ -1,4 +1,4 @@
-package com.d108.sduty.ui.sign
+package com.d108.sduty.ui.sign.dialog
 
 import android.content.Context
 import android.graphics.Point
