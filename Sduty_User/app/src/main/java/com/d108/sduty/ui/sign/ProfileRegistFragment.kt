@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
 import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.ui.sign.viewmodel.ProfileViewModel
@@ -82,7 +80,7 @@ class ProfileRegistFragment : Fragment() {
             if(nickname.isEmpty() || job.isEmpty() || interest.isEmpty() || birth == null || introduce.isEmpty()){
                 requireContext().showToast("모든 항목을 입력해 주세요")
             }else{
-                viewModel.insertProfile(Profile(nickname, birth, publicBirth, introduce, imageUrl, job, publicJob, interest, publicInterest, 1))
+                viewModel.insertProfile(Profile(nickname, birth, publicBirth, introduce, "", job, publicJob, interest, publicInterest, 1), imageUrl)
             }
         }
     }
