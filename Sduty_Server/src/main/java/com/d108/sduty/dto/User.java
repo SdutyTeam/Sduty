@@ -46,4 +46,10 @@ public class User {
 	private Date regtime;
 	@Column(name="user_public")
 	private int userPublic;
+	
+	@Override
+	public String toString() {
+		return "User [seq=" + seq + ", id=" + id + ", pass=" + pass + ", name=" + name + ", tel=" + tel + ", email="
+				+ email + ", fcmToken=" + fcmToken + ", regtime=" + regtime + ", userPublic=" + userPublic + "]";
+	}
 }
