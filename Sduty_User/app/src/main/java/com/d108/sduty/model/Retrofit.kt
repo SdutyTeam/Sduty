@@ -3,6 +3,7 @@ package com.d108.sduty.model
 import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.api.TimerApi
 import com.d108.sduty.model.api.ProfileApi
+import com.d108.sduty.model.api.StudyApi
 import com.d108.sduty.model.api.UserApi
 
 object Retrofit {
@@ -17,6 +18,10 @@ object Retrofit {
 
     val timerApi : TimerApi by lazy {
         retrofit.create(TimerApi::class.java)
+    }
+
+    val studyApi : StudyApi by lazy{
+        retrofit.create(StudyApi::class.java)
     }
 
 }
