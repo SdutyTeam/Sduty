@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--마이페이지 - 내 닉네임, 프로필 사진, 숫자 표시(게시물, 팔로우, 팔로워), 한줄소개, 프로필 편집, 통계, 잔디그래프,
     탭(내 게시물/ 스크랩), 내 게시물(그리드+스크롤) , 설정, 업적-->
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="vm"
             type="com.d108.sduty.ui.main.mypage.viewmodel.MyPageViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".ui.main.mypage.MyPageFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,7 +67,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/const_profile_top"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginHorizontal="12dp"
                     >
@@ -190,28 +190,27 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyler_contribution"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="115dp"
+                        android:layout_marginVertical="12dp"
+                        android:layout_marginTop="8dp"
                         app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
-                        android:layout_marginVertical="12dp"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/const_contents"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintTop_toBottomOf="@id/const_profile_top"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
+                        tools:layout_editor_absoluteX="0dp" />
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyler_story"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_height="520dp"
+                        app:layout_constraintTop_toBottomOf="@id/recyler_contribution"
                         app:layout_constraintBottom_toBottomOf="parent"/>
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+
+
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.core.widget.NestedScrollView>
 
 
