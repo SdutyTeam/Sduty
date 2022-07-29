@@ -91,4 +91,10 @@ public class StudyController {
 		resultMap.put("my_study_list", myStudyList);
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
+	
+	@ApiOperation(value="스터디 상세 조회")
+	@GetMapping("/detail/{study_seq}")
+	public ResponseEntity<?> getStudyDetail(@PathVariable int study_seq){
+		return new ResponseEntity<Study>(studyService.getStudyDetail(study_seq), HttpStatus.OK);
+	}
 }

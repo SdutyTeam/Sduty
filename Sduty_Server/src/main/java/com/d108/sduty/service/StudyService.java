@@ -9,4 +9,5 @@ public interface StudyService {
 	public List<Study> getAllStudy();
 	public boolean checkStudyName(String name);
 	public void registStudy(Study study, Alarm alarm);
+	public Study getStudyDetail(int studySeq);
 }

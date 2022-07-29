@@ -38,4 +38,9 @@ public class StudyServiceImpl implements StudyService {
 		}
 	}
 
+	@Override
+	public Study getStudyDetail(int studySeq) {
+		return studyRepo.findBySeq(studySeq);
+	}
+
 }
