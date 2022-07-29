@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Report
+import com.d108.sduty.model.dto.Task
 import com.d108.sduty.utils.convertTimeDateToString
 import com.d108.sduty.utils.convertTimeStringToDate
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +44,10 @@ class TimerViewModel() : ViewModel() {
         get() = _isRunningTimer
 
     private var isDelayingTimer = false
+
+    private var isDisplayingContent2 = false
+    private var isDisplayingContent3 = false
+
 
     // 시간 측정 시작 시간
     var startTime: String = "00:00:00"
@@ -98,11 +103,17 @@ class TimerViewModel() : ViewModel() {
     fun stopTimer() {
 
         // TODO: 스터디에 종료 정보 알림
-
+        // TODO: 서버에 종료 정보 알림 
+        
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
         _timer.postValue(0)
         resetDelayTimer()
+    }
+
+    fun saveTask(report: Report){
+        // Task 저장
+        postTask(report)
     }
 
     /* API */
@@ -119,6 +130,20 @@ class TimerViewModel() : ViewModel() {
                     // 못 받았을 때
                     Log.d(TAG, "getReport: ${it.errorBody()}")
                     _toastMessage.postValue("서버에서 리포트를 받아오는데 실패했습니다.")
+                }
+            }
+        }
+    }
+
+    // 시간 측정 기록 저장
+    private fun postTask(report: Report){
+        CoroutineScope(Dispatchers.IO).launch {
+            Retrofit.timerApi.postTask(report).let {
+                if(it.isSuccessful && it.code() == 200){
+                    _toastMessage.postValue("측정 기록 등록을 완료하였습니다.")
+                } else {
+                    Log.e(TAG, "saveTask: ${it.errorBody()}", )
+                    _toastMessage.postValue("서버에 등록하는데 실패하였습니다.")
                 }
             }
         }

@@ -39,6 +39,10 @@ class ConfirmDialog : DialogFragment() {
                 // ConfirmDialog 종료
                 dismiss()
             }
+
+            btnCancel.setOnClickListener {
+                dismiss()
+            }
         }
     }
 
