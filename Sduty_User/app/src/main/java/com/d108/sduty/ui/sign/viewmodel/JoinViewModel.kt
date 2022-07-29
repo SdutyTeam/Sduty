@@ -142,6 +142,7 @@ class JoinViewModel: ViewModel() {
             code!!.code = inputCode
             Log.d(TAG, "checkOTP: ${authInfo}")
             Retrofit.userApi.checkAuthCode(code).let {
+                Log.d(TAG, "checkOTP: ${it.code()}")
                 if(it.code() == 401){
                     _isSucceedAuth.postValue(false)
                     _authMsg.postValue("인증번호가 일치하지 않습니다.")

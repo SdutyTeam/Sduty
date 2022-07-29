@@ -66,7 +66,7 @@ class LoginFragment : Fragment() {
     private fun initViewModel(){
         viewModel.user.observe(viewLifecycleOwner){
             mainViewModel.setUserValue(it)
-            requireContext().showToast("${it.user_name}님 반갑습니다.")
+            requireContext().showToast("${it.name}님 반갑습니다.")
         }
         viewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){
