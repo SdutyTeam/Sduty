@@ -5,6 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="StudyRegisteVM"
+            type="com.d108.sduty.ui.sign.viewmodel.StudyRegisteViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="5">
+            android:weightSum="10">
 
             <TextView
                 android:layout_width="0dp"
@@ -58,21 +65,26 @@
                 android:text="그룹 명"
                 android:gravity="center"
                 android:textSize="20sp"
-                android:layout_weight="1"/>
+                android:layout_weight="3"/>
 
             <EditText
+                android:id="@+id/et_study_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="그룹 명"
                 android:gravity="center"
-                android:layout_weight="3"/>
+                android:layout_weight="7"/>
 
-            <Button
-                android:id="@+id/btn_studyName_check"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tv_study_check"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="중복확인"
-                android:layout_weight="1"/>
+                android:visibility="@{StudyRegisteVM.isStudyId() ? View.VISIBLE : View.INVISIBLE}"
+                android:text="중복된 그룹 명입니다."
+                android:layout_weight="1"
+                android:textColor="@color/red_300"
+                />
+
         </LinearLayout>
 
         <LinearLayout
@@ -90,6 +102,7 @@
                 android:textSize="20sp"/>
 
             <EditText
+                android:id="@+id/et_stduy_pass"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="공백 입력 시 공개 방"
@@ -253,6 +266,7 @@
         </LinearLayout>
 
         <EditText
+            android:id="@+id/et_study_introduce"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginHorizontal="30dp"
