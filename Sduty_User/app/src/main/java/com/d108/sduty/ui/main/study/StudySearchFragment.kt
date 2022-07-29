@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudySearchBinding
+import com.d108.sduty.ui.viewmodel.MainViewModel
 
 // 스터디 검색 - 스터디 명, 카테고리 별 검색
 private const val TAG = "StudySearchFragment"
@@ -23,6 +26,10 @@ class StudySearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.commonTopBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 }

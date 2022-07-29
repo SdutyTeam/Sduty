@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="studyList"
+            type="com.d108.sduty.model.dto.Study" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/background_200"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        >
+
+        <TextView
+            android:id="@+id/study_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="그룹 이름"
+            android:text="@{studyList.name}"
+            android:textStyle="bold"
+            />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/study_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="그룹 카테고리"
+                android:text="@{studyList.category}"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/study_join"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="15명"
+                            android:text="@{studyList.joinNumber+`명`}"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" / "
+                            />
+
+                        <TextView
+                            android:id="@+id/study_limit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="20명"
+                            android:text="@{studyList.limitNumber+`명`}"
+                            />
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</layout>

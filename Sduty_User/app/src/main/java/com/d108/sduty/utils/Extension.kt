@@ -6,7 +6,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Insets
+import android.graphics.Point
 import android.util.TypedValue
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.navigation.NavController
@@ -18,7 +22,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun Activity.hideKeyboard() {
-    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+    val inputMethodManager =
+        getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
     if (inputMethodManager.isAcceptingText) {
         inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
@@ -32,7 +37,11 @@ fun Context.dpToPixel(dp: Int): Int {
     ).toInt()
 }
 
-fun Activity.showAlertDialog(title: String, message: String, listener: DialogInterface.OnClickListener?) {
+fun Activity.showAlertDialog(
+    title: String,
+    message: String,
+    listener: DialogInterface.OnClickListener?
+) {
     AlertDialog.Builder(this)
         .setTitle(title)
         .setMessage(message)
@@ -60,10 +69,11 @@ fun AudioDevice.toReadableString(): String {
     }
 }
 
-fun navigateBack(activity: Activity){
+fun navigateBack(activity: Activity) {
     Navigation.findNavController(activity, R.id.frame_main).popBackStack()
 }
-fun NavController.safeNavigate(action: NavDirections){
+
+fun NavController.safeNavigate(action: NavDirections) {
     navigate(action)
 }
 
@@ -73,7 +83,39 @@ fun convertTimeStringToDate(str: String, format: String): Date {
     return simpleDateFormat.parse(str)
 }
 
-fun convertTimeLongToString(date: Date, format: String): String {
+fun convertTimeDateToString(date: Date, format: String): String {
     val simpleDateFormat = SimpleDateFormat(format, Locale("ko", "KR"))
     return simpleDateFormat.format(date)
 }
+
+// device size
+fun getDeviceSize(activity: Activity): Point {
+    val windowManager = activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    return windowManager.currentWindowMetricsPointCompat()
+}
+
+fun WindowManager.currentWindowMetricsPointCompat() : Point {
+    // R(30) 이상
+    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+        val windowInsets = currentWindowMetrics.windowInsets
+        var insets: Insets = windowInsets.getInsets(WindowInsets.Type.navigationBars())
+        windowInsets.displayCutout?.run {
+            insets = Insets.max(
+                insets,
+                Insets.of(safeInsetLeft, safeInsetTop, safeInsetRight, safeInsetBottom)
+            )
+        }
+        val insetsWidth = insets.right + insets.left
+        val insetsHeight = insets.top + insets.bottom
+        Point(
+            currentWindowMetrics.bounds.width() - insetsWidth,
+            currentWindowMetrics.bounds.height() - insetsHeight
+        )
+    } else {
+        Point().apply {
+            defaultDisplay.getSize(this)
+        }
+    }
+
+}
+
