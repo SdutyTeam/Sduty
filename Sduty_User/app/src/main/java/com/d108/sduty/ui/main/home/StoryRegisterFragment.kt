@@ -123,6 +123,8 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             ivRegisterStory.setOnClickListener {
                 // 게시물 정보 등록
                 // 등록할 때, 초기 화면으로 visibility 다시 세팅...
+
+                navigateBack(requireActivity())
             }
 
             // 템플릿 적용한 이미지 변화 인식해 보여주기
@@ -141,17 +143,20 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         return when (item.itemId) {
             R.id.privateDisclosure -> {
                 disclosure = 0
-                requireContext().showToast("나만 보기 클릭 : " + disclosure)
+                binding.btnDisclosure.text = "나만 보기"
+//                requireContext().showToast("나만 보기 클릭 : " + disclosure)
                 true
             }
             R.id.followerDisclosure -> {
                 disclosure = 1
-                requireContext().showToast("팔로워만 공개 클릭 : " + disclosure)
+                binding.btnDisclosure.text = "팔로워 공개"
+//                requireContext().showToast("팔로워만 공개 클릭 : " + disclosure)
                 true
             }
             R.id.publicDisclosure -> {
                 disclosure = 2
-                requireContext().showToast("전체 공개 클릭 : " + disclosure)
+                binding.btnDisclosure.text = "전체 공개"
+//                requireContext().showToast("전체 공개 클릭 : " + disclosure)
                 true
             }
             else -> false
