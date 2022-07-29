@@ -1,4 +1,4 @@
-package com.d108.sduty.ui.main.study
+package com.d108.sduty.ui.main.study.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -10,8 +10,7 @@ import android.widget.Button
 import android.widget.ImageView
 import com.d108.sduty.R
 
-class CustomDialog(context: Context)
-{
+class StudyDetailDialog(context: Context) {
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
 
@@ -22,39 +21,32 @@ class CustomDialog(context: Context)
 
     fun showDialog()
     {
-        dialog.setContentView(R.layout.custom_dialog)
-        dialog.window?.setGravity(Gravity.TOP)
-        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(R.layout.dialog_study_detail)
+        dialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
         dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         dialog.setCanceledOnTouchOutside(true)
         dialog.setCancelable(true)
         dialog.show()
 
-        val normalStudyRegister = dialog.findViewById<Button>(R.id.btn_normalStudy)
-        val camStudyRegister = dialog.findViewById<Button>(R.id.btn_camStudy)
-        val back = dialog.findViewById<ImageView>(R.id.common_top_back)
+        val studyJoinButton = dialog.findViewById<Button>(R.id.btn_study_cancel)
+        val cancelButton = dialog.findViewById<Button>(R.id.btn_study_join)
 
-        normalStudyRegister.setOnClickListener {
-            onClickListener.onClicked(false)
+        studyJoinButton.setOnClickListener {
+            onClickListener.onClicked()
             dialog.dismiss()
         }
 
-        camStudyRegister.setOnClickListener {
-            onClickListener.onClicked(true)
+        cancelButton.setOnClickListener {
             dialog.dismiss()
         }
 
-        back.setOnClickListener {
-            dialog.dismiss()
-        }
 
 
     }
 
     interface OnDialogClickListener
     {
-        fun onClicked(type: Boolean)
+        fun onClicked()
     }
-
 }

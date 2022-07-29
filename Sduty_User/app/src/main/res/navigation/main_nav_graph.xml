@@ -168,11 +168,6 @@
         <action
             android:id="@+id/action_studyListFragment_to_studySearchFragment"
             app:destination="@+id/studySearchFragment"/>
-        <action
-            android:id="@+id/action_studyListFragment_to_studyRegistFragment"
-            app:destination="@+id/studyRegistFragment"
-            app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_stop"/>
     </fragment>
     <fragment
         android:id="@+id/studySettingFragment"

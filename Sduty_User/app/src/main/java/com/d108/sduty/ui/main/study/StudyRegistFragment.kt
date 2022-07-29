@@ -2,6 +2,7 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -43,7 +44,9 @@ class StudyRegistFragment : Fragment() {
 
         when(args.type){
             false -> {
-                binding.daily.visibility = View.INVISIBLE
+                binding.dailyTime.visibility = View.GONE
+                binding.dailyWeek.visibility = View.GONE
+                binding.dailyCheck.visibility = View.GONE
             }
         }
 
@@ -55,10 +58,17 @@ class StudyRegistFragment : Fragment() {
         val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
         binding.spinnerCategory.adapter = categoryAdapter
 
+        binding.btnCreateStudy.setOnClickListener {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                val hour = binding.timePicker.hour
+                val minute = binding.timePicker.minute
+            }
+        }
+
+
         binding.commonTopBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
     }
 
     override fun onDestroy() {
