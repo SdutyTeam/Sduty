@@ -9,7 +9,7 @@
         android:height="50dp" />
     <corners android:radius="3dp" />
     <stroke
-        android:width="1dp"
-            android:color="@color/onlight_02"
+        android:width="0.5dp"
+            android:color="@color/background_300"
         />
 </shape>
