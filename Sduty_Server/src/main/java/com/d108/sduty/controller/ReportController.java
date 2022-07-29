@@ -73,6 +73,7 @@ public class ReportController {
 	@ApiOperation(value = "테스크 상세조회")
 	@GetMapping("/tasks/{task_seq}")
 	public ResponseEntity<?> registTask(@PathVariable int task_seq){
+		System.out.println("test##################################################");
 		return new ResponseEntity<Task>(reportService.getTask(task_seq), HttpStatus.OK);
 	}
 	
