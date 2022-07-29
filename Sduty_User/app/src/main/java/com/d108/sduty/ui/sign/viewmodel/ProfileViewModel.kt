@@ -64,7 +64,7 @@ class ProfileViewModel: ViewModel() {
                     _profile.postValue(response.body() as Profile)
                 }
             }catch (e: Exception){
-                Log.d(TAG, "getBannerListItems: ${e.message}")
+                Log.d(TAG, "insertProfile: ${e.message}")
             }
         }
     }
