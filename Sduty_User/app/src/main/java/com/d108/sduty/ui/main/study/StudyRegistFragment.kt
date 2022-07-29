@@ -21,7 +21,7 @@ import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
 import com.d108.sduty.model.dto.Study
-import com.d108.sduty.ui.sign.viewmodel.StudyRegisteViewModel
+import com.d108.sduty.ui.main.study.viewmodel.StudyRegisteViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.showToast
 

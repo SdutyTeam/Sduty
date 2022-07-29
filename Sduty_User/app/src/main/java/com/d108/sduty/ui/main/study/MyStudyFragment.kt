@@ -16,7 +16,7 @@ import com.d108.sduty.adapter.MyStudyAdapter
 import com.d108.sduty.databinding.FragmentMyStudyBinding
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
-import com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel
+import com.d108.sduty.ui.main.study.viewmodel.MyStudyViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 
