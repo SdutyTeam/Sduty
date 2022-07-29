@@ -40,6 +40,15 @@ public class StudyController {
 		return new ResponseEntity<List<Study>>(studyService.getAllStudy(), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "스터디명 중복검사")
+	@GetMapping("/check/{study_name}")
+	public ResponseEntity<?> checkStudyName(@PathVariable String study_name){
+		boolean result = studyService.checkStudyName(study_name);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("result", result);
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "스터디 등록")
 	@PostMapping("")
 	public ResponseEntity<?> registStudy(@RequestBody ObjectNode reqObject){

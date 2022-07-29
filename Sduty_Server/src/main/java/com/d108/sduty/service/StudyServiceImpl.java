@@ -24,6 +24,11 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
+	public boolean checkStudyName(String name) {
+		return studyRepo.findByNameEquals(name).isPresent();
+	}
+
+	@Override
 	public void registStudy(Study study, Alarm alarm) {
 		study.setJoinNumber(1);// 방장만 참여
 		Study newStudy = studyRepo.save(study);
