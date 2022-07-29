@@ -177,8 +177,6 @@
                 android:layout_marginVertical="20dp"
                 android:hint="ID"
                 android:singleLine="true"
-                android:enabled="false"
-                android:text="@{vm.userId == `` ? ``: vm.userId}"
                 />
             <EditText
                 android:id="@+id/et_pw"

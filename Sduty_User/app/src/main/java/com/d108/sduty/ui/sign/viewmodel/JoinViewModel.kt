@@ -110,13 +110,13 @@ class JoinViewModel: ViewModel() {
         get() = _isSucceedSendAuthInfo
 
     fun sendOTP(userPhoneNum: String){
-        val authCode = (100000..999999).random()
-        val message = Message(
-            from = "01049177914",
-            to = userPhoneNum,
-            text = "[Sduty] 인증 번호[${authCode}]를 입력해 주세요. "
-        )
         viewModelScope.launch(Dispatchers.IO){
+            var authCode = (100000..999999).random()
+            val message = Message(
+                from = "01049177914",
+                to = userPhoneNum,
+                text = "[Sduty] 인증 번호[${authCode}]를 입력해 주세요. "
+            )
             val newAuthInfo = AuthInfo(userPhoneNum, authCode.toString(), )
             _authInfo.postValue(newAuthInfo)
             ApplicationClass.messageService.sendOne(SingleMessageSendingRequest(message)) // SMS 보냄
