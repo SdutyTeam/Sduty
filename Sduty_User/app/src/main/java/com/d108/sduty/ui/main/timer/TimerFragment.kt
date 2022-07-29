@@ -56,7 +56,7 @@ class TimerFragment : Fragment() {
         today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
         binding.commonSelectedDate.text = today
-        //timerViewModel.selectDate(today)
+        timerViewModel.selectDate(today)
     }
 
     private fun showDatePicker(){
@@ -65,18 +65,21 @@ class TimerFragment : Fragment() {
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, day ->
             val selectedDate = "${year}년 ${month + 1}월 ${day}일"
             binding.commonSelectedDate.text = selectedDate
-            //timerViewModel.selectDate(selectedDate)
+            timerViewModel.selectDate(selectedDate)
 
-            //
             when(selectedDate != today){
                 true -> {
                     binding.apply {
+                        ivTimer.visibility = View.INVISIBLE
                         btnReturnToday.text = "오늘($today) 로 돌아가기"
                         btnReturnToday.visibility = View.VISIBLE
                     }
                 }
                 false -> {
-                    binding.btnReturnToday.visibility = View.INVISIBLE
+                    binding.apply {
+                        ivTimer.visibility = View.VISIBLE
+                        btnReturnToday.visibility = View.INVISIBLE
+                    }
                 }
             }
         }
@@ -94,7 +97,7 @@ class TimerFragment : Fragment() {
 
             // 하루 공부한 시간
             timerViewModel.report.observe(viewLifecycleOwner){ report ->
-                binding.tvTotalTime.text = report.totalTime
+                binding.tvTotalTime.text = report.total_time
             }
 
             // 시간 변경 시
@@ -135,8 +138,9 @@ class TimerFragment : Fragment() {
             // 오늘 날짜로 돌아가기
             btnReturnToday.setOnClickListener {
                 commonSelectedDate.text = today
+                ivTimer.visibility = View.VISIBLE
                 btnReturnToday.visibility = View.INVISIBLE
-                //timerViewModel.selectDate(today)
+                timerViewModel.selectDate(today)
             }
         }
     }

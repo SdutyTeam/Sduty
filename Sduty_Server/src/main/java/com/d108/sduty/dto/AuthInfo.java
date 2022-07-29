@@ -2,59 +2,30 @@ package com.d108.sduty.dto;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@Service
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name="identification")
 public class AuthInfo {
+	
+	@Id
 	private int id;
 	private String tel;
 	private String code;
 	private Date expire;
-	public AuthInfo() {
-		super();
-	}
 	
-	public AuthInfo(String tel, String code, Date expire) {
-		super();
-		this.tel = tel;
-		this.code = code;
-		this.expire = expire;
-	}
-	
-	public AuthInfo(String tel, String code) {
-		super();
-		this.tel = tel;
-		this.code = code;
-	}
-
-	public AuthInfo(int id, String tel, String code, Date expire) {
-		super();
-		this.id = id;
-		this.tel = tel;
-		this.code = code;
-		this.expire = expire;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getTel() {
-		return tel;
-	}
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	public Date getExpire() {
-		return expire;
-	}
-	public void setExpire(Date expire) {
-		this.expire = expire;
-	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
