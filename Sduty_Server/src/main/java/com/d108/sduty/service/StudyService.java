@@ -10,4 +10,5 @@ public interface StudyService {
 	public boolean checkStudyName(String name);
 	public void registStudy(Study study, Alarm alarm);
 	public Study getStudyDetail(int studySeq);
+	public boolean deleteStudy(int userSeq, int studySeq);
 }

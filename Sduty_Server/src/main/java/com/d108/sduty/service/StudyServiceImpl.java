@@ -43,4 +43,17 @@ public class StudyServiceImpl implements StudyService {
 		return studyRepo.findBySeq(studySeq);
 	}
 
+	@Override
+	public boolean deleteStudy(int userSeq, int studySeq) {
+		//1. user_seq가 방장인지 확인
+		if(studyRepo.findBySeq(studySeq).getMasterSeq() != userSeq) {
+			return false;
+		}
+		//2. 삭제
+		if(studyRepo.deleteBySeq(studySeq)==0) {
+			return false;
+		}
+		return true;
+	}
+
 }

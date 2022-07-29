@@ -8,11 +8,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Alarm;
@@ -34,21 +37,6 @@ public class StudyController {
 	@Autowired
 	private StudyService studyService;
 	
-	@ApiOperation(value="스터디 전체 조회")
-	@GetMapping("")
-	public ResponseEntity<?> getAllStudy(){
-		return new ResponseEntity<List<Study>>(studyService.getAllStudy(), HttpStatus.OK);
-	}
-	
-	@ApiOperation(value = "스터디명 중복검사")
-	@GetMapping("/check/{study_name}")
-	public ResponseEntity<?> checkStudyName(@PathVariable String study_name){
-		boolean result = studyService.checkStudyName(study_name);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("result", result);
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-	}
-	
 	@ApiOperation(value = "스터디 등록")
 	@PostMapping("")
 	public ResponseEntity<?> registStudy(@RequestBody ObjectNode reqObject){
@@ -69,6 +57,27 @@ public class StudyController {
 		
 		studyService.registStudy(study, alarm);
 		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "스터디명 중복검사")
+	@GetMapping("/check/{study_name}")
+	public ResponseEntity<?> checkStudyName(@PathVariable String study_name){
+		boolean result = studyService.checkStudyName(study_name);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("result", result);
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="스터디 전체 조회")
+	@GetMapping("")
+	public ResponseEntity<?> getAllStudy(){
+		return new ResponseEntity<List<Study>>(studyService.getAllStudy(), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="스터디 상세 조회")
+	@GetMapping("/detail/{study_seq}")
+	public ResponseEntity<?> getStudyDetail(@PathVariable int study_seq){
+		return new ResponseEntity<Study>(studyService.getStudyDetail(study_seq), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "내 스터디 목록")
@@ -92,9 +101,16 @@ public class StudyController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value="스터디 상세 조회")
-	@GetMapping("/detail/{study_seq}")
-	public ResponseEntity<?> getStudyDetail(@PathVariable int study_seq){
-		return new ResponseEntity<Study>(studyService.getStudyDetail(study_seq), HttpStatus.OK);
+	@ApiOperation(value = "스터디 삭제")
+	@DeleteMapping("/{user_seq}/{study_seq}")
+	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, int study_seq){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(studyService.deleteStudy(user_seq, study_seq)) {
+			map.put("result", "삭제되었습니다.");
+		}
+		else {
+			map.put("result", "삭제할 수 없습니다.");
+		}
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 }
