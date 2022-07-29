@@ -13,11 +13,13 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentPreviewBinding
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.camstudy.room.RoomActivity
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.Status
 import com.google.common.util.concurrent.ListenableFuture
 import com.sendbird.calls.SendBirdCall
@@ -29,7 +31,7 @@ class PreviewFragment : Fragment() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
     private var preview: Preview? = null
-
+    private val mainViewModel: MainViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -116,7 +118,7 @@ class PreviewFragment : Fragment() {
 
     private fun onEnterButtonClicked(v: View) {
         SendBirdCall.init(requireActivity().applicationContext, SENDBIRD_APP_ID)
-        viewModel.authenticate("aa")
+        viewModel.authenticate(mainViewModel.user.value!!.name)
 
     }
 
