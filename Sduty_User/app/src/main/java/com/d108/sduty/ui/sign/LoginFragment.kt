@@ -71,7 +71,9 @@ class LoginFragment : Fragment() {
                 true ->{
 //                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
 //                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, PreviewFragment()).addToBackStack(null).commit()
-                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).addToBackStack(null).commit()
+//                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).addToBackStack(null).commit()
+                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).commit()
+//                    findNavController().safeNavigate(LoginFragmentDirections.lto)
                 }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }
