@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -14,7 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.d108.sduty.adapter.MyStudyAdapter
 import com.d108.sduty.databinding.FragmentMyStudyBinding
 import com.d108.sduty.ui.MainActivity
-import com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel
+import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
+import com.d108.sduty.ui.main.study.viewmodel.MyStudyViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 
@@ -60,14 +62,18 @@ class MyStudyFragment : Fragment() {
 
         binding.btnCreateStudy.setOnClickListener{
             // Dialog만들기
-            val dialog = CustomDialog(mainActivity)
+            val dialog = StudyCreateDialog(mainActivity)
             dialog.showDialog()
-            dialog.setOnClickListener(object : CustomDialog.OnDialogClickListener{
+            dialog.setOnClickListener(object : StudyCreateDialog.OnDialogClickListener{
                 override fun onClicked(type: Boolean) {
                     findNavController().safeNavigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyRegistFragment(type))
                 }
 
             })
+        }
+
+        binding.btnListStudy.setOnClickListener {
+            findNavController().safeNavigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyListFragment())
         }
 
     }

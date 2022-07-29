@@ -1,15 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 타임라인 - 게시글(스크롤 뷰), 게시글 쓰기, 닉네임(게시글 상세페이지 이동) 더보기(신고, 스크랩, 팔로잉) ,좋아요, 댓글, 필터, 데일리 질문, 추천 팔로우-->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.home.TimeLineFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".ui.main.home.StoryRegisterFragment"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/common_top"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <Button
+                android:id="@+id/btn_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="필터"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+
+            <TextView
+                android:id="@+id/common_top_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:text="타임라인"
+                android:textSize="18sp"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- AppBar 게시물 등록 버튼 : 게시물 등록 & 타임라인으로 돌아감 -->
+            <ImageView
+                android:id="@+id/iv_register_story"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/icon_add_circle"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

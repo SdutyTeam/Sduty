@@ -3,10 +3,7 @@ package com.d108.sduty.model.api
 import com.d108.sduty.model.dto.AuthInfo
 import com.d108.sduty.model.dto.User
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface UserApi {
     @POST("/user")
@@ -38,5 +35,11 @@ interface UserApi {
 
     @POST("/user/auth/check")
     suspend fun checkAuthCode(@Body authInfo: AuthInfo): Response<Void>
+
+    @GET("/user/id/{tel}")
+    suspend fun findId(@Path("tel")tel: String): Response<String>
+
+    @PUT("/user/pwd")
+    suspend fun changePw(@Body user: User): Response<Void>
 
 }

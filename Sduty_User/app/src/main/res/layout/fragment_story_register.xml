@@ -92,32 +92,24 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginVertical="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_word_length"
             app:layout_constraintBottom_toTopOf="@id/layout_tag">
 
-            <!-- 이미지 추가 버튼 : 갤러리의 이미지를 가져올 수 있다. -->
+            <!-- 이미지 추가 버튼 : 촬영 또는 갤러리의 이미지를 가져올 수 있다. -->
             <Button
                 android:id="@+id/btn_add_img"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:text="이미지 추가"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/btn_camera"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="이미지 추가"/>
 
-            <!-- 촬영 버튼 : 촬영 화면으로 이동한다. -->
-            <Button
-                android:id="@+id/btn_camera"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:text="촬영"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_add_img"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+            <ImageView
+                android:id="@+id/img_story"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

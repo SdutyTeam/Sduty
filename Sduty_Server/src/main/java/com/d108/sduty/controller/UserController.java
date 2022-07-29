@@ -179,13 +179,12 @@ public class UserController {
 	
 
 	@ApiOperation(value = "비밀번호 변경 > 200/401 리턴", response = HttpStatus.class)
-	@PutMapping("/pwd/{id}")
-	public ResponseEntity<?> setPwdById(@PathVariable String id, @RequestBody String password) throws Exception {
-		//인증이 안되면 수정이 안되므로 거의 not null 확실
-		User user = userService.selectUserById(id).get();
-		user.setPass(password);
-		System.out.println(password);
-		User result = userService.updatePassword(user);
+	@PutMapping("/pwd")
+	public ResponseEntity<?> setPwdById(@RequestBody User user) throws Exception {
+		//인증이 안되면 수정이 안되므로 거의 not null 확실		
+		User selected_user = userService.selectUserById(user.getId()).get();		
+		selected_user.setPass(user.getPass());		
+		User result = userService.updatePassword(selected_user);
 		if(result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);
 		}
