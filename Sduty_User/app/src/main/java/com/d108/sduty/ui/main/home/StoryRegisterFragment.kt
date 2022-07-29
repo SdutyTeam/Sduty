@@ -17,6 +17,7 @@ import com.d108.sduty.R
 import com.d108.sduty.common.KAKAO_JOIN
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
 import com.d108.sduty.ui.sign.LoginFragmentDirections
+import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -114,6 +115,9 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     .createIntent { intent ->
                         startForProfileImageResult.launch(intent)
                     }
+            }
+            ivBack.setOnClickListener {
+                navigateBack(requireActivity())
             }
         }
     }
