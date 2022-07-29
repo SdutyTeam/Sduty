@@ -9,7 +9,7 @@
         <import type="android.view.View" />
         <variable
             name="StudyRegisteVM"
-            type="com.d108.sduty.ui.sign.viewmodel.StudyRegisteViewModel" />
+            type="com.d108.sduty.ui.main.study.viewmodel.StudyRegisteViewModel" />
     </data>
 
     <LinearLayout

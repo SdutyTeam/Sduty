@@ -7,7 +7,7 @@
     <data>
         <variable
             name="StudyListVM"
-            type="com.d108.sduty.ui.sign.viewmodel.StudyListViewModel" />
+            type="com.d108.sduty.ui.main.study.viewmodel.StudyListViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

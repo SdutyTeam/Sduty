@@ -2,9 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable
-            name="MyStudyVM"
-            type="com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel" />
+
     </data>
 
     <LinearLayout
