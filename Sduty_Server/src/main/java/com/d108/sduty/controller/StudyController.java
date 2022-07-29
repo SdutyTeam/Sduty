@@ -56,6 +56,12 @@ public class StudyController {
 			e.printStackTrace();
 		}
 		
+		//1. form 제출 후, 이름 중복 검사
+		boolean result = studyService.checkStudyName(study.getName());
+		if(result==true) {//중복
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		//2. 등록
 		studyService.registStudy(study, alarm);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -64,9 +70,10 @@ public class StudyController {
 	@GetMapping("/check/{study_name}")
 	public ResponseEntity<?> checkStudyName(@PathVariable String study_name){
 		boolean result = studyService.checkStudyName(study_name);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("result", result);
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		if(result==true) {//중복
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="스터디 전체 조회")
