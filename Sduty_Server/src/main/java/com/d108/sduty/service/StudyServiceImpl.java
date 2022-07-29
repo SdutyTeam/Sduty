@@ -3,6 +3,7 @@ package com.d108.sduty.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Alarm;
@@ -54,6 +55,54 @@ public class StudyServiceImpl implements StudyService {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public List<Study> searchStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter, String keyword) {
+		Specification<Study> spec = (root, query, criteriaBuilder)->null;
+		if(category!=null) {
+			spec = spec.and(findCategory(category));
+		}
+		if(emptyfilter==true) {
+			spec = spec.and(findEmpty());
+		}
+		if(camfilter==true) {
+			spec = spec.and(findCamStudy(camfilter));
+		}
+		if(publicfilter==true) {
+			spec = spec.and(findPublic(publicfilter));
+		}
+		if(keyword!=null) {
+			spec = spec.and(findKeyword(keyword));
+		}
+		System.out.println(studyRepo.findAll(spec));
+		return null;
+	}
+	
+	public Specification<Study> findCategory(String category){
+		return (root, query, criteriaBuilder)->criteriaBuilder.equal(root.get("category"), category);
+	}
+	
+	public Specification<Study> findEmpty(){
+		return (root, query, criteriaBuilder)->criteriaBuilder.gt(root.get("limitNumber"), root.get("joinNumber"));
+	}
+	
+	public Specification<Study> findCamStudy(boolean isCamStudy){
+		return (root, query, criteriaBuilder)->criteriaBuilder.equal(root.get("isCamstudy"), isCamStudy);
+	}
+	
+	public Specification<Study> findPublic(boolean isPublic){
+		if(isPublic) {
+			return (root, query, criteriaBuilder)->criteriaBuilder.isNull(root.get("password"));
+		}
+		else {
+			return (root, query, criteriaBuilder)->criteriaBuilder.isNotNull(root.get("password"));
+		}
+		
+	}
+	
+	public Specification<Study> findKeyword(String keyword){
+		return (root, query, criteriaBuilder)->criteriaBuilder.like(root.get("name"), "%"+keyword+"%");
 	}
 
 }

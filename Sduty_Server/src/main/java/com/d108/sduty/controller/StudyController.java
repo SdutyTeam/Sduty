@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -112,5 +113,13 @@ public class StudyController {
 			map.put("result", "삭제할 수 없습니다.");
 		}
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "스터디 검색")
+	@GetMapping("/{category}/{emptyfilter}/{camfilter}/{publicfilter}/{keyword}")
+	public ResponseEntity<?> searchStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter, String keyword){
+		studyService.searchStudy(category, emptyfilter, camfilter, publicfilter, keyword);
+		
+		return new ResponseEntity<List<Study>>(HttpStatus.OK);
 	}
 }
