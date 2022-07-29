@@ -39,7 +39,7 @@ interface UserApi {
     @GET("/user/id/{tel}")
     suspend fun findId(@Path("tel")tel: String): Response<String>
 
-    @PUT("/user/pwd/{id}")
-    suspend fun changePw(@Path("id")id: String, @Body password: String): Response<Void>
+    @PUT("/user/pwd")
+    suspend fun changePw(@Body user: User): Response<Void>
 
 }
