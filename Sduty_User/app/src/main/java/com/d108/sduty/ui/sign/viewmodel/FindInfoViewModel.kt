@@ -53,7 +53,8 @@ class FindInfoViewModel: ViewModel() {
         get() = _isSucceedChangePw
     fun changePw(user: User){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.userApi.changePw(user.id, user).let {
+            Retrofit.userApi.changePw(user.id, user.pass).let {
+                Log.d(TAG, "changePw: ${user.pass}")
                 if(it.isSuccessful){
                     _isSucceedChangePw.postValue(true)
                 }
