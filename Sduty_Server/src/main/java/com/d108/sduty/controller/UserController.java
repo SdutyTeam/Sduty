@@ -184,6 +184,7 @@ public class UserController {
 		//인증이 안되면 수정이 안되므로 거의 not null 확실
 		User user = userService.selectUserById(id).get();
 		user.setPass(password);
+		System.out.println(password);
 		User result = userService.updatePassword(user);
 		if(result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);
