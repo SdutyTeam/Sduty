@@ -9,14 +9,21 @@ import retrofit2.http.Path
 
 interface StudyApi {
     @POST("/study")
-    suspend fun create(@Body study: Study): Response<Void>
+    suspend fun studyCreate(@Body study: Study): Response<Study>
 
     @GET("/sutdy/check/{study_name}")
-    suspend fun getUsedName(@Path("study_name")studyName: String): Response<Boolean>
+    suspend fun getStudyName(@Path("study_name")studyName: String): Response<Boolean>
+
+    @GET("/study")
+    suspend fun studyList(): Response<List<Study>>
+
+    @GET("/study/{study_seq}")
+    suspend fun getStudyDetail(@Path("study_seq")studySeq: Int): Response<Study>
 
     @GET("/study/{user_seq}")
     suspend fun myStudyList(@Path("user_seq")userSeq: Int): Response<List<Study>>
 
-    @GET("/study")
-    suspend fun studyList(): Response<List<Study>>
+
+
+
 }

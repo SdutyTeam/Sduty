@@ -114,9 +114,9 @@ public class UserController {
 		user.setPass("");
 		user.setName(name);
 		user.setEmail(email);
-		User result = userService.insertUser(user);  // User 정보만 보내주고 /join으로 카카오, 네이버 둘 다 가입
-		if(result != null) {
-			return new ResponseEntity<User>(result, HttpStatus.OK);
+		//User result = userService.insertUser(user);  // User 정보만 보내주고 /join으로 카카오, 네이버 둘 다 가입
+		if(user != null) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);	
 	}
@@ -132,9 +132,9 @@ public class UserController {
 		user.setPass("");
 		user.setName(name);
 		user.setEmail(email);
-		User result = userService.insertUser(user);
-		if(result != null) {
-			return new ResponseEntity<User>(result, HttpStatus.OK);
+		//User result = userService.insertUser(user);
+		if(user != null) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
 	}
