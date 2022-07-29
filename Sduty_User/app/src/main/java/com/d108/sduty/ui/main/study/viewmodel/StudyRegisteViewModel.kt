@@ -1,4 +1,4 @@
-package com.d108.sduty.ui.sign.viewmodel
+package com.d108.sduty.ui.main.study.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
