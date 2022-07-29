@@ -15,8 +15,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public Profile insertProfile(Profile profile) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return profileRepo.save(profile);
 	}
 
 	@Override

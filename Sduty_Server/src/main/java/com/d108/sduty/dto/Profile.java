@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;

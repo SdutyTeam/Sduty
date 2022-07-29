@@ -1,18 +1,25 @@
 package com.d108.sduty.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.User;
+import com.d108.sduty.service.ImageService;
 import com.d108.sduty.service.ProfileService;
+import com.google.gson.Gson;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,10 +33,21 @@ public class ProfileController {
 	@Autowired
 	ProfileService profileService;
 	
+	@Autowired
+	ImageService imageService;
+	
 	@ApiOperation(value = "프로필 저장 > Profile > Profile 리턴", response = Profile.class)
 	@PostMapping()
-	public Profile insertProfile(@RequestBody Profile profile) {
-		return null;
+	public ResponseEntity<?> insertProfile(@RequestParam MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
+		Gson gson = new Gson();
+		Profile profile = gson.fromJson(json, Profile.class);
+		profile.setImage(imageFile.getOriginalFilename());
+		imageService.fileUpload(imageFile);
+		Profile result = profileService.insertProfile(profile);
+		if(result != null) {
+			return new ResponseEntity<Profile>(profile, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "닉네임 중복 확인 > Nickname > Profile 리턴", response = HttpStatus.class)
