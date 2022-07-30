@@ -8,7 +8,7 @@
 
         <variable
             name="vm"
-            type="com.d108.sduty.ui.main.mypage.viewmodel.MyPageViewModel" />
+            type="com.d108.sduty.ui.viewmodel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,7 +96,7 @@
                             android:id="@+id/iv_profile"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:src="@drawable/icon_avatar"
+                            loadImage="@{vm.profile.image}"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

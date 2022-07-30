@@ -45,9 +45,11 @@ class MainViewModel: ViewModel() {
     private val _profile = MutableLiveData<Profile>()
     val profile: LiveData<Profile>
         get() = _profile
+    fun setProfileValue(profile: Profile){ _profile.postValue(profile)}
     fun getProfileValue(userSeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.profileApi.getProfileValue(userSeq).let {
+                Log.d(TAG, "getProfileValue: ${it.body() as Profile}")
                 if(it.isSuccessful && it.body() != null) {
                     _profile.postValue(it.body() as Profile)
                     _isRegisterdProfile.postValue(true)
