@@ -8,7 +8,6 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,6 @@ import lombok.Setter;
 @DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "Profile: 유저 프로필 정보", description = "유저 프로필 상세 정보")
 public class Profile {
 	
 	@Id

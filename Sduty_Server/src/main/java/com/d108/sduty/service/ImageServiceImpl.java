@@ -17,7 +17,7 @@ import com.d108.sduty.repo.ImageRepo;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-	private final String FILE_URL = "";
+	private final String FILE_URL = "/home/ubuntu/images/profileImage/";
 	
 	@Autowired
 	private ImageRepo imageRepo;

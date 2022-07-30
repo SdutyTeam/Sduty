@@ -1,5 +1,6 @@
 package com.d108.sduty.dto;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -17,8 +18,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Image {
 	@Id
-	String fileNo;
-	String filename;
-	String fileOriName;
+	@Column(name="image_id")
+	String id;
+	@Column(name="image_name")
+	String name;
+	@Column(name="image_url")
 	String fileurl;
 }
