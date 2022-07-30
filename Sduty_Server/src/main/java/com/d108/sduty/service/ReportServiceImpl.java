@@ -1,5 +1,12 @@
 package com.d108.sduty.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +22,12 @@ public class ReportServiceImpl implements ReportService {
 	private TaskRepo taskRepo;
 	@Autowired
 	private ReportRepo reportRepo;
-
-	@Override
-	public void startTask(int userSeq) {
-		//profile 수정 후, 구현예정
-		
-	}
 	
 	@Override
 	public void registTask(int userSeq, String date, Task task) {
-		//1. 오늘 날짜 report 가져오기(없으면 만들어서 반환)
+		//1. 해당 날짜 report 가져오기(없으면 만들어서 반환)
 		Report report = reportRepo.findByDateAndOwnerSeq(date, userSeq);
-		
+		System.out.println(report);
 		if(report==null) {
 			report = new Report();
 			report.setOwnerSeq(userSeq);
@@ -36,15 +37,41 @@ public class ReportServiceImpl implements ReportService {
 		System.out.println(report);
 		
 		//2. task에 report번호 등록
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+		int sec = 0;
+		try {
+			Date sd = sdf.parse(task.getStartTime());
+			Date ed = sdf.parse(task.getEndTime());
+			sec += ed.getTime()/1000-sd.getTime()/1000;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		task.setDurationTime(sec);
 		task.setReportSeq(report.getSeq());
 		taskRepo.save(task);
 	}
 
 	@Override
-	public Report getReport(int userSeq, String date) {
+	public Map<String, Object> getReport(int userSeq, String date) {
 		Report report = reportRepo.findByDateAndOwnerSeq(date, userSeq);
 		System.out.println(report);
-		return report;
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+		int sec = 0;
+		for(Task task : report.getTask()) {
+			sec += task.getDurationTime();
+		}
+		int hour = sec/3600;
+		int minute = sec%3600/60;
+		sec = sec % 3600 %60;
+		String totalTime = String.format("%02d:%02d:%02d", hour, minute, sec);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("report_date", report.getDate());
+		resultMap.put("total_time", totalTime);
+		resultMap.put("tasks", report.getTask());
+		
+//		System.out.println(totalTime);
+		return resultMap;
 	}
 
 	@Override
