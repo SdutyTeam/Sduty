@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,6 @@ public class ReportServiceImpl implements ReportService {
 			report.setDate(date);
 			report = reportRepo.save(report);
 		}
-		System.out.println(report);
 		
 		//2. task에 report번호 등록
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
@@ -76,11 +76,24 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public Task getTask(int taskSeq) {
-		return taskRepo.findBySeq(taskSeq);
+		return taskRepo.findBySeq(taskSeq).get();
 	}
 
 	@Override
 	public Task updateTask(Task task) {
+		if(taskRepo.existsBySeq(task.getSeq())) {
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+			int sec = 0;
+			try {
+				Date sd = sdf.parse(task.getStartTime());
+				Date ed = sdf.parse(task.getEndTime());
+				sec += ed.getTime()/1000-sd.getTime()/1000;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			task.setDurationTime(sec);
+			return taskRepo.save(task);
+		}
 		return null;
 	}
 

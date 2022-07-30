@@ -2,10 +2,8 @@ package com.d108.sduty.service;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.d108.sduty.dto.Report;
 import com.d108.sduty.dto.Task;
 
 @Service
@@ -15,5 +13,4 @@ public interface ReportService {
 	public Task getTask(int taskSeq);
 	public Task updateTask(Task task);
 	public void deleteTask(int taskSeq);
-	
 }
