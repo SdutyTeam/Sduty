@@ -1,9 +1,7 @@
 package com.d108.sduty.dto;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -97,5 +95,6 @@ public class User {
 	private Set<Study> masterStudies = new HashSet<Study>();
 
 	@ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER)
+
 	private Set<Study> studies = new HashSet<Study>();
 }
