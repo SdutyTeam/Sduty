@@ -32,12 +32,6 @@ public class ReportController {
 	@Autowired
 	private ReportService reportService;
 	
-	@PutMapping("/timer/{user_seq}")
-	public ResponseEntity<?> startTimer(@PathVariable int user_seq){
-		reportService.startTask(user_seq);
-		return new ResponseEntity<Map<String, Object>>(HttpStatus.OK);
-	}
-	
 	@ApiOperation(value = "테스크 등록하기")
 	@PostMapping("/tasks")
 	public ResponseEntity<?> regist(@RequestBody ObjectNode reqObject) throws JsonProcessingException, IllegalArgumentException{
@@ -49,25 +43,23 @@ public class ReportController {
 		return new ResponseEntity<Map<String, Object>>(HttpStatus.OK);
 	}
 	
-	//총 시간 구현 필요..
+	@ApiOperation(value = "리포트 조회")
 	@GetMapping("/{user_seq}/{date}")
 	public ResponseEntity<?> report(@PathVariable int user_seq, @PathVariable String date){
-		System.out.println(user_seq+", "+date);
-		//Report report = reportService.getReport(user_seq, date);
+		Map<String, Object> resultMap = reportService.getReport(user_seq, date);
 		
 		//testcode
-		Map<String, Object> report = new HashMap<String, Object>();
-		//
-		List<Task> tasks = new ArrayList<>();
-		Task task1 = new Task(2, 5, "토익", "리딩공부하기", "14:00:00", "16:30:00", "02:30:00");
-		Task task2 = new Task(3, 46, "코딩", "리포트구현하기", "22:00:00", "23:59:59", "01:59:59");
-		tasks.add(task1);
-		tasks.add(task2);
-		report.put("report_date", "2022-07-25");
-		report.put("total_time", "04:29:59");
-		report.put("tasks", tasks);
-		return new ResponseEntity<Map<String, Object>>(report, HttpStatus.OK);
-		//return new ResponseEntity<Report>(report, HttpStatus.OK);
+//		Map<String, Object> report = new HashMap<String, Object>();
+//		List<Task> tasks = new ArrayList<>();
+//		Task task1 = new Task(2, 5, "토익", "리딩공부하기", "14:00:00", "16:30:00", "02:30:00");
+//		Task task2 = new Task(3, 46, "코딩", "리포트구현하기", "22:00:00", "23:59:59", "01:59:59");
+//		tasks.add(task1);
+//		tasks.add(task2);
+//		report.put("report_date", "2022-07-25");
+//		report.put("total_time", "04:29:59");
+//		report.put("tasks", tasks);
+//		return new ResponseEntity<Map<String, Object>>(report, HttpStatus.OK);
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "테스크 상세조회")
