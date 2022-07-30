@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @ApiModel(value = "Task: report's task 정보", description = "리포트의 task 상세정보")
 @Entity
-@Table
 public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +33,6 @@ public class Task {
 	@Column(name="task_end_time")
 	private String endTime;
 	@Column(name="task_duration_time")
-	private String durationTime;
+	private int durationTime;
 	
 }

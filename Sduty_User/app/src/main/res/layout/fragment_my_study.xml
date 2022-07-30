@@ -6,9 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="MyStudyVM"
-            type="com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

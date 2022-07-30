@@ -3,17 +3,23 @@ package com.d108.sduty.ui.main.timer
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.databinding.FragmentTimerBinding
+import com.d108.sduty.model.dto.Report
+import com.d108.sduty.model.dto.Task
+import com.d108.sduty.ui.main.study.MyStudyFragmentDirections
 import com.d108.sduty.ui.main.timer.dialog.DelayDialog
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.convertTimeDateToString
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
 import java.util.*
 
@@ -132,7 +138,11 @@ class TimerFragment : Fragment() {
 
             // 리포트로 이동
             fabReport.setOnClickListener {
+                Log.d(TAG, "initViewModel: ${timerViewModel.report.value}")
                 // report 데이터 넘겨주기
+                findNavController().safeNavigate(TimerFragmentDirections.actionTimerFragmentToReportFragment(
+                    Report(1,1,"1","1", listOf<Task>(Task(1,"1","1","1","1","","","")))
+                ))
             }
 
             // 오늘 날짜로 돌아가기

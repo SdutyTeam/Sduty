@@ -14,12 +14,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
-import com.d108.sduty.common.COMMON_JOIN
-import com.d108.sduty.common.FIND_ID
-import com.d108.sduty.common.KAKAO_JOIN
-import com.d108.sduty.common.NAVER_JOIN
+import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentLoginBinding
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
+import com.d108.sduty.ui.main.mypage.MyPageFragment
 import com.d108.sduty.ui.sign.dialog.DialogFindInfo
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
@@ -71,7 +69,11 @@ class LoginFragment : Fragment() {
         viewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){
                 true ->{
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
+//                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
+//                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, PreviewFragment()).addToBackStack(null).commit()
+//                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).addToBackStack(null).commit()
+                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).commit()
+//                    findNavController().safeNavigate(LoginFragmentDirections.lto)
                 }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }
@@ -151,7 +153,7 @@ class LoginFragment : Fragment() {
             }
             tvFindPw.setOnClickListener{
                 DialogFindInfo(requireContext()).let {
-                    it.arguments = bundleOf("flag" to FIND_ID)
+                    it.arguments = bundleOf("flag" to FIND_PW)
                     it.show(parentFragmentManager.beginTransaction(),null)
                 }
             }

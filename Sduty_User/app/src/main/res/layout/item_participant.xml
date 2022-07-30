@@ -55,7 +55,7 @@
                     android:fontFamily="sans-serif"
                     android:lineSpacingExtra="1sp"
                     android:textColor="@color/ondark_01"
-                    android:textSize="11sp"
+                    android:textSize="14sp"
                     android:textStyle="normal"
                     android:maxLines="1"
                     android:ellipsize="end" />

@@ -1,8 +1,9 @@
 package com.d108.sduty.dto;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,17 +11,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data // getter, setter 등
+@Data // getter, setter, toString 등
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "Study: 스터디 정보", description = "스터디 이름, 소개, 인원 등의 정보")
@@ -52,4 +55,10 @@ public class Study {
 	@Column(name = "study_notice")
 	private String notice;
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="participation",
+			joinColumns = @JoinColumn(name="participation_study_seq"),
+			inverseJoinColumns = @JoinColumn(name="participation_user_seq"))
+	@JsonBackReference
+	private Set<User> participants = new HashSet<User>();
 }
