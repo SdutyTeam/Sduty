@@ -62,19 +62,28 @@ class LoginFragment : Fragment() {
 
 
     private fun initViewModel(){
+        mainViewModel.isRegisterdProfile.observe(viewLifecycleOwner){
+            when(it){
+                true -> {
+                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).commit()
+                    requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
+                }
+                false -> {
+                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, ProfileRegistFragment()).commit()
+                    requireContext().showToast("프로필 등록 후 이용해 주세요")
+                }
+            }
+        }
+
         viewModel.user.observe(viewLifecycleOwner){
             mainViewModel.setUserValue(it)
-            requireContext().showToast("${it.name}님 반갑습니다.")
+            mainViewModel.getProfileValue(it.seq)
+
+
+
         }
         viewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){
-                true ->{
-//                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
-//                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, PreviewFragment()).addToBackStack(null).commit()
-//                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).addToBackStack(null).commit()
-                    parentFragmentManager.beginTransaction().replace(R.id.frame_main, MyPageFragment()).commit()
-//                    findNavController().safeNavigate(LoginFragmentDirections.lto)
-                }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }
         }
