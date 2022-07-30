@@ -55,6 +55,10 @@ public class UserServiceImpl implements UserService {
 		return userRepo.save(user);
 	}
 	
+	@Override
+	public void deleteUser(int seq) throws Exception {
+		userRepo.deleteById(seq);
+	}
 
 	@Override
 	public int insertAuthInfo(AuthInfo authInfo) throws Exception {
@@ -75,5 +79,7 @@ public class UserServiceImpl implements UserService {
 	public void deleteAuthInfo(AuthInfo authInfo) throws Exception {
 		authInfoRepo.deleteAuthInfo(authInfo);
 	}
+
+
 
 }
