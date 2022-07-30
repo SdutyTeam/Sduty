@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
 import com.d108.sduty.databinding.FragmentMyPageBinding
@@ -55,7 +56,7 @@ class MyPageFragment : Fragment() {
 
     private fun initView(){
         contributionAdapter = ContributionAdapter()
-        storyAdapter = StoryAdapter()
+        storyAdapter = StoryAdapter(requireActivity())
         binding.apply {
             lifecycleOwner = this@MyPageFragment
             vm = mainViewModel
@@ -65,7 +66,7 @@ class MyPageFragment : Fragment() {
             }
             recylerContribution.apply {
                 adapter = contributionAdapter
-                layoutManager = GridLayoutManager(requireContext(), 7, GridLayoutManager.HORIZONTAL, false)
+                layoutManager = GridLayoutManager(requireContext(), 26)
             }
         }
     }
