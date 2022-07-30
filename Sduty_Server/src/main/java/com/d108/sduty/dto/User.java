@@ -1,9 +1,7 @@
 package com.d108.sduty.dto;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -59,9 +56,6 @@ public class User {
 		return "User [seq=" + seq + ", id=" + id + ", pass=" + pass + ", name=" + name + ", tel=" + tel + ", email="
 				+ email + ", fcmToken=" + fcmToken + ", regtime=" + regtime + ", userPublic=" + userPublic + "]";
 	}
-	
-	@OneToMany(mappedBy="masterSeq", fetch = FetchType.LAZY)
-	private Set<Study> masterStudies  = new HashSet<Study>();
 	
 	@ManyToMany(mappedBy="participation", fetch = FetchType.EAGER)
 	private Set<Study> studies = new HashSet<Study>();
