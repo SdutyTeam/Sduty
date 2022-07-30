@@ -57,6 +57,6 @@ public class User {
 				+ email + ", fcmToken=" + fcmToken + ", regtime=" + regtime + ", userPublic=" + userPublic + "]";
 	}
 	
-	@ManyToMany(mappedBy="participation", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy="participation", fetch = FetchType.LAZY)
 	private Set<Study> studies = new HashSet<Study>();
 }
