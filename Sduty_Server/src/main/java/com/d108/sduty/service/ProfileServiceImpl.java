@@ -15,19 +15,21 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public Profile insertProfile(Profile profile) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return profileRepo.save(profile);
 	}
 
 	@Override
 	public boolean checkDupNickname(String nickname) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		return profileRepo.existsBynickname(nickname);
 	}
 
 	@Override
-	public Optional<Profile> selectProfile() {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Profile> selectProfile(int seq) {
+		return profileRepo.findById(seq);
+	}
+
+	@Override
+	public Profile updateProfile(Profile profile) throws Exception {
+		return profileRepo.save(profile);
 	}
 }

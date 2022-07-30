@@ -22,7 +22,6 @@ import lombok.Setter;
 @DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "Profile: 유저 프로필 정보", description = "유저 프로필 상세 정보")
 public class Profile {
 	
 	@Id
