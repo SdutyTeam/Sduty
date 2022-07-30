@@ -1,6 +1,9 @@
 package com.d108.sduty.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -50,6 +53,16 @@ public class StudyServiceImpl implements StudyService {
 	public Study getStudyDetail(int studySeq) {
 		return studyRepo.findBySeq(studySeq).get();
 	}
+	
+
+	@Override
+	public Set<Study> getMyStudies(int userSeq) {
+		Optional<User> user = userRepo.findBySeq(userSeq);
+		if(user.isPresent()) {
+			return user.get().getStudies();
+		}
+		return null;
+	}
 
 	@Override
 	public boolean deleteStudy(int userSeq, int studySeq) {
@@ -82,8 +95,7 @@ public class StudyServiceImpl implements StudyService {
 		if(keyword!=null) {
 			spec = spec.and(findKeyword(keyword));
 		}
-		System.out.println(studyRepo.findAll(spec));
-		return null;
+		return studyRepo.findAll(spec);
 	}
 	
 	public Specification<Study> findCategory(String category){

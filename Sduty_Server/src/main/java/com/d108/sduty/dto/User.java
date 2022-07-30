@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -91,10 +93,9 @@ public class User {
 		return true;
 	}
 
-	@OneToMany(mappedBy = "masterSeq", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "masterSeq", fetch = FetchType.EAGER)
 	private Set<Study> masterStudies = new HashSet<Study>();
 
 	@ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER)
-
 	private Set<Study> studies = new HashSet<Study>();
 }

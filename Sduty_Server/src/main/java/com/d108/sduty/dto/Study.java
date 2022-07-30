@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -57,5 +59,6 @@ public class Study {
 	@JoinTable(name="participation",
 			joinColumns = @JoinColumn(name="participation_study_seq"),
 			inverseJoinColumns = @JoinColumn(name="participation_user_seq"))
+	@JsonBackReference
 	private Set<User> participants = new HashSet<User>();
 }
