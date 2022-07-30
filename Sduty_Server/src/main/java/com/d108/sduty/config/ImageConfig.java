@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class ImageConfig implements WebMvcConfigurer{
-    private String connectPath = "/images/**";
+    private String connectPath = "/image/**";
     private String resourcePath = "file:////home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/";
 
     @Override
