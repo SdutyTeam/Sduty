@@ -60,7 +60,7 @@ public class User {
 				+ email + ", fcmToken=" + fcmToken + ", regtime=" + regtime + ", userPublic=" + userPublic + "]";
 	}
 	
-	@OneToMany(mappedBy="masterSeq", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="masterSeq", fetch = FetchType.EAGER)
 	private Set<Study> masterStudies  = new HashSet<Study>();
 	
 	@ManyToMany(mappedBy="participation", fetch = FetchType.EAGER)
