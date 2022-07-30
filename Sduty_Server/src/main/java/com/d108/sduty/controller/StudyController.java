@@ -47,6 +47,10 @@ public class StudyController {
 		try {
 			study = mapper.treeToValue(reqObject.get("study"), Study.class);
 			JsonNode node = reqObject.get("alarm");
+			if((study.isCamstudy() && node==null)||(!study.isCamstudy()&& node!=null)) {
+				//캠스터디인데 알람이 없는경우 || 캠스터디 아닌데 알람이 있는 경우
+				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			}
 			if(node != null) {
 				alarm = mapper.treeToValue(node, Alarm.class);
 			}
