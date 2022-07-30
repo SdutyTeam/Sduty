@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
 import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.ui.sign.viewmodel.ProfileViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.DateFormatUtil
 import com.d108.sduty.utils.UriPathUtil
 import com.d108.sduty.utils.showToast
 import java.util.*
@@ -41,10 +44,14 @@ class ProfileRegistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
     }
 
     private fun initViewModel(){
-
+        viewModel.profile.observe(viewLifecycleOwner){
+            mainViewModel.setProfileValue(it)
+            findNavController().navigate(ProfileRegistFragmentDirections.actionProfileRegistFragmentToTimeLineFragment())
+        }
     }
 
     private fun initView(){
@@ -74,13 +81,16 @@ class ProfileRegistFragment : Fragment() {
             val publicJob = viewModel.flagJob.value!!
             val interest = etInterest.text.toString()
             val publicInterest = viewModel.flagInterest.value!!
-            val birth = Date()
+            val birthInput = etBirth.text.toString().toInt()
             val publicBirth = viewModel.flagBirth.value!!
             val introduce = etIntroduce.text.toString()
-            if(nickname.isEmpty() || job.isEmpty() || interest.isEmpty() || birth == null || introduce.isEmpty()){
-                requireContext().showToast("모든 항목을 입력해 주세요")
+            val birth = DateFormatUtil.converYYYYMMDD(birthInput.toString())
+
+            Log.d(TAG, "saveProfile: ${birth}")
+            if(nickname.isEmpty() || job.isEmpty() || interest.isEmpty() || birthInput < 19000101 || birthInput > 20220731 || etBirth.text.toString().length != 8 || introduce.isEmpty()){
+                requireContext().showToast("모든 항목을 정확히 입력해 주세요")
             }else{
-                viewModel.insertProfile(Profile(nickname, birth, publicBirth, introduce, "", job, publicJob, interest, publicInterest, 1), imageUrl)
+                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth, publicBirth, introduce, "", job, publicJob, interest, publicInterest, 1), imageUrl)
             }
         }
     }

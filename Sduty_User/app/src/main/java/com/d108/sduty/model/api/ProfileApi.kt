@@ -10,7 +10,11 @@ interface ProfileApi {
     @GET("/profile/check/{nickname}")
     suspend fun getUsedId(@Path("nickname") nickname: String): Response<Void>
 
+    @Multipart
     @POST("/profile")
-    suspend fun insertProfile(@Part imageFile: MultipartBody.Part, @Part("banner") banner: RequestBody) : Response<Profile>
+    suspend fun insertProfile(@Part imageFile: MultipartBody.Part, @Part("profile") banner: RequestBody) : Response<Profile>
+
+    @GET("/profile/{userSeq}")
+    suspend fun getProfileValue(@Path("userSeq")userSeq: Int): Response<Profile>
 
 }

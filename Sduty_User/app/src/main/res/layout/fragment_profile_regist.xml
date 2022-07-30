@@ -124,7 +124,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintTop_toTopOf="@id/tv_title_agree"
-                                android:visibility="@{vm.isUsedNickname? View.VISIBLE : View.GONE}"
+                                android:visibility="@{vm.isUsedNickname? View.GONE : View.VISIBLE}"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginStart="20dp"
                                 >
