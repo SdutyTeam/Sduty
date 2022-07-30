@@ -91,6 +91,24 @@ public class StudyController {
 	public ResponseEntity<?> getStudyDetail(@PathVariable int study_seq){
 		return new ResponseEntity<Study>(studyService.getStudyDetail(study_seq), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value="스터디 참여")
+	@PostMapping("/participation/{study_seq}/{user_seq}")
+	public ResponseEntity<?> joinStudy(@PathVariable int study_seq, @PathVariable int user_seq){
+		if(!studyService.joinStudy(study_seq, user_seq)) {
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="스터디 탈퇴")
+	@DeleteMapping("/participation/{study_seq}/{user_seq}")
+	public ResponseEntity<?> disjoinStudy(@PathVariable int study_seq, @PathVariable int user_seq){
+		if(!studyService.disjoinStudy(study_seq, user_seq)) {
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "내 스터디 목록")
 	@GetMapping("/{user_seq}")

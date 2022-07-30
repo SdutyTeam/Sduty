@@ -14,5 +14,6 @@ public interface StudyService {
 	public Study getStudyDetail(int studySeq);
 	public boolean deleteStudy(int userSeq, int studySeq);
 	public List<Study> searchStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter, String keyword);
-	public Specification<Study> findCamStudy(boolean isCamStudy);
+	public boolean joinStudy(int studySeq, int userSeq);
+	public boolean disjoinStudy(int studySeq, int userSeq);
 }
