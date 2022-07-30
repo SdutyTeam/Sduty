@@ -74,13 +74,9 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-
-        viewModel.user.observe(viewLifecycleOwner){
+        viewModel.user.observe(viewLifecycleOwner) {
             mainViewModel.setUserValue(it)
             mainViewModel.getProfileValue(it.seq)
-
-
-
         }
         viewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){

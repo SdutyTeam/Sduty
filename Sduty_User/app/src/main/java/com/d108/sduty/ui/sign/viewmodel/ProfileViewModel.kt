@@ -27,18 +27,20 @@ class ProfileViewModel: ViewModel() {
     val profile: LiveData<Profile>
         get() = _profile
 
-    private val _isUsedNickname = MutableLiveData<Boolean>(false)
+    private val _isUsedNickname = MutableLiveData<Boolean>(true)
     val isUsedNickname: LiveData<Boolean>
         get() = _isUsedNickname
     fun checkNickname(nickname: String){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.profileApi.getUsedId(nickname).let {
                 when {
-                    it.code() == 401 -> {
-                        _isUsedNickname.postValue(true)
-                    }
                     it.code() == 200 -> {
                         _isUsedNickname.postValue(false)
+                        Log.d(TAG, "checkNickname: ${it.code()}")
+                    }
+                    it.code() == 401 -> {
+                        _isUsedNickname.postValue(true)
+                        Log.d(TAG, "checkNickname: ${it.code()}")
                     }
                     else -> {
                         Log.d(TAG, "checkNickname: ${it}")
