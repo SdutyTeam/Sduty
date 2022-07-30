@@ -12,6 +12,7 @@ public interface UserService {
 	public boolean isUsedId(String id) throws Exception;
 	public User updateUser(User user) throws Exception;
 	public Optional<User> selectUser(int seq) throws Exception;
+	public void deleteUser(int seq) throws Exception;
 	
 	public Optional<User> selectByTel(String tel) throws Exception;
 	public User updatePassword(User user) throws Exception;
