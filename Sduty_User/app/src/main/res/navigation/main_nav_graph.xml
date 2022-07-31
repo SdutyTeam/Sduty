@@ -113,6 +113,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_achievementFragment"
+            app:destination="@id/achievementFragment" />
     </fragment>
     <fragment
         android:id="@+id/storyRegisterFragment"
@@ -243,4 +246,8 @@
             android:id="@+id/action_scrapFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/achievementFragment"
+        android:name="com.d108.sduty.ui.main.mypage.AchievementFragment"
+        android:label="AchievementFragment" />
 </navigation>
