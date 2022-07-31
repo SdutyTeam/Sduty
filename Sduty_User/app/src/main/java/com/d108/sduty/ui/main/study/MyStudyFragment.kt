@@ -12,10 +12,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.adapter.MyStudyAdapter
+import com.d108.sduty.adapter.StudyListAdapter
 import com.d108.sduty.databinding.FragmentMyStudyBinding
+import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
+import com.d108.sduty.ui.main.study.dialog.StudyDetailDialog
 import com.d108.sduty.ui.main.study.viewmodel.MyStudyViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
@@ -28,10 +32,8 @@ class MyStudyFragment : Fragment() {
     private lateinit var binding: FragmentMyStudyBinding
     private val myStudyViewModel: MyStudyViewModel by viewModels()
 
-    private lateinit var myStudyAdapter: MyStudyAdapter
-    private var list = listOf<String>()
-
-
+    private lateinit var mystudyListAdapter: StudyListAdapter
+    private lateinit var mystudyList: List<Study>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,14 +53,17 @@ class MyStudyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
 
-        myStudyViewModel.list.observe(viewLifecycleOwner){
-            myStudyAdapter.myStudyList = it
-            list = it
+        myStudyViewModel.myStudyList.observe(viewLifecycleOwner){
+            if(it != null){
+                mystudyList = myStudyViewModel.myStudyList.value as List<Study>
+                initAdapter()
+            }
         }
 
-        myStudyViewModel.getList()
+        //myStudyViewModel.getMyStudyList()
+
+
 
         binding.btnCreateStudy.setOnClickListener{
             // Dialog만들기
@@ -68,7 +73,6 @@ class MyStudyFragment : Fragment() {
                 override fun onClicked(type: Boolean) {
                     findNavController().safeNavigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyRegistFragment(type))
                 }
-
             })
         }
 
@@ -80,17 +84,17 @@ class MyStudyFragment : Fragment() {
 
 
     private fun initAdapter(){
-        myStudyAdapter = MyStudyAdapter(list)
-        myStudyAdapter.clickListener = object : MyStudyAdapter.ClickListener{
+        mystudyListAdapter = StudyListAdapter(mystudyList)
+        mystudyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
-                // 스터디 입장 (내 스터디 클릭 이벤트)
-                TODO("Not yet implemented")
+                // 선택 스터디 입장
+
+
             }
         }
-
-//        binding.mystudyList.apply {
-//            adapter = myStudyAdapter
-//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-//        }
+        binding.myStudyList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = mystudyListAdapter
+        }
     }
 }

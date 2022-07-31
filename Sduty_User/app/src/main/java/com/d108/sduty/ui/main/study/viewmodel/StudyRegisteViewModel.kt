@@ -34,7 +34,6 @@ class StudyRegisteViewModel: ViewModel() {
                     _createSuccess.postValue(true)
                 }
             }catch (e: Exception){
-                Log.d(TAG, "studyCreate: ${e.message}")
                 _createSuccess.postValue(false)
             }
         }
@@ -44,12 +43,11 @@ class StudyRegisteViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = Retrofit.studyApi.getStudyName(id)
-                if(response.isSuccessful && response.body() == true){
-                    _isStudyId.postValue(true)
-                    Log.d(TAG, "getStudyId: @@@")
-                }
-                else if(response.body() == false){
+                if(response.code() == 200){
                     _isStudyId.postValue(false)
+                }
+                else if(response.code() == 401){
+                    _isStudyId.postValue(true)
                 }
             }catch (e: Exception){
                 Log.d(TAG, "getStudyId: ${e.message}")
