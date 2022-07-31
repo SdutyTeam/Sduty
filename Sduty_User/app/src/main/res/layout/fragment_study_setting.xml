@@ -4,10 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/common_top"
@@ -37,6 +41,498 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/const_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
+            >
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_study_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="그룹 정보"
+                android:textSize="16sp"
+                android:layout_marginVertical="15dp"
+                android:layout_marginHorizontal="20dp"
+                />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/study_info"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginHorizontal="30dp"
+                app:cardCornerRadius="10dp"
+                android:layout_marginVertical="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_study_info">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="카테고리"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/divider_a"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_study_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/divider_a"
+                        android:layout_marginRight="20dp"
+                        tools:text="대학생"/>
+
+                    <LinearLayout
+                        android:id="@+id/divider_a"
+                        style="@style/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_study_category"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_study_people"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="인원 수"
+                        app:layout_constraintTop_toBottomOf="@id/divider_a"
+                        app:layout_constraintBottom_toTopOf="@id/divider_b"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_study_people"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_a"
+                        app:layout_constraintBottom_toTopOf="@id/divider_b"
+                        android:layout_marginRight="20dp"
+                        tools:text="15명"/>
+
+                    <LinearLayout
+                        android:id="@+id/divider_b"
+                        style="@style/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/tv_study_people"
+                        app:layout_constraintBottom_toTopOf="@id/tv_study_master"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="그룹 장"
+                        app:layout_constraintTop_toBottomOf="@id/divider_b"
+                        app:layout_constraintBottom_toBottomOf="@id/divider_c"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_study_master"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_b"
+                        app:layout_constraintBottom_toBottomOf="@id/divider_c"
+                        android:layout_marginRight="20dp"
+                        tools:text="알리미"/>
+
+                    <LinearLayout
+                        android:id="@+id/divider_c"
+                        style="@style/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/tv_study_master"
+                        app:layout_constraintBottom_toTopOf="@id/tv_study_public"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="공개 / 비공개"
+                        app:layout_constraintTop_toBottomOf="@id/divider_c"
+                        app:layout_constraintBottom_toTopOf="@id/divider_d"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_study_public"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_c"
+                        app:layout_constraintBottom_toTopOf="@id/divider_d"
+                        android:layout_marginRight="20dp"
+                        tools:text="비공개"/>
+
+                    <LinearLayout
+                        android:id="@+id/divider_d"
+                        style="@style/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/tv_study_public"
+                        app:layout_constraintBottom_toTopOf="@id/iv_study_introduce"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="그룹 소개"
+                        app:layout_constraintTop_toBottomOf="@id/divider_d"
+                        app:layout_constraintBottom_toTopOf="@id/divider_e"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/iv_study_introduce"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_d"
+                        app:layout_constraintBottom_toTopOf="@id/divider_e"
+                        android:layout_marginRight="20dp"
+                        android:src="@drawable/icon_join"/>
+
+                    <LinearLayout
+                        android:id="@+id/divider_e"
+                        style="@style/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/iv_study_introduce"
+                        app:layout_constraintBottom_toTopOf="@+id/iv_study_calendar"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="일정"
+                        app:layout_constraintTop_toBottomOf="@id/divider_e"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/iv_study_calendar"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_e"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginRight="20dp"
+                        android:src="@drawable/icon_join"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_study_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/study_info"
+                android:text="그룹 수정"
+                android:textSize="16sp"
+                android:layout_marginVertical="15dp"
+                android:layout_marginHorizontal="20dp"
+                />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/study_update"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginHorizontal="30dp"
+                app:cardCornerRadius="10dp"
+                android:layout_marginVertical="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_study_update">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="공지사항 변경"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/divider_aa"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_notice_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/divider_aa"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_aa"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_notice_update"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_name_update"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="그룹 명 변경"
+                    app:layout_constraintTop_toBottomOf="@id/divider_aa"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ab"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_name_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_aa"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ab"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_ab"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_name_update"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_master_update"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="그룹 장 변경"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ab"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ac"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_master_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ab"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ac"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_ac"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_master_update"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_category_update"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="카테고리 변경"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ac"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ad"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_category_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ac"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ad"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_ad"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_category_update"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_people_update"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="모집인원 변경"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ad"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ae"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_people_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ad"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ae"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_ae"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_people_update"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_password_update"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호 변경"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ae"
+                    app:layout_constraintBottom_toTopOf="@id/divider_af"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_password_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ae"
+                    app:layout_constraintBottom_toTopOf="@id/divider_af"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_af"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_password_update"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_introduce_update"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="그룹 소개 변경"
+                    app:layout_constraintTop_toBottomOf="@id/divider_af"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ag"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_introduce_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_af"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ag"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_ag"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_introduce_update"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_people_ban"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="그룹원 강퇴"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ag"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ah"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_people_ban"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ag"
+                    app:layout_constraintBottom_toTopOf="@id/divider_ah"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+                <LinearLayout
+                    android:id="@+id/divider_ah"
+                    style="@style/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/iv_study_people_ban"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_study_calendar_update"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일정 수정"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ah"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_study_calendar_update"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_ah"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_join"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btn_study_exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="그룹 탈퇴"
+                android:background="@color/red_200"
+                app:layout_constraintTop_toBottomOf="@id/study_update"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                />
+
+            <Button
+                android:id="@+id/btn_study_bomb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="그룹 해체"
+                android:background="@color/red_200"
+                app:layout_constraintTop_toBottomOf="@id/btn_study_exit"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="5dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

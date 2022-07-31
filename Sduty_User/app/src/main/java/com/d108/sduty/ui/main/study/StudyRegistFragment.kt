@@ -75,7 +75,7 @@ class StudyRegistFragment : Fragment() {
 
         binding.apply {
             btnCreateStudy.setOnClickListener { studyCreate() }
-            etStudyName.addTextChangedListener { textChangeListener }
+            etStudyName.addTextChangedListener(textChangeListener)
             commonTopBack.setOnClickListener {
                 findNavController().popBackStack()
             }
@@ -97,7 +97,7 @@ class StudyRegistFragment : Fragment() {
             else{
                 studyRegisteViewModel.study.observe(viewLifecycleOwner){
                     if(it != null){
-                        // 성공적으로 스터디 생성
+                        // 성공적으로 스터디 생성 - 스터디 이동? 내 스터디 리스트?
 
                     }
                 }
@@ -111,10 +111,11 @@ class StudyRegistFragment : Fragment() {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
         }
 
         override fun afterTextChanged(s: Editable?) {
-            studyRegisteViewModel.getStudyId(binding.etStudyName.toString())
+            studyRegisteViewModel.getStudyId(binding.etStudyName.text.toString())
         }
 
     }

@@ -15,5 +15,13 @@ data class Study(
     var studyRegtime: Date?,
     var notice: String,
     var camstudy: Boolean
-): Serializable {
+) {
+    constructor(
+        masterSeq: Int, name: String, introduce: String, category: String, limitNumber: Int,
+        password: String, camstudy: Boolean):
+            this(0, masterSeq, name, introduce, category,
+            limitNumber, 1, password, null, "", camstudy)
+
+
+
 }
