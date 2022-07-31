@@ -14,10 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
-import com.d108.sduty.common.COMMON_JOIN
-import com.d108.sduty.common.FIND_ID
-import com.d108.sduty.common.KAKAO_JOIN
-import com.d108.sduty.common.NAVER_JOIN
+import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentLoginBinding
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
 import com.d108.sduty.ui.sign.dialog.DialogFindInfo
@@ -151,7 +148,7 @@ class LoginFragment : Fragment() {
             }
             tvFindPw.setOnClickListener{
                 DialogFindInfo(requireContext()).let {
-                    it.arguments = bundleOf("flag" to FIND_ID)
+                    it.arguments = bundleOf("flag" to FIND_PW)
                     it.show(parentFragmentManager.beginTransaction(),null)
                 }
             }

@@ -12,10 +12,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
 import com.d108.sduty.common.KAKAO_JOIN
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
+import com.d108.sduty.ui.main.home.viewmodel.StoryViewModel
 import com.d108.sduty.ui.sign.LoginFragmentDirections
 import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.safeNavigate
@@ -26,6 +28,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 private const val TAG ="StoryRegisterFragment"
 class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private lateinit var binding: FragmentStoryRegisterBinding
+    private val viewModel: StoryViewModel by activityViewModels()
     // (공개 범위) 0 : 전체 공개, 1 : 팔로워만, 2 : 나만 보기
     private var disclosure = 0
 
@@ -75,8 +78,6 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     // mProfileUri = fileUri
                     binding.apply {
                         //imgStory.setImageURI(fileUri)
-                        imgStory.visibility = View.VISIBLE
-                        btnAddImg.visibility = View.GONE
                         val fileUriStr = fileUri.toString()
                         findNavController().safeNavigate(
                             StoryRegisterFragmentDirections
@@ -119,6 +120,21 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             ivBack.setOnClickListener {
                 navigateBack(requireActivity())
             }
+            ivRegisterStory.setOnClickListener {
+                // 게시물 정보 등록
+                // 등록할 때, 초기 화면으로 visibility 다시 세팅...
+
+                navigateBack(requireActivity())
+            }
+
+            // 템플릿 적용한 이미지 변화 인식해 보여주기
+            viewModel.bitmap.observe(viewLifecycleOwner) { bitmap ->
+                // bitmap값
+                // requireContext().showToast("$bitmap")
+                imgStory.visibility = View.VISIBLE
+                btnAddImg.visibility = View.GONE
+                binding.imgStory.setImageBitmap(bitmap)
+            }
         }
     }
 
@@ -127,17 +143,20 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         return when (item.itemId) {
             R.id.privateDisclosure -> {
                 disclosure = 0
-                requireContext().showToast("나만 보기 클릭 : " + disclosure)
+                binding.btnDisclosure.text = "나만 보기"
+//                requireContext().showToast("나만 보기 클릭 : " + disclosure)
                 true
             }
             R.id.followerDisclosure -> {
                 disclosure = 1
-                requireContext().showToast("팔로워만 공개 클릭 : " + disclosure)
+                binding.btnDisclosure.text = "팔로워 공개"
+//                requireContext().showToast("팔로워만 공개 클릭 : " + disclosure)
                 true
             }
             R.id.publicDisclosure -> {
                 disclosure = 2
-                requireContext().showToast("전체 공개 클릭 : " + disclosure)
+                binding.btnDisclosure.text = "전체 공개"
+//                requireContext().showToast("전체 공개 클릭 : " + disclosure)
                 true
             }
             else -> false

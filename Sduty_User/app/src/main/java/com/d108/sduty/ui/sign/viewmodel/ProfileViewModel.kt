@@ -10,8 +10,15 @@ import com.d108.sduty.common.INTEREST_BUTTON
 import com.d108.sduty.common.JOB_BUTTON
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Profile
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
+import java.lang.Exception
+import java.util.*
 
 private const val TAG ="ProfileViewModel"
 class ProfileViewModel: ViewModel() {
@@ -41,20 +48,23 @@ class ProfileViewModel: ViewModel() {
         }
     }
 
-    fun insertProfile(profile: Profile){
+    fun insertProfile(profile: Profile, imageUrl: String){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.profileApi.insertProfile(profile).let {
-                when {
-                    it.code() == 401 -> {
-                        _isUsedNickname.postValue(true)
-                    }
-                    it.code() == 200 -> {
-                        _isUsedNickname.postValue(false)
-                    }
-                    else -> {
-                        Log.d(TAG, "checkNickname: ${it}")
-                    }
+            try {
+                val file = File(imageUrl)
+                Log.d(TAG, "insertProfile: ${imageUrl}")
+                var fileName = "profile/" + System.currentTimeMillis().toString()+".png"
+                profile.image = fileName
+                var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,requestBody)
+                val json = Gson().toJson(profile)
+                val profileBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
+                val response = Retrofit.profileApi.insertProfile(imageBody, profileBody)
+                if(response.isSuccessful && response.body() != null){
+                    _profile.postValue(response.body() as Profile)
                 }
+            }catch (e: Exception){
+                Log.d(TAG, "getBannerListItems: ${e.message}")
             }
         }
     }
