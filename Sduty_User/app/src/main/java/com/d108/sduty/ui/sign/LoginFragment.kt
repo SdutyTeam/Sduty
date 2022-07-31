@@ -12,11 +12,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentLoginBinding
 import com.d108.sduty.ui.camstudy.preview.PreviewFragment
+import com.d108.sduty.ui.main.home.TimeLineFragment
+import com.d108.sduty.ui.main.mypage.MyPageFragment
 import com.d108.sduty.ui.sign.dialog.DialogFindInfo
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
@@ -58,18 +63,47 @@ class LoginFragment : Fragment() {
         initView()
         checkPermission()
     }
+    fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+        observe(lifecycleOwner, object : Observer<T> {
+            override fun onChanged(t: T?) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
+
+        /*
+        observeForever(object : Observer<T> {
+            override fun onChanged(t: T?) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
+         */
+    }
 
 
     private fun initViewModel(){
-        viewModel.user.observe(viewLifecycleOwner){
+        mainViewModel.isRegisterdProfile.observeOnce(this, object : Observer<Boolean>{
+            override fun onChanged(t: Boolean?) {
+                when(mainViewModel.isRegisterdProfile.value){
+                    true -> {
+                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
+                        requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
+                    }
+                    false -> {
+                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
+                        requireContext().showToast("프로필 등록 후 이용해 주세요")
+                    }
+                }
+            }
+        })
+
+        viewModel.user.observe(viewLifecycleOwner) {
             mainViewModel.setUserValue(it)
-            requireContext().showToast("${it.name}님 반갑습니다.")
+            mainViewModel.getProfileValue(it.seq)
         }
         viewModel.isLoginSucceed.observe(viewLifecycleOwner){
             when(it){
-                true ->{
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
-                }
                 false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
             }
         }
@@ -95,6 +129,14 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+    private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
+        observeOnce(object : Observer<T> {
+            override fun onChanged(t: T?) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 
     private fun initView() {

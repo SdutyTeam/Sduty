@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/myStudyFragment">
+    app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.d108.sduty.ui.sign.LoginFragment"
@@ -13,6 +13,8 @@
             app:destination="@id/joinFragment" />
         <action
             android:id="@+id/action_loginFragment_to_timeLineFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/timeLineFragment" />
         <action
             android:id="@+id/action_loginFragment_to_termsFragment"
@@ -69,6 +71,8 @@
             android:defaultValue=""/>
         <action
             android:id="@+id/action_joinRegistFragment_to_loginFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/loginFragment" />
     </fragment>
     <fragment
@@ -77,6 +81,8 @@
         android:label="ProfileRegistFragment" >
         <action
             android:id="@+id/action_profileRegistFragment_to_timeLineFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/timeLineFragment" />
     </fragment>
     <fragment

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -167,6 +168,18 @@ public class UserController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@ApiOperation(value = "회원정보 탈퇴 > 200/401 리턴", response = HttpStatus.class)
+	@DeleteMapping("/{seq}")
+	public ResponseEntity<?> deleteUser(@PathVariable int seq) throws Exception {
+		try {
+			userService.deleteUser(seq);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK); 
+		
+	}
+	
 	@ApiOperation(value = "아이디 찾기 > String/401 리턴", response = HttpStatus.class)
 	@GetMapping("/id/{tel}")
 	public ResponseEntity<?> findIdByTel(@PathVariable String tel) throws Exception {

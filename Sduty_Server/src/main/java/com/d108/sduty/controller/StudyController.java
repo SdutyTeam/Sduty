@@ -2,8 +2,10 @@ package com.d108.sduty.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,6 +49,10 @@ public class StudyController {
 		try {
 			study = mapper.treeToValue(reqObject.get("study"), Study.class);
 			JsonNode node = reqObject.get("alarm");
+			if((study.isCamstudy() && node==null)||(!study.isCamstudy()&& node!=null)) {
+				//캠스터디인데 알람이 없는경우 || 캠스터디 아닌데 알람이 있는 경우
+				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			}
 			if(node != null) {
 				alarm = mapper.treeToValue(node, Alarm.class);
 			}
@@ -87,25 +93,30 @@ public class StudyController {
 	public ResponseEntity<?> getStudyDetail(@PathVariable int study_seq){
 		return new ResponseEntity<Study>(studyService.getStudyDetail(study_seq), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value="스터디 참여")
+	@PostMapping("/participation/{study_seq}/{user_seq}")
+	public ResponseEntity<?> joinStudy(@PathVariable int study_seq, @PathVariable int user_seq){
+		if(!studyService.joinStudy(study_seq, user_seq)) {
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="스터디 탈퇴")
+	@DeleteMapping("/participation/{study_seq}/{user_seq}")
+	public ResponseEntity<?> disjoinStudy(@PathVariable int study_seq, @PathVariable int user_seq){
+		if(!studyService.disjoinStudy(study_seq, user_seq)) {
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "내 스터디 목록")
 	@GetMapping("/{user_seq}")
-	public ResponseEntity<?> myStudyList(@PathVariable int user_seq){
-		System.out.println("내 스터디 목록"+ user_seq);
-		List<Study> myStudyList = new ArrayList<>();
-//		myStudyList.add(new Study(5, 71, "하루 10시간ㄱ", "하루 10시간하실 분만 오세요!", "대학생", 12, 5, "a123", false, "2022-07-27 08:24:31", "공지사항!!", null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
-//		myStudyList.add(new Study(1, 23, "서울가자", "열심히 해봐요", "중학생", 10, 2, null, true, "2022-07-26 22:00:12", null, null));
+	public ResponseEntity<?> getMyStudies(@PathVariable int user_seq){
 		Map<String, Object> resultMap = new HashMap();
-		resultMap.put("my_study_list", myStudyList);
+		resultMap.put("my_study_list", studyService.getMyStudies(user_seq));
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 	
@@ -125,8 +136,8 @@ public class StudyController {
 	@ApiOperation(value = "스터디 검색")
 	@GetMapping("/{category}/{emptyfilter}/{camfilter}/{publicfilter}/{keyword}")
 	public ResponseEntity<?> searchStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter, String keyword){
-		studyService.searchStudy(category, emptyfilter, camfilter, publicfilter, keyword);
+		List<Study> resultList = studyService.searchStudy(category, emptyfilter, camfilter, publicfilter, keyword);
 		
-		return new ResponseEntity<List<Study>>(HttpStatus.OK);
+		return new ResponseEntity<List<Study>>(resultList, HttpStatus.OK);
 	}
 }
