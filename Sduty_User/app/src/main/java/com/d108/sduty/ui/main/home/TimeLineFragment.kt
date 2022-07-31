@@ -8,8 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
+import com.d108.sduty.adapter.TimeLineAdapter
 import com.d108.sduty.databinding.FragmentTimeLineBinding
+import com.d108.sduty.model.dto.Story
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 
@@ -18,6 +21,7 @@ private const val TAG ="TimeLineFragment"
 class TimeLineFragment : Fragment() {
     private lateinit var binding: FragmentTimeLineBinding
     private val mainViewModel: MainViewModel by activityViewModels()
+    private lateinit var timeLineAdapter: TimeLineAdapter
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainViewModel.displayBottomNav(true)
@@ -33,13 +37,34 @@ class TimeLineFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        timeLineAdapter.list.add(Story())
+        timeLineAdapter.list.add(Story())
+        timeLineAdapter.list.add(Story())
+        timeLineAdapter.list.add(Story())
+        timeLineAdapter.list.add(Story())
+    }
+
+    private fun initView(){
+        timeLineAdapter = TimeLineAdapter()
         binding.apply {
+            lifecycleOwner = this@TimeLineFragment
+
             ivRegisterStory.setOnClickListener {
                 findNavController().safeNavigate(
                     TimeLineFragmentDirections
                         .actionTimeLineFragmentToStoryRegisterFragment()
                 )
             }
+            recyclerTimeline.apply {
+                adapter = timeLineAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
         }
+
+    }
+
+    private fun initViewModel(){
+
     }
 }
