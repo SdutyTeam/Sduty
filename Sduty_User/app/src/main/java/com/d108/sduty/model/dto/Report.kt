@@ -6,9 +6,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Report(
-    val report_seq: Int,
-    val report_owner: Int,
-    val report_date: String,
+    val seq: Int,
+    val owner_seq: Int,
+    val date: String,
     val total_time: String,
     val tasks: List<Task>
 ) : Parcelable {

@@ -2,10 +2,7 @@ package com.d108.sduty.model.api
 
 import com.d108.sduty.model.dto.Report
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import java.util.*
 
 interface TimerApi {
@@ -17,4 +14,12 @@ interface TimerApi {
     // 태스크를 등록한다.
     @POST("/report/tasks")
     suspend fun postTask(@Body report: Report): Response<Unit>
+
+    // 태스크를 수정한다.
+    @PUT("/report/tasks/{task_seq}")
+    suspend fun updateTask(@Path("task_seq") task_seq : Int, @Body report: Report): Response<Unit>
+
+    // 태스크 하나를 삭제한다.
+    @DELETE("/report/tasks/{task_seq}")
+    suspend fun removeTask(@Path("task_seq") task_seq: Int) : Response<Unit>
 }
