@@ -19,6 +19,8 @@
             app:destination="@id/termsFragment" />
         <action
             android:id="@+id/action_loginFragment_to_profileRegistFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/profileRegistFragment" />
     </fragment>
     <fragment
@@ -54,6 +56,8 @@
         android:label="JoinRegistFragment" >
         <action
             android:id="@+id/action_joinRegistFragment_to_profileRegistFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/profileRegistFragment" />
         <argument
             android:name="route"
