@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.d108.sduty.repo.FollowRepo">	
+	<insert id="insertFollow" parameterType="Follow">
+		insert into follow(follower_seq, followee_seq) values(#{followerSeq}, #{followeeSeq});
+	</insert>
+	
+	<select id="selectFollower" resultType="Follow" parameterType="Integer">
+		select * from follow where follower_seq = #{followerSeq}
+	</select>
+	
+	<select id="selectFollowee" resultType="Follow" parameterType="Integer">
+		select * from follow where followee_seq = #{followeeSeq}
+	</select>
+	
+	<select id="findFollowing" resultType="Follow" parameterType="Integer">
+		select * from follow where follower_seq = #{followerSeq} and followee_seq = #{followeeSeq} 
+	</select>
+	
+	<delete id="deleteFollowing" parameterType="Integer">
+		delete from follow where follower_seq = #{followerSeq} and followee_seq = #{followeeSeq} 
+	</delete>
+</mapper>

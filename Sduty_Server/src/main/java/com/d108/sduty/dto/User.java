@@ -30,7 +30,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@ApiModel(value = "User: 유저 정보", description = "유저 상세 정보")
 public class User {
 	@Id
 	@ApiModelProperty(value = "아이디")
