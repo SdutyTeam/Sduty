@@ -32,11 +32,11 @@ class StoryAdapter(val activity: Activity): RecyclerView.Adapter<StoryAdapter.Vi
         holder.bind(list[position])
         val displaymetrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(displaymetrics)
-        val devicewidth = displaymetrics.widthPixels / 3
-        val deviceheight = displaymetrics.heightPixels / 4
+        val deviceWidth = displaymetrics.widthPixels / 3
+        val deviceHeight = displaymetrics.heightPixels / 4
         holder.binding.apply {
-            ivStory.layoutParams.width = devicewidth
-            ivStory.layoutParams.height = deviceheight
+            ivStory.layoutParams.width = deviceWidth
+            ivStory.layoutParams.height = deviceHeight
         }
     }
 

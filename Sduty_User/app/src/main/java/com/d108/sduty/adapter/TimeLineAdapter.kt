@@ -1,12 +1,14 @@
 package com.d108.sduty.adapter
 
+import android.app.Activity
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ItemTimelineBinding
 import com.d108.sduty.model.dto.Story
 
-class TimeLineAdapter: RecyclerView.Adapter<TimeLineAdapter.ViewHolder>() {
+class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdapter.ViewHolder>() {
     var list = mutableListOf<Story>()
         set(value) {
             field = value
@@ -26,6 +28,14 @@ class TimeLineAdapter: RecyclerView.Adapter<TimeLineAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
+        val displaymetrics = DisplayMetrics()
+        activity.windowManager.defaultDisplay.getMetrics(displaymetrics)
+        val deviceWidth = displaymetrics.widthPixels
+        val deviceHeight = deviceWidth / 3 * 4
+        holder.binding.apply {
+            ivTimelineContent.layoutParams.width = deviceWidth
+            ivTimelineContent.layoutParams.height = deviceHeight
+        }
     }
 
     override fun getItemCount(): Int = list.size

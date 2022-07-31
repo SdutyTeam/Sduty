@@ -46,7 +46,7 @@ class TimeLineFragment : Fragment() {
     }
 
     private fun initView(){
-        timeLineAdapter = TimeLineAdapter()
+        timeLineAdapter = TimeLineAdapter(requireActivity())
         binding.apply {
             lifecycleOwner = this@TimeLineFragment
 
