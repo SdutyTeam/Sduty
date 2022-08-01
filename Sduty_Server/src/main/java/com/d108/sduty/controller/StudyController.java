@@ -1,10 +1,12 @@
 package com.d108.sduty.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Alarm;
+import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Study;
 import com.d108.sduty.dto.Task;
 import com.d108.sduty.dto.User;
+import com.d108.sduty.service.ProfileService;
+import com.d108.sduty.service.ReportService;
 import com.d108.sduty.service.StudyService;
+import com.d108.sduty.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +45,12 @@ public class StudyController {
 	
 	@Autowired
 	private StudyService studyService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private ProfileService profileService;
+	@Autowired
+	private ReportService reportService;
 	
 	@ApiOperation(value = "스터디 등록")
 	@PostMapping("")
@@ -120,9 +132,59 @@ public class StudyController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value="내 스터디 상세 조회")
+	@GetMapping("/{user_seq}/{study_seq}")
+	public ResponseEntity<?> getMyStudyDetail(@PathVariable int user_seq, @PathVariable int study_seq) throws Exception{
+		Map<String, Object> resultMap = new HashMap<>();
+		//1. 스터디 기본 정보
+		Study study = studyService.getStudyDetail(study_seq);
+		resultMap.put("study", study);
+		//2. 참여자
+		//내가 참여자인지 확인
+		User user = userService.selectUser(user_seq).get();
+		if(!study.getParticipants().contains(user)) {//참여자가 아니면
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);//요청거부
+		}
+		//참여자 정보
+		List<Map<String, Object>> list = new ArrayList<>();
+		Set<User> participants = study.getParticipants();
+		for(User participant : participants) {
+			Map<String, Object> user_info = new HashMap<>();
+			user_info.put("userSeq", participant.getSeq());
+			
+			Optional<Profile> profileOp = profileService.selectProfile(participant.getSeq());
+			if(profileOp.isPresent()) {
+				Profile profile = profileOp.get();
+				user_info.put("nickname", profile.getNickname());
+				user_info.put("is_studying", profile.getIsStudying());
+			}
+			else {
+				user_info.put("nickname", "프로필 없음");
+				user_info.put("is_studying", 0);
+			}
+			
+			Map<String, Object> report = reportService.getReport(participant.getSeq(), LocalDate.now().toString());
+			if(report==null) {
+				user_info.put("total_time", "00:00:00");
+			}
+			else {
+				user_info.put("total_time", report.get("total_time"));
+			}
+			
+			list.add(user_info);
+		}
+		resultMap.put("members", list);
+		//3. 캠스터디면, 알람
+		if(study.isCamstudy()) {
+			Alarm alarm = studyService.getAlarm(study_seq);
+			resultMap.put("alarm", alarm);
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "스터디 삭제")
 	@DeleteMapping("/{user_seq}/{study_seq}")
-	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, int study_seq){
+	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(studyService.deleteStudy(user_seq, study_seq)) {
 			map.put("result", "삭제되었습니다.");
