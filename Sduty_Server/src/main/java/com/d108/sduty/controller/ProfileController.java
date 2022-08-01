@@ -150,7 +150,7 @@ public class ProfileController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "업적 상세 정보 조회 > Achievement > ", response = Achievement.class)
+	@ApiOperation(value = "업적 상세 정보 조회 > UserAchieve > ", response = Achievement.class)
 	@GetMapping("/achievement/info/{achieveSeq}")
 	public ResponseEntity<?> selectAchievementInfo(@PathVariable int achieveSeq) {
 		Achievement selectedAchievement = userAchieveService.selectAchievement(achieveSeq); 
@@ -161,12 +161,12 @@ public class ProfileController {
 	}
 	
 	@ApiOperation(value = "대표 업적 설정 > Achievement > ", response = Achievement.class)
-	@PutMapping("/achievement/{userSeq}")
-	public ResponseEntity<?> updateRepAchievement(@PathVariable int userSeq, @RequestBody int achieveSeq) throws Exception {
-		Optional<Profile> selectedProfile = profileService.selectProfile(userSeq);
+	@PutMapping("/achievement")
+	public ResponseEntity<?> updateRepAchievement(@RequestBody UserAchieve userAchieve) throws Exception {
+		Optional<Profile> selectedProfile = profileService.selectProfile(userAchieve.getUserSeq());
 		if(selectedProfile.isPresent()) {
 			Profile profile = selectedProfile.get();
-			profile.setMainAchievmentSeq(achieveSeq);
+			profile.setMainAchievmentSeq(userAchieve.getAchievementSeq());
 			Profile tempProfile = profileService.updateProfile(profile);
 			if(tempProfile != null) {
 				return new ResponseEntity<Void> (HttpStatus.OK);
