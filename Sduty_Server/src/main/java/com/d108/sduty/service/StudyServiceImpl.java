@@ -41,7 +41,8 @@ public class StudyServiceImpl implements StudyService {
 
 	@Override
 	public void registStudy(Study study, Alarm alarm) {
-		study.setJoinNumber(1);// 방장만 참여
+		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
+		//study.setJoinNumber(1);// 방장만 참여 => trigger로 바꿀예정
 		Study newStudy = studyRepo.save(study);
 		if (alarm != null) {
 			alarm.setStudy(newStudy);
@@ -62,6 +63,12 @@ public class StudyServiceImpl implements StudyService {
 			return user.get().getStudies();
 		}
 		return null;
+	}
+	
+
+	@Override
+	public Alarm getAlarm(int studySeq) {
+		return alarmRepo.findByStudy(studyRepo.findBySeq(studySeq).get());
 	}
 
 	@Override
@@ -128,8 +135,8 @@ public class StudyServiceImpl implements StudyService {
 	public boolean joinStudy(int studySeq, int userSeq) {
 		Study study = studyRepo.findBySeq(studySeq).get();
 		User user = userRepo.findBySeq(userSeq).get();
-		System.out.println(study.getParticipants());
-		System.out.println(user.getStudies());
+//		System.out.println(study.getParticipants());
+//		System.out.println(user.getStudies());
 		//이미 참여 중이면
 		if(study.getParticipants().contains(user)) {
 			System.out.println("이미 참여중");
