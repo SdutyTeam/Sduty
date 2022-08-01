@@ -21,6 +21,8 @@
             app:destination="@id/termsFragment" />
         <action
             android:id="@+id/action_loginFragment_to_profileRegistFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/profileRegistFragment" />
     </fragment>
     <fragment
@@ -56,6 +58,8 @@
         android:label="JoinRegistFragment" >
         <action
             android:id="@+id/action_joinRegistFragment_to_profileRegistFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/profileRegistFragment" />
         <argument
             android:name="route"
@@ -109,6 +113,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_achievementFragment"
+            app:destination="@id/achievementFragment" />
     </fragment>
     <fragment
         android:id="@+id/storyRegisterFragment"
@@ -161,6 +168,9 @@
         <action
             android:id="@+id/action_myStudyFragment_to_studyListFragment"
             app:destination="@+id/studyListFragment"/>
+        <action
+            android:id="@+id/action_myStudyFragment_to_previewFragment"
+            app:destination="@id/previewFragment" />
     </fragment>
     <fragment
         android:id="@+id/studyDetailFragment"
@@ -236,4 +246,8 @@
             android:id="@+id/action_scrapFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/achievementFragment"
+        android:name="com.d108.sduty.ui.main.mypage.AchievementFragment"
+        android:label="AchievementFragment" />
 </navigation>

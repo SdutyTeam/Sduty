@@ -58,7 +58,7 @@
             android:visibility="visible"
             >
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_filter"
+                android:id="@+id/recycler_achievement"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />

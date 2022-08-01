@@ -117,7 +117,7 @@ public class ProfileController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "유저 신고 > UserSeq > 팔로워 리턴", response = HttpStatus.class)
+	@ApiOperation(value = "유저 신고 > UserSeq > HttpStatus", response = HttpStatus.class)
 	@PutMapping("/warning/{userSeq}")
 	public ResponseEntity<?> warnUser(@PathVariable int userSeq) throws Exception {
 		Optional<Profile> selectedProfile = profileService.selectProfile(userSeq);
