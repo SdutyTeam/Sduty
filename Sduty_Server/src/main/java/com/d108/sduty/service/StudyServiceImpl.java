@@ -41,13 +41,14 @@ public class StudyServiceImpl implements StudyService {
 
 	@Override
 	public void registStudy(Study study, Alarm alarm) {
+		//1. 방장 참여
 		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
 		//study.setJoinNumber(1);// 방장만 참여 => trigger로 바꿀예정
-		Study newStudy = studyRepo.save(study);
-		if (alarm != null) {
-			alarm.setStudy(newStudy);
-			alarmRepo.save(alarm);
+		if(alarm!=null) {
+			alarm = alarmRepo.save(alarm);
 		}
+		study.setAlarm(alarm);
+		studyRepo.save(study);
 	}
 
 	@Override
@@ -64,12 +65,6 @@ public class StudyServiceImpl implements StudyService {
 		}
 		return null;
 	}
-	
-
-	@Override
-	public Alarm getAlarm(int studySeq) {
-		return alarmRepo.findByStudy(studyRepo.findBySeq(studySeq).get());
-	}
 
 	@Override
 	public boolean deleteStudy(int userSeq, int studySeq) {
@@ -85,7 +80,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	public List<Study> searchStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter, String keyword) {
+	public List<Study> filterStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter) {
 		Specification<Study> spec = (root, query, criteriaBuilder)->null;
 		if(category!=null) {
 			spec = spec.and(findCategory(category));
@@ -99,9 +94,12 @@ public class StudyServiceImpl implements StudyService {
 		if(publicfilter==true) {
 			spec = spec.and(findPublic(publicfilter));
 		}
-		if(keyword!=null) {
-			spec = spec.and(findKeyword(keyword));
-		}
+		return studyRepo.findAll(spec);
+	}
+	
+	@Override
+	public List<Study> searchStudy(String keyword){
+		Specification<Study> spec = (root, query, criteriaBuilder)->criteriaBuilder.like(root.get("name"), "%"+keyword+"%");
 		return studyRepo.findAll(spec);
 	}
 	
@@ -114,7 +112,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 	
 	public Specification<Study> findCamStudy(boolean isCamStudy){
-		return (root, query, criteriaBuilder)->criteriaBuilder.equal(root.get("isCamstudy"), isCamStudy);
+		return (root, query, criteriaBuilder)->criteriaBuilder.isNotNull(root.get("roomId"));
 	}
 	
 	public Specification<Study> findPublic(boolean isPublic){
@@ -125,10 +123,6 @@ public class StudyServiceImpl implements StudyService {
 			return (root, query, criteriaBuilder)->criteriaBuilder.isNotNull(root.get("password"));
 		}
 		
-	}
-	
-	public Specification<Study> findKeyword(String keyword){
-		return (root, query, criteriaBuilder)->criteriaBuilder.like(root.get("name"), "%"+keyword+"%");
 	}
 
 	@Override
@@ -153,8 +147,8 @@ public class StudyServiceImpl implements StudyService {
 		System.out.println(studySeq+", "+userSeq);
 		Study study = studyRepo.findBySeq(studySeq).get();
 		User user = userRepo.findBySeq(userSeq).get();
-		System.out.println(study.getParticipants());
-		System.out.println(user.getStudies());
+//		System.out.println(study.getParticipants());
+//		System.out.println(user.getStudies());
 		//1. 참여 중인가? & 방장은 탈퇴X 삭제만 가능
 		if(!study.getParticipants().contains(user)) {
 			System.out.println("스터디 회원이 아니므로 탈퇴할 수 없습니다.");

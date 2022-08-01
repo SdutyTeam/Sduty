@@ -35,8 +35,4 @@ public class Alarm {
 	private boolean fri;
 	private boolean sat;
 	private boolean sun;
-	
-	@OneToOne(optional = false)
-	@JoinColumn(name="alarm_study_seq")
-	private Study study;
 }

@@ -237,7 +237,11 @@
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.SettingFragment"
-        android:label="SettingFragment" />
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_settingFragment_to_accessibilityFragment"
+            app:destination="@id/accessibilityFragment" />
+    </fragment>
     <fragment
         android:id="@+id/scrapFragment"
         android:name="com.d108.sduty.ui.main.mypage.ScrapFragment"
@@ -250,4 +254,8 @@
         android:id="@+id/achievementFragment"
         android:name="com.d108.sduty.ui.main.mypage.AchievementFragment"
         android:label="AchievementFragment" />
+    <fragment
+        android:id="@+id/accessibilityFragment"
+        android:name="com.d108.sduty.ui.main.mypage.setting.AccessibilityFragment"
+        android:label="AccessibilityFragment" />
 </navigation>
