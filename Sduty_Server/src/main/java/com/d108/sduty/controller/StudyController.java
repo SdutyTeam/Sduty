@@ -195,11 +195,17 @@ public class StudyController {
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "스터디 필터링")
+	@GetMapping("filter/{category}/{emptyfilter}/{camfilter}/{publicfilter}")
+	public ResponseEntity<?> filterStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
+		List<Study> resultList = studyService.filterStudy(category, emptyfilter, camfilter, publicfilter);
+		return new ResponseEntity<List<Study>>(resultList, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "스터디 검색")
-	@GetMapping("/{category}/{emptyfilter}/{camfilter}/{publicfilter}/{keyword}")
-	public ResponseEntity<?> searchStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter, String keyword){
-		List<Study> resultList = studyService.searchStudy(category, emptyfilter, camfilter, publicfilter, keyword);
-		
+	@GetMapping("filter/{keyword}")
+	public ResponseEntity<?> searchStudy(String keyword){
+		List<Study> resultList = studyService.searchStudy(keyword);
 		return new ResponseEntity<List<Study>>(resultList, HttpStatus.OK);
 	}
 }

@@ -80,7 +80,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	public List<Study> searchStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter, String keyword) {
+	public List<Study> filterStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter) {
 		Specification<Study> spec = (root, query, criteriaBuilder)->null;
 		if(category!=null) {
 			spec = spec.and(findCategory(category));
@@ -94,9 +94,12 @@ public class StudyServiceImpl implements StudyService {
 		if(publicfilter==true) {
 			spec = spec.and(findPublic(publicfilter));
 		}
-		if(keyword!=null) {
-			spec = spec.and(findKeyword(keyword));
-		}
+		return studyRepo.findAll(spec);
+	}
+	
+	@Override
+	public List<Study> searchStudy(String keyword){
+		Specification<Study> spec = (root, query, criteriaBuilder)->criteriaBuilder.like(root.get("name"), "%"+keyword+"%");
 		return studyRepo.findAll(spec);
 	}
 	
@@ -120,10 +123,6 @@ public class StudyServiceImpl implements StudyService {
 			return (root, query, criteriaBuilder)->criteriaBuilder.isNotNull(root.get("password"));
 		}
 		
-	}
-	
-	public Specification<Study> findKeyword(String keyword){
-		return (root, query, criteriaBuilder)->criteriaBuilder.like(root.get("name"), "%"+keyword+"%");
 	}
 
 	@Override
