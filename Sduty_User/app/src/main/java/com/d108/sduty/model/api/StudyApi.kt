@@ -11,8 +11,8 @@ interface StudyApi {
     @POST("/study")
     suspend fun studyCreate(@Body study: Study): Response<Study>
 
-    @GET("/sutdy/check/{study_name}")
-    suspend fun getStudyName(@Path("study_name")studyName: String): Response<Boolean>
+    @GET("/study/check/{study_name}")
+    suspend fun getStudyName(@Path("study_name")studyName: String): Response<Void>
 
     @GET("/study")
     suspend fun studyList(): Response<List<Study>>

@@ -14,4 +14,6 @@ data class Story(
 ) {
     constructor(seq: Int):
             this(seq,0,"","","",null, 0, 0)
+
+    constructor(): this(0,0,"","","",null,0,0) // 영상촬영용. 삭제해야함
 }

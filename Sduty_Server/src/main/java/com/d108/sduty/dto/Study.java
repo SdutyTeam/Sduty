@@ -56,9 +56,42 @@ public class Study {
 	private String notice;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name="participation",
-			joinColumns = @JoinColumn(name="participation_study_seq"),
-			inverseJoinColumns = @JoinColumn(name="participation_user_seq"))
+	@JoinTable(name = "participation", joinColumns = @JoinColumn(name = "participation_study_seq"), inverseJoinColumns = @JoinColumn(name = "participation_user_seq"))
 	@JsonBackReference
 	private Set<User> participants = new HashSet<User>();
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Study other = (Study) obj;
+		if (masterSeq != other.masterSeq)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (seq == null) {
+			if (other.seq != null)
+				return false;
+		} else if (!seq.equals(other.seq))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + masterSeq;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((seq == null) ? 0 : seq.hashCode());
+		return result;
+	}
+
 }
