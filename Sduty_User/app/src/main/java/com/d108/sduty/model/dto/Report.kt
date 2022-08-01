@@ -7,16 +7,14 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Report(
     val seq: Int,
-    val owner_seq: Int,
+    val userSeq: Int,
     val date: String,
-    val total_time: String,
-    val tasks: List<Task>
+    val totalTime: String,
+    val task: List<Task>
 ) : Parcelable {
     override fun describeContents(): Int {
-        TODO("Not yet implemented")
+        return 0
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun writeToParcel(dest: Parcel?, flags: Int) {}
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.d108.sduty.R
@@ -31,6 +32,9 @@ class TaskDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 여백 터치 시 다이얼로그 종료 방지
+        isCancelable = false
+
         binding.apply {
             val time = timerViewModel.timer.value!!
             val hour = time / 60 / 60
@@ -44,6 +48,7 @@ class TaskDialog : DialogFragment() {
             etEndTime.setText(convertTimeDateToString(Date(System.currentTimeMillis()),"hh:mm:ss"))
             etEndTime.isEnabled = false
 
+            // 내용 2, 3 추가 버튼
             ivAddContent.setOnClickListener {
                 if(etContent2.visibility == View.GONE && etContent3.visibility == View.GONE){
                     etContent2.visibility = View.VISIBLE
@@ -56,6 +61,7 @@ class TaskDialog : DialogFragment() {
                 }
             }
 
+            // 내용 2
             etContent2.visibility = View.GONE
             ivRemoveContent2.visibility = View.GONE
             ivRemoveContent2.setOnClickListener {
@@ -64,6 +70,7 @@ class TaskDialog : DialogFragment() {
                 ivRemoveContent2.visibility = View.GONE
             }
 
+            // 내용 3
             etContent3.visibility = View.GONE
             ivRemoveContent3.visibility = View.GONE
             ivRemoveContent3.setOnClickListener {
@@ -76,7 +83,6 @@ class TaskDialog : DialogFragment() {
 
             btnSave.setOnClickListener {
                 // 등록 수행
-                val durationTime = tvTimer.text.toString()
                 val startTime = etStartTime.text.toString()
                 val endTime = etEndTime.text.toString()
                 val title = etTitle.text.toString()
@@ -84,17 +90,26 @@ class TaskDialog : DialogFragment() {
                 val content2 = etContent1.text.toString()
                 val content3 = etContent1.text.toString()
 
-//                val task = Task(0,durationTime,startTime,endTime,title,content1,content2,content3)
-//
-//                val report = Report(0, )
-//
-//                // title은 필수로 입력해야한다.
-//                if(title.isNotEmpty()){
-//                    timerViewModel.saveTask()
-//
-//                }
+                val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
 
-                dismiss()
+                val newTask = Task(-1,-1,endTime, startTime, 0, title, content1, content2, content3)
+
+                // TODO: userSeq 변경 필요 
+                val report = Report(-1, 47, today, "", listOf(newTask))
+
+                // title 은 필수로 입력해야한다.
+                if(title.isNotEmpty()){
+                    timerViewModel.saveTask(report)
+                    dismiss()
+                } else {
+                    ConfirmDialog().apply {
+                        // 경고창에 출력할 메시지를 담아 보낸다.
+                        arguments = Bundle().apply {
+                            putString("Message","제목을 입력해주세요!!")
+                        }
+                        show(this@TaskDialog.requireActivity().supportFragmentManager, "TaskDialog")
+                    }
+                }
             }
 
             btnDelete.setOnClickListener {
