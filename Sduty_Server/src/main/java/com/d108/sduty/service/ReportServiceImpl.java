@@ -28,7 +28,7 @@ public class ReportServiceImpl implements ReportService {
 	public void registTask(int userSeq, String date, Task task) {
 		// 1. 해당 날짜 report 가져오기(없으면 만들어서 반환)
 		Report report = reportRepo.findByDateAndOwnerSeq(date, userSeq);
-		System.out.println(report);
+		//System.out.println(report);
 		if (report == null) {
 			report = new Report();
 			report.setOwnerSeq(userSeq);
@@ -68,8 +68,8 @@ public class ReportServiceImpl implements ReportService {
 		String totalTime = String.format("%02d:%02d:%02d", hour, minute, sec);
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("report_date", report.getDate());
-		resultMap.put("total_time", totalTime);
+		resultMap.put("reportDate", report.getDate());
+		resultMap.put("totalTime", totalTime);
 		resultMap.put("tasks", report.getTask());
 
 //		System.out.println(totalTime);
