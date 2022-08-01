@@ -160,6 +160,21 @@ public class ProfileController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@ApiOperation(value = "대표 업적 설정 > Achievement > ", response = Achievement.class)
+	@PutMapping("/achievement/{userSeq}")
+	public ResponseEntity<?> updateRepAchievement(@PathVariable int userSeq, @RequestBody int achieveSeq) throws Exception {
+		Optional<Profile> selectedProfile = profileService.selectProfile(userSeq);
+		if(selectedProfile.isPresent()) {
+			Profile profile = selectedProfile.get();
+			profile.setMainAchievmentSeq(achieveSeq);
+			Profile tempProfile = profileService.updateProfile(profile);
+			if(tempProfile != null) {
+				return new ResponseEntity<Void> (HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
 	@ApiOperation(value = "팔로우/취소 > Follow > HttpStatus", response = HttpStatus.class)
 	@PostMapping("/follow")
 	public ResponseEntity<?> doFollow(@RequestBody Follow follow) throws Exception {
