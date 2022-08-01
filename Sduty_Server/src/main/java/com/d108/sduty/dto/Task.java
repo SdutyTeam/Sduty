@@ -26,8 +26,8 @@ public class Task {
 	private int reportSeq;
 	@Column(name="task_title")
 	private String title;
-	@Column(name="task_content")
-	private String content;
+	@Column(name="task_content1")
+	private String content1;
 	@Column(name="task_content2")
 	private String content2;
 	@Column(name="task_content3")
