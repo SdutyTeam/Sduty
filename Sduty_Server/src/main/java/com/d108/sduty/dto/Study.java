@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -35,6 +36,9 @@ public class Study {
 	private Integer seq;
 	@Column(name = "study_master_seq")
 	private int masterSeq;
+	@OneToOne(optional = true)
+	@JoinColumn(name="study_alarm_seq")
+	private Alarm alarm;
 	@Column(name = "study_name")
 	private String name;
 	@Column(name = "study_introduce")
@@ -47,8 +51,8 @@ public class Study {
 	private int joinNumber;
 	@Column(name = "study_password")
 	private String password;
-	@Column(name = "study_is_camstudy")
-	private boolean isCamstudy;// is로 시작하는건 getter setter가 is떼고 만듦..
+	@Column(name = "study_room_id")
+	private String roomId;
 	@Column(name = "study_regtime")
 	@CreationTimestamp
 	private LocalDateTime regtime;

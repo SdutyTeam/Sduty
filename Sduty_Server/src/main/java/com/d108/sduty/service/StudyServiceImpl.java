@@ -41,13 +41,12 @@ public class StudyServiceImpl implements StudyService {
 
 	@Override
 	public void registStudy(Study study, Alarm alarm) {
+		//1. 방장 참여
 		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
 		//study.setJoinNumber(1);// 방장만 참여 => trigger로 바꿀예정
-		Study newStudy = studyRepo.save(study);
-		if (alarm != null) {
-			alarm.setStudy(newStudy);
-			alarmRepo.save(alarm);
-		}
+		alarm = alarmRepo.save(alarm);
+		study.setAlarm(alarm);
+		studyRepo.save(study);
 	}
 
 	@Override
@@ -63,12 +62,6 @@ public class StudyServiceImpl implements StudyService {
 			return user.get().getStudies();
 		}
 		return null;
-	}
-	
-
-	@Override
-	public Alarm getAlarm(int studySeq) {
-		return alarmRepo.findByStudy(studyRepo.findBySeq(studySeq).get());
 	}
 
 	@Override
@@ -114,7 +107,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 	
 	public Specification<Study> findCamStudy(boolean isCamStudy){
-		return (root, query, criteriaBuilder)->criteriaBuilder.equal(root.get("isCamstudy"), isCamStudy);
+		return (root, query, criteriaBuilder)->criteriaBuilder.isNotNull(root.get("roomId"));
 	}
 	
 	public Specification<Study> findPublic(boolean isPublic){
@@ -153,8 +146,8 @@ public class StudyServiceImpl implements StudyService {
 		System.out.println(studySeq+", "+userSeq);
 		Study study = studyRepo.findBySeq(studySeq).get();
 		User user = userRepo.findBySeq(userSeq).get();
-		System.out.println(study.getParticipants());
-		System.out.println(user.getStudies());
+//		System.out.println(study.getParticipants());
+//		System.out.println(user.getStudies());
 		//1. 참여 중인가? & 방장은 탈퇴X 삭제만 가능
 		if(!study.getParticipants().contains(user)) {
 			System.out.println("스터디 회원이 아니므로 탈퇴할 수 없습니다.");

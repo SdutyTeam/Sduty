@@ -61,7 +61,7 @@ public class StudyController {
 		try {
 			study = mapper.treeToValue(reqObject.get("study"), Study.class);
 			JsonNode node = reqObject.get("alarm");
-			if((study.isCamstudy() && node==null)||(!study.isCamstudy()&& node!=null)) {
+			if((study.getRoomId()!=null && node==null)||(study.getRoomId()==null&& node!=null)) {
 				//캠스터디인데 알람이 없는경우 || 캠스터디 아닌데 알람이 있는 경우
 				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 			}
@@ -127,9 +127,8 @@ public class StudyController {
 	@ApiOperation(value = "내 스터디 목록")
 	@GetMapping("/{user_seq}")
 	public ResponseEntity<?> getMyStudies(@PathVariable int user_seq){
-		Map<String, Object> resultMap = new HashMap();
-		resultMap.put("my_study_list", studyService.getMyStudies(user_seq));
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		Set<Study> result = studyService.getMyStudies(user_seq);
+		return new ResponseEntity<Set<Study>>(result, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="내 스터디 상세 조회")
@@ -175,10 +174,10 @@ public class StudyController {
 		}
 		resultMap.put("members", list);
 		//3. 캠스터디면, 알람
-		if(study.isCamstudy()) {
-			Alarm alarm = studyService.getAlarm(study_seq);
-			resultMap.put("alarm", alarm);
-		}
+//		if(study.isCamstudy()) {
+//			Alarm alarm = studyService.getAlarm(study_seq);
+//			resultMap.put("alarm", alarm);
+//		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 	
@@ -191,6 +190,7 @@ public class StudyController {
 		}
 		else {
 			map.put("result", "삭제할 수 없습니다.");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.FORBIDDEN);
 		}
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}

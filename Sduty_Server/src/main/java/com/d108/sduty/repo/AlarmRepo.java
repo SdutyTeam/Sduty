@@ -6,5 +6,4 @@ import com.d108.sduty.dto.Alarm;
 import com.d108.sduty.dto.Study;
 
 public interface AlarmRepo extends JpaRepository<Alarm, String> {
-	Alarm findByStudy(Study study);
 }
