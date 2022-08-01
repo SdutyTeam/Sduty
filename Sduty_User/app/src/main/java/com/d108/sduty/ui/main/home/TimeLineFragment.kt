@@ -61,7 +61,6 @@ class TimeLineFragment : Fragment() {
                 override fun onMenuClicked(view: View, position: Int) {
                 }
                 override fun onProfileClicked(view: View, position: Int) {
-                    Log.d(TAG, "onReplyClicked: ")
                     findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToStoryDetailFragment())
                 }
             }
