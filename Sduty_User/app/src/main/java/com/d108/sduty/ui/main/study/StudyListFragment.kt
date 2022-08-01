@@ -18,7 +18,7 @@ import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
 import com.d108.sduty.ui.main.study.dialog.StudyDetailDialog
-import com.d108.sduty.ui.sign.viewmodel.StudyListViewModel
+import com.d108.sduty.ui.main.study.viewmodel.StudyListViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 
@@ -93,8 +93,6 @@ class StudyListFragment : Fragment(){
             layoutManager = LinearLayoutManager(context)
             adapter = studyListAdapter
         }
-
-
     }
 
 

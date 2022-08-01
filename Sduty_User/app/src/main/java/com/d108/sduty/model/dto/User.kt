@@ -6,15 +6,15 @@ import java.io.Serializable
 import java.util.*
 
 data class User(
-    var user_seq: Int,
-    var user_id: String,
-    var user_pass: String,
-    var user_name: String,
-    var user_tel: String,
-    var user_email: String,
-    var user_fcm_token: String,
-    var user_regtime: Date?,
-    var user_public: Int
+    var seq: Int,
+    var id: String,
+    var pass: String,
+    var name: String,
+    var tel: String,
+    var email: String,
+    var fcmToken: String,
+    var regtime: Date?,
+    var userPublic: Int
 ){
     constructor(): this(0,"","","","","","", null,1)
     constructor(id: String, password: String):

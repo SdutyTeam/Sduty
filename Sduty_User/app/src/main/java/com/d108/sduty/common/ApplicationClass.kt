@@ -1,6 +1,7 @@
 package com.d108.sduty.common
 
 import android.app.Application
+import android.content.SharedPreferences
 import com.d108.sduty.R
 import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
@@ -15,6 +16,12 @@ class ApplicationClass : Application() {
     companion object{
         lateinit var retrofit: Retrofit
         lateinit var messageService: DefaultMessageService
+        lateinit var settingsPref: SharedPreferences
+        lateinit var userPref: SharedPreferences
+        lateinit var pushStateAll: SharedPreferences
+        lateinit var pushStatePersonal: SharedPreferences
+        lateinit var autoLoginState: SharedPreferences
+        lateinit var darkModeState: SharedPreferences
     }
 
     override fun onCreate() {
@@ -35,5 +42,10 @@ class ApplicationClass : Application() {
             .build()
 
         messageService = NurigoApp.initialize(SOLAPI_API_KEY, SOLAPI_API_SECRET_KEY, SOLAPI_DOMAIN)
+
+        userPref = getSharedPreferences("User", MODE_PRIVATE)
+        pushStateAll = getSharedPreferences("PushStateAll", MODE_PRIVATE)
+        pushStatePersonal = getSharedPreferences("PushStatePersonal", MODE_PRIVATE)
+        darkModeState = getSharedPreferences("DarkMode", MODE_PRIVATE)
     }
 }

@@ -5,10 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ListItemMystudyBinding
-import com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel
+import com.d108.sduty.model.dto.Study
+import com.d108.sduty.ui.main.study.viewmodel.MyStudyViewModel
 
-class MyStudyAdapter(var list: List<String>) : RecyclerView.Adapter<MyStudyAdapter.ViewHolder>() {
-    var myStudyList: List<String> = list
+class MyStudyAdapter() : RecyclerView.Adapter<MyStudyAdapter.ViewHolder>() {
+    var list = mutableListOf<Study>()
         set(value){
             field = value
             notifyDataSetChanged()
@@ -16,10 +17,13 @@ class MyStudyAdapter(var list: List<String>) : RecyclerView.Adapter<MyStudyAdapt
 
     inner class ViewHolder(val binding: ListItemMystudyBinding): RecyclerView.ViewHolder(binding.root){
         init {
-            binding.myStudyVM = MyStudyViewModel()
-        }
-        fun bind(text: String){
 
+        }
+        fun bind(){
+            binding.data = list[adapterPosition]
+            binding.root.setOnClickListener {
+                clickListener.onClick(it, adapterPosition)
+            }
         }
     }
 
@@ -30,10 +34,10 @@ class MyStudyAdapter(var list: List<String>) : RecyclerView.Adapter<MyStudyAdapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bind()
     }
 
-    override fun getItemCount(): Int = myStudyList.size
+    override fun getItemCount(): Int = list.size
 
     interface ClickListener{
         fun onClick(view: View, position: Int)

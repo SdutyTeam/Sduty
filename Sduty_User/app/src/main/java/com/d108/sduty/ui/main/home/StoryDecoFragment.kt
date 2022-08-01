@@ -12,8 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.databinding.FragmentStoryDecoBinding
+import com.d108.sduty.ui.main.home.viewmodel.StoryViewModel
+import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.showToast
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -23,6 +26,8 @@ private const val TAG ="StoryDecoFragment"
 class StoryDecoFragment : Fragment() {
     private lateinit var binding: FragmentStoryDecoBinding
     private val args: StoryDecoFragmentArgs by navArgs()
+    private val viewModel: StoryViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,22 +74,18 @@ class StoryDecoFragment : Fragment() {
                 val canvas = Canvas(bitmap)
                 // Drawing commands — to indicate to the canvas what to draw.
                 layoutPreview.draw(canvas)
+                saveImageBitmap(bitmap)
             }
         }
+    }
+
+    private fun saveImageBitmap(bitmap: Bitmap) {
+        viewModel.setBitmap(bitmap)
+        navigateBack(requireActivity())
     }
 
     private fun convertDpToPx(dp: Int): Int {
         val density = resources.displayMetrics.density
         return (dp * density).toInt()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertBitmapToString(bitmap: Bitmap): String {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-
-        val bytes = stream.toByteArray()
-
-        return Base64.getEncoder().encodeToString(bytes)
     }
 }

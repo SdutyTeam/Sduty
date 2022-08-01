@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -114,9 +115,9 @@ public class UserController {
 		user.setPass("");
 		user.setName(name);
 		user.setEmail(email);
-		User result = userService.insertUser(user);  // User 정보만 보내주고 /join으로 카카오, 네이버 둘 다 가입
-		if(result != null) {
-			return new ResponseEntity<User>(result, HttpStatus.OK);
+		//User result = userService.insertUser(user);  // User 정보만 보내주고 /join으로 카카오, 네이버 둘 다 가입
+		if(user != null) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);	
 	}
@@ -132,9 +133,9 @@ public class UserController {
 		user.setPass("");
 		user.setName(name);
 		user.setEmail(email);
-		User result = userService.insertUser(user);
-		if(result != null) {
-			return new ResponseEntity<User>(result, HttpStatus.OK);
+		//User result = userService.insertUser(user);
+		if(user != null) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
 	}
@@ -167,6 +168,18 @@ public class UserController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@ApiOperation(value = "회원정보 탈퇴 > 200/401 리턴", response = HttpStatus.class)
+	@DeleteMapping("/{seq}")
+	public ResponseEntity<?> deleteUser(@PathVariable int seq) throws Exception {
+		try {
+			userService.deleteUser(seq);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK); 
+		
+	}
+	
 	@ApiOperation(value = "아이디 찾기 > String/401 리턴", response = HttpStatus.class)
 	@GetMapping("/id/{tel}")
 	public ResponseEntity<?> findIdByTel(@PathVariable String tel) throws Exception {
@@ -179,13 +192,16 @@ public class UserController {
 	
 
 	@ApiOperation(value = "비밀번호 변경 > 200/401 리턴", response = HttpStatus.class)
-	@PutMapping("/pwd/{id}")
-	public ResponseEntity<?> setPwdById(@PathVariable String id, @RequestBody String password) throws Exception {
-		//인증이 안되면 수정이 안되므로 거의 not null 확실
-		User user = userService.selectUserById(id).get();
-		user.setPass(password);
-		userService.updatePassword(user);
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	@PutMapping("/pwd")
+	public ResponseEntity<?> setPwdById(@RequestBody User user) throws Exception {
+		//인증이 안되면 수정이 안되므로 거의 not null 확실		
+		User selected_user = userService.selectUserById(user.getId()).get();		
+		selected_user.setPass(user.getPass());		
+		User result = userService.updatePassword(selected_user);
+		if(result != null) {
+			return new ResponseEntity<User>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); 
 	}
 
 	

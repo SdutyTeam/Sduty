@@ -27,12 +27,38 @@ class MainViewModel: ViewModel() {
     fun setUserValue(user: User){
         _user.postValue(user)
     }
+    fun getUserValue(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.userApi.getUserValue(userSeq).let {
+                if(it.isSuccessful && it.body() != null) {
+                    _user.postValue(it.body() as User)
+                }else{
+                    Log.d(TAG, "getUserValue: ${it.code()}")
+                }
+            }
+        }
+    }
 
+    private val _isRegisterdProfile = MutableLiveData<Boolean>()
+    val isRegisterdProfile: LiveData<Boolean>
+        get() = _isRegisterdProfile
     private val _profile = MutableLiveData<Profile>()
     val profile: LiveData<Profile>
         get() = _profile
-    fun setProfile(profile: Profile){
-        _profile.postValue(profile)
+    fun setProfileValue(profile: Profile){ _profile.postValue(profile)}
+    fun getProfileValue(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.profileApi.getProfileValue(userSeq).let {
+                if(it.isSuccessful && it.body() != null) {
+                    _profile.postValue(it.body() as Profile)
+                    _isRegisterdProfile.postValue(true)
+                }else{
+                    _isRegisterdProfile.postValue(false)
+                    Log.d(TAG, "getProfileValue: ${it.code()}")
+                }
+            }
+        }
     }
+
 
 }

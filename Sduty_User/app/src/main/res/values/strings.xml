@@ -8,7 +8,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="no_nickname">—</string>
-    <string name="user_id_template">User ID: %1$s</string>
+    <string name="user_id_template">%1$s</string>
 
     <!-- SignInActivity -->
     <string name="sign_in_title">SendBird Calls</string>
@@ -43,9 +43,9 @@
 
     <!-- PreviewFragment -->
     <string name="preview_title">Enter room</string>
-    <string name="preview_mute_my_audio">Mute my audio</string>
-    <string name="preview_turn_off_my_video">Turn off my video</string>
-    <string name="preview_enter">Enter</string>
+    <string name="preview_mute_my_audio">마이크 끄기</string>
+    <string name="preview_turn_off_my_video">카메라 끄기</string>
+    <string name="preview_enter">입장</string>
 
     <!-- GroupCallFragment -->
     <string name="group_call_settings">Settings</string>
@@ -57,8 +57,8 @@
     <string name="group_call_select_audio_device_dialog_title">Audio device</string>
 
     <!-- ParticipantListFragment -->
-    <string name="participant_list_title">Participants (%1$s)</string>
-    <string name="participant_list_share_room_id">Share room ID</string>
+    <string name="participant_list_title">참여자 (%1$s)</string>
+    <string name="participant_list_share_room_id">공유</string>
 
     <!-- RoomInfoFragment -->
     <string name="room_info_title">Room information</string>

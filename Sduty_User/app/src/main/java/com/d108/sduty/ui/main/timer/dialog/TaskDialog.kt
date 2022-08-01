@@ -93,6 +93,8 @@ class TaskDialog : DialogFragment() {
 //                    timerViewModel.saveTask()
 //
 //                }
+
+                dismiss()
             }
 
             btnDelete.setOnClickListener {

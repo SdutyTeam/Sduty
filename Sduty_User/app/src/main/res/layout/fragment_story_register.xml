@@ -99,11 +99,14 @@
             app:layout_constraintBottom_toTopOf="@id/layout_tag">
 
             <!-- 이미지 추가 버튼 : 촬영 또는 갤러리의 이미지를 가져올 수 있다. -->
+
             <Button
                 android:id="@+id/btn_add_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="이미지 추가"/>
+                android:text="이미지 추가"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <ImageView
                 android:id="@+id/img_story"

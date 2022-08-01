@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="MyStudyVM"
-            type="com.d108.sduty.ui.sign.viewmodel.MyStudyViewModel" />
+            name="data"
+            type="com.d108.sduty.model.dto.Study" />
     </data>
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:id="@+id/mygroup_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="그룹 이름"
+            android:text="@{data.name}"
             android:textStyle="bold"
             />
 
@@ -32,7 +32,7 @@
                 android:id="@+id/mygroup_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="그룹 카테고리"
+                android:text="그룹 카테고리"
                 />
 
             <TextView
@@ -44,7 +44,8 @@
                 android:id="@+id/mygroup_job"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="직업"
+                android:layout_marginHorizontal="10dp"
+                android:text="@{data.category}"
                 />
         </LinearLayout>
 
@@ -56,7 +57,7 @@
                 android:id="@+id/mygroup_people_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="15/20명"
+                android:text="@{data.limitNumber + `/6명`}"
                 />
 
             <TextView
@@ -68,7 +69,7 @@
                 android:id="@+id/mygroup_leader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="방장 별명"
+                android:text="@{`스터디장: `+ data.password}"
                 />
 
 

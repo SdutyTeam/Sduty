@@ -1,8 +1,11 @@
 package com.d108.sduty.ui.sign.dialog
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +43,7 @@ class DialogFindInfo(val mContext: Context) : DialogFragment() {
 
         initView()
         initViewModel()
-
+        Log.d(TAG, "onViewCreated: $flag")
     }
 
     private fun initViewModel(){
@@ -69,7 +72,7 @@ class DialogFindInfo(val mContext: Context) : DialogFragment() {
             vm = viewModel
             joinVM = joinViewModel
 
-            btnConfirm.setOnClickListener {
+            btnConfirm.setOnClickListener {                
                 when(flag){
                     FIND_ID ->{
                         if(etPhone.text.isEmpty() || etPhone.text.length != 11){
@@ -119,5 +122,6 @@ class DialogFindInfo(val mContext: Context) : DialogFragment() {
         params?.width = (deviceWidth * 0.9).toInt()
         params?.height = (deviceHeight * 0.95).toInt()
         dialog?.window?.attributes = params as WindowManager.LayoutParams
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 }
