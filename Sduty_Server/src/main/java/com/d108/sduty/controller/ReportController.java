@@ -47,6 +47,9 @@ public class ReportController {
 	@GetMapping("/{user_seq}/{date}")
 	public ResponseEntity<?> report(@PathVariable int user_seq, @PathVariable String date){
 		Map<String, Object> resultMap = reportService.getReport(user_seq, date);
+		if(resultMap==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 	
