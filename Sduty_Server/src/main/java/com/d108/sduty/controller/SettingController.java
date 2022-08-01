@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +47,26 @@ public class SettingController {
 	public ResponseEntity<?> registQna(@RequestBody Qna qna){
 		if(settingService.registQna(qna)==1) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value="문의사항 상세보기")
+	@GetMapping("/qna/{qna_seq}")
+	public ResponseEntity<?> getQnaDetail(@RequestParam int qna_seq){
+		Qna qna = settingService.getQnaDetail(qna_seq);
+		if(qna!=null) {
+			return new ResponseEntity<Qna>(qna, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value="문의사항 수정하기")
+	@PutMapping("/qna/{qna_seq}")
+	public ResponseEntity<?> updateQna(@RequestParam int qna_seq, @RequestBody Qna qna){
+		qna = settingService.updateQna(qna_seq, qna);
+		if(qna!=null) {
+			return new ResponseEntity<Qna>(qna, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}

@@ -1,5 +1,7 @@
 package com.d108.sduty.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +23,23 @@ public class SettingServiceImpl implements SettingService {
 
 	@Override
 	public Qna getQnaDetail(int qnaSeq) {
-		// TODO Auto-generated method stub
+		Optional<Qna> qna = qnaRepo.findById(qnaSeq);
+		if(qna.isPresent()) {
+			return qna.get();
+		}
 		return null;
 	}
 
 	@Override
-	public Qna updateQna(Qna qna) {
-		// TODO Auto-generated method stub
+	public Qna updateQna(int qnaSeq, Qna qna) {
+		Optional<Qna> qnaOp = qnaRepo.findById(qnaSeq);
+		if(qnaOp.isPresent()) {
+			Qna originQna = qnaOp.get();
+			originQna.setCategory(qna.getCategory());
+			originQna.setTitle(qna.getTitle());
+			originQna.setContent(qna.getContent());
+			return qnaRepo.save(originQna);
+		}
 		return null;
 	}
 
