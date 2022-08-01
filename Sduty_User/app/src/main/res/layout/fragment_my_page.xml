@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/common_top_setting"
+                android:id="@+id/iv_setting"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:padding="12dp"
