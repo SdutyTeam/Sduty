@@ -73,6 +73,9 @@ class MyPageFragment : Fragment() {
             ivAchieve.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToAchievementFragment())
             }
+            ivSetting.setOnClickListener {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())
+            }
         }
     }
 }
