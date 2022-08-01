@@ -44,7 +44,9 @@ public class StudyServiceImpl implements StudyService {
 		//1. 방장 참여
 		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
 		//study.setJoinNumber(1);// 방장만 참여 => trigger로 바꿀예정
-		alarm = alarmRepo.save(alarm);
+		if(alarm!=null) {
+			alarm = alarmRepo.save(alarm);
+		}
 		study.setAlarm(alarm);
 		studyRepo.save(study);
 	}
