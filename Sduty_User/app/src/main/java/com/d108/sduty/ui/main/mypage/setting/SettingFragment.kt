@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentSettingBinding
+import com.d108.sduty.utils.safeNavigate
 
 
 private const val TAG = "SettingFragment"
@@ -29,7 +31,9 @@ class SettingFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
-
+            btnLock.setOnClickListener {
+                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToAccessibilityFragment())
+            }
         }
     }
 
