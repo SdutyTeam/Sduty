@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -28,29 +29,46 @@
             app:layout_constraintEnd_toEndOf="parent">
 
 <!--            <Button-->
-<!--                android:id="@+id/btn_"-->
+<!--                android:id="@+id/btn_prospective_highschool"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_colWeight="1"-->
-<!--                android:text="국가고시"/>-->
+<!--                android:text="예비고등"/>-->
 
 <!--            <Button-->
+<!--                android:id="@+id/btn_korean_sat"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_colWeight="1"-->
-<!--                android:text="국가고시"/>-->
+<!--                android:text="수능"/>-->
 
 <!--            <Button-->
+<!--                android:id="@+id/btn_major"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_colWeight="1"-->
-<!--                android:text="국가고시"/>-->
+<!--                android:text="전공"/>-->
 
 <!--            <Button-->
+<!--                android:id="@+id/btn_language"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_colWeight="1"-->
-<!--                android:text="국가고시"/>-->
+<!--                android:text="어학"/>-->
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_it"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_colWeight="1"-->
+<!--                android:text="IT"/>-->
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_certificate"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_colWeight="1"-->
+<!--                android:text="자격증"/>-->
 
         </GridLayout>
 
@@ -64,12 +82,14 @@
             app:layout_constraintTop_toBottomOf="@id/button_layout">
 
             <Button
+                android:id="@+id/btn_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="취소"/>
 
             <Button
+                android:id="@+id/btn_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
