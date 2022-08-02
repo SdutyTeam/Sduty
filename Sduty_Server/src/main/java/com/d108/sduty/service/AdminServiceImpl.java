@@ -13,12 +13,15 @@ import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.repo.AdminRepo;
+import com.d108.sduty.repo.NoticeRepo;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AdminRepo adminRepo;
+	@Autowired
+	private NoticeRepo noticeRepo;
 	
 	@Override
 	public Optional<Admin> getAdmin(String id) {
@@ -27,8 +30,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public boolean registNotice(Notice notice) {
-		// TODO Auto-generated method stub
-		return false;
+		Notice newNotice = noticeRepo.save(notice);
+		return (newNotice!=null);
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Admin;
+import com.d108.sduty.dto.Notice;
 import com.d108.sduty.service.AdminService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,6 +44,19 @@ public class AdminController {
 				return new ResponseEntity<Admin>(adminObject, HttpStatus.OK);
 			}
 		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "공지사항 등록")
+	@PostMapping("/notice")
+	public ResponseEntity<?> registNotice(@RequestBody Notice newNotice){
+		if(newNotice.getWriterSeq()!=null && newNotice.getContent()!=null) {
+			newNotice.setSeq(null);
+			if(adminService.registNotice(newNotice)) {
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
+		}
+		
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 }
