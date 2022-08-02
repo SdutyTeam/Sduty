@@ -120,5 +120,13 @@ public class AdminController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
+	
+	@ApiOperation(value = "데일리질문 삭제")
+	@DeleteMapping("/question/{question_seq}")
+	public ResponseEntity<?> deleteDailyQustion(@RequestParam int question_seq){
+		adminService.deleteDailyQuestion(question_seq);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
 	//1:1 문의
 }

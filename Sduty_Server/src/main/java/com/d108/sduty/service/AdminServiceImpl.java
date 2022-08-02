@@ -104,8 +104,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void deleteDailyQuestion(int dailyQuestionSeq) {
-		// TODO Auto-generated method stub
-
+		dailyqRepo.deleteById(dailyQuestionSeq);
 	}
 
 	@Override
