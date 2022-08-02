@@ -7,5 +7,7 @@ import com.d108.sduty.dto.Story;
 
 public interface StoryService {
 	Story insertStory(Story story);
-	List<Optional<Story>> findBywriterSeq(int userSeq);
+	List<Story> findBywriterSeq(int userSeq);
+	Optional<Story> findById(int storySeq);
+	List<Story> findAll();
 }
