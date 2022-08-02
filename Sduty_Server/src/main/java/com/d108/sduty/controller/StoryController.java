@@ -22,16 +22,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.d108.sduty.dto.Follow;
 import com.d108.sduty.dto.Profile;
+import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.service.FollowService;
 import com.d108.sduty.service.ImageService;
+import com.d108.sduty.service.ScrapService;
 import com.d108.sduty.service.StoryService;
 import com.google.gson.Gson;
 
@@ -49,6 +53,9 @@ public class StoryController {
 	
 	@Autowired
 	private ImageService imageService;
+	
+	@Autowired
+	private ScrapService scrapService;
 	
 	@ApiOperation(value = "스토리 저장 > Story > Story 리턴", response = Story.class)
 	@PostMapping("")
@@ -85,6 +92,29 @@ public class StoryController {
 		
 		if(listStory.size() > 0) {
 			return new ResponseEntity<List<Story>>(listStory, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "스크랩/취소 > Scrap > HttpStatus", response = HttpStatus.class)
+	@PostMapping("/scrap")
+	public ResponseEntity<?> doScrap(@RequestBody Scrap scrap) throws Exception {
+		int userSeq = scrap.getUserSeq();
+		int storySeq = scrap.getStorySeq();
+		boolean alreadyScrapped = scrapService.checkAlreadyScrap(userSeq, storySeq);
+		
+		if(alreadyScrapped) {
+			try {
+				scrapService.deleteScrap(userSeq, storySeq);
+			} catch (Exception e) {
+				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			}
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		} else {
+			Scrap result = scrapService.insertScrap(scrap);
+			if(result != null) {			
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
