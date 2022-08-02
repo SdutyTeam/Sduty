@@ -180,6 +180,12 @@
         <action
             android:id="@+id/action_studyDetailFragment_to_studySettingFragment"
             app:destination="@+id/studySettingFragment"/>
+
+<!--        <argument-->
+<!--            android:name="studyInfo"-->
+<!--            app:argType="com.d108.sduty.model.dto.Study"-->
+<!--            app:nullable="true" />-->
+
     </fragment>
     <fragment
         android:id="@+id/camStudyDetailFragment"
