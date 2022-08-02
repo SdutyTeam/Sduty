@@ -59,8 +59,8 @@ public class StudyController {
 		Study study = null;
 		Alarm alarm = null;
 		try {
-			study = mapper.treeToValue(reqObject.get("study"), Study.class);
-			JsonNode node = reqObject.get("alarm");
+			study = mapper.treeToValue(reqObject.get("Study"), Study.class);
+			JsonNode node = reqObject.get("Alarm");
 			if((study.getRoomId()!=null && node==null)||(study.getRoomId()==null&& node!=null)) {
 				//캠스터디인데 알람이 없는경우 || 캠스터디 아닌데 알람이 있는 경우
 				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
