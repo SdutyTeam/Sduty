@@ -36,7 +36,12 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Notice updateNotice(Notice notice) {
-		// TODO Auto-generated method stub
+		Optional<Notice> noticeOp = noticeRepo.findById(notice.getSeq());
+		if(noticeOp.isPresent()) {
+			Notice originNotice = noticeOp.get();
+			originNotice.setContent(notice.getContent());
+			return noticeRepo.save(originNotice);
+		}
 		return null;
 	}
 

@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Admin;
@@ -56,7 +58,19 @@ public class AdminController {
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
 		}
-		
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "공지사항 수정")
+	@PutMapping("/notice/{notice_seq}")
+	public ResponseEntity<?> updateNotice(@RequestParam int notice_seq, @RequestBody Notice notice){
+		System.out.println(notice);
+		if(notice_seq == notice.getSeq()) {
+			Notice result = adminService.updateNotice(notice);
+			if(result!=null) {
+				return new ResponseEntity<Notice>(result, HttpStatus.OK);
+			}
+		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 }
