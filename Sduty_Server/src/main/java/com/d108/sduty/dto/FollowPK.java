@@ -1,5 +1,11 @@
 package com.d108.sduty.dto;
 
-public class FollowPK {
+import java.io.Serializable;
 
+import lombok.Data;
+
+@Data 
+public class FollowPK implements Serializable{
+	private int followerSeq;
+	private int followeeSeq;
 }
