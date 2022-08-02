@@ -28,9 +28,9 @@ public class Admin {
 	@Column(name = "admin_name")
 	private String name;
 	
-	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.EAGER)
 	private Set<Notice> notices = new HashSet<>();
 	
-	@OneToMany(mappedBy = "adminSeq", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "adminSeq", fetch = FetchType.EAGER)
 	private Set<Qna> qnas = new HashSet<>(); 
 }

@@ -1,0 +1,124 @@
+package com.d108.sduty.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.d108.sduty.dto.Admin;
+import com.d108.sduty.dto.DailyQuestion;
+import com.d108.sduty.dto.Notice;
+import com.d108.sduty.dto.Qna;
+import com.d108.sduty.dto.Story;
+import com.d108.sduty.dto.User;
+import com.d108.sduty.repo.AdminRepo;
+
+@Service
+public class AdminServiceImpl implements AdminService {
+
+	@Autowired
+	private AdminRepo adminRepo;
+	
+	@Override
+	public Optional<Admin> getAdmin(String id) {
+		return adminRepo.findByid(id);
+	}
+
+	@Override
+	public boolean registNotice(Notice notice) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Notice updateNotice(Notice notice) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteNotice(int noticeSeq) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<Story> getBadStories() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> getBadUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void limitUser() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean registDailyQuestion() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<DailyQuestion> getDailyQuestions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DailyQuestion getDailyQuestionDetail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DailyQuestion updateDailyQuestion(DailyQuestion dailyq) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteDailyQuestion(int dailyQuestionSeq) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<Qna> getQnas() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Qna getQnaDetail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Qna registAnswer(Qna qna) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Qna updateAnswer(Qna qna) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Qna deleteAnswer(int qnaSeq) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
