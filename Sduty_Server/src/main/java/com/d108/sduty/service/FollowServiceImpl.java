@@ -1,5 +1,6 @@
 package com.d108.sduty.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,29 +18,38 @@ public class FollowServiceImpl implements FollowService {
 	
 	@Override
 	public List<Follow> selectFollower(int seq) {
-		return followRepo.selectFollower(seq);
+		List<Optional<Follow>> followers = followRepo.findByFollowerSeq(seq);
+		List<Follow> followerList = new ArrayList<>();
+		for(Optional<Follow> f : followers) {
+			if(f.isPresent())
+				followerList.add(f.get());
+		}
+		return followerList;
 	}
 
 	@Override
 	public List<Follow> selectFollowee(int seq) {
-		return followRepo.selectFollowee(seq);
+		List<Optional<Follow>> followees = followRepo.findByFolloweeSeq(seq);
+		List<Follow> followeeList = new ArrayList<>();
+		for(Optional<Follow> f : followees) {
+			if(f.isPresent())
+				followeeList.add(f.get());
+		}
+		return followeeList;
 	}
 
 	@Override
-	public int insertFollow(int followerSeq, int followeeSeq) {
-		return followRepo.insertFollow(followerSeq, followeeSeq);
+	public Follow insertFollow(Follow follow) {
+		return followRepo.save(follow);
 	}
 
 	@Override
 	public boolean findFollowing(int followerSeq, int followeeSeq) {
-		if(followRepo.findFollowing(followerSeq, followeeSeq) != null) {
-			return true;
-		}
-		return false;
+		return followRepo.existsByFollowerSeqAndFolloweeSeq(followerSeq, followeeSeq);
 	}
 
 	@Override
-	public int deleteFollow(int followerSeq, int followeeSeq) {
-		return followRepo.deleteFollowing(followerSeq, followeeSeq);
+	public void deleteFollow(Follow follow) {
+		followRepo.delete(follow);
 	}
 }
