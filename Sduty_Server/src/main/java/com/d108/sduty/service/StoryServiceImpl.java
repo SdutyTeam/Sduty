@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Story;
@@ -36,6 +37,11 @@ public class StoryServiceImpl implements StoryService {
 		return storyRepo.findAll();
 	}
 	
+	@Override
+	public List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, PageRequest pageRequest) {
+		return optConverter(storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs, pageRequest));
+	}
+	
 
 	private List<Story> optConverter(List<Optional<Story>> list){
 		List<Story> sList = new ArrayList<>();
@@ -45,5 +51,6 @@ public class StoryServiceImpl implements StoryService {
 		}
 		return sList;
 	}
+
 
 }
