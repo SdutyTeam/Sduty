@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.d108.sduty.dto.Notice;
 import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.service.SettingService;
@@ -77,5 +78,12 @@ public class SettingController {
 	public ResponseEntity<?> deleteQna(@RequestParam int qna_seq){
 		settingService.deleteQna(qna_seq);
 		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="공지사항 목록 조회")
+	@GetMapping("/notice")
+	public ResponseEntity<?> getNoticeList(){
+		List<Notice> notices = settingService.getNoticeList();
+		return new ResponseEntity<List<Notice>>(notices, HttpStatus.OK);
 	}
 }

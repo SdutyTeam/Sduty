@@ -1,11 +1,14 @@
 package com.d108.sduty.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.d108.sduty.dto.Notice;
 import com.d108.sduty.dto.Qna;
+import com.d108.sduty.repo.NoticeRepo;
 import com.d108.sduty.repo.QnaRepo;
 
 @Service
@@ -13,6 +16,8 @@ public class SettingServiceImpl implements SettingService {
 	
 	@Autowired
 	private QnaRepo qnaRepo;
+	@Autowired
+	private NoticeRepo noticeRepo;
 	
 	@Override
 	public int registQna(Qna qna) {
@@ -46,6 +51,11 @@ public class SettingServiceImpl implements SettingService {
 	@Override
 	public void deleteQna(int qnaSeq) {
 		qnaRepo.deleteById(qnaSeq);
+	}
+
+	@Override
+	public List<Notice> getNoticeList() {
+		return noticeRepo.findAll();
 	}
 
 }
