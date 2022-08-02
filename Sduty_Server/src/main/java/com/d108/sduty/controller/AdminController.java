@@ -135,4 +135,14 @@ public class AdminController {
 	public ResponseEntity<?> getQnas(){
 		return new ResponseEntity<List<Qna>>(adminService.getQnas(), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "1:1문의 상세 조회")
+	@GetMapping("/qna/{qna_seq}")
+	public ResponseEntity<?> getQnaDetail(@RequestParam int qna_seq){
+		Qna qna = adminService.getQnaDetail(qna_seq);
+		if(qna!=null) {
+			return new ResponseEntity<Qna>(qna, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
 }

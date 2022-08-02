@@ -26,7 +26,7 @@ public interface AdminService {
 	public void deleteDailyQuestion(int dailyQuestionSeq);
 	//1:1문의
 	public List<Qna> getQnas();
-	public Qna getQnaDetail();
+	public Qna getQnaDetail(int qnaSeq);
 	public Qna registAnswer(Qna qna);
 	public Qna updateAnswer(Qna qna);
 	public Qna deleteAnswer(int qnaSeq);

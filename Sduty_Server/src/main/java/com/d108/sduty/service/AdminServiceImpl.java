@@ -116,8 +116,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Qna getQnaDetail() {
-		// TODO Auto-generated method stub
+	public Qna getQnaDetail(int qnaSeq) {
+		Optional<Qna> qna = qnaRepo.findById(qnaSeq);
+		if(qna.isPresent()) {
+			return qna.get();
+		}
 		return null;
 	}
 
