@@ -1,5 +1,6 @@
 package com.d108.sduty.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +22,27 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public List<Optional<Story>> findBywriterSeq(int userSeq) {
-		return storyRepo.findBywriterSeqOrderByRegtimeDesc(userSeq);
+	public List<Story> findBywriterSeq(int userSeq) {
+		return optConverter(storyRepo.findBywriterSeqOrderByRegtimeDesc(userSeq));
+	}
+
+	@Override
+	public Optional<Story> findById(int storySeq) {
+		return storyRepo.findById(storySeq);
+	}
+
+	@Override
+	public List<Story> findAll() {
+		return storyRepo.findAll();
+	}
+	
+	private List<Story> optConverter(List<Optional<Story>> list){
+		List<Story> sList = new ArrayList<>();
+		for(Optional<Story> l : list) {
+			if(l.isPresent())
+				sList.add(l.get());
+		}
+		return sList;
 	}
 
 }

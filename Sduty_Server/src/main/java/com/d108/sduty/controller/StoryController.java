@@ -57,6 +57,15 @@ public class StoryController {
 	@Autowired
 	private ScrapService scrapService;
 	
+	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
+	@GetMapping("/")
+	public ResponseEntity<?> selectAllStory() throws Exception {
+		List<Story> selectedStory = storyService.findAll();
+		if(selectedStory != null)
+			return new ResponseEntity<List<Story>>(selectedStory, HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
 	@ApiOperation(value = "스토리 저장 > Story > Story 리턴", response = Story.class)
 	@PostMapping("")
 	public ResponseEntity<?> insertProfile(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("story") String json) throws Exception {
@@ -78,25 +87,26 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "스토리 작성자 시퀀스로로 조회 > UserSeq > List<Story> 리턴", response = Story.class)
+	@ApiOperation(value = "스토리 시퀀스로 상세 내용 조회 : Story > Story", response = Story.class)
+	@GetMapping("/{storySeq}")
+	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq) throws Exception {
+		Optional<Story> selectedOStory = storyService.findById(storySeq);
+		if(selectedOStory.isPresent())
+			return new ResponseEntity<Story>(selectedOStory.get(), HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "스토리 작성자 시퀀스로 조회 : UserSeq > List<Story> 리턴", response = Story.class)
 	@GetMapping("/writer/{userSeq}")
 	public ResponseEntity<?> selectByWriterSeq(@PathVariable int userSeq) throws Exception {
-		List<Optional<Story>> selectedOStory = storyService.findBywriterSeq(userSeq);
-		List<Story> listStory = new ArrayList<Story>();
-		for(Optional<Story> s : selectedOStory) {
-			if(s.isPresent())
-				listStory.add(s.get());
-			else	
-				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-		}
-		
-		if(listStory.size() > 0) {
+		List<Story> listStory = storyService.findBywriterSeq(userSeq);
+		if(listStory != null) {
 			return new ResponseEntity<List<Story>>(listStory, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "스크랩/취소 > Scrap > HttpStatus", response = HttpStatus.class)
+	@ApiOperation(value = "스크랩/취소 : Scrap > HttpStatus", response = HttpStatus.class)
 	@PostMapping("/scrap")
 	public ResponseEntity<?> doScrap(@RequestBody Scrap scrap) throws Exception {
 		int userSeq = scrap.getUserSeq();
