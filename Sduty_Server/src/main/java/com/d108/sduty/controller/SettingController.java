@@ -47,7 +47,7 @@ public class SettingController {
 	@ApiOperation(value = "문의사항 작성하기")
 	@PostMapping("/qna")
 	public ResponseEntity<?> registQna(@RequestBody Qna qna){
-		if(settingService.registQna(qna)==1) {
+		if(settingService.registQuestion(qna)==1) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -66,7 +66,7 @@ public class SettingController {
 	@ApiOperation(value="문의사항 수정하기")
 	@PutMapping("/qna/{qna_seq}")
 	public ResponseEntity<?> updateQna(@RequestParam int qna_seq, @RequestBody Qna qna){
-		qna = settingService.updateQna(qna_seq, qna);
+		qna = settingService.updateQuestion(qna_seq, qna);
 		if(qna!=null) {
 			return new ResponseEntity<Qna>(qna, HttpStatus.OK);
 		}

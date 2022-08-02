@@ -32,4 +32,18 @@ class StudyListViewModel: ViewModel() {
         }
     }
 
+    fun getStudyFilter(category: String, empty: Boolean, cam: Boolean, public: Boolean){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.studyApi.studyFilter(category, empty, cam, public)
+                Log.d(TAG, "getStudyFilter: ${response}")
+                if(response.isSuccessful && response.body() != null){
+                    _studyList.postValue(response.body() as List<Study>)
+                }
+            } catch (e: Exception){
+                Log.d(TAG, "getStudyFilter: ${e.message}")
+            }
+        }
+    }
+
 }
