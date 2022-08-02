@@ -1,5 +1,6 @@
 package com.d108.sduty.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,12 @@ public class AdminController {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "데일리질문 목록")
+	@GetMapping("/question")
+	public ResponseEntity<?> getDailyQuestions(){
+		return new ResponseEntity<List<DailyQuestion>>(adminService.getDailyQuestions(), HttpStatus.OK);
 	}
 	
 	//1:1 문의

@@ -79,8 +79,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<DailyQuestion> getDailyQuestions() {
-		// TODO Auto-generated method stub
-		return null;
+		return dailyqRepo.findAll();
 	}
 
 	@Override
