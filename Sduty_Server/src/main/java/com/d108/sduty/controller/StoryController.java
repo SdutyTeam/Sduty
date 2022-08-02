@@ -153,6 +153,22 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@ApiOperation(value= "게시글 신고 : StorySeq > HttpStatus", response = HttpStatus.class)
+	@PutMapping("/report/{storySeq}")
+	public ResponseEntity<?> reportStory(@PathVariable int storySeq) {
+		Optional<Story> selectedOStory = storyService.findById(storySeq);
+		Story updatingStory;
+		if(selectedOStory.isPresent()) {
+			updatingStory = selectedOStory.get();
+			updatingStory.setWarning(updatingStory.getWarning() + 1);
+			Story story = storyService.insertStory(updatingStory);
+			if(story != null) {
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
 	@ApiOperation(value = "스크랩/취소 : Scrap > HttpStatus", response = HttpStatus.class)
 	@PostMapping("/scrap")
 	public ResponseEntity<?> doScrap(@RequestBody Scrap scrap) throws Exception {
