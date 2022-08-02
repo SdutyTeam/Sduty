@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -66,11 +67,16 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+
+
+    }
+
+    private fun initView(){
         val startForProfileImageResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result : ActivityResult ->
                 val resultCode = result.resultCode
                 val data = result.data
-
                 if (resultCode == Activity.RESULT_OK) {
                     // Image Uri will not be null for RESULT_OK
                     val fileUri = data?.data!!
@@ -92,6 +98,11 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
 
         binding.apply {
+            vm = viewModel
+            lifecycleOwner = this@StoryRegisterFragment
+
+
+
             // 공개 범위 설정 버튼 클릭 시, 팝업 메뉴 보이기
             btnDisclosure.setOnClickListener {
                 PopupMenu(requireContext(), it).apply {
@@ -123,17 +134,17 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             ivRegisterStory.setOnClickListener {
                 // 게시물 정보 등록
                 // 등록할 때, 초기 화면으로 visibility 다시 세팅...
-
+                Log.d(TAG, "onViewCreated: ${viewModel.image.value}")
+                Log.d(TAG, "onViewCreated: ${binding.vm!!.image.value}")
+                viewModel.clearStoryImage()
+                vm = viewModel
                 navigateBack(requireActivity())
             }
 
             // 템플릿 적용한 이미지 변화 인식해 보여주기
             viewModel.bitmap.observe(viewLifecycleOwner) { bitmap ->
                 // bitmap값
-                // requireContext().showToast("$bitmap")
-                imgStory.visibility = View.VISIBLE
-                btnAddImg.visibility = View.GONE
-                binding.imgStory.setImageBitmap(bitmap)
+                viewModel.setStoryImage()
             }
         }
     }

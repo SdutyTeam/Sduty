@@ -20,7 +20,7 @@ public class SettingServiceImpl implements SettingService {
 	private NoticeRepo noticeRepo;
 	
 	@Override
-	public int registQna(Qna qna) {
+	public int registQuestion(Qna qna) {
 		Qna newQna = qnaRepo.save(qna);
 		if(newQna!=null) {return 1;}
 		return 0;
@@ -36,7 +36,7 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
-	public Qna updateQna(int qnaSeq, Qna qna) {
+	public Qna updateQuestion(int qnaSeq, Qna qna) {
 		Optional<Qna> qnaOp = qnaRepo.findById(qnaSeq);
 		if(qnaOp.isPresent()) {
 			Qna originQna = qnaOp.get();

@@ -1,6 +1,7 @@
 package com.d108.sduty.ui.main.study
 
 import android.content.Context
+import android.graphics.Color
 import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
@@ -32,6 +33,13 @@ class StudyRegistFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val studyRegisteViewModel: StudyRegisteViewModel by viewModels()
     private val args: StudyRegistFragmentArgs by navArgs()
+    private var mon_state: Boolean = false
+    private var tue_state: Boolean = false
+    private var wed_state: Boolean = false
+    private var thur_state: Boolean = false
+    private var fri_state: Boolean = false
+    private var sat_state: Boolean = false
+    private var sun_state: Boolean = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,6 +88,92 @@ class StudyRegistFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
+            btnMon.setOnClickListener {
+                if(!mon_state){
+                    mon_state = true
+                    btnMon.setBackgroundColor(Color.GRAY)
+                } else{
+                    mon_state = false
+                    btnMon.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnTue.setOnClickListener {
+                if(!tue_state){
+                    tue_state = true
+                    btnTue.setBackgroundColor(Color.GRAY)
+                } else{
+                    tue_state = false
+                    btnTue.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnWed.setOnClickListener {
+                if(!wed_state){
+                    wed_state = true
+                    btnWed.setBackgroundColor(Color.GRAY)
+                } else{
+                    wed_state = false
+                    btnWed.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnThur.setOnClickListener {
+                if(!thur_state){
+                    thur_state = true
+                    btnThur.setBackgroundColor(Color.GRAY)
+                } else{
+                    thur_state = false
+                    btnThur.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnFri.setOnClickListener {
+                if(!fri_state){
+                    fri_state = true
+                    btnFri.setBackgroundColor(Color.GRAY)
+                } else{
+                    fri_state = false
+                    btnFri.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnSat.setOnClickListener {
+                if(!sat_state){
+                    sat_state = true
+                    btnSat.setBackgroundColor(Color.GRAY)
+                } else{
+                    sat_state = false
+                    btnSat.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnSun.setOnClickListener {
+                if(!sun_state){
+                    sun_state = true
+                    btnSun.setBackgroundColor(Color.GRAY)
+                } else{
+                    sun_state = false
+                    btnSun.setBackgroundColor(Color.WHITE)
+                }
+            }
+
+
+            checkBoxDaily.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnMon.setBackgroundColor(Color.GRAY)
+                    btnTue.setBackgroundColor(Color.GRAY)
+                    btnWed.setBackgroundColor(Color.GRAY)
+                    btnThur.setBackgroundColor(Color.GRAY)
+                    btnFri.setBackgroundColor(Color.GRAY)
+                    btnSat.setBackgroundColor(Color.GRAY)
+                    btnSun.setBackgroundColor(Color.GRAY)
+                }else{
+                    btnMon.setBackgroundColor(Color.WHITE)
+                    btnTue.setBackgroundColor(Color.WHITE)
+                    btnWed.setBackgroundColor(Color.WHITE)
+                    btnThur.setBackgroundColor(Color.WHITE)
+                    btnFri.setBackgroundColor(Color.WHITE)
+                    btnSat.setBackgroundColor(Color.WHITE)
+                    btnSun.setBackgroundColor(Color.WHITE)
+                }
+            }
+
+
             lifecycleOwner = this@StudyRegistFragment
             studyRegisteVM = studyRegisteViewModel
 
@@ -91,6 +185,10 @@ class StudyRegistFragment : Fragment() {
             val name = etStudyName.text.toString().trim()
             val pass = etStduyPass.text.toString().trim()
             val introduce = etStudyIntroduce.text.toString().trim()
+            val people = spinnerPeople.selectedItem.toString()
+            val category = spinnerCategory.selectedItem.toString()
+
+
             if(name.isEmpty() || pass.isEmpty() || introduce.isEmpty()){
                 context?.showToast("빈 칸을 모두 입력해 주세요.")
             }
@@ -98,10 +196,10 @@ class StudyRegistFragment : Fragment() {
                 studyRegisteViewModel.study.observe(viewLifecycleOwner){
                     if(it != null){
                         // 성공적으로 스터디 생성 - 스터디 이동? 내 스터디 리스트?
-
+                        requireContext().showToast("!!!!")
                     }
                 }
-                //studyRegisteViewModel.studyCreate(Study())
+                studyRegisteViewModel.studyCreate(Study())
             }
         }
     }

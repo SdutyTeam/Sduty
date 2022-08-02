@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,26 +19,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Qna {
+@Table(name="daily_question")
+public class DailyQuestion {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="qna_seq")
+	@Column(name="dailyq_seq")
 	private int seq;
-	@Column(name="ques_title")
-	private String title;
-	@Column(name="ques_content")
+	@Column(name="dailyq_admin_seq")
+	private int adminSeq;
+	@Column(name="dailyq_content")
 	private String content;
-	@Column(name="ques_category")
-	private String category;
-	@Column(name="ques_writer")
-	private int writerSeq;
-	@Column(name="ques_regtime")
+	@Column(name="dailyq_regtime")
 	@CreationTimestamp
 	private LocalDateTime regtime;
-	@Column(name="ans_content")
-	private String answer;
-	@Column(name="ans_writer")
-	private Integer adminSeq;
-	@Column(name="ans_regtime")
-	private LocalDateTime answerRegtime;
 }

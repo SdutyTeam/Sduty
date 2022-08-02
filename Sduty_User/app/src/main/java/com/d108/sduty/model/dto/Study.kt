@@ -14,14 +14,15 @@ data class Study(
     var password: String,
     var studyRegtime: Date?,
     var notice: String,
-    var roomId: String?
+    var roomId: String
 ) {
     constructor(
         masterSeq: Int, name: String, introduce: String, category: String, limitNumber: Int,
-        password: String, camstudy: Boolean):
+        password: String, roomId: String = ""):
             this(0, masterSeq, name, introduce, category,
-            limitNumber, 1, password, null, "", null)
+            limitNumber, 1, password, null, "", roomId)
 
-    constructor(): this(0,"구미 1반 8팀","안녕하세요","SSAFY",6,"권용준",true) // 영상촬영용. 삭제해야됨
+    constructor(): this(51,"e","e","대학생",6,"e","") // 영상촬영용. 삭제해야됨
+    //constructor(): this(0,"구미 1반 8팀","안녕하세요","SSAFY",6,"권용준","") // 영상촬영용. 삭제해야됨
 
 }

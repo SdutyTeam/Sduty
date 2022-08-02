@@ -181,15 +181,19 @@ public class ProfileController {
 		int followerSeq = follow.getFollowerSeq();
 		int followeeSeq = follow.getFolloweeSeq();
 		boolean alreadyFollowing = followService.findFollowing(followerSeq, followeeSeq);
-		int result = 0;
+		Follow result;
 		if(alreadyFollowing) {
-			result = followService.deleteFollow(followerSeq, followeeSeq);
+			try {
+				followService.deleteFollow(follow);
+			} catch (Exception e) {
+				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			}
 		} else {
-			result = followService.insertFollow(followerSeq, followeeSeq);
+			result = followService.insertFollow(follow);
+			if(result != null) {			
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
 		}
-		if(result > 0) {			
-			return new ResponseEntity<Void>(HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 }
