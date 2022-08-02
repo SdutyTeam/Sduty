@@ -189,7 +189,7 @@ class StudyRegistFragment : Fragment() {
             val category = spinnerCategory.selectedItem.toString()
 
 
-            if(name.isEmpty() || pass.isEmpty() || introduce.isEmpty()){
+            if(name.isEmpty() || introduce.isEmpty()){
                 context?.showToast("빈 칸을 모두 입력해 주세요.")
             }
             else{
@@ -199,7 +199,8 @@ class StudyRegistFragment : Fragment() {
                         requireContext().showToast("!!!!")
                     }
                 }
-                studyRegisteViewModel.studyCreate(Study())
+                studyRegisteViewModel.studyCreate(Study(mainViewModel.profile.value!!.userSeq, name,
+                                                        introduce, category, people.toInt(), pass, null))
             }
         }
     }

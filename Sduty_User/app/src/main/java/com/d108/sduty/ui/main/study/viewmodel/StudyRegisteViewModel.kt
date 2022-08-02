@@ -29,7 +29,7 @@ class StudyRegisteViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(TAG, "studyCreate: ${study}")
             try {
-                Retrofit.studyApi.studyCreate(study).let {
+                Retrofit.studyApi.studyCreate(mapOf("Study" to study)).let {
                     Log.d("TAG", "join: ${it}")
                     if(it.isSuccessful){
                         _createSuccess.postValue(true)

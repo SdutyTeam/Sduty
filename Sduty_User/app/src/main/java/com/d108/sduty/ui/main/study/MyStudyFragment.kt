@@ -2,6 +2,7 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.adapter.MyStudyAdapter
 import com.d108.sduty.adapter.StudyListAdapter
@@ -82,7 +84,8 @@ class MyStudyFragment : Fragment() {
         mystudyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
                 // 선택 스터디 입장
-                //findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToPreviewFragment())
+                Log.d(TAG, "onClick: ${mystudyList[position]}")
+                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment())
             }
         }
         binding.myStudyList.apply {
