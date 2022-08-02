@@ -214,7 +214,7 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 검색")
 	@GetMapping("filter/{keyword}")
-	public ResponseEntity<?> searchStudy(String keyword){
+	public ResponseEntity<?> searchStudy(@PathVariable String keyword){
 		if(keyword=="") {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
