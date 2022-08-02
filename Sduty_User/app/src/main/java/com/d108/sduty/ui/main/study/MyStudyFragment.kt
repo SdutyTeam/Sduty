@@ -28,7 +28,7 @@ class MyStudyFragment : Fragment() {
     private lateinit var binding: FragmentMyStudyBinding
     private val myStudyViewModel: MyStudyViewModel by viewModels()
 
-    private lateinit var mystudyListAdapter: MyStudyAdapter
+    private lateinit var mystudyListAdapter: StudyListAdapter
     private lateinit var mystudyList: List<Study>
 
     override fun onAttach(context: Context) {
@@ -49,18 +49,15 @@ class MyStudyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
-        mystudyListAdapter.list = mutableListOf(Study())
+
         myStudyViewModel.myStudyList.observe(viewLifecycleOwner){
             if(it != null){
-//                mystudyList = myStudyViewModel.myStudyList.value as List<Study>
-                //initAdapter()
+                mystudyList = myStudyViewModel.myStudyList.value as List<Study>
+                initAdapter()
             }
         }
 
-        //myStudyViewModel.getMyStudyList()
-
-
+        mainViewModel.profile.value?.let { myStudyViewModel.getMyStudyList(it.userSeq) }
 
         binding.btnCreateStudy.setOnClickListener{
             // Dialog만들기
@@ -81,11 +78,11 @@ class MyStudyFragment : Fragment() {
 
 
     private fun initAdapter(){
-        mystudyListAdapter = MyStudyAdapter()
-        mystudyListAdapter.clickListener = object : MyStudyAdapter.ClickListener{
+        mystudyListAdapter = StudyListAdapter(mystudyList)
+        mystudyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
                 // 선택 스터디 입장
-                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToPreviewFragment())
+                //findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToPreviewFragment())
             }
         }
         binding.myStudyList.apply {

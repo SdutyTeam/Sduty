@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -51,6 +53,10 @@ class StudyListFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val categoryData:Array<String> = resources.getStringArray(R.array.array_category)
+        val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
+        binding.spinnerCategoryFilter.adapter = categoryAdapter
+
         studyListViewModel.studyList.observe(viewLifecycleOwner){
             if(it != null){
                 studyList = studyListViewModel.studyList.value as List<Study>
@@ -59,13 +65,47 @@ class StudyListFragment : Fragment(){
         }
         studyListViewModel.getStudyList()
 
+        binding.apply {
 
-        binding.btnSearch.setOnClickListener {
-            findNavController().safeNavigate(StudyListFragmentDirections.actionStudyListFragmentToStudySearchFragment())
-        }
+            val category = spinnerCategoryFilter.selectedItem.toString()
 
-        binding.commonTopBack.setOnClickListener {
-            findNavController().popBackStack()
+            spinnerCategoryFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
+
+            }
+
+            cbPeople.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+            }
+
+            cbCamstudy.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, cbPeople.isChecked, isChecked, cbPublic.isChecked)
+            }
+
+            cbPublic.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, isChecked)
+            }
+
+
+
+
+            btnSearch.setOnClickListener {
+                findNavController().safeNavigate(StudyListFragmentDirections.actionStudyListFragmentToStudySearchFragment())
+            }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 
