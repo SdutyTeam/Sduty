@@ -67,7 +67,6 @@ public class AdminController {
 	@ApiOperation(value = "공지사항 수정")
 	@PutMapping("/notice/{notice_seq}")
 	public ResponseEntity<?> updateNotice(@RequestParam int notice_seq, @RequestBody Notice notice){
-		System.out.println(notice);
 		if(notice_seq == notice.getSeq()) {
 			Notice result = adminService.updateNotice(notice);
 			if(result!=null) {
@@ -107,6 +106,16 @@ public class AdminController {
 	public ResponseEntity<?> getDailyQuestionDetail(@RequestParam int question_seq){
 		DailyQuestion dq = adminService.getDailyQuestionDetail(question_seq);
 		if(dq!=null) {
+			return new ResponseEntity<DailyQuestion>(dq, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "데일리질문 수정")
+	@PutMapping("/question/{question_seq}")
+	public ResponseEntity<?> updateDailyQuestion(@RequestParam int question_seq, @RequestBody DailyQuestion dailyq){
+		if(question_seq==dailyq.getSeq()) {
+			DailyQuestion dq = adminService.updateDailyQuestion(dailyq);
 			return new ResponseEntity<DailyQuestion>(dq, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);

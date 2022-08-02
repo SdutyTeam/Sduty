@@ -93,7 +93,12 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public DailyQuestion updateDailyQuestion(DailyQuestion dailyq) {
-		// TODO Auto-generated method stub
+		Optional<DailyQuestion> dqOp = dailyqRepo.findById(dailyq.getSeq());
+		if(dqOp.isPresent()) {
+			DailyQuestion origindq = dqOp.get();
+			origindq.setContent(dailyq.getContent());
+			return dailyqRepo.save(origindq);
+		}
 		return null;
 	}
 
