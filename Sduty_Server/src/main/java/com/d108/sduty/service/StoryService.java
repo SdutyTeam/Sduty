@@ -13,4 +13,5 @@ public interface StoryService {
 	Optional<Story> findById(int storySeq);
 	List<Story> findAll();
 	List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, PageRequest pageRequest);
+	void deleteStory(int storySeq);
 }

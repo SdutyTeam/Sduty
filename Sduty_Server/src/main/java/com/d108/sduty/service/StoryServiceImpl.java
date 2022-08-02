@@ -1,5 +1,6 @@
 package com.d108.sduty.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,11 @@ public class StoryServiceImpl implements StoryService {
 	public List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, PageRequest pageRequest) {
 		return optConverter(storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs, pageRequest));
 	}
-	
+
+	@Override
+	public void deleteStory(int storySeq) {
+		storyRepo.deleteById(storySeq);
+	}
 
 	private List<Story> optConverter(List<Optional<Story>> list){
 		List<Story> sList = new ArrayList<>();
@@ -51,6 +56,5 @@ public class StoryServiceImpl implements StoryService {
 		}
 		return sList;
 	}
-
 
 }
