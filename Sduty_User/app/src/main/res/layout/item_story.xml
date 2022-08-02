@@ -3,7 +3,7 @@
     <data>
         <variable
             name="vm"
-            type="com.d108.sduty.ui.main.mypage.viewmodel.MyPageViewModel" />
+            type="com.d108.sduty.ui.viewmodel.StoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
