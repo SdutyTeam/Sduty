@@ -15,6 +15,7 @@ import com.d108.sduty.dto.User;
 import com.d108.sduty.repo.AdminRepo;
 import com.d108.sduty.repo.DailyQuestionRepo;
 import com.d108.sduty.repo.NoticeRepo;
+import com.d108.sduty.repo.QnaRepo;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -25,6 +26,8 @@ public class AdminServiceImpl implements AdminService {
 	private NoticeRepo noticeRepo;
 	@Autowired
 	private DailyQuestionRepo dailyqRepo;
+	@Autowired
+	private QnaRepo qnaRepo;
 	
 	@Override
 	public Optional<Admin> getAdmin(String id) {
@@ -109,8 +112,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<Qna> getQnas() {
-		// TODO Auto-generated method stub
-		return null;
+		return qnaRepo.findAll();
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.d108.sduty.dto.Admin;
 import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
+import com.d108.sduty.dto.Qna;
 import com.d108.sduty.service.AdminService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -129,4 +130,9 @@ public class AdminController {
 	}
 	
 	//1:1 문의
+	@ApiOperation(value = "1:1문의 목록 조회")
+	@GetMapping("/qna")
+	public ResponseEntity<?> getQnas(){
+		return new ResponseEntity<List<Qna>>(adminService.getQnas(), HttpStatus.OK);
+	}
 }
