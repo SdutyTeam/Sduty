@@ -1,5 +1,6 @@
 package com.d108.sduty.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -126,7 +127,14 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Qna registAnswer(Qna qna) {
-		// TODO Auto-generated method stub
+		Optional<Qna> qnaOp = qnaRepo.findById(qna.getSeq());
+		if(qnaOp.isPresent()) {
+			Qna originQna = qnaOp.get();
+			originQna.setAnswer(qna.getAnswer());
+			originQna.setAdminSeq(qna.getAdminSeq());
+			originQna.setAnswerRegtime(LocalDateTime.now());
+			return qnaRepo.save(originQna);
+		}
 		return null;
 	}
 

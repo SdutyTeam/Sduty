@@ -145,4 +145,16 @@ public class AdminController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
+	
+	@ApiOperation(value = "1:1문의 답변 등록")
+	@PostMapping("/qna/{qna_seq}")
+	public ResponseEntity<?> registAnswer(@RequestParam int qna_seq, @RequestBody Qna qna){
+		if(qna_seq==qna.getSeq()) {
+			Qna result = adminService.registAnswer(qna);
+			if(result!=null) {
+				return new ResponseEntity<Qna>(result, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
 }

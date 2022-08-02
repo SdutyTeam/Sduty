@@ -39,5 +39,5 @@ public class Qna {
 	@Column(name="ans_writer")
 	private Integer adminSeq;
 	@Column(name="ans_regtime")
-	private String answerRegtime;
+	private LocalDateTime answerRegtime;
 }
