@@ -204,7 +204,7 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 필터링")
 	@GetMapping("filter/{category}/{emptyfilter}/{camfilter}/{publicfilter}")
-	public ResponseEntity<?> filterStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
+	public ResponseEntity<?> filterStudy(@PathVariable String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
 		List<Study> resultList = studyService.filterStudy(category, emptyfilter, camfilter, publicfilter);
 		if(resultList==null) {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
