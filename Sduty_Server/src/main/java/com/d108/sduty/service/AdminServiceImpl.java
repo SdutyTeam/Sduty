@@ -47,8 +47,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void deleteNotice(int noticeSeq) {
-		// TODO Auto-generated method stub
-
+		noticeRepo.deleteById(noticeSeq);
 	}
 
 	@Override
