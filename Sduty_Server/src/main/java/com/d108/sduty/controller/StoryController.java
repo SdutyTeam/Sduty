@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,12 +59,31 @@ public class StoryController {
 	@Autowired
 	private ScrapService scrapService;
 	
+	@Autowired
+	private FollowService followService;
+	
 	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
 	@GetMapping("/")
 	public ResponseEntity<?> selectAllStory() throws Exception {
 		List<Story> selectedStory = storyService.findAll();
 		if(selectedStory != null)
 			return new ResponseEntity<List<Story>>(selectedStory, HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "유저별로 스토리 조회 : UserSeq > List<Story> 리턴", response = Story.class)
+	@GetMapping("/user/{userSeq}")
+	public ResponseEntity<?> selectByUserSeq(@PathVariable int userSeq) throws Exception {
+		List<Follow> follows = followService.selectFollower(userSeq);
+		List<Integer> writerSeqs = new ArrayList<Integer>();
+		for(Follow f : follows) {
+			writerSeqs.add(f.getFolloweeSeq());
+		}
+		PageRequest pageRequest = PageRequest.of(0, 2);
+		List<Story> listStory = storyService.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs, pageRequest);
+		if(listStory != null) {
+			return new ResponseEntity<List<Story>>(listStory, HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
