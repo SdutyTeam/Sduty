@@ -120,7 +120,7 @@ class StudyListFragment : Fragment(){
             override fun onClick(view: View, position: Int) {
                 Log.d(TAG, "onClick: ${studyList}")
                 // 전체 스터디 조회 - 스터디 클릭 시 상세정보 다이얼로그
-                val dialog = StudyDetailDialog(mainActivity)
+                val dialog = StudyDetailDialog(mainActivity, studyList[position])
                 dialog.showDialog()
                 dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
                     override fun onClicked() {
