@@ -21,7 +21,7 @@ public interface AdminService {
 	//데일리 질문
 	public boolean registDailyQuestion(DailyQuestion dailyq);
 	public List<DailyQuestion> getDailyQuestions();
-	public DailyQuestion getDailyQuestionDetail();
+	public DailyQuestion getDailyQuestionDetail(int questionSeq);
 	public DailyQuestion updateDailyQuestion(DailyQuestion dailyq);
 	public void deleteDailyQuestion(int dailyQuestionSeq);
 	//1:1문의

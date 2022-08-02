@@ -102,5 +102,14 @@ public class AdminController {
 		return new ResponseEntity<List<DailyQuestion>>(adminService.getDailyQuestions(), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "데일리질문 상세 조회")
+	@GetMapping("/question/{question_seq}")
+	public ResponseEntity<?> getDailyQuestionDetail(@RequestParam int question_seq){
+		DailyQuestion dq = adminService.getDailyQuestionDetail(question_seq);
+		if(dq!=null) {
+			return new ResponseEntity<DailyQuestion>(dq, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
 	//1:1 문의
 }

@@ -83,8 +83,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public DailyQuestion getDailyQuestionDetail() {
-		// TODO Auto-generated method stub
+	public DailyQuestion getDailyQuestionDetail(int questionSeq) {
+		Optional<DailyQuestion> dq = dailyqRepo.findById(questionSeq);
+		if(dq.isPresent()) {
+			return dq.get();
+		}
 		return null;
 	}
 
