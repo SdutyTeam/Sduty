@@ -2,6 +2,7 @@ package com.d108.sduty.ui.main.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,23 @@ class TimeLineFragment : Fragment() {
 
     private fun initView(){
         timeLineAdapter = TimeLineAdapter(requireActivity())
+        timeLineAdapter.apply {
+            onClickTimelineItem = object : TimeLineAdapter.TimeLineClickListener{
+                override fun onFavoriteClicked(view: View, position: Int) {
+
+                }
+                override fun onScrapClicked(view: View, position: Int) {
+                }
+                override fun onReplyClicked(view: View, position: Int) {
+
+                }
+                override fun onMenuClicked(view: View, position: Int) {
+                }
+                override fun onProfileClicked(view: View, position: Int) {
+                    findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToStoryDetailFragment())
+                }
+            }
+        }
         binding.apply {
             lifecycleOwner = this@TimeLineFragment
 

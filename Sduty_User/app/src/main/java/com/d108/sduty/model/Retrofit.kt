@@ -1,10 +1,7 @@
 package com.d108.sduty.model
 
 import com.d108.sduty.common.ApplicationClass
-import com.d108.sduty.model.api.TimerApi
-import com.d108.sduty.model.api.ProfileApi
-import com.d108.sduty.model.api.StudyApi
-import com.d108.sduty.model.api.UserApi
+import com.d108.sduty.model.api.*
 
 object Retrofit {
     private val retrofit = ApplicationClass.retrofit
@@ -22,6 +19,10 @@ object Retrofit {
 
     val studyApi : StudyApi by lazy{
         retrofit.create(StudyApi::class.java)
+    }
+
+    val storyApi: StoryApi by lazy {
+        retrofit.create(StoryApi::class.java)
     }
 
 }

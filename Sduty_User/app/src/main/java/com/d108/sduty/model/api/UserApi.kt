@@ -42,7 +42,10 @@ interface UserApi {
     @PUT("/user/pwd")
     suspend fun changePw(@Body user: User): Response<Void>
 
+    @DELETE("/user/{seq}")
+    suspend fun deleteUser(@Path("seq")userSeq: Int): Response<Void>
+
     @GET("/user/{user_seq}")
-    suspend fun getUserValue(@Path("userSeq") userSeq: Int): Response<User>
+    suspend fun getUserValue(@Path("user_seq")userSeq: Int): Response<User>
 
 }

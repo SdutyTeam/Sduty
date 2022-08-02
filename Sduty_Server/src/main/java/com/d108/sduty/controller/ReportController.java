@@ -36,7 +36,7 @@ public class ReportController {
 	@PostMapping("/tasks")
 	public ResponseEntity<?> regist(@RequestBody ObjectNode reqObject) throws JsonProcessingException, IllegalArgumentException{
 		ObjectMapper mapper = new ObjectMapper();
-		int userSeq = reqObject.get("userSeq").intValue();
+		int userSeq = reqObject.get("ownerSeq").intValue();
 		String date = reqObject.get("date").asText();
 		Task task = mapper.treeToValue(reqObject.get("task"), Task.class);
 		reportService.registTask(userSeq, date, task);
@@ -47,6 +47,9 @@ public class ReportController {
 	@GetMapping("/{user_seq}/{date}")
 	public ResponseEntity<?> report(@PathVariable int user_seq, @PathVariable String date){
 		Map<String, Object> resultMap = reportService.getReport(user_seq, date);
+		if(resultMap==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 	
