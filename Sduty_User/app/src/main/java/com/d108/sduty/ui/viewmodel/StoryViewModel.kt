@@ -18,7 +18,13 @@ class StoryViewModel: ViewModel() {
         get() = _storyList
     fun getStoryListValue(){
         viewModelScope.launch(Dispatchers.IO){
-
+            Retrofit.storyApi.getStoryList().let {
+                if(it.isSuccessful && it.body() != null){
+                    _storyList.postValue(it.body() as MutableList<Story>)
+                }else{
+                    Log.d(TAG, "getStoryListValue: ${it.code()}")
+                }
+            }
         }
     }
 
