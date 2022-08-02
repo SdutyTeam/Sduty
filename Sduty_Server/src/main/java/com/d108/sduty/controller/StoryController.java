@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -93,6 +94,20 @@ public class StoryController {
 		Optional<Story> selectedOStory = storyService.findById(storySeq);
 		if(selectedOStory.isPresent())
 			return new ResponseEntity<Story>(selectedOStory.get(), HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "스토리 수정 : Story > Story 리턴", response = Story.class)
+	@PutMapping("")
+	public ResponseEntity<?> updateStory(@RequestBody Story story) throws Exception {
+		Optional<Story> selectedOStory = storyService.findById(story.getSeq());
+		Story savedStory;
+		if(selectedOStory.isPresent()) {
+			savedStory = selectedOStory.get();
+			story.setImageSource(savedStory.getImageSource());
+			story.setThumbnail(savedStory.getThumbnail());
+			return new ResponseEntity<Story>(storyService.insertStory(story), HttpStatus.OK);
+		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	

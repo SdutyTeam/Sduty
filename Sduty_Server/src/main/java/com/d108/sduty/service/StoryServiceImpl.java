@@ -36,6 +36,7 @@ public class StoryServiceImpl implements StoryService {
 		return storyRepo.findAll();
 	}
 	
+
 	private List<Story> optConverter(List<Optional<Story>> list){
 		List<Story> sList = new ArrayList<>();
 		for(Optional<Story> l : list) {
