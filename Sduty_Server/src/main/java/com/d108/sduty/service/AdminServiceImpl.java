@@ -139,14 +139,15 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Qna updateAnswer(Qna qna) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Qna deleteAnswer(int qnaSeq) {
-		// TODO Auto-generated method stub
+		Optional<Qna> qnaOp = qnaRepo.findById(qnaSeq);
+		if(qnaOp.isPresent()) {
+			Qna originQna = qnaOp.get();
+			originQna.setAnswer(null);
+			originQna.setAdminSeq(null);
+			originQna.setAnswerRegtime(null);
+			return qnaRepo.save(originQna);
+		}
 		return null;
 	}
 

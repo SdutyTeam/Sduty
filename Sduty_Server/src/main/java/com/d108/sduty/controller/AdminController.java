@@ -146,7 +146,7 @@ public class AdminController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "1:1문의 답변 등록")
+	@ApiOperation(value = "1:1문의 답변 등록 및 수정")
 	@PostMapping("/qna/{qna_seq}")
 	public ResponseEntity<?> registAnswer(@RequestParam int qna_seq, @RequestBody Qna qna){
 		if(qna_seq==qna.getSeq()) {
@@ -154,6 +154,16 @@ public class AdminController {
 			if(result!=null) {
 				return new ResponseEntity<Qna>(result, HttpStatus.OK);
 			}
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "1:1문의 답변 삭제")
+	@PutMapping("/qna/{qna_seq}")
+	public ResponseEntity<?> updateAnswer(@RequestParam int qna_seq){
+		Qna result = adminService.deleteAnswer(qna_seq);
+		if(result!=null) {
+			return new ResponseEntity<Qna>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
