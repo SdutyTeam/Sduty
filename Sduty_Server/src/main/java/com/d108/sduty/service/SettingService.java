@@ -6,5 +6,5 @@ public interface SettingService {
 	public int registQna(Qna qna);
 	public Qna getQnaDetail(int qnaSeq);
 	public Qna updateQna(int qnaSeq, Qna qna);
-	public Qna deleteQna(int qnaSeq);
+	public void deleteQna(int qnaSeq);
 }

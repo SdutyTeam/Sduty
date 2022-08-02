@@ -44,9 +44,8 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
-	public Qna deleteQna(int qnaSeq) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteQna(int qnaSeq) {
+		qnaRepo.deleteById(qnaSeq);
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,5 +70,12 @@ public class SettingController {
 			return new ResponseEntity<Qna>(qna, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value="문의사항 삭제하기")
+	@DeleteMapping("/qna/{qna_seq}")
+	public ResponseEntity<?> deleteQna(@RequestParam int qna_seq){
+		settingService.deleteQna(qna_seq);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }
