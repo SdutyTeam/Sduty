@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Admin;
+import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
 import com.d108.sduty.service.AdminService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -81,4 +82,18 @@ public class AdminController {
 		adminService.deleteNotice(notice_seq);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	//신고 관리
+	
+	//데일리 질문
+	@ApiOperation(value = "데일리질문 등록")
+	@PostMapping("/question")
+	public ResponseEntity<?> registDailyQuestion(@RequestBody DailyQuestion dailyq){
+		if(adminService.registDailyQuestion(dailyq)) {
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	//1:1 문의
 }

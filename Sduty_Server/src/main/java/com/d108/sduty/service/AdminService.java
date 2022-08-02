@@ -19,7 +19,7 @@ public interface AdminService {
 	public List<User> getBadUsers();
 	public void limitUser();
 	//데일리 질문
-	public boolean registDailyQuestion();
+	public boolean registDailyQuestion(DailyQuestion dailyq);
 	public List<DailyQuestion> getDailyQuestions();
 	public DailyQuestion getDailyQuestionDetail();
 	public DailyQuestion updateDailyQuestion(DailyQuestion dailyq);

@@ -13,6 +13,7 @@ import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.repo.AdminRepo;
+import com.d108.sduty.repo.DailyQuestionRepo;
 import com.d108.sduty.repo.NoticeRepo;
 
 @Service
@@ -22,6 +23,8 @@ public class AdminServiceImpl implements AdminService {
 	private AdminRepo adminRepo;
 	@Autowired
 	private NoticeRepo noticeRepo;
+	@Autowired
+	private DailyQuestionRepo dailyqRepo;
 	
 	@Override
 	public Optional<Admin> getAdmin(String id) {
@@ -69,9 +72,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public boolean registDailyQuestion() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean registDailyQuestion(DailyQuestion dailyq) {
+		DailyQuestion result = dailyqRepo.save(dailyq);
+		return (result!=null);
 	}
 
 	@Override
