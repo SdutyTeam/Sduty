@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -129,6 +130,17 @@ public class StoryController {
 			return new ResponseEntity<Story>(storyService.insertStory(story), HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "스토리 시퀀스로 삭제 : StorySeq > HttpStatus", response = HttpStatus.class)
+	@DeleteMapping("/{storySeq}")
+	public ResponseEntity<?> deleteByStorySeq(@PathVariable int storySeq) throws Exception {
+		try {
+			storyService.deleteStory(storySeq);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스토리 작성자 시퀀스로 조회 : UserSeq > List<Story> 리턴", response = Story.class)
