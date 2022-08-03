@@ -13,7 +13,12 @@ class HomeViewModel: ViewModel() {
     private val _image = MutableLiveData<Drawable?>(null)
     val image: LiveData<Drawable?>
         get() = _image
+
+    private val _bitmap = MutableLiveData<Bitmap?>()
+    val bitmap : LiveData<Bitmap?>
+        get() = _bitmap
     fun setStoryImage(bitmap: Bitmap?){
+        _bitmap.postValue(bitmap)
         _image.postValue(BitmapDrawable(bitmap))
     }
     fun clearStoryImage(){

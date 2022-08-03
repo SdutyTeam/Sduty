@@ -4,6 +4,8 @@ import com.d108.sduty.model.dto.Comment
 import com.d108.sduty.model.dto.Report
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.utils.Resource
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -11,8 +13,9 @@ interface StoryApi {
     @GET("/story")
     suspend fun getStoryList(): Response<List<Story>>
 
+    @Multipart
     @POST("/story")
-    suspend fun insertStory(@Body story: Story): Response<List<Story>>
+    suspend fun insertStory(@Part imageFile: MultipartBody.Part, @Part("story") story: RequestBody): Response<List<Story>>
 
     @PUT("/story")
     suspend fun updateStory(@Body story: Story): Response<List<Story>>
