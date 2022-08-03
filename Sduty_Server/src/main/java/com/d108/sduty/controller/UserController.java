@@ -62,9 +62,6 @@ public class UserController {
 	@GetMapping("/join/{id}")
 	public ResponseEntity<?> isUsedId(@PathVariable String id) throws Exception {
 		boolean result = userService.isUsedId(id);
-//		System.out.println(id);
-//		System.out.println(result);
-
 		if(result) {			
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
@@ -154,9 +151,11 @@ public class UserController {
 		user.setSeq(seq);
 		User selectUser = userService.selectUser(seq).get();
 		if(user.getPass() != null) {
+			//이게 null이면 user.setPass(selectUser.getPass());인거 같습니다!
 			//암호화
-//			String securePw = security.passwordEncoder().encode(user.getPass());
-//			selectUser.setPass(securePw);
+			//selectUser.setPass(security.passwordEncoder().encode(user.getPass()));
+			System.out.println("암호화된 비번도 변경");
+			user.setPass2(security.passwordEncoder().encode(user.getPass()));
 			selectUser.setPass(user.getPass());
 		}
 		user.setTel(selectUser.getTel());
@@ -212,6 +211,8 @@ public class UserController {
 		//암호화
 //		String securePw = security.passwordEncoder().encode(user.getPass());
 //		selected_user.setPass(securePw);
+		System.out.println("비번 변경 => 암호화");
+		selected_user.setPass2(security.passwordEncoder().encode(user.getPass()));
 		selected_user.setPass(user.getPass());
 		User result = userService.updatePassword(selected_user);
 		if(result != null) {
