@@ -8,7 +8,7 @@
     <data>
         <variable
             name="vm"
-            type="com.d108.sduty.ui.main.home.viewmodel.StoryViewModel" />
+            type="com.d108.sduty.ui.main.home.viewmodel.HomeViewModel" />
         <import type="com.d108.sduty.R"/>
     </data>
 
