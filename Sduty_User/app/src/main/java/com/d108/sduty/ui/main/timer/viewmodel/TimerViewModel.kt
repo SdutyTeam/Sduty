@@ -124,10 +124,12 @@ class TimerViewModel() : ViewModel() {
                 if (it.isSuccessful && it.body() != null) {
                     Log.d(TAG, "getReport: body ${it.body()}")
                     _report.postValue(it.body())
-                } else {
+                } else if(it.code() == 401) {
+                    _toastMessage.postValue("서버에서 불러오는데 실패했습니다..")
+                }else {
                     // 못 받았을 때
                     Log.d(TAG, "getReport: error ${it.errorBody()}")
-                    _toastMessage.postValue("서버에서 리포트를 받아오는데 실패했습니다.")
+                    _report.postValue(Report(0,0,selectedDate,"00:00:00", listOf()))
                 }
             }
         }
@@ -138,7 +140,7 @@ class TimerViewModel() : ViewModel() {
         Log.d(TAG, "insertTask: ${report}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.insertTask(report).let {
-                if(it.isSuccessful && it.code() == 200){
+                if(it.isSuccessful){
                     _toastMessage.postValue("측정 기록 등록을 완료하였습니다.")
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}", )

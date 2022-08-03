@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Report(
     val seq: Int,
-    val userSeq: Int,
+    val ownerSeq: Int,
     val date: String,
     val totalTime: String,
     val task: List<Task>
