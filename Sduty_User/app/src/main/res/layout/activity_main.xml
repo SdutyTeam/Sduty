@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:itemIconSize="30dp"
             app:itemTextColor="@drawable/bottom_nav_color"
             app:itemIconTint="@drawable/bottom_nav_color"
             android:background="@color/white"
