@@ -6,8 +6,10 @@ import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -16,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.databinding.FragmentStoryDecoBinding
 import com.d108.sduty.ui.main.home.viewmodel.StoryViewModel
+import com.d108.sduty.utils.dpToPixel
 import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.showToast
 import java.io.ByteArrayOutputStream
@@ -59,12 +62,24 @@ class StoryDecoFragment : Fragment() {
             }
             // 기본 템플릿 적용
             btnDecoBasic.setOnClickListener {
-                val layoutParams = imgPreview.layoutParams as FrameLayout.LayoutParams
-                val px = convertDpToPx(12)
-                layoutParams.setMargins(px, px, px, px)
-                imgPreview.layoutParams = layoutParams
-
                 tvTime.visibility = View.VISIBLE
+            }
+            var startX = 0f
+            var startY = 0f
+            tvTime.setOnTouchListener { v, event ->
+                when(event.action){
+                    MotionEvent.ACTION_DOWN ->{
+                        startX = event.x
+                        startY = event.y
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val movedX: Float = event.x - startX
+                        val movedY: Float = event.y - startY
+                        v.x = v.x + movedX
+                        v.y = v.y + movedY
+                    }
+                }
+                true
             }
             // 이미지를 Reg로
             ivDoneDeco.setOnClickListener {
@@ -82,10 +97,5 @@ class StoryDecoFragment : Fragment() {
     private fun saveImageBitmap(bitmap: Bitmap) {
         viewModel.setBitmap(bitmap)
         navigateBack(requireActivity())
-    }
-
-    private fun convertDpToPx(dp: Int): Int {
-        val density = resources.displayMetrics.density
-        return (dp * density).toInt()
     }
 }

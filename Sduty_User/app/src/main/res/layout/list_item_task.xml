@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="TaskList"
+            type="com.d108.sduty.model.dto.Task" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -22,6 +27,7 @@
             android:layout_height="0dp"
             android:gravity="center_vertical"
             android:textSize="24sp"
+            android:text="@{TaskList.title}"
             app:layout_constraintTop_toTopOf="@id/v_report_color"
             app:layout_constraintBottom_toBottomOf="@id/v_report_color"
             app:layout_constraintStart_toEndOf="@id/v_report_color"
@@ -33,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
+            android:text="@{}"
             app:layout_constraintTop_toTopOf="@id/v_report_color"
             app:layout_constraintBottom_toBottomOf="@id/v_report_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,6 +49,7 @@
             android:id="@+id/tv_content_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{TaskList.content1}"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:layout_constraintStart_toEndOf="@id/v_report_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,6 +58,7 @@
             android:id="@+id/tv_content_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{TaskList.content2}"
             app:layout_constraintTop_toBottomOf="@id/tv_content_1"
             app:layout_constraintStart_toEndOf="@id/v_report_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,6 +67,7 @@
             android:id="@+id/tv_content_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{TaskList.content3}"
             app:layout_constraintTop_toBottomOf="@id/tv_content_2"
             app:layout_constraintStart_toEndOf="@id/v_report_color"
             app:layout_constraintEnd_toEndOf="parent"

@@ -145,10 +145,6 @@
         <action
             android:id="@+id/action_reportFragment_to_timerFragment"
             app:destination="@id/timerFragment" />
-        <argument
-            android:name="report"
-            app:argType="com.d108.sduty.model.dto.Report"
-            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/myStudyFragment"
@@ -180,6 +176,12 @@
         <action
             android:id="@+id/action_studyDetailFragment_to_studySettingFragment"
             app:destination="@+id/studySettingFragment"/>
+
+<!--        <argument-->
+<!--            android:name="studyInfo"-->
+<!--            app:argType="com.d108.sduty.model.dto.Study"-->
+<!--            app:nullable="true" />-->
+
     </fragment>
     <fragment
         android:id="@+id/camStudyDetailFragment"
@@ -241,6 +243,11 @@
         <action
             android:id="@+id/action_settingFragment_to_accessibilityFragment"
             app:destination="@id/accessibilityFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_loginFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/scrapFragment"

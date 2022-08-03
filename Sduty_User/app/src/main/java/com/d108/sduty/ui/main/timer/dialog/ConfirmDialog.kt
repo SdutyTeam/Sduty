@@ -13,7 +13,7 @@ import com.d108.sduty.databinding.DialogConfirmBinding
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.utils.getDeviceSize
 
-class ConfirmDialog : DialogFragment() {
+class ConfirmDialog() : DialogFragment() {
     private lateinit var binding: DialogConfirmBinding
     private val timerViewModel : TimerViewModel by viewModels({requireActivity()})
 
@@ -27,7 +27,18 @@ class ConfirmDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 여백 터치 시 다이얼로그 종료 방지
+        isCancelable = false
+
         binding.apply {
+
+            if(!arguments?.getString("Message").isNullOrEmpty()){
+                tvWarningMessage.text = requireArguments().getString("Message")
+                btnConfirm.visibility = View.GONE
+                btnCancel.text = "확인"
+            }
+
             btnConfirm.setOnClickListener {
                 // DelayDialog 종료
                 val fragment = requireActivity().supportFragmentManager.findFragmentByTag("TaskDialog")

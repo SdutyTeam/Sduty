@@ -31,6 +31,7 @@ class DelayDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 여백 터치 시 다이얼로그 종료 방지
         isCancelable = false
 
         binding.apply {

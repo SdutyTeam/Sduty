@@ -59,8 +59,8 @@ public class StudyController {
 		Study study = null;
 		Alarm alarm = null;
 		try {
-			study = mapper.treeToValue(reqObject.get("study"), Study.class);
-			JsonNode node = reqObject.get("alarm");
+			study = mapper.treeToValue(reqObject.get("Study"), Study.class);
+			JsonNode node = reqObject.get("Alarm");
 			if((study.getRoomId()!=null && node==null)||(study.getRoomId()==null&& node!=null)) {
 				//캠스터디인데 알람이 없는경우 || 캠스터디 아닌데 알람이 있는 경우
 				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
@@ -97,7 +97,11 @@ public class StudyController {
 	@ApiOperation(value="스터디 전체 조회")
 	@GetMapping("")
 	public ResponseEntity<?> getAllStudy(){
-		return new ResponseEntity<List<Study>>(studyService.getAllStudy(), HttpStatus.OK);
+		List<Study> studies = studyService.getAllStudy();
+		if(studies==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<List<Study>>(studies, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="스터디 상세 조회")
@@ -128,6 +132,9 @@ public class StudyController {
 	@GetMapping("/{user_seq}")
 	public ResponseEntity<?> getMyStudies(@PathVariable int user_seq){
 		Set<Study> result = studyService.getMyStudies(user_seq);
+		if(result==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<Set<Study>>(result, HttpStatus.OK);
 	}
 	
@@ -197,15 +204,24 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 필터링")
 	@GetMapping("filter/{category}/{emptyfilter}/{camfilter}/{publicfilter}")
-	public ResponseEntity<?> filterStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
+	public ResponseEntity<?> filterStudy(@PathVariable String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
 		List<Study> resultList = studyService.filterStudy(category, emptyfilter, camfilter, publicfilter);
+		if(resultList==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<List<Study>>(resultList, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스터디 검색")
 	@GetMapping("filter/{keyword}")
-	public ResponseEntity<?> searchStudy(String keyword){
+	public ResponseEntity<?> searchStudy(@PathVariable String keyword){
+		if(keyword=="") {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		List<Study> resultList = studyService.searchStudy(keyword);
+		if(resultList==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<List<Study>>(resultList, HttpStatus.OK);
 	}
 }
