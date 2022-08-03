@@ -20,27 +20,29 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_top"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="56dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             >
 
-            <Button
-                android:id="@+id/btn_filter"
+            <ImageView
+                android:id="@+id/iv_title_text"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="필터"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/menu_logo_text_24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
-
 
             <TextView
                 android:id="@+id/common_top_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="타임라인"
                 android:textSize="18sp"
                 android:gravity="center"
+                tools:text="타임라인"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="16dp"
@@ -49,10 +51,24 @@
 
             <!-- AppBar 게시물 등록 버튼 : 게시물 등록 & 타임라인으로 돌아감 -->
             <ImageView
+                android:id="@+id/iv_filter"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_menu_tune_black_24"
+                android:tintMode="src_atop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_register_story"/>
+
+            <!-- AppBar 게시물 등록 버튼 : 게시물 등록 & 타임라인으로 돌아감 -->
+            <ImageView
                 android:id="@+id/iv_register_story"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/icon_add_circle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_menu_library_add_black_24"
+                android:tintMode="src_atop"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
