@@ -1,5 +1,7 @@
 package com.d108.sduty.dto;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,9 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.d108.sduty.utils.StudyScheduler;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -35,4 +39,10 @@ public class Alarm {
 	private boolean fri;
 	private boolean sat;
 	private boolean sun;
+	
+//	public void setScheduler() {
+//		StudyScheduler ts = new StudyScheduler();
+//		ts.changeCronSet("*/5 * * * * *");
+//		ts.startScheduler(1);
+//	}
 }
