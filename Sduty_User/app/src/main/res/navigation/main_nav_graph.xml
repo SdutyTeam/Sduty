@@ -145,10 +145,6 @@
         <action
             android:id="@+id/action_reportFragment_to_timerFragment"
             app:destination="@id/timerFragment" />
-        <argument
-            android:name="report"
-            app:argType="com.d108.sduty.model.dto.Report"
-            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/myStudyFragment"
