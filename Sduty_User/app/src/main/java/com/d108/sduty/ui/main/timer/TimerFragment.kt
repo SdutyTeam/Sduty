@@ -127,6 +127,7 @@ class TimerFragment : Fragment() {
             // 첫 화면은 오늘 날짜로 설정
             commonSelectedDate.text = today
             timerViewModel.selectDate(today)
+            timerViewModel.restoreTime()
         }
     }
 

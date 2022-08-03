@@ -62,12 +62,12 @@ class TimerViewModel() : ViewModel() {
     // TODO: SharedPreferences 또는 SaveStateViewModel 
     // 앱이 종료 되었을 경우 측정 시간을 복구한다.
     fun restoreTime() {
-        _startTime = ApplicationClass.timerPref.getString("StartTime", "00:00:00")!!
+        val time = ApplicationClass.timerPref.getString("StartTime", "")!!
 
         // 측정하던 정보가 남아 있을 경우
-        if(_startTime != "00:00:00"){
+        if(time.isNotEmpty()){
             val curTime = Date(System.currentTimeMillis())
-            val time = convertTimeStringToDate(_startTime, "hh:mm:ss").time.toInt()
+            val time = convertTimeStringToDate(time, "hh:mm:ss").time.toInt()
             _timer.value = time
             startTimer()
         }
@@ -78,7 +78,7 @@ class TimerViewModel() : ViewModel() {
         _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
 
         // 시작 시간을 디바이스에 저장
-        ApplicationClass.timerPref.edit().putString("StartTime", startTime).apply()
+        ApplicationClass.timerPref.edit().putString("StartTime", _startTime).apply()
 
         // TODO: 스터디에 시작 정보 알림
 
