@@ -10,7 +10,7 @@ data class Report(
     val ownerSeq: Int,
     val date: String,
     val totalTime: String,
-    val task: List<Task>
+    val tasks: List<Task>
 ) : Parcelable {
     override fun describeContents(): Int {
         return 0

@@ -47,7 +47,9 @@ class TimerViewModel() : ViewModel() {
     private var isDelayingTimer = false
 
     // 시간 측정 시작 시간
-    var startTime: String = "00:00:00"
+    private var _startTime: String = "00:00:00"
+    val startTime: String
+        get() = _startTime
 
     // 사용자가 날짜 선택
     fun selectDate(strDate: String) {
@@ -59,14 +61,21 @@ class TimerViewModel() : ViewModel() {
 
     // TODO: SharedPreferences 또는 SaveStateViewModel 
     // 앱이 종료 되었을 경우 측정 시간을 복구한다.
-    private fun restoreTime() {
+    fun restoreTime() {
+        _startTime = ApplicationClass.timerPref.getString("StartTime", "00:00:00")!!
 
+        // 측정하던 정보가 남아 있을 경우
+        if(_startTime != "00:00:00"){
+            val curTime = Date(System.currentTimeMillis())
+            val time = convertTimeStringToDate(_startTime, "hh:mm:ss").time.toInt()
+            _timer.value = time
+            startTimer()
+        }
     }
-
     // 시간 측정을 시작한다.
     fun startTimer() {
         // 측정 시작 시간을 저장한다.
-        startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
+        _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
 
         // 시작 시간을 디바이스에 저장
         ApplicationClass.timerPref.edit().putString("StartTime", startTime).apply()
@@ -101,7 +110,7 @@ class TimerViewModel() : ViewModel() {
 
         // TODO: 서버에 종료 정보 알림 
 
-        ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
+        ApplicationClass.timerPref.edit().putString("StartTime", "00:00:00").apply()
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
         _timer.postValue(0)
@@ -125,11 +134,11 @@ class TimerViewModel() : ViewModel() {
                     Log.d(TAG, "getReport: body ${it.body()}")
                     _report.postValue(it.body())
                 } else if(it.code() == 401) {
-                    _toastMessage.postValue("서버에서 불러오는데 실패했습니다..")
-                }else {
                     // 못 받았을 때
                     Log.d(TAG, "getReport: error ${it.errorBody()}")
                     _report.postValue(Report(0,0,selectedDate,"00:00:00", listOf()))
+                }else {
+                    _toastMessage.postValue("서버에서 불러오는데 실패했습니다..")
                 }
             }
         }

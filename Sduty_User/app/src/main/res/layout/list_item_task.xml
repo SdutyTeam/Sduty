@@ -14,8 +14,8 @@
 
         <View
             android:id="@+id/v_report_color"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:background="@color/purple_500"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -24,9 +24,10 @@
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textSize="24sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:text="@{TaskList.title}"
             app:layout_constraintTop_toTopOf="@id/v_report_color"
             app:layout_constraintBottom_toBottomOf="@id/v_report_color"
@@ -38,8 +39,8 @@
             android:id="@+id/tv_totalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:text="@{}"
+            android:textSize="16sp"
+            android:text="00:00:00"
             app:layout_constraintTop_toTopOf="@id/v_report_color"
             app:layout_constraintBottom_toBottomOf="@id/v_report_color"
             app:layout_constraintEnd_toEndOf="parent"
