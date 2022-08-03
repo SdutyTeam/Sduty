@@ -4,24 +4,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp">
-
-        <LinearLayout
-            android:id="@+id/divider_1"
-            style="@style/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="16dp">
+            android:layout_marginHorizontal="16dp"
+            android:paddingBottom="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_profile"
@@ -137,7 +126,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+        <LinearLayout
+            android:id="@+id/divider_1"
+            style="@style/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
