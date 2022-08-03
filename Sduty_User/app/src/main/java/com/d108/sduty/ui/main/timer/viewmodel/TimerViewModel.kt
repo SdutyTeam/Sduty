@@ -53,7 +53,7 @@ class TimerViewModel() : ViewModel() {
     fun selectDate(strDate: String) {
         val selectedDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
         val convertedDate = convertTimeDateToString(selectedDate, "yyyy-MM-dd")
-        val userSeq = ApplicationClass.userPref.getInt("seq", 0)
+        val userSeq = ApplicationClass.userPref.getInt("seq", 47)
         getReport(userSeq, convertedDate)
     }
 
@@ -63,15 +63,13 @@ class TimerViewModel() : ViewModel() {
 
     }
 
-    private fun saveTime(startTime: String) {
-
-    }
-
     // 시간 측정을 시작한다.
     fun startTimer() {
         // 측정 시작 시간을 저장한다.
         startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
-        saveTime(startTime)
+
+        // 시작 시간을 디바이스에 저장
+        ApplicationClass.timerPref.edit().putString("StartTime", startTime).apply()
 
         // TODO: 스터디에 시작 정보 알림
 
@@ -100,8 +98,10 @@ class TimerViewModel() : ViewModel() {
     fun stopTimer() {
 
         // TODO: 스터디에 종료 정보 알림
+
         // TODO: 서버에 종료 정보 알림 
-        
+
+        ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
         _timer.postValue(0)

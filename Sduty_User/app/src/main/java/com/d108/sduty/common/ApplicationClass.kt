@@ -22,6 +22,7 @@ class ApplicationClass : Application() {
         lateinit var pushStatePersonal: SharedPreferences
         lateinit var autoLoginState: SharedPreferences
         lateinit var darkModeState: SharedPreferences
+        lateinit var timerPref: SharedPreferences
     }
 
     override fun onCreate() {
@@ -47,5 +48,6 @@ class ApplicationClass : Application() {
         pushStateAll = getSharedPreferences("PushStateAll", MODE_PRIVATE)
         pushStatePersonal = getSharedPreferences("PushStatePersonal", MODE_PRIVATE)
         darkModeState = getSharedPreferences("DarkMode", MODE_PRIVATE)
+        timerPref = getSharedPreferences("Timer", MODE_PRIVATE)
     }
 }
