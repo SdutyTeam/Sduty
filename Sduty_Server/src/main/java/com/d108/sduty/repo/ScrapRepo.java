@@ -10,4 +10,5 @@ public interface ScrapRepo extends JpaRepository<Scrap, Integer>{
 	boolean existsByUserSeqAndStorySeq(int userSeq, int storySeq);
 	@Transactional
 	void deleteByUserSeqAndStorySeq(int userSeq, int storySeq);
+	Scrap findByUserSeqAndStorySeq(int userSeq, int storySeq);
 }
