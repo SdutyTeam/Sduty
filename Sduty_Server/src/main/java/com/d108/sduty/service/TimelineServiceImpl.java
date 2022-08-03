@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Profile;
+import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.Timeline;
 import com.d108.sduty.repo.LikesRepo;
@@ -40,12 +41,9 @@ public class TimelineServiceImpl implements TimelineService {
 		List<Timeline> tList = new ArrayList<>();
 		for(Story s : selectedOStory) {
 			Timeline t = new Timeline();
-			Optional<Profile> OProfile = profileRepo.findById(s.getWriterSeq());
-			if(OProfile.isPresent()) {
-				t.setProfile(OProfile.get());
-			}
+			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
-			t.setReply(replyRepo.findAllByStorySeqOrderByRegtimeDesc(s.getSeq()));
+			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			tList.add(t);
@@ -56,6 +54,18 @@ public class TimelineServiceImpl implements TimelineService {
 	@Override
 	public List<Timeline> selectAllByUserSeqsWithTagOrderByRegtime() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+	
+//	public Timeline selectDetailTimeline(int userSeq, int storySeq) {
+//		
+//	}
+	
+	public Profile getProfile(int userSeq) {
+		Optional<Profile> OProfile = profileRepo.findById(userSeq);
+		if(OProfile.isPresent()) {
+			return OProfile.get();
+		}
 		return null;
 	}
 

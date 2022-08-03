@@ -1,5 +1,6 @@
 package com.d108.sduty.dto;
 
+import java.util.HashMap;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +15,10 @@ import lombok.Setter;
 public class Timeline {
 	private Profile profile ;
 	private Story story ;
-	private List<Reply> reply;
+	private int cntReply; 
+	private List<HashMap<Profile, Reply>> replyAndProfile;
 	private boolean likes;
 	private boolean scrap;
+	private String jobHashtag;
+	private List<String> subjectHashtag;
 }
