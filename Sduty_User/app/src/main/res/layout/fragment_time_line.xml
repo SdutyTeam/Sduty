@@ -56,7 +56,6 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_menu_tune_black_24"
-                android:tintMode="src_atop"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_register_story"/>
@@ -68,7 +67,6 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_menu_library_add_black_24"
-                android:tintMode="src_atop"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
