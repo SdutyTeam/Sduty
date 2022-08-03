@@ -33,11 +33,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.d108.sduty.dto.Follow;
+import com.d108.sduty.dto.Likes;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.service.FollowService;
 import com.d108.sduty.service.ImageService;
+import com.d108.sduty.service.LikesService;
 import com.d108.sduty.service.ScrapService;
 import com.d108.sduty.service.StoryService;
 import com.google.gson.Gson;
@@ -62,6 +64,9 @@ public class StoryController {
 	
 	@Autowired
 	private FollowService followService;
+	
+	@Autowired
+	private LikesService likeService;
 	
 	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
 	@GetMapping("/")
@@ -149,6 +154,41 @@ public class StoryController {
 		List<Story> listStory = storyService.findBywriterSeq(userSeq);
 		if(listStory != null) {
 			return new ResponseEntity<List<Story>>(listStory, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value= "게시글 신고 : StorySeq > HttpStatus", response = HttpStatus.class)
+	@PutMapping("/report/{storySeq}")
+	public ResponseEntity<?> reportStory(@PathVariable int storySeq) {
+		Optional<Story> selectedOStory = storyService.findById(storySeq);
+		Story updatingStory;
+		if(selectedOStory.isPresent()) {
+			updatingStory = selectedOStory.get();
+			updatingStory.setWarning(updatingStory.getWarning() + 1);
+			Story story = storyService.insertStory(updatingStory);
+			if(story != null) {
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "좋아요/취소 : Like > HttpStatus", response = HttpStatus.class)
+	@PostMapping("/like")
+	public ResponseEntity<?> doLike(@RequestBody Likes likes) throws Exception {
+		boolean alreadyLiked = likeService.checkAlreadyLike(likes);
+		if(alreadyLiked) {
+			try {
+				likeService.deleteLike(likes);
+			} catch (Exception e) {
+				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			}
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		} else {
+			Likes insertedLike = likeService.insertLike(likes);
+			if(insertedLike != null)
+				return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
