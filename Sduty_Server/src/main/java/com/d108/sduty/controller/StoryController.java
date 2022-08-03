@@ -37,11 +37,13 @@ import com.d108.sduty.dto.Likes;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
+import com.d108.sduty.dto.Timeline;
 import com.d108.sduty.service.FollowService;
 import com.d108.sduty.service.ImageService;
 import com.d108.sduty.service.LikesService;
 import com.d108.sduty.service.ScrapService;
 import com.d108.sduty.service.StoryService;
+import com.d108.sduty.service.TimelineService;
 import com.google.gson.Gson;
 
 import io.swagger.annotations.Api;
@@ -68,16 +70,21 @@ public class StoryController {
 	@Autowired
 	private LikesService likeService;
 	
-	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
-	@GetMapping("/")
-	public ResponseEntity<?> selectAllStory() throws Exception {
-		List<Story> selectedStory = storyService.findAll();
-		if(selectedStory != null)
-			return new ResponseEntity<List<Story>>(selectedStory, HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-	}
+	@Autowired
+	private TimelineService timelineService;
 	
-	@ApiOperation(value = "유저별로 스토리 조회 : UserSeq > List<Story> 리턴", response = Story.class)
+//	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
+//	@GetMapping("/all/{userSeq}")
+//	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq) throws Exception {
+//		List<Timeline> selectedTimeline = timelineService.selectAll();
+//		List<Story> selectedStory = storyService.findAll();
+//		if(selectedStory != null)
+//			return new ResponseEntity<List<Story>>(selectedStory, HttpStatus.OK);
+//			return new ResponseEntity<List<Timeline>>(timelineService.selectAll(userSeq), HttpStatus.OK);
+//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+//	}
+	
+	@ApiOperation(value = "유저별로 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/user/{userSeq}")
 	public ResponseEntity<?> selectByUserSeq(@PathVariable int userSeq) throws Exception {
 		List<Follow> follows = followService.selectFollower(userSeq);
@@ -85,10 +92,9 @@ public class StoryController {
 		for(Follow f : follows) {
 			writerSeqs.add(f.getFolloweeSeq());
 		}
-		PageRequest pageRequest = PageRequest.of(0, 2);
-		List<Story> listStory = storyService.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs, pageRequest);
-		if(listStory != null) {
-			return new ResponseEntity<List<Story>>(listStory, HttpStatus.UNAUTHORIZED);
+		List<Timeline> listTimeline = timelineService.selectAllByUserSeqsOrderByRegtime(userSeq, writerSeqs);
+		if(listTimeline != null) {
+			return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}

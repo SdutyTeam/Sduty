@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.StudyListAdapter
 import com.d108.sduty.databinding.FragmentReportBinding
+import com.d108.sduty.model.dto.Report
 import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.study.MyStudyFragmentDirections
 import com.d108.sduty.ui.main.timer.adapter.TaskListAdapter
@@ -24,6 +26,7 @@ import com.d108.sduty.utils.convertTimeDateToString
 import com.d108.sduty.utils.safeNavigate
 import java.util.*
 
+private const val TAG = "ReportFragment"
 class ReportFragment : Fragment() {
     private lateinit var binding : FragmentReportBinding
 
@@ -51,26 +54,19 @@ class ReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 뷰모델 초기화
         initViewModel()
-
+        Log.d(TAG, "onViewCreated: ")
+        // 화면 초기화
         initView()
-
-        initAdapter()
+        // 해야할 일 갱신
+        updateAdapter(timerViewModel.report.value!!)
 
     }
 
     private fun initViewModel(){
-        binding.apply {
-            lifecycleOwner = this@ReportFragment
-
-            // 날짜 선택
-            commonSelectedDate.setOnClickListener {
-                showDatePicker()
-            }
-
-            fabTimer.setOnClickListener {
-                findNavController().safeNavigate(ReportFragmentDirections.actionReportFragmentToTimerFragment())
-            }
+        timerViewModel.report.observe(viewLifecycleOwner){ report ->
+            updateAdapter(report)
         }
     }
 
@@ -101,25 +97,37 @@ class ReportFragment : Fragment() {
             Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
     }
 
-    private fun initAdapter(){
-//        taskListAdapter = StudyListAdapter()
-//        taskListAdapter.onClickTaskItem = object : StudyListAdapter.OnStudyItemClick{
-//            override fun onClick(view: View, position: Int) {
-//                // 선택 스터디 입장
-//                Log.d(com.d108.sduty.ui.main.study.TAG, "onClick: ${mystudyList[position]}")
-//                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment())
-//            }
-//        }
-//        binding.myStudyList.apply {
-//            layoutManager = LinearLayoutManager(context)
-//            adapter = mystudyListAdapter
-//        }
-    }
-
     private fun initView(){
         today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
+        binding.apply {
+            // 날짜 선택
+            commonSelectedDate.setOnClickListener {
+                showDatePicker()
+            }
+
+            fabTimer.setOnClickListener {
+                findNavController().safeNavigate(ReportFragmentDirections.actionReportFragmentToTimerFragment())
+            }
+        }
+
+        // 첫 화면은 오늘 날짜로 설정
         binding.commonSelectedDate.text = today
         timerViewModel.selectDate(today)
+    }
+
+    // 리사이클러뷰 갱신
+    private fun updateAdapter(report : Report){
+        taskListAdapter = TaskListAdapter(report.tasks)
+        taskListAdapter.onClickTaskItem = object : TaskListAdapter.OnClickTaskItem{
+            override fun onClick(view: View, position: Int) {
+                // TODO: 상세조회 다이얼로그
+                Toast.makeText(requireContext(), "${position}번 상세조회", Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.rvReport.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = taskListAdapter
+        }
     }
 }

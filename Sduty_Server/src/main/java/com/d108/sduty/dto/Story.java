@@ -33,6 +33,8 @@ public class Story {
 	private String thumbnail;
 	@Column(name="story_hashtag")
 	private int hashtag;
+	@Column(name="story_contents")
+	private String contents;
 	@Column(name="story_regtime", updatable = false)
 	private Date regtime;
 	@Column(name="story_public")

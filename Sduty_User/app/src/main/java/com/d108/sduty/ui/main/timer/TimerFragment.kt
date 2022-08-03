@@ -60,7 +60,36 @@ class TimerFragment : Fragment() {
         binding.apply {
             lifecycleOwner = this@TimerFragment
             timerVM = timerViewModel
+        }
 
+        timerViewModel.apply {
+            // 토스트 메시지 출력 요청
+            toastMessage.observe(viewLifecycleOwner) { message ->
+                requireContext().showToast(message)
+            }
+
+            // 하루 공부한 시간
+            timerViewModel.report.observe(viewLifecycleOwner) { report ->
+                binding.tvTotalTime.text = report.totalTime
+                // TODO: 차트 변경
+            }
+
+            // 타이머
+            timer.observe(viewLifecycleOwner) { time ->
+                val hour = time / 60 / 60
+                val min = time / 60
+                val sec = time % 60
+                binding.tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
+            }
+        }
+    }
+
+    // 화면 초기화
+    private fun initView() {
+        // 오늘 날짜
+        today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
+
+        binding.apply {
             // 날짜 선택
             commonSelectedDate.setOnClickListener {
                 showDatePicker()
@@ -68,19 +97,18 @@ class TimerFragment : Fragment() {
 
             // 공부 시작, 종료
             ivTimer.setOnClickListener {
-                when(timerViewModel.isRunningTimer.value){
-                    false -> {timerViewModel.startTimer()}
-                    true -> {timerViewModel.delayTimer()}
+                when (timerViewModel.isRunningTimer.value) {
+                    false -> {
+                        timerViewModel.startTimer()
+                    }
+                    true -> {
+                        timerViewModel.delayTimer()
+                    }
                 }
                 // 측정을 중지하였을 때
-                if(timerViewModel.timer.value!! > 0){
+                if (timerViewModel.timer.value!! > 0) {
                     DelayDialog().show(requireActivity().supportFragmentManager, "DelayDialog")
                 }
-            }
-
-            // 리포트로 이동
-            fabReport.setOnClickListener {
-                findNavController().safeNavigate(TimerFragmentDirections.actionTimerFragmentToReportFragment())
             }
 
             // 오늘 날짜로 돌아가기
@@ -90,27 +118,15 @@ class TimerFragment : Fragment() {
                 btnReturnToday.visibility = View.INVISIBLE
                 timerViewModel.selectDate(today)
             }
-        }
 
-        timerViewModel.apply {
-            // 토스트 메시지 출력 요청
-            toastMessage.observe(viewLifecycleOwner){ message ->
-                requireContext().showToast(message)
+            // 리포트로 이동
+            fabReport.setOnClickListener {
+                findNavController().safeNavigate(TimerFragmentDirections.actionTimerFragmentToReportFragment())
             }
 
-            // 하루 공부한 시간
-            timerViewModel.report.observe(viewLifecycleOwner){ report ->
-                binding.tvTotalTime.text = report.totalTime
-                // 차트 변경
-            }
-
-            // 시간 변경 시
-            timer.observe(viewLifecycleOwner){ time ->
-                val hour = time / 60 / 60
-                val min = time / 60
-                val sec = time % 60
-                binding.tvTimer.text = String.format("%02d:%02d:%02d",hour,min, sec)
-            }
+            // 첫 화면은 오늘 날짜로 설정
+            commonSelectedDate.text = today
+            timerViewModel.selectDate(today)
         }
     }
 
@@ -142,14 +158,5 @@ class TimerFragment : Fragment() {
         }
         // 캘린더 다이얼로그 출력
         DatePickerDialog(requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
-    }
-
-    // 화면 초기화
-    private fun initView(){
-        // 오늘 날짜
-        today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
-
-        binding.commonSelectedDate.text = today
-        timerViewModel.selectDate(today)
     }
 }

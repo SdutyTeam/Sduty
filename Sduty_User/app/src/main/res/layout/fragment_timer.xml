@@ -91,6 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="오늘 날짜로 돌아가기"
+            android:visibility="invisible"
             app:layout_constraintTop_toTopOf="@id/fab_report"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

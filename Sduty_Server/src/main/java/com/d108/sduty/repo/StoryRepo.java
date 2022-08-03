@@ -15,4 +15,6 @@ public interface StoryRepo extends JpaRepository<Story, Integer>{
 	List<Optional<Story>> findBywriterSeqOrderByRegtimeDesc(int userSeq);
 	List<Optional<Date>> findRegtimeBywriterSeq(int writerSeq);
 	List<Optional<Story>> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> followerSeqs, Pageable pageable);
+	List<Story> findAllByOrderByRegtimeDesc();
+	List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs);
 }
