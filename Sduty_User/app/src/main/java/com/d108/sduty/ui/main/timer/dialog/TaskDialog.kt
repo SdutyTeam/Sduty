@@ -87,15 +87,15 @@ class TaskDialog : DialogFragment() {
                 val endTime = etEndTime.text.toString()
                 val title = etTitle.text.toString()
                 val content1 = etContent1.text.toString()
-                val content2 = etContent1.text.toString()
-                val content3 = etContent1.text.toString()
+                val content2 = etContent2.text.toString()
+                val content3 = etContent3.text.toString()
 
                 val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
 
                 val newTask = Task(-1,-1,endTime, startTime, 0, title, content1, content2, content3)
 
                 // TODO: userSeq 변경 필요 
-                val report = Report(-1, 47, today, "", listOf(newTask))
+                val report = Report(-1, 47, today, "",listOf(newTask))
 
                 // title 은 필수로 입력해야한다.
                 if(title.isNotEmpty()){
