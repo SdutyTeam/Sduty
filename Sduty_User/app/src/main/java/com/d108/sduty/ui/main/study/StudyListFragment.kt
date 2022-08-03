@@ -34,6 +34,7 @@ class StudyListFragment : Fragment(){
     private val studyListViewModel: StudyListViewModel by viewModels()
     private lateinit var studyListAdapter: StudyListAdapter
     private lateinit var studyList: List<Study>
+    private lateinit var category: String
 
 
     override fun onAttach(context: Context) {
@@ -67,7 +68,7 @@ class StudyListFragment : Fragment(){
 
         binding.apply {
 
-            val category = spinnerCategoryFilter.selectedItem.toString()
+
 
             spinnerCategoryFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(
@@ -76,7 +77,12 @@ class StudyListFragment : Fragment(){
                     position: Int,
                     id: Long
                 ) {
-                    studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+                    category = spinnerCategoryFilter.selectedItem.toString()
+                    if(category == "전체"){
+                        studyListViewModel.getStudyList()
+                    } else{
+                        studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {

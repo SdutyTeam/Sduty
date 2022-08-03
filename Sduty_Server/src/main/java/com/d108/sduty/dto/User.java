@@ -39,6 +39,8 @@ public class User {
 	private String id;
 	@Column(name = "user_password")
 	private String pass;
+	@Column(name = "user_password2")
+	private String pass2;
 	@Column(name = "user_name")
 	private String name;
 	@Column(name = "user_tel")

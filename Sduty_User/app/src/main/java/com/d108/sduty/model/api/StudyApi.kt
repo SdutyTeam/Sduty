@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface StudyApi {
     @POST("/study")
-    suspend fun studyCreate(@Body study: Study): Response<Study>
+    suspend fun studyCreate(@Body study: Map<String, Study>): Response<Study>
 
     @GET("/study/check/{study_name}")
     suspend fun getStudyName(@Path("study_name")studyName: String): Response<Void>
@@ -28,12 +28,14 @@ interface StudyApi {
     @GET("/study/filter/{keyword}")
     suspend fun studySearch(@Path("keyword")keyword: String) : Response<List<Study>>
 
-    // 스터디 삭제
-    @DELETE("/study/{user_seq}/{study_seq}")
-    suspend fun deleteStduy(@Path("user_seq")userSeq: Int, @Path("study_seq")studySeq: Int): Response<Void>
-
     // 스터디 탈퇴
     @DELETE("/study/participation/{study_seq}/{user_seq}")
-    suspend fun quitStduy(@Path("study_seq")studySeq: Int, @Path("user_seq")userSeq: Int): Response<Void>
+    suspend fun quitStudy(@Path("study_seq")studySeq: Int, @Path("user_seq")userSeq: Int): Response<Void>
+
+    // 스터디 삭제
+    @DELETE("/study/{user_seq}/{study_seq}")
+    suspend fun deleteStudy(@Path("user_seq")userSeq: Int, @Path("study_seq")studySeq: Int): Response<Void>
+
+
 
 }
