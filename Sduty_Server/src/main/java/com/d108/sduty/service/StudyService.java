@@ -16,6 +16,7 @@ public interface StudyService {
 	public void registStudy(Study study, Alarm alarm);
 	public Study getStudyDetail(int studySeq);
 	public Set<Study> getMyStudies(int userSeq);
+	public Study updateStudy(Study study);
 	public boolean deleteStudy(int userSeq, int studySeq);
 	public List<Study> filterStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter);
 	public List<Study> searchStudy(String keyword);

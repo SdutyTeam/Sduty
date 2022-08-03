@@ -65,6 +65,12 @@ public class StudyServiceImpl implements StudyService {
 		}
 		return null;
 	}
+	
+
+	@Override
+	public Study updateStudy(Study study) {
+		return studyRepo.save(study);
+	}
 
 	@Override
 	public boolean deleteStudy(int userSeq, int studySeq) {
