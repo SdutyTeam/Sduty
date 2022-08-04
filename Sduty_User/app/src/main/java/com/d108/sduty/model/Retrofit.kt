@@ -26,7 +26,7 @@ object Retrofit {
     }
 
     val tagApi: TagApi by lazy {
-        retrofit.create(tagApi::class.java)
+        retrofit.create(TagApi::class.java)
     }
 
 }

@@ -19,6 +19,8 @@ import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.ui.main.home.viewmodel.HomeViewModel
+import com.d108.sduty.ui.sign.dialog.TagSelectDialog
+import com.d108.sduty.ui.sign.viewmodel.TagViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.UriPathUtil
@@ -34,6 +36,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val viewModel: HomeViewModel by viewModels()
     private val storyViewModel: StoryViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+    private val tagViewModel: TagViewModel by activityViewModels()
     // (공개 범위) 0 : 전체 공개, 1 : 팔로워만, 2 : 나만 보기
     private var disclosure = 0
     private val args: StoryRegisterFragmentArgs by navArgs()
@@ -152,6 +155,11 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", etWrite.text.toString(), disclosure), viewModel.bitmap.value!!)
                     requireContext().showToast("스토리가 등록 되었습니다")
                     findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToTimeLineFragment())
+                }
+            }
+            btnAddSubject.setOnClickListener {
+                TagSelectDialog(requireContext()).let {
+                    it.show(parentFragmentManager, null)
                 }
             }
 

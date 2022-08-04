@@ -136,7 +136,7 @@
 
             <Button
                 android:enabled="false"
-                android:text="직업"
+                android:text="태그"
                 android:textSize="18sp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"

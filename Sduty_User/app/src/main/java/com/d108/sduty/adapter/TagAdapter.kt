@@ -25,7 +25,7 @@ class TagAdapter(val flag: Int): RecyclerView.Adapter<TagAdapter.ViewHolder>() {
         fun bind(name: String){
             binding.apply {
                 btnTag.text = name
-                tag.setOnClickListener {
+                btnTag.setOnClickListener {
                     onClickTagItem.onClick(it, adapterPosition)
                 }
             }

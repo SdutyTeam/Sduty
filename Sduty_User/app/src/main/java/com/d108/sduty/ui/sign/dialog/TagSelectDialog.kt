@@ -1,17 +1,27 @@
 package com.d108.sduty.ui.sign.dialog
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TagAdapter
+import com.d108.sduty.common.INTEREST_TAG
+import com.d108.sduty.common.JOB_TAG
 import com.d108.sduty.databinding.DialogTagSelectBinding
+import com.d108.sduty.model.dto.InterestHashtag
+import com.d108.sduty.model.dto.JobHashtag
+import com.d108.sduty.ui.sign.viewmodel.TagViewModel
 
 private const val TAG ="TagSelectDialog"
 class TagSelectDialog(val mContext: Context) : DialogFragment() {
@@ -21,6 +31,12 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
     private lateinit var selectedInterestAdapter: TagAdapter
     private lateinit var selectedJobAdapter: TagAdapter
 
+    private var jobList = mutableListOf<JobHashtag>()
+    private var interestList = mutableListOf<InterestHashtag>()
+    private var selectedJobList = mutableListOf<JobHashtag>()
+    private var selectedInterestList = mutableListOf<InterestHashtag>()
+
+    private val tagViewModel: TagViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,7 +49,91 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initViewModel()
 
+    }
+
+    private fun initViewModel(){
+        tagViewModel.apply {
+            getInterestListValue()
+            getJobListValue()
+            initView()
+            interestList.observe(viewLifecycleOwner){
+                this@TagSelectDialog.interestList = it
+                interestAdapter.interestList = it
+
+            }
+            jobList.observe(viewLifecycleOwner){
+                this@TagSelectDialog.jobList = it
+                jobAdapter.jobList = it
+
+            }
+        }
+
+    }
+
+    private fun initView(){
+        interestAdapter = TagAdapter(INTEREST_TAG)
+        interestAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
+            override fun onClick(view: View, position: Int) {
+                selectedInterestList.add(interestList[position])
+                interestList.removeAt(position)
+                interestAdapter.interestList = interestList
+                selectedInterestAdapter.interestList = selectedInterestList
+                Log.d(TAG, "onClick: interest ${position}")
+            }
+        }
+
+        jobAdapter = TagAdapter(JOB_TAG)
+        jobAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
+            override fun onClick(view: View, position: Int) {
+                selectedJobList.add(jobList[position])
+                jobList.removeAt(position)
+                jobAdapter.jobList = jobList
+                selectedJobAdapter.jobList = selectedJobList
+                Log.d(TAG, "onClick: job ${position}")
+            }
+        }
+
+        selectedInterestAdapter = TagAdapter(INTEREST_TAG)
+        selectedInterestAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
+            override fun onClick(view: View, position: Int) {
+                interestList.add(selectedInterestList[position])
+                selectedInterestList.removeAt(position)
+                interestAdapter.interestList = interestList
+                selectedInterestAdapter.interestList = selectedInterestList
+                Log.d(TAG, "onClick: interest ${position}")
+            }
+        }
+
+        selectedJobAdapter = TagAdapter(JOB_TAG)
+        selectedJobAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
+            override fun onClick(view: View, position: Int) {
+                jobList.add(selectedJobList[position])
+                selectedJobList.removeAt(position)
+                jobAdapter.jobList = jobList
+                selectedJobAdapter.jobList = selectedJobList
+                Log.d(TAG, "onClick: job ${position}")
+            }
+        }
+        binding.apply {
+            recyclerInterest.apply {
+                adapter = interestAdapter
+                layoutManager = GridLayoutManager(requireContext(), 3)
+            }
+            recyclerJob.apply {
+                adapter = jobAdapter
+                layoutManager = GridLayoutManager(requireContext(), 3)
+            }
+            recyclerSelectedInterest.apply {
+                adapter = selectedInterestAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+            }
+            recyclerSelectedJob.apply {
+                adapter = selectedJobAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+            }
+        }
     }
 
 
@@ -52,7 +152,8 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
         val deviceWidth = size.x
         val deviceHeight = size.y
         params?.width = (deviceWidth * 0.9).toInt()
-        params?.height = (deviceHeight * 0.5).toInt()
+        params?.height = (deviceHeight * 0.95).toInt()
         dialog?.window?.attributes = params as WindowManager.LayoutParams
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 }
