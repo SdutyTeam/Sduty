@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:text="#직업 #관심분야1 #관심분야2"
                 android:textSize="16sp"
-                android:textColor="#5A83FF"
+                android:textColor="@color/app_blue"
                 app:layout_constraintTop_toBottomOf="@id/tv_content" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

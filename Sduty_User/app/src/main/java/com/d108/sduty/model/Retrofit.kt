@@ -25,4 +25,8 @@ object Retrofit {
         retrofit.create(StoryApi::class.java)
     }
 
+    val tagApi: TagApi by lazy {
+        retrofit.create(tagApi::class.java)
+    }
+
 }
