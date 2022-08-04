@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 
+import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 
 public interface StoryService {
@@ -15,4 +16,8 @@ public interface StoryService {
 	List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs);
 	List<Story> selectStoryInSeq(List<Integer> storySeqs);
 	void deleteStory(int storySeq);
+	
+	Reply insertReply(Reply reply);
+	Reply updateReply(Reply reply);
+	void deleteReply(int replySeq);
 }

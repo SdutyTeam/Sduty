@@ -38,6 +38,7 @@ import com.d108.sduty.dto.Follow;
 import com.d108.sduty.dto.Image;
 import com.d108.sduty.dto.Likes;
 import com.d108.sduty.dto.Profile;
+import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.Timeline;
@@ -91,7 +92,7 @@ public class StoryController {
 
 	}
 	
-	@ApiOperation(value = "유저별로 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
+	@ApiOperation(value = "유저별 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/user/{userSeq}")
 	public ResponseEntity<?> selectByUserSeq(@PathVariable int userSeq) throws Exception {
 		List<Follow> follows = followService.selectFollower(userSeq);
@@ -131,7 +132,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "스토리 시퀀스로 상세 내용 조회 : Story > Story", response = Story.class)
+	@ApiOperation(value = "스토리 상세 내용 조회 : Story > Story", response = Story.class)
 	@GetMapping("/{storySeq}")
 	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq) throws Exception {
 		Timeline selectedTimeline = timelineService.selectDetailTimeline(storySeq);
@@ -154,7 +155,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "스토리 시퀀스로 삭제 : StorySeq > HttpStatus", response = HttpStatus.class)
+	@ApiOperation(value = "스토리 삭제 : StorySeq > HttpStatus", response = HttpStatus.class)
 	@DeleteMapping("/{storySeq}")
 	public ResponseEntity<?> deleteByStorySeq(@PathVariable int storySeq) throws Exception {
 		try {
@@ -165,7 +166,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "스토리 작성자 시퀀스로 조회 : UserSeq > List<Story> 리턴", response = Story.class)
+	@ApiOperation(value = "작성자로 글 조회 : UserSeq > List<Story> 리턴", response = Story.class)
 	@GetMapping("/writer/{userSeq}")
 	public ResponseEntity<?> selectByWriterSeq(@PathVariable int userSeq) throws Exception {
 		List<Story> listStory = storyService.findBywriterSeq(userSeq);
@@ -233,7 +234,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "사용자 시퀀스로 스크랩한 자료 조회 : UserSeq > List<Story> 리턴", response = Story.class)
+	@ApiOperation(value = "스크랩한 자료 조회 : UserSeq > List<Story> 리턴", response = Story.class)
 	@GetMapping("/scrap/{userSeq}")
 	public ResponseEntity<?> selectScrapByUserSeq(@PathVariable int userSeq) throws Exception {
 		List<Integer> listStorySeqs = scrapService.selectScrapSeqs(userSeq);
@@ -243,6 +244,37 @@ public class StoryController {
 			return new ResponseEntity<List<Story>>(storyList, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "댓글 작성 : Reply > Reply 리턴", response = Reply.class)
+	@PostMapping("/reply")
+	public ResponseEntity<?> insertReply(@RequestBody Reply reply) throws Exception {
+		Reply r = storyService.insertReply(reply);
+		if(r!=null) {
+			return new ResponseEntity<Reply>(r, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "댓글 수정 : Reply > Reply 리턴", response = Reply.class)
+	@PutMapping("/reply")
+	public ResponseEntity<?> updateReply(@RequestBody Reply reply) throws Exception {
+		Reply r = storyService.updateReply(reply);
+		if(r!=null) {
+			return new ResponseEntity<Reply>(r, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "댓글 삭제 : ReplySeq > HttpStatus 리턴", response = HttpStatus.class)
+	@DeleteMapping("/reply/{replySeq}")
+	public ResponseEntity<?> deleteReply(@PathVariable int replySeq) throws Exception {
+		try {
+			storyService.deleteReply(replySeq);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 	}
 	
 	public void makeThumbnail(MultipartFile mpImage) throws Exception {
