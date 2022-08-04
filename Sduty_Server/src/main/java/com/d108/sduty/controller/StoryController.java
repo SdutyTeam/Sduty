@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.d108.sduty.dto.Follow;
+import com.d108.sduty.dto.Image;
 import com.d108.sduty.dto.Likes;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Scrap;
@@ -73,6 +76,12 @@ public class StoryController {
 	@Autowired
 	private TimelineService timelineService;
 	
+	private final String FILE_STORY_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/story/";
+	private final String FILE_PROFILE_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/profile/";
+	private final String FILE_THUMB_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/thumb/";
+	
+	
+
 //	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
 //	@GetMapping("/all/{userSeq}")
 //	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq) throws Exception {
@@ -106,12 +115,14 @@ public class StoryController {
 		Story story = gson.fromJson(json, Story.class);
 		
 		//Story Image Uploaded
-		story.setImageSource(imageFile.getOriginalFilename());
+		String fileName = imageFile.getOriginalFilename();
+		story.setImageSource(fileName);
 		imageService.fileUpload(imageFile);
+		imageService.insertImage(new Image("0", fileName, FILE_STORY_URL));
 		
-		MultipartFile mpfImage = makeThumbnail(imageFile);
-		story.setThumbnail(mpfImage.getOriginalFilename());
-		imageService.fileUpload(mpfImage);
+//		MultipartFile mpfImage = makeThumbnail(imageFile);
+//		story.setThumbnail(mpfImage.getOriginalFilename());
+//		imageService.fileUpload(mpfImage);
 		
 		Story result = storyService.insertStory(story);
 		if(result != null) {
@@ -123,9 +134,9 @@ public class StoryController {
 	@ApiOperation(value = "스토리 시퀀스로 상세 내용 조회 : Story > Story", response = Story.class)
 	@GetMapping("/{storySeq}")
 	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq) throws Exception {
-		Optional<Story> selectedOStory = storyService.findById(storySeq);
-		if(selectedOStory.isPresent())
-			return new ResponseEntity<Story>(selectedOStory.get(), HttpStatus.OK);
+		Timeline selectedTimeline = timelineService.selectDetailTimeline(storySeq);
+		if(selectedTimeline != null)
+			return new ResponseEntity<Timeline>(selectedTimeline, HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	

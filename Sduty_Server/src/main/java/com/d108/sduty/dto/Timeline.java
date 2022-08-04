@@ -14,7 +14,12 @@ import lombok.Setter;
 public class Timeline {
 	private Profile profile ;
 	private Story story ;
-	private List<Reply> reply;
+	private int cntReply; 
+	private List<Reply> replies;
 	private boolean likes;
 	private boolean scrap;
+	private String jobHashtag;
+	private List<String> subjectHashtag;
+	
+	
 }
