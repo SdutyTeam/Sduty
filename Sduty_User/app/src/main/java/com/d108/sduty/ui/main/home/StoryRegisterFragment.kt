@@ -1,7 +1,6 @@
 package com.d108.sduty.ui.main.home
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -12,14 +11,17 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
-import com.d108.sduty.common.KAKAO_JOIN
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
-import com.d108.sduty.ui.main.home.viewmodel.StoryViewModel
-import com.d108.sduty.ui.sign.LoginFragmentDirections
+import com.d108.sduty.model.dto.Story
+import com.d108.sduty.ui.main.home.viewmodel.HomeViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.UriPathUtil
 import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
@@ -29,10 +31,13 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 private const val TAG ="StoryRegisterFragment"
 class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private lateinit var binding: FragmentStoryRegisterBinding
-    private val viewModel: StoryViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by viewModels()
+    private val storyViewModel: StoryViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     // (공개 범위) 0 : 전체 공개, 1 : 팔로워만, 2 : 나만 보기
     private var disclosure = 0
-
+    private val args: StoryRegisterFragmentArgs by navArgs()
+    private var imageUrl: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,8 +72,15 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initView()
 
+        initView()
+        initViewModel()
+        if(args.storyImage != null){
+            viewModel.setStoryImage(args.storyImage)
+        }
+    }
+
+    private fun initViewModel() {
 
     }
 
@@ -84,10 +96,11 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     // mProfileUri = fileUri
                     binding.apply {
                         //imgStory.setImageURI(fileUri)
-                        val fileUriStr = fileUri.toString()
+                        imageUrl = UriPathUtil().getPath(requireContext(), fileUri)
+                        Log.d(TAG, "initView: ${imageUrl}")
                         findNavController().safeNavigate(
                             StoryRegisterFragmentDirections
-                                .actionStoryRegisterFragmentToStoryDecoFragment(fileUriStr)
+                                .actionStoryRegisterFragmentToStoryDecoFragment(fileUri.toString())
                         )
                     }
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -100,9 +113,6 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@StoryRegisterFragment
-
-
-
             // 공개 범위 설정 버튼 클릭 시, 팝업 메뉴 보이기
             btnDisclosure.setOnClickListener {
                 PopupMenu(requireContext(), it).apply {
@@ -124,8 +134,8 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 ImagePicker.with(requireActivity())
                     .crop(3f, 4f)	    //Crop image and let user choose aspect ratio.
                     .compress(1024)
-                    .createIntent { intent ->
-                        startForProfileImageResult.launch(intent)
+                    .createIntent {
+                        startForProfileImageResult.launch(it)
                     }
             }
             ivBack.setOnClickListener {
@@ -134,18 +144,17 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             ivRegisterStory.setOnClickListener {
                 // 게시물 정보 등록
                 // 등록할 때, 초기 화면으로 visibility 다시 세팅...
-                Log.d(TAG, "onViewCreated: ${viewModel.image.value}")
-                Log.d(TAG, "onViewCreated: ${binding.vm!!.image.value}")
-                viewModel.clearStoryImage()
-                vm = viewModel
-                navigateBack(requireActivity())
+                if(viewModel.bitmap.value == null){
+                    requireContext().showToast("사진을 등록해 주세요")
+                }else if(etWrite.text.isEmpty()) {
+                    requireContext().showToast("내용을 입력해 주세요")
+                }else{
+                    storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", etWrite.text.toString(), disclosure), viewModel.bitmap.value!!)
+                    findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToTimeLineFragment())
+                }
+//
             }
 
-            // 템플릿 적용한 이미지 변화 인식해 보여주기
-            viewModel.bitmap.observe(viewLifecycleOwner) { bitmap ->
-                // bitmap값
-                viewModel.setStoryImage()
-            }
         }
     }
 

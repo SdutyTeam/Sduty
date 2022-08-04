@@ -1,15 +1,28 @@
 package com.d108.sduty.ui.viewmodel
 
+import android.graphics.Bitmap
 import android.util.Log
+import androidx.core.graphics.createBitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Reply
+import com.d108.sduty.model.dto.Comment
+import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.model.dto.Story
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okio.BufferedSink
+import java.io.File
+import java.lang.Exception
 
 private const val TAG ="StoryViewModel"
 class StoryViewModel: ViewModel() {
@@ -18,7 +31,7 @@ class StoryViewModel: ViewModel() {
         get() = _storyList
     fun getStoryListValue(){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStoryList().let { 
+            Retrofit.storyApi.getStoryList().let {
                 if(it.isSuccessful && it.body() != null){
                     _storyList.postValue(it.body() as MutableList<Story>)
                 }else{
@@ -32,14 +45,26 @@ class StoryViewModel: ViewModel() {
     val toastMessage: LiveData<String>
         get() = _toastMessage
 
-    fun insertStory(story: Story){
+    fun insertStory(story: Story, bitmap: Bitmap){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.insertStory(story).let {
-                if (it.isSuccessful && it.body() != null) {
-                    _storyList.postValue(it.body() as MutableList<Story>)
-                }else{
-                    Log.d(TAG, "insertStory: ${it.code()}")
+            try {
+                val bitmapRequestBody = bitmap?.let {
+                    BitmapRequestBody(it)
                 }
+
+                var fileName = "story/" + System.currentTimeMillis().toString()+".png"
+                story.imageSource = fileName
+//                var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,bitmapRequestBody)
+                val json = Gson().toJson(story)
+                val storyBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
+                val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
+                Log.d(TAG, "insertStory: ${response.code()}")
+                if(response.isSuccessful && response.body() != null){
+                    _storyList.postValue(response.body() as MutableList<Story>)
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "insertStory: ${e.message}")
             }
         }
     }
@@ -200,7 +225,12 @@ class StoryViewModel: ViewModel() {
             }
         }
     }
-
+    inner class BitmapRequestBody(private val bitmap: Bitmap) : RequestBody() {
+        override fun contentType(): MediaType = "image/*".toMediaType()
+        override fun writeTo(sink: BufferedSink) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 99, sink.outputStream())
+        }
+    }
 
 
 

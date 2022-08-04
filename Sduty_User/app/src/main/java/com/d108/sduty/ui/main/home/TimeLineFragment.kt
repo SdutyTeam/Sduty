@@ -75,7 +75,7 @@ class TimeLineFragment : Fragment() {
             ivRegisterStory.setOnClickListener {
                 findNavController().safeNavigate(
                     TimeLineFragmentDirections
-                        .actionTimeLineFragmentToStoryRegisterFragment()
+                        .actionTimeLineFragmentToStoryRegisterFragment(null)
                 )
             }
             recyclerTimeline.apply {
