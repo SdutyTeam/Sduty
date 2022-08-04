@@ -67,11 +67,22 @@ public class TimelineServiceImpl implements TimelineService {
 		}
 		return tList;
 	}
+	
 
 	@Override
-	public List<Timeline> selectAllByUserSeqsWithTagOrderByRegtime() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Timeline> selectAllByUserSeqsWithTag(int userSeq, List<Integer> writerSeq, int jobSeq) {
+		List<Story> selectedOStory =  storyRepo.findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(writerSeq, jobSeq);
+		List<Timeline> tList = new ArrayList<>();
+		for(Story s : selectedOStory) {
+			Timeline t = new Timeline();
+			t.setProfile(getProfile(s.getWriterSeq()));
+			t.setStory(s);
+			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			tList.add(t);
+		}
+		return tList;
 	}
 	
 	public Timeline selectDetailTimeline(int storySeq) {
@@ -103,6 +114,8 @@ public class TimelineServiceImpl implements TimelineService {
 		}
 		return null;
 	}
+
+
 
 	
 }

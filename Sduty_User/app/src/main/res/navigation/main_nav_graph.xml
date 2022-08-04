@@ -99,6 +99,9 @@
         <action
             android:id="@+id/action_timeLineFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
+        <action
+            android:id="@+id/action_timeLineFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
@@ -279,4 +282,12 @@
         android:id="@+id/accessibilityFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.AccessibilityFragment"
         android:label="AccessibilityFragment" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.d108.sduty.ui.main.home.UserProfileFragment"
+        android:label="UserProfileFragment">
+        <argument
+            android:name="userSeq"
+            app:argType="integer"/>
+    </fragment>
 </navigation>

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.model.dto.Reply
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.model.dto.Timeline
@@ -226,6 +227,22 @@ class StoryViewModel: ViewModel() {
             }
         }
     }
+
+    private val _profile = MutableLiveData<Profile>()
+    val profile: LiveData<Profile>
+        get() = _profile
+    fun getProfileValue(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.profileApi.getProfileValue(userSeq).let {
+                if(it.isSuccessful && it.body() != null) {
+                    _profile.postValue(it.body() as Profile)
+                }else{
+                    Log.d(TAG, "getProfileValue: ${it.code()}")
+                }
+            }
+        }
+    }
+
     inner class BitmapRequestBody(private val bitmap: Bitmap) : RequestBody() {
         override fun contentType(): MediaType = "image/*".toMediaType()
         override fun writeTo(sink: BufferedSink) {
