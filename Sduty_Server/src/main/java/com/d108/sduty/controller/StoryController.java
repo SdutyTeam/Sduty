@@ -76,7 +76,7 @@ public class StoryController {
 	@Autowired
 	private TimelineService timelineService;
 	
-	private final String FILE_STORY_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/story/";
+	private final String FILE_STORY_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/";
 	private final String FILE_PROFILE_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/profile/";
 	private final String FILE_THUMB_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/thumb/";
 //	private final String FILE_URL = "C:\\SSAFY\\Sduty\\Sduty_Server\\src\\main\\resources\\image\\";
@@ -255,7 +255,7 @@ public class StoryController {
 //		System.out.println(mpImage.getOriginalFilename());
 		mpImage.transferTo(fileImage);
 		
-		File thumbnailFile = new File(FILE_STORY_URL);
+		File thumbnailFile = new File(FILE_STORY_URL+"/story/");
 		Thumbnails.of(fileImage)
 		.size(360, 480)
 		.toFiles(thumbnailFile, Rename.PREFIX_HYPHEN_THUMBNAIL);
