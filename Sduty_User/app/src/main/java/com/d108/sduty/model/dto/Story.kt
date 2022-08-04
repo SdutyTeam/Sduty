@@ -7,7 +7,7 @@ data class Story(
     var writerSeq: Int,
     var imageSource: String,
     var thumbnail: String,
-    var content: String,
+    var contents: String,
     var regtime: Date?,
     var storyPublic: Int,
     var storyWarning: Int,
@@ -16,7 +16,7 @@ data class Story(
             this(0,0,",",",","",null,0,0)
     constructor(seq: Int):
             this(seq,0,"","","",null, 0, 0)
-    constructor(writerSeq: Int, imageSource: String, content: String, storyPublic: Int): this(
-        0, writerSeq, imageSource, "", content, null, storyPublic, 0)
+    constructor(writerSeq: Int, imageSource: String, contents: String, storyPublic: Int): this(
+        0, writerSeq, imageSource, "", contents, null, storyPublic, 0)
 
 }

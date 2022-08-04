@@ -83,16 +83,13 @@ public class StoryController {
 	
 	
 
-//	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
-//	@GetMapping("/all/{userSeq}")
-//	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq) throws Exception {
-//		List<Timeline> selectedTimeline = timelineService.selectAll();
-//		List<Story> selectedStory = storyService.findAll();
-//		if(selectedStory != null)
-//			return new ResponseEntity<List<Story>>(selectedStory, HttpStatus.OK);
-//			return new ResponseEntity<List<Timeline>>(timelineService.selectAll(userSeq), HttpStatus.OK);
-//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-//	}
+	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
+	@GetMapping("/all/{userSeq}")
+	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq) throws Exception {
+		List<Timeline> selectedTimeline = timelineService.selectAllTimelines(userSeq);
+		return new ResponseEntity<List<Timeline>>(selectedTimeline, HttpStatus.OK);
+
+	}
 	
 	@ApiOperation(value = "유저별로 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/user/{userSeq}")

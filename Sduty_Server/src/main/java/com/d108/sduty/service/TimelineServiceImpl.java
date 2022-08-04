@@ -35,6 +35,22 @@ public class TimelineServiceImpl implements TimelineService {
 	
 	@Autowired
 	private ScrapRepo scrapRepo;
+	
+	@Override
+	public List<Timeline> selectAllTimelines(int userSeq){
+		List<Story> storyList = storyRepo.findAllByOrderByRegtimeDesc();
+		List<Timeline> timelineList = new ArrayList<Timeline>();
+		for(Story s : storyList) {
+			Timeline t = new Timeline();
+			t.setProfile(getProfile(s.getWriterSeq()));
+			t.setStory(s);
+			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			timelineList.add(t);
+		}
+		return timelineList;
+	}
 
 	@Override
 	public List<Timeline> selectAllByUserSeqsOrderByRegtime(int userSeq, List<Integer> writerSeq) {

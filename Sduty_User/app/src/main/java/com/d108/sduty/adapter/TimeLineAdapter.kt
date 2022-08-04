@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ItemTimelineBinding
 import com.d108.sduty.model.dto.Story
+import com.d108.sduty.model.dto.Timeline
 
 class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdapter.ViewHolder>() {
-    var list = mutableListOf<Story>()
+    var list = mutableListOf<Timeline>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -18,6 +19,7 @@ class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdap
     inner class ViewHolder(val binding: ItemTimelineBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(){
             binding.apply {
+                data = list[adapterPosition]
                 ivFavorite.setOnClickListener {
                     onClickTimelineItem.onFavoriteClicked(it, adapterPosition)
                 }

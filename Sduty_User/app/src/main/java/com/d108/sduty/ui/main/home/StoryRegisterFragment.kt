@@ -150,9 +150,9 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     requireContext().showToast("내용을 입력해 주세요")
                 }else{
                     storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", etWrite.text.toString(), disclosure), viewModel.bitmap.value!!)
+                    requireContext().showToast("스토리가 등록 되었습니다")
                     findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToTimeLineFragment())
                 }
-//
             }
 
         }

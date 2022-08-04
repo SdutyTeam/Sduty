@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Reply
 import com.d108.sduty.model.dto.Story
+import com.d108.sduty.model.dto.Timeline
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,11 +25,15 @@ class StoryViewModel: ViewModel() {
     private val _storyList = MutableLiveData<MutableList<Story>>()
     val storyList: LiveData<MutableList<Story>>
         get() = _storyList
-    fun getStoryListValue(){
+
+    private val _timelineList = MutableLiveData<MutableList<Timeline>>()
+    val timelineList: LiveData<MutableList<Timeline>>
+        get() = _timelineList
+    fun getStoryListValue(userSeq: Int){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStoryList().let {
+            Retrofit.storyApi.getStoryList(userSeq).let {
                 if(it.isSuccessful && it.body() != null){
-                    _storyList.postValue(it.body() as MutableList<Story>)
+                    _timelineList.postValue(it.body() as MutableList<Timeline>)
                 }else{
                     Log.d(TAG, "getStoryListValue: ${it.code()}")
                 }
@@ -42,6 +47,7 @@ class StoryViewModel: ViewModel() {
 
     fun insertStory(story: Story, bitmap: Bitmap){
         viewModelScope.launch(Dispatchers.IO){
+            Log.d(TAG, "insertStory: ${story}")
             try {
                 val bitmapRequestBody = bitmap?.let {
                     BitmapRequestBody(it)

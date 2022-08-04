@@ -43,11 +43,6 @@ class TimeLineFragment : Fragment() {
         initViewModel()
         initView()
 
-        timeLineAdapter.list.add(Story())
-        timeLineAdapter.list.add(Story())
-        timeLineAdapter.list.add(Story())
-        timeLineAdapter.list.add(Story())
-        timeLineAdapter.list.add(Story())
     }
 
     private fun initView(){
@@ -87,9 +82,10 @@ class TimeLineFragment : Fragment() {
     }
 
     private fun initViewModel(){
-        storyViewModel.storyList.observe(viewLifecycleOwner){
+        storyViewModel.timelineList.observe(viewLifecycleOwner){
             timeLineAdapter.list = it
+            Log.d(TAG, "initViewModel: ${it}")
         }
-        storyViewModel.getStoryListValue()
+        storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
     }
 }

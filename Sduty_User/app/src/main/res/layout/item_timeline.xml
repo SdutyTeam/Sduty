@@ -5,7 +5,7 @@
     <data>
         <variable
             name="data"
-            type="com.d108.sduty.model.dto.Story" />
+            type="com.d108.sduty.model.dto.Timeline" />
     </data>
 
 
@@ -25,14 +25,14 @@
                 android:layout_height="30dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/img_profile_sample"
+                loadImage="@{data.profile.image}"
                 android:layout_marginVertical="16dp" />
 
             <TextView
                 android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="testuser"
+                android:text="@{data.profile.nickname}"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp"
@@ -57,7 +57,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginVertical="16dp"
-                android:src="@drawable/empty_image"
+                loadImage="@{data.story.imageSource}"
                 android:background="@color/indigo_50"
                 />
 
@@ -96,7 +96,7 @@
                 android:id="@+id/tv_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="@{data.cntReply}"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginStart="4dp"
@@ -117,7 +117,7 @@
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="테스트 글 내용 입니다."
+                android:text="@{data.story.contents}"
                 android:textSize="16sp"
                 android:layout_marginVertical="16dp"
                 app:layout_constraintTop_toBottomOf="@id/iv_favorite" />

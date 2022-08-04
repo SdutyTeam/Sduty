@@ -10,8 +10,8 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface StoryApi {
-    @GET("/story")
-    suspend fun getStoryList(): Response<List<Timeline>>
+    @GET("/story/all/{userSeq}")
+    suspend fun getStoryList(@Path("userSeq")userSeq: Int): Response<List<Timeline>>
 
     @Multipart
     @POST("/story")
