@@ -61,15 +61,13 @@ class StudySearchFragment : Fragment() {
         binding.studySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    Log.d(TAG, "onQueryTextSubmit: ${query}")
-                    studySearchViewModel.getStudySearchList(query)
-                }
-
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    studySearchViewModel.getStudySearchList(newText)
+                }
                 return true
             }
 

@@ -67,9 +67,6 @@ class StudyListFragment : Fragment(){
         studyListViewModel.getStudyList()
 
         binding.apply {
-
-
-
             spinnerCategoryFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -78,11 +75,8 @@ class StudyListFragment : Fragment(){
                     id: Long
                 ) {
                     category = spinnerCategoryFilter.selectedItem.toString()
-                    if(category == "전체"){
-                        studyListViewModel.getStudyList()
-                    } else{
-                        studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
-                    }
+                    Log.d(TAG, "onItemSelected: ${category}")
+                    studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
