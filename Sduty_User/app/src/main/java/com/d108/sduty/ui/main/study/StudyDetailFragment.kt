@@ -23,7 +23,7 @@ class StudyDetailFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentStudyDetailBinding
     private val studyDetailViewModel: StudyDetailViewModel by viewModels()
-    //private val args: StudyDetailFragmentArgs by navArgs()
+    private val args: StudyDetailFragmentArgs by navArgs()
 
 
     override fun onAttach(context: Context) {
@@ -43,7 +43,8 @@ class StudyDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Log.d(TAG, "onViewCreated: ${args}")
+        studyDetailViewModel.getMyStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
+
         binding.apply {
 
 
