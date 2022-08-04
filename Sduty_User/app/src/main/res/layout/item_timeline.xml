@@ -32,12 +32,7 @@
                 android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-<<<<<<< HEAD
                 android:text="testuser"
-=======
-                android:text="사용자 별명"
-                tools:text="별명"
->>>>>>> feature/FE/register-story
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp"
@@ -48,21 +43,11 @@
             <ImageView
                 android:id="@+id/iv_menu"
                 android:layout_width="30dp"
-<<<<<<< HEAD
                 android:layout_height="30dp"
                 android:src="@drawable/ic_baseline_more_horiz_black_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/iv_profile"
                 app:layout_constraintBottom_toBottomOf="@id/iv_profile" />
-=======
-                android:layout_height="40dp"
-                android:src="@drawable/icon_more_vert"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/iv_profile"
-                app:layout_constraintBottom_toBottomOf="@id/iv_profile"
-                android:layout_marginHorizontal="15dp"
-                />
->>>>>>> feature/FE/register-story
 
             <ImageView
                 android:id="@+id/iv_timeline_content"
@@ -71,13 +56,8 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
                 android:layout_marginVertical="16dp"
                 android:src="@drawable/empty_image"
-=======
-                android:layout_marginVertical="10dp"
-                loadImage="@{data.imageSource}"
->>>>>>> feature/FE/register-story
                 android:background="@color/indigo_50"
                 />
 
@@ -137,11 +117,7 @@
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-<<<<<<< HEAD
                 android:text="테스트 글 내용 입니다."
-=======
-                android:text="글 내용"
->>>>>>> feature/FE/register-story
                 android:textSize="16sp"
                 android:layout_marginVertical="16dp"
                 app:layout_constraintTop_toBottomOf="@id/iv_favorite" />
