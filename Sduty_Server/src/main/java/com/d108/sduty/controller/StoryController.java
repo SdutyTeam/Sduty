@@ -233,6 +233,18 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@ApiOperation(value = "사용자 시퀀스로 스크랩한 자료 조회 : UserSeq > List<Story> 리턴", response = Story.class)
+	@GetMapping("/scrap/{userSeq}")
+	public ResponseEntity<?> selectScrapByUserSeq(@PathVariable int userSeq) throws Exception {
+		List<Integer> listStorySeqs = scrapService.selectScrapSeqs(userSeq);
+		List<Story> storyList = storyService.selectStoryInSeq(listStorySeqs);
+		System.out.println(listStorySeqs);
+		if(storyList != null) {
+			return new ResponseEntity<List<Story>>(storyList, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
 	public MultipartFile makeThumbnail(MultipartFile mpImage) throws Exception {
 		//Make Thumbnail
 		//Convert Multipartfile to file

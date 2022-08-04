@@ -39,8 +39,8 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, PageRequest pageRequest) {
-		return optConverter(storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs, pageRequest));
+	public List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs) {
+		return storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs);
 	}
 
 	@Override
@@ -55,6 +55,11 @@ public class StoryServiceImpl implements StoryService {
 				sList.add(l.get());
 		}
 		return sList;
+	}
+
+	@Override
+	public List<Story> selectStoryInSeq(List<Integer> storySeqs) {
+		return storyRepo.findAllBySeqInOrderByRegtimeDesc(storySeqs);
 	}
 
 }
