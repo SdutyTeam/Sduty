@@ -1,15 +1,14 @@
 package com.d108.sduty.model.api
 
-import com.d108.sduty.model.dto.Comment
-import com.d108.sduty.model.dto.Report
+import com.d108.sduty.model.dto.Reply
 import com.d108.sduty.model.dto.Story
-import com.d108.sduty.utils.Resource
+import com.d108.sduty.model.dto.Timeline
 import retrofit2.Response
 import retrofit2.http.*
 
 interface StoryApi {
     @GET("/story")
-    suspend fun getStoryList(): Response<List<Story>>
+    suspend fun getStoryList(): Response<List<Timeline>>
 
     @POST("/story")
     suspend fun insertStory(@Body story: Story): Response<List<Story>>
@@ -18,7 +17,7 @@ interface StoryApi {
     suspend fun updateStory(@Body story: Story): Response<List<Story>>
 
     @GET("/story/{story_seq")
-    suspend fun getStudyDetail(@Path("story_seq") storySeq: Int): Response<Story>
+    suspend fun getStudyDetail(@Path("story_seq") storySeq: Int): Response<Timeline>
 
     @GET("/story/writer/{user_seq}")
     suspend fun getUserStoryList(@Path("user_seq")userSeq: Int): Response<List<Story>>
@@ -36,16 +35,16 @@ interface StoryApi {
     suspend fun deleteStory(@Path("story_seq")storySeq: Int): Response<List<Story>>
 
     @GET("/story/{story_seq}/reply")
-    suspend fun getReplyList(@Path("story_seq")storySeq: Int): Response<List<Comment>>
+    suspend fun getReplyList(@Path("story_seq")storySeq: Int): Response<List<Reply>>
 
     @POST("/story/{story_seq}/reply")
-    suspend fun insertComment(@Body comment: Comment, @Path("story_seq")storySeq: Int): Response<List<Comment>>
+    suspend fun insertComment(@Body comment: Reply, @Path("story_seq")storySeq: Int): Response<List<Reply>>
 
     @PUT("/story/{story_seq}/reply")
-    suspend fun updateComment(@Body comment: Comment, @Path("story_seq")storySeq: Int): Response<List<Comment>>
+    suspend fun updateComment(@Body comment: Reply, @Path("story_seq")storySeq: Int): Response<List<Reply>>
 
     @DELETE("/story/{story_seq}/reply/{reply_seq}")
-    suspend fun deleteComment(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<List<Comment>>
+    suspend fun deleteComment(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<List<Reply>>
 
     @PUT("/story/like/{user_seq}")
     suspend fun likeStory(@Path("user_seq")userSeq: Int, @Body story: Story): Response<Void>

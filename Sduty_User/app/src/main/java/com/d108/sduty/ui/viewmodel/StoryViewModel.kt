@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.Comment
+import com.d108.sduty.model.dto.Reply
 import com.d108.sduty.model.dto.Story
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +18,13 @@ class StoryViewModel: ViewModel() {
         get() = _storyList
     fun getStoryListValue(){
         viewModelScope.launch(Dispatchers.IO){
-
+            Retrofit.storyApi.getStoryList().let { 
+                if(it.isSuccessful && it.body() != null){
+                    _storyList.postValue(it.body() as MutableList<Story>)
+                }else{
+                    Log.d(TAG, "getStoryListValue: ${it.code()}")
+                }
+            }
         }
     }
 
@@ -114,14 +120,14 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _commentList = MutableLiveData<MutableList<Comment>>()
-    val commentList: LiveData<MutableList<Comment>>
+    private val _commentList = MutableLiveData<MutableList<Reply>>()
+    val commentList: LiveData<MutableList<Reply>>
         get() = _commentList
     fun getCommentListValue(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.getReplyList(storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "getCommentListValue: ${it.code()}")
                 }
@@ -129,11 +135,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun insertComment(comment: Comment){
+    fun insertComment(comment: Reply){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.insertComment(comment, comment.storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "insertComment: ${it.code()}")
                 }
@@ -141,11 +147,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun updateComment(comment: Comment){
+    fun updateComment(comment: Reply){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.updateComment(comment, comment.storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "updateComment: ${it.code()}")
                 }
@@ -153,11 +159,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun deleteComment(comment: Comment){
+    fun deleteComment(comment: Reply){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.deleteComment(comment.storySeq, comment.seq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "updateComment: ${it.code()}")
                 }
