@@ -57,6 +57,7 @@ class MyPageFragment : Fragment() {
             storyAdapter.list = it
         }
         viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
+        viewModel.getProfileValue(mainViewModel.user.value!!.seq)
     }
 
     private fun initView(){
@@ -64,7 +65,7 @@ class MyPageFragment : Fragment() {
         storyAdapter = StoryAdapter(requireActivity())
         binding.apply {
             lifecycleOwner = this@MyPageFragment
-            vm = mainViewModel
+            vm = viewModel
             recylerStory.apply {
                 adapter = storyAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)
