@@ -79,6 +79,7 @@ public class StoryController {
 	private final String FILE_STORY_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/story/";
 	private final String FILE_PROFILE_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/profile/";
 	private final String FILE_THUMB_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/thumb/";
+//	private final String FILE_URL = "C:\\SSAFY\\Sduty\\Sduty_Server\\src\\main\\resources\\image\\";
 	
 	
 
@@ -113,16 +114,18 @@ public class StoryController {
 	public ResponseEntity<?> insertProfile(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("story") String json) throws Exception {
 		Gson gson = new Gson();		
 		Story story = gson.fromJson(json, Story.class);
-		
+		System.out.println(story);
 		//Story Image Uploaded
 		String fileName = imageFile.getOriginalFilename();
 		story.setImageSource(fileName);
 		imageService.fileUpload(imageFile);
-		imageService.insertImage(new Image("0", fileName, FILE_STORY_URL));
+		//imageService.insertImage(new Image("0", fileName, FILE_STORY_URL)); 필요 없는 것 같아요.
 		
-//		MultipartFile mpfImage = makeThumbnail(imageFile);
-//		story.setThumbnail(mpfImage.getOriginalFilename());
-//		imageService.fileUpload(mpfImage);
+		//MultipartFile mpfImage = 
+		makeThumbnail(imageFile);
+		fileName = fileName.replace("/", "/thumbnail-");
+		story.setThumbnail(fileName);		
+		//imageService.fileUpload(mpfImage); - makeThumbnail()에서 저장.
 		
 		Story result = storyService.insertStory(story);
 		if(result != null) {
@@ -245,27 +248,16 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	public MultipartFile makeThumbnail(MultipartFile mpImage) throws Exception {
+	public void makeThumbnail(MultipartFile mpImage) throws Exception {
 		//Make Thumbnail
 		//Convert Multipartfile to file
-		File fileImage = new File(mpImage.getOriginalFilename());
+		File fileImage = new File(FILE_STORY_URL+mpImage.getOriginalFilename());
+//		System.out.println(mpImage.getOriginalFilename());
 		mpImage.transferTo(fileImage);
 		
-		//Thumbnail generation
-		BufferedImage bi = ImageIO.read(fileImage);
-		File thumbnailImage = Thumbnails.of(bi)
-        .size(360, 480)
-        .asFiles(Rename.PREFIX_HYPHEN_THUMBNAIL)
-        .get(0);
-		
-		FileItem fileItem = (FileItem) new DiskFileItem("mainFile", Files.probeContentType(thumbnailImage.toPath()), false, thumbnailImage.getName(), (int) thumbnailImage.length(), thumbnailImage.getParentFile());
-
-		try {
-		     IOUtils.copy(new FileInputStream(thumbnailImage), fileItem.getOutputStream());
-		} catch (IOException ex) {
-			return null;
-		}
-
-		return new CommonsMultipartFile(fileItem);
+		File thumbnailFile = new File(FILE_STORY_URL);
+		Thumbnails.of(fileImage)
+		.size(360, 480)
+		.toFiles(thumbnailFile, Rename.PREFIX_HYPHEN_THUMBNAIL);
 	}
 }
