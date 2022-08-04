@@ -181,10 +181,9 @@
             android:id="@+id/action_studyDetailFragment_to_studySettingFragment"
             app:destination="@+id/studySettingFragment"/>
 
-<!--        <argument-->
-<!--            android:name="studyInfo"-->
-<!--            app:argType="com.d108.sduty.model.dto.Study"-->
-<!--            app:nullable="true" />-->
+        <argument
+            android:name="studySeq"
+            app:argType="integer"/>
 
     </fragment>
     <fragment
@@ -208,6 +207,9 @@
             android:name="type"
             app:argType="boolean"
             />
+        <action
+            android:id="@+id/action_studyRegistFragment_to_myStudyFragment"
+            app:destination="@id/myStudyFragment" />
     </fragment>
     <fragment
         android:id="@+id/studyListFragment"
