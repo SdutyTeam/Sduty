@@ -1,6 +1,7 @@
 package com.d108.sduty.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,9 +58,27 @@ public class TimelineServiceImpl implements TimelineService {
 		return null;
 	}
 	
-//	public Timeline selectDetailTimeline(int userSeq, int storySeq) {
-//		
-//	}
+	public Timeline selectDetailTimeline(int storySeq) {
+		Optional<Story> selectedOStory = storyRepo.findById(storySeq);
+		if(selectedOStory.isPresent()) {
+			Timeline t =  new Timeline();
+			Story s = selectedOStory.get();
+			int userSeq = s.getWriterSeq();
+			t.setProfile(getProfile(userSeq));
+			t.setStory(s);
+			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
+			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
+			List<Reply> listReply = replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
+			for(Reply r : listReply) {
+				r.setProfile(profileRepo.findById((r.getUserSeq())).get());
+			}
+			t.setReplies(listReply);
+			return t;
+		}
+		
+		
+		return null;
+	}
 	
 	public Profile getProfile(int userSeq) {
 		Optional<Profile> OProfile = profileRepo.findById(userSeq);
@@ -69,4 +88,5 @@ public class TimelineServiceImpl implements TimelineService {
 		return null;
 	}
 
+	
 }
