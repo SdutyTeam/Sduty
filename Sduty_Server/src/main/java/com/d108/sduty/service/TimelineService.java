@@ -7,4 +7,6 @@ import com.d108.sduty.dto.Timeline;
 public interface TimelineService {
 	public List<Timeline> selectAllByUserSeqsOrderByRegtime(int userSeq, List<Integer> writerSeq);
 	public List<Timeline> selectAllByUserSeqsWithTagOrderByRegtime();
+	public Timeline selectDetailTimeline(int storySeq);
+	List<Timeline> selectAllTimelines(int userSeq);
 }

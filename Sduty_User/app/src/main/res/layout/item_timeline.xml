@@ -1,63 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="data"
+            type="com.d108.sduty.model.dto.Timeline" />
+    </data>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        >
-
-        <LinearLayout
-            android:id="@+id/divider_1"
-            style="@style/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="12dp"
-            >
+            android:layout_marginHorizontal="16dp"
+            android:paddingBottom="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_profile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="2dp"
-                android:src="@drawable/icon_avatar"
-                android:layout_marginVertical="12dp"
-                />
+                loadImage="@{data.profile.image}"
+                android:layout_marginVertical="16dp" />
 
             <TextView
                 android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="테스트 사용자"
+                android:text="@{data.profile.nickname}"
                 android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
                 app:layout_constraintTop_toTopOf="@id/iv_profile"
                 app:layout_constraintBottom_toBottomOf="@id/iv_profile"
-                app:layout_constraintStart_toEndOf="@id/iv_profile"
-                android:layout_marginHorizontal="15dp"/>
+                app:layout_constraintStart_toEndOf="@id/iv_profile"/>
 
             <ImageView
                 android:id="@+id/iv_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/icon_more_vert"
+                android:src="@drawable/ic_baseline_more_horiz_black_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/iv_profile"
-                app:layout_constraintBottom_toBottomOf="@id/iv_profile"
-                android:layout_marginHorizontal="20dp"
-                />
+                app:layout_constraintBottom_toBottomOf="@id/iv_profile" />
 
             <ImageView
                 android:id="@+id/iv_timeline_content"
@@ -66,8 +56,8 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginVertical="10dp"
-                android:src="@drawable/empty_image"
+                android:layout_marginVertical="16dp"
+                loadImage="@{data.story.imageSource}"
                 android:background="@color/indigo_50"
                 />
 
@@ -75,46 +65,84 @@
                 android:id="@+id/iv_favorite"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_baseline_favorite_border_24"
+                android:src="@drawable/ic_baseline_thumb_up_off_alt_black_24"
                 app:layout_constraintTop_toBottomOf="@id/iv_timeline_content"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginVertical="8dp"/>
+                android:layout_marginVertical="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="1dp"
+                app:layout_constraintTop_toTopOf="@id/iv_favorite"
+                app:layout_constraintBottom_toBottomOf="@id/iv_favorite"
+                app:layout_constraintStart_toEndOf="@id/iv_favorite"/>
+
+            <ImageView
+                android:id="@+id/iv_comment"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_baseline_comment_black_24"
+                app:layout_constraintTop_toTopOf="@id/tv_favorite"
+                app:layout_constraintBottom_toBottomOf="@id/tv_favorite"
+                app:layout_constraintStart_toEndOf="@id/tv_favorite"
+                android:layout_marginStart="12dp"/>
+
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{data.cntReply +``}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"
+                app:layout_constraintTop_toTopOf="@id/iv_comment"
+                app:layout_constraintBottom_toBottomOf="@id/iv_comment"
+                app:layout_constraintStart_toEndOf="@id/iv_comment"/>
 
             <ImageView
                 android:id="@+id/iv_scrap"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_bookmark"
+                android:src="@drawable/ic_baseline_bookmark_border_black_24"
                 app:layout_constraintTop_toTopOf="@id/iv_favorite"
-                app:layout_constraintTop_toBottomOf="@id/iv_favorite"
+                app:layout_constraintBottom_toBottomOf="@id/iv_favorite"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="테스트 글 내용 입니다.\n안녕하세요."
+                android:text="@{data.story.contents}"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/iv_favorite"
-                android:layout_marginVertical="10dp"
-                android:background="@drawable/textview_regular"/>
+                android:layout_marginVertical="16dp"
+                app:layout_constraintTop_toBottomOf="@id/iv_favorite" />
 
             <TextView
-                android:id="@+id/tv_reply"
+                android:id="@+id/tv_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="댓글 영역 입니다.\n안녕하세요."
+                android:text="#직업 #관심분야1 #관심분야2"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/tv_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@drawable/textview_regular"/>
-
+                android:textColor="#5A83FF"
+                app:layout_constraintTop_toBottomOf="@id/tv_content" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+        <LinearLayout
+            android:id="@+id/divider_1"
+            style="@style/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

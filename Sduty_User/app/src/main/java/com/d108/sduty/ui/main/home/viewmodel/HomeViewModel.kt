@@ -8,26 +8,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-private const val TAG = "StoryViewModel"
-class StoryViewModel: ViewModel() {
-    private val _bitmap = MutableLiveData<Bitmap>()
-    val bitmap: LiveData<Bitmap>
-        get() = _bitmap
-
-    fun setBitmap(bitmap: Bitmap?) {
-        _bitmap.postValue(bitmap!!)
-        // Log.d(TAG, "setBitmap: $bitmap")
-    }
-
+private const val TAG = "HomeViewModel"
+class HomeViewModel: ViewModel() {
     private val _image = MutableLiveData<Drawable?>(null)
     val image: LiveData<Drawable?>
         get() = _image
-    fun setStoryImage(){
-        _image.postValue(BitmapDrawable(bitmap.value))
+
+    private val _bitmap = MutableLiveData<Bitmap?>()
+    val bitmap : LiveData<Bitmap?>
+        get() = _bitmap
+    fun setStoryImage(bitmap: Bitmap?){
+        _bitmap.postValue(bitmap)
+        _image.postValue(BitmapDrawable(bitmap))
     }
     fun clearStoryImage(){
         _image.value = null
-        Log.d(TAG, "clearStoryImage: ${image.value}")
-
     }
 }
+

@@ -1,24 +1,43 @@
 package com.d108.sduty.ui.viewmodel
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.Comment
+import com.d108.sduty.model.dto.Reply
 import com.d108.sduty.model.dto.Story
+import com.d108.sduty.model.dto.Timeline
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okio.BufferedSink
 
 private const val TAG ="StoryViewModel"
 class StoryViewModel: ViewModel() {
     private val _storyList = MutableLiveData<MutableList<Story>>()
     val storyList: LiveData<MutableList<Story>>
         get() = _storyList
-    fun getStoryListValue(){
-        viewModelScope.launch(Dispatchers.IO){
 
+    private val _timelineList = MutableLiveData<MutableList<Timeline>>()
+    val timelineList: LiveData<MutableList<Timeline>>
+        get() = _timelineList
+    fun getStoryListValue(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getStoryList(userSeq).let {
+                if(it.isSuccessful && it.body() != null){
+                    _timelineList.postValue(it.body() as MutableList<Timeline>)
+                }else{
+                    Log.d(TAG, "getStoryListValue: ${it.code()}")
+                }
+            }
         }
     }
 
@@ -26,14 +45,27 @@ class StoryViewModel: ViewModel() {
     val toastMessage: LiveData<String>
         get() = _toastMessage
 
-    fun insertStory(story: Story){
+    fun insertStory(story: Story, bitmap: Bitmap){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.insertStory(story).let {
-                if (it.isSuccessful && it.body() != null) {
-                    _storyList.postValue(it.body() as MutableList<Story>)
-                }else{
-                    Log.d(TAG, "insertStory: ${it.code()}")
+            Log.d(TAG, "insertStory: ${story}")
+            try {
+                val bitmapRequestBody = bitmap?.let {
+                    BitmapRequestBody(it)
                 }
+
+                var fileName = "story/" + System.currentTimeMillis().toString()+".png"
+                story.imageSource = fileName
+//                var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,bitmapRequestBody)
+                val json = Gson().toJson(story)
+                val storyBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
+                val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
+                Log.d(TAG, "insertStory: ${response.code()}")
+                if(response.isSuccessful && response.body() != null){
+                    _storyList.postValue(response.body() as MutableList<Story>)
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "insertStory: ${e.message}")
             }
         }
     }
@@ -114,14 +146,14 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _commentList = MutableLiveData<MutableList<Comment>>()
-    val commentList: LiveData<MutableList<Comment>>
+    private val _commentList = MutableLiveData<MutableList<Reply>>()
+    val commentList: LiveData<MutableList<Reply>>
         get() = _commentList
     fun getCommentListValue(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.getReplyList(storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "getCommentListValue: ${it.code()}")
                 }
@@ -129,11 +161,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun insertComment(comment: Comment){
+    fun insertComment(comment: Reply){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.insertComment(comment, comment.storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "insertComment: ${it.code()}")
                 }
@@ -141,11 +173,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun updateComment(comment: Comment){
+    fun updateComment(comment: Reply){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.updateComment(comment, comment.storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "updateComment: ${it.code()}")
                 }
@@ -153,11 +185,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun deleteComment(comment: Comment){
+    fun deleteComment(comment: Reply){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.deleteComment(comment.storySeq, comment.seq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Comment>)
+                    _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{
                     Log.d(TAG, "updateComment: ${it.code()}")
                 }
@@ -194,7 +226,12 @@ class StoryViewModel: ViewModel() {
             }
         }
     }
-
+    inner class BitmapRequestBody(private val bitmap: Bitmap) : RequestBody() {
+        override fun contentType(): MediaType = "image/*".toMediaType()
+        override fun writeTo(sink: BufferedSink) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 99, sink.outputStream())
+        }
+    }
 
 
 

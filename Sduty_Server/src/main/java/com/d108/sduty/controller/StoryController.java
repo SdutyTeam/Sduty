@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.d108.sduty.dto.Follow;
+import com.d108.sduty.dto.Image;
 import com.d108.sduty.dto.Likes;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Scrap;
@@ -73,16 +76,20 @@ public class StoryController {
 	@Autowired
 	private TimelineService timelineService;
 	
-//	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
-//	@GetMapping("/all/{userSeq}")
-//	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq) throws Exception {
-//		List<Timeline> selectedTimeline = timelineService.selectAll();
-//		List<Story> selectedStory = storyService.findAll();
-//		if(selectedStory != null)
-//			return new ResponseEntity<List<Story>>(selectedStory, HttpStatus.OK);
-//			return new ResponseEntity<List<Timeline>>(timelineService.selectAll(userSeq), HttpStatus.OK);
-//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-//	}
+	private final String FILE_STORY_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/";
+	private final String FILE_PROFILE_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/profile/";
+	private final String FILE_THUMB_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/thumb/";
+//	private final String FILE_URL = "C:\\SSAFY\\Sduty\\Sduty_Server\\src\\main\\resources\\image\\";
+	
+	
+
+	@ApiOperation(value = "전체 스토리 조회 : Void > Story", response = Story.class)
+	@GetMapping("/all/{userSeq}")
+	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq) throws Exception {
+		List<Timeline> selectedTimeline = timelineService.selectAllTimelines(userSeq);
+		return new ResponseEntity<List<Timeline>>(selectedTimeline, HttpStatus.OK);
+
+	}
 	
 	@ApiOperation(value = "유저별로 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/user/{userSeq}")
@@ -104,14 +111,18 @@ public class StoryController {
 	public ResponseEntity<?> insertProfile(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("story") String json) throws Exception {
 		Gson gson = new Gson();		
 		Story story = gson.fromJson(json, Story.class);
-		
+		System.out.println(story);
 		//Story Image Uploaded
-		story.setImageSource(imageFile.getOriginalFilename());
+		String fileName = imageFile.getOriginalFilename();
+		story.setImageSource(fileName);
 		imageService.fileUpload(imageFile);
+		//imageService.insertImage(new Image("0", fileName, FILE_STORY_URL)); 필요 없는 것 같아요.
 		
-		MultipartFile mpfImage = makeThumbnail(imageFile);
-		story.setThumbnail(mpfImage.getOriginalFilename());
-		imageService.fileUpload(mpfImage);
+		//MultipartFile mpfImage = 
+		makeThumbnail(imageFile);
+		fileName = fileName.replace("/", "/thumbnail-");
+		story.setThumbnail(fileName);		
+		//imageService.fileUpload(mpfImage); - makeThumbnail()에서 저장.
 		
 		Story result = storyService.insertStory(story);
 		if(result != null) {
@@ -123,9 +134,9 @@ public class StoryController {
 	@ApiOperation(value = "스토리 시퀀스로 상세 내용 조회 : Story > Story", response = Story.class)
 	@GetMapping("/{storySeq}")
 	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq) throws Exception {
-		Optional<Story> selectedOStory = storyService.findById(storySeq);
-		if(selectedOStory.isPresent())
-			return new ResponseEntity<Story>(selectedOStory.get(), HttpStatus.OK);
+		Timeline selectedTimeline = timelineService.selectDetailTimeline(storySeq);
+		if(selectedTimeline != null)
+			return new ResponseEntity<Timeline>(selectedTimeline, HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
@@ -222,27 +233,28 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	public MultipartFile makeThumbnail(MultipartFile mpImage) throws Exception {
+	@ApiOperation(value = "사용자 시퀀스로 스크랩한 자료 조회 : UserSeq > List<Story> 리턴", response = Story.class)
+	@GetMapping("/scrap/{userSeq}")
+	public ResponseEntity<?> selectScrapByUserSeq(@PathVariable int userSeq) throws Exception {
+		List<Integer> listStorySeqs = scrapService.selectScrapSeqs(userSeq);
+		List<Story> storyList = storyService.selectStoryInSeq(listStorySeqs);
+		System.out.println(listStorySeqs);
+		if(storyList != null) {
+			return new ResponseEntity<List<Story>>(storyList, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	public void makeThumbnail(MultipartFile mpImage) throws Exception {
 		//Make Thumbnail
 		//Convert Multipartfile to file
-		File fileImage = new File(mpImage.getOriginalFilename());
+		File fileImage = new File(FILE_STORY_URL+mpImage.getOriginalFilename());
+//		System.out.println(mpImage.getOriginalFilename());
 		mpImage.transferTo(fileImage);
 		
-		//Thumbnail generation
-		BufferedImage bi = ImageIO.read(fileImage);
-		File thumbnailImage = Thumbnails.of(bi)
-        .size(360, 480)
-        .asFiles(Rename.PREFIX_HYPHEN_THUMBNAIL)
-        .get(0);
-		
-		FileItem fileItem = (FileItem) new DiskFileItem("mainFile", Files.probeContentType(thumbnailImage.toPath()), false, thumbnailImage.getName(), (int) thumbnailImage.length(), thumbnailImage.getParentFile());
-
-		try {
-		     IOUtils.copy(new FileInputStream(thumbnailImage), fileItem.getOutputStream());
-		} catch (IOException ex) {
-			return null;
-		}
-
-		return new CommonsMultipartFile(fileItem);
+		File thumbnailFile = new File(FILE_STORY_URL+"/story/");
+		Thumbnails.of(fileImage)
+		.size(360, 480)
+		.toFiles(thumbnailFile, Rename.PREFIX_HYPHEN_THUMBNAIL);
 	}
 }
