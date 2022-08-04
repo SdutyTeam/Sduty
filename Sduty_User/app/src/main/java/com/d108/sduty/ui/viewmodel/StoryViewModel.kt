@@ -2,15 +2,12 @@ package com.d108.sduty.ui.viewmodel
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.core.graphics.createBitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Reply
-import com.d108.sduty.model.dto.Comment
-import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.model.dto.Story
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +18,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okio.BufferedSink
-import java.io.File
-import java.lang.Exception
 
 private const val TAG ="StoryViewModel"
 class StoryViewModel: ViewModel() {
