@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.StoryInterest;
+import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.repo.ReplyRepo;
 import com.d108.sduty.repo.StoryInterestHashtagRepo;
 import com.d108.sduty.repo.StoryRepo;
@@ -27,6 +28,9 @@ public class StoryServiceImpl implements StoryService {
 	
 	@Autowired
 	private StoryInterestHashtagRepo storyInterestHashtagRepo;
+	
+	@Autowired
+	private ProfileRepo profileRepo;
 	
 	@Override
 	public Story insertStory(Story story) {
@@ -121,6 +125,10 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	public List<Reply> selectReplyByStorySeq(int storySeq) {
-		return replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
+		List<Reply> list = replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
+		for(Reply item: list) {
+			item.setProfile(profileRepo.findById(item.getUserSeq()).get());
+		}
+		return list;
 	}
 }

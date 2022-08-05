@@ -145,16 +145,16 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _commentList = MutableLiveData<MutableList<Reply>>()
-    val commentList: LiveData<MutableList<Reply>>
-        get() = _commentList
-    fun getCommentListValue(storySeq: Int){
+    private val _replyList = MutableLiveData<MutableList<Reply>>()
+    val replyList: LiveData<MutableList<Reply>>
+        get() = _replyList
+    fun getReplyListValue(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.getReplyList(storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "getCommentListValue: ${it.code()}")
+                    Log.d(TAG, "getReplyListValue: ${it.code()}")
                 }
             }
         }
@@ -164,33 +164,33 @@ class StoryViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.insertReply(reply).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "insertComment: ${it.code()}")
+                    Log.d(TAG, "insertReply: ${it.code()}")
                 }
             }
         }
     }
 
-    fun updateComment(comment: Reply){
+    fun updateReply(reply: Reply){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.updateComment(comment, comment.storySeq).let {
+            Retrofit.storyApi.updateReply(reply, reply.storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "updateComment: ${it.code()}")
+                    Log.d(TAG, "updateReply: ${it.code()}")
                 }
             }
         }
     }
 
-    fun deleteComment(comment: Reply){
+    fun deleteReply(reply: Reply){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.deleteComment(comment.storySeq, comment.seq).let {
+            Retrofit.storyApi.deleteReply(reply.storySeq, reply.seq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "updateComment: ${it.code()}")
+                    Log.d(TAG, "updateReply: ${it.code()}")
                 }
             }
         }

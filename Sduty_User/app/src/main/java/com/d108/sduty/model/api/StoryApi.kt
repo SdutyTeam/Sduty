@@ -42,13 +42,13 @@ interface StoryApi {
     suspend fun getReplyList(@Path("story_seq")storySeq: Int): Response<List<Reply>>
 
     @POST("/story/reply")
-    suspend fun insertReply(@Body comment: Reply): Response<MutableList<Reply>>
+    suspend fun insertReply(@Body reply: Reply): Response<MutableList<Reply>>
 
     @PUT("/story/{story_seq}/reply")
-    suspend fun updateComment(@Body comment: Reply, @Path("story_seq")storySeq: Int): Response<List<Reply>>
+    suspend fun updateReply(@Body reply: Reply, @Path("story_seq")storySeq: Int): Response<MutableList<Reply>>
 
     @DELETE("/story/{story_seq}/reply/{reply_seq}")
-    suspend fun deleteComment(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<List<Reply>>
+    suspend fun deleteReply(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
 
     @PUT("/story/like/{user_seq}")
     suspend fun likeStory(@Path("user_seq")userSeq: Int, @Body story: Story): Response<Void>

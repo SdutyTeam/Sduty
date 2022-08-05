@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.d108.sduty.adapter.ReplyAdapter
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
 import com.d108.sduty.model.dto.Reply
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -22,6 +24,8 @@ class StoryDetailFragment : Fragment() {
     private val viewModel: StoryViewModel by viewModels()
     private val args: StoryDetailFragmentArgs by navArgs()
     private val mainViewModel: MainViewModel by activityViewModels()
+
+    private lateinit var replyAdapter: ReplyAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,11 +55,15 @@ class StoryDetailFragment : Fragment() {
     private fun initViewModel() {
         viewModel.apply {
             getTimelineValue(args.seq)
+            timeLine.observe(viewLifecycleOwner){
+                replyAdapter.list = timeLine.value!!.replies
+            }
 
         }
     }
 
     private fun initView(){
+        replyAdapter = ReplyAdapter()
         binding.apply {
             vm = viewModel
             ivRegisterReply.setOnClickListener {
@@ -65,6 +73,11 @@ class StoryDetailFragment : Fragment() {
                 }
                 viewModel.insertReply(Reply(args.seq, mainViewModel.user.value!!.seq, etReply.text.toString()))
             }
+            recyclerReply.apply {
+                adapter = replyAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
+
         }
     }
 
