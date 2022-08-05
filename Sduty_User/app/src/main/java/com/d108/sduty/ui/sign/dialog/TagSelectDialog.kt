@@ -36,6 +36,8 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
     private var selectedJobList = mutableListOf<JobHashtag>()
     private var selectedInterestList = mutableListOf<InterestHashtag>()
 
+    lateinit var onClickConfirm: OnClickConfirm
+
     private val tagViewModel: TagViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +75,11 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
     }
 
     private fun initView(){
+        binding.apply {
+            vm = tagViewModel
+            lifecycleOwner = this@TagSelectDialog
+        }
+
         interestAdapter = TagAdapter(INTEREST_TAG)
         interestAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
             override fun onClick(view: View, position: Int) {
@@ -80,7 +87,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
                 interestList.removeAt(position)
                 interestAdapter.interestList = interestList
                 selectedInterestAdapter.interestList = selectedInterestList
-                Log.d(TAG, "onClick: interest ${position}")
+                tagViewModel.setInterestVisible(selectedInterestList.size)
             }
         }
 
@@ -91,7 +98,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
                 jobList.removeAt(position)
                 jobAdapter.jobList = jobList
                 selectedJobAdapter.jobList = selectedJobList
-                Log.d(TAG, "onClick: job ${position}")
+                tagViewModel.setJobVisible()
             }
         }
 
@@ -102,7 +109,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
                 selectedInterestList.removeAt(position)
                 interestAdapter.interestList = interestList
                 selectedInterestAdapter.interestList = selectedInterestList
-                Log.d(TAG, "onClick: interest ${position}")
+                tagViewModel.setInterestVisible(selectedInterestList.size)
             }
         }
 
@@ -113,7 +120,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
                 selectedJobList.removeAt(position)
                 jobAdapter.jobList = jobList
                 selectedJobAdapter.jobList = selectedJobList
-                Log.d(TAG, "onClick: job ${position}")
+                tagViewModel.setJobVisible()
             }
         }
         binding.apply {
@@ -131,9 +138,17 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
             }
             recyclerSelectedJob.apply {
                 adapter = selectedJobAdapter
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                layoutManager = GridLayoutManager(requireContext(), 1)
+            }
+            btnConfirm.setOnClickListener {
+                onClickConfirm.onClick(selectedJobList, selectedInterestList)
+                dismiss()
             }
         }
+    }
+
+    interface OnClickConfirm{
+        fun onClick(selectedJobList: MutableList<JobHashtag>, selectedInterestList: MutableList<InterestHashtag>)
     }
 
 

@@ -17,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
+import com.d108.sduty.model.dto.InterestHashtag
+import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.ui.main.home.viewmodel.HomeViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
@@ -41,6 +43,9 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var disclosure = 0
     private val args: StoryRegisterFragmentArgs by navArgs()
     private var imageUrl: String? = null
+
+    private lateinit var selectedJobList: MutableList<JobHashtag>
+    private lateinit var selectedInterestList: MutableList<InterestHashtag>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -160,6 +165,12 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             btnAddSubject.setOnClickListener {
                 TagSelectDialog(requireContext()).let {
                     it.show(parentFragmentManager, null)
+                    it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
+                        override fun onClick(selectedJobList: MutableList<JobHashtag>, selectedInterestList: MutableList<InterestHashtag>) {
+                            this@StoryRegisterFragment.selectedJobList = selectedJobList
+                            this@StoryRegisterFragment.selectedInterestList = selectedInterestList
+                        }
+                    }
                 }
             }
 

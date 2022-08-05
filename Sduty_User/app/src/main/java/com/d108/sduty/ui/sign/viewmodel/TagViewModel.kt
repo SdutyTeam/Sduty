@@ -43,4 +43,22 @@ class TagViewModel: ViewModel() {
             }
         }
     }
+
+    private val _jobSelectVisible = MutableLiveData<Boolean>(true)
+    val jobSelectVisible: LiveData<Boolean>
+        get() = _jobSelectVisible
+    fun setJobVisible(){
+        _jobSelectVisible.postValue(!jobSelectVisible.value!!)
+    }
+    private val _interestSelectVisible = MutableLiveData<Boolean>(true)
+    val interestSelectVisible: LiveData<Boolean>
+        get() = _interestSelectVisible
+    fun setInterestVisible(selectedInterestedSize: Int){
+        if(selectedInterestedSize > 2){
+            _interestSelectVisible.postValue(false)
+        }else{
+            _interestSelectVisible.postValue(true)
+        }
+    }
+
 }
