@@ -31,8 +31,7 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public Story insertStory(Story story) {
 		Story s = storyRepo.save(story);
-		System.out.println(s.toString());
-		int storySeq = s.getSeq();
+		int storySeq = storyRepo.findTopByWriterSeqOrderByRegtimeDesc(s.getWriterSeq()).getSeq();
 		if(!story.getInterestHashtag().isEmpty()) {
 			for(int i : story.getInterestHashtag())
 				storyInterestHashtagRepo.save(new StoryInterest(storySeq, i));
@@ -43,7 +42,7 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public Story updateStory(Story story) {
 		Story s = storyRepo.save(story);
-		int storySeq = s.getSeq();
+		int storySeq = storyRepo.findTopByWriterSeqOrderByRegtimeDesc(s.getWriterSeq()).getSeq();
 		List<StoryInterest> listSI = storyInterestHashtagRepo.findAllBySeq(storySeq);
 		if(!listSI.isEmpty()) {
 			for(StoryInterest si : listSI) {
