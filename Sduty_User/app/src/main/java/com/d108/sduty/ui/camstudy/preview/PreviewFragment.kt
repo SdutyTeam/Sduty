@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentPreviewBinding
 import com.d108.sduty.ui.MainActivity
@@ -61,7 +62,7 @@ class PreviewFragment : Fragment() {
 
     private fun setViewEventListeners() {
         binding.previewEnterButton.setOnClickListener(this::onEnterButtonClicked)
-        binding.previewImageViewClose.setOnClickListener { requireActivity().finish() }
+        binding.previewImageViewClose.setOnClickListener { findNavController().popBackStack() }
     }
 
 
@@ -119,7 +120,6 @@ class PreviewFragment : Fragment() {
     private fun onEnterButtonClicked(v: View) {
         SendBirdCall.init(requireActivity().applicationContext, SENDBIRD_APP_ID)
         viewModel.authenticate(mainViewModel.user.value!!.name)
-
     }
 
     private fun bindPreview(cameraProvider : ProcessCameraProvider) {

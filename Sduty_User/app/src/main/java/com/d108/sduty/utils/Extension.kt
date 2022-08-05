@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -46,6 +47,20 @@ fun Activity.showAlertDialog(
         .setTitle(title)
         .setMessage(message)
         .setPositiveButton("확인", listener)
+        .setNegativeButton("취소", null)
+        .create()
+        .show()
+}
+
+fun Activity.showEditDialog(
+    title: String,
+    message: EditText,
+    listener: DialogInterface.OnClickListener?
+) {
+    AlertDialog.Builder(this)
+        .setTitle(title)
+        .setView(message)
+        .setPositiveButton("변경", listener)
         .setNegativeButton("취소", null)
         .create()
         .show()

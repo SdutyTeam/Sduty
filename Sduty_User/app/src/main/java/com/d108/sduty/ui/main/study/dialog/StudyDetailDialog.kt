@@ -32,13 +32,13 @@ class StudyDetailDialog(context: Context, studyInfo: Study) {
         dialog.setCancelable(true)
         dialog.show()
 
-        val studyJoinButton = dialog.findViewById<Button>(R.id.btn_study_cancel)
-        val cancelButton = dialog.findViewById<Button>(R.id.btn_study_join)
+        val studyJoinButton = dialog.findViewById<Button>(R.id.btn_study_join)
+        val cancelButton = dialog.findViewById<Button>(R.id.btn_study_cancel)
         val studyName = dialog.findViewById<TextView>(R.id.study_name)
         val studyIntroduce = dialog.findViewById<TextView>(R.id.study_intoduce)
 
-        studyName.setText(studyInfo.name)
-        studyIntroduce.setText(studyInfo.introduce)
+        studyName.text = studyInfo.name
+        studyIntroduce.text = studyInfo.introduce
 
         studyJoinButton.setOnClickListener {
             onClickListener.onClicked()

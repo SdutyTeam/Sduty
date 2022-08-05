@@ -2,25 +2,23 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.graphics.Color
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
-import androidx.core.widget.addTextChangedListener
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
+import com.d108.sduty.model.dto.Alarm
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.StudyRegisteViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -55,6 +53,7 @@ class StudyRegistFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,12 +73,7 @@ class StudyRegistFragment : Fragment() {
         val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
         binding.spinnerCategory.adapter = categoryAdapter
 
-        binding.btnCreateStudy.setOnClickListener {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                val hour = binding.timePicker.hour
-                val minute = binding.timePicker.minute
-            }
-        }
+
 
         binding.apply {
             btnCreateStudy.setOnClickListener { studyCreate() }
@@ -180,13 +174,18 @@ class StudyRegistFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun studyCreate(){
         binding.apply {
             val name = etStudyName.text.toString().trim()
-            val pass = etStduyPass.text.toString().trim()
+            var pass = etStduyPass.text?.toString()?.trim()
             val introduce = etStudyIntroduce.text.toString().trim()
             val people = spinnerPeople.selectedItem.toString()
             val category = spinnerCategory.selectedItem.toString()
+            val hour = binding.timePicker.hour.toString()
+            val minute = binding.timePicker.minute
+
+
 
 
             if(name.isEmpty() || introduce.isEmpty()){
@@ -199,8 +198,27 @@ class StudyRegistFragment : Fragment() {
                         findNavController().navigate(StudyRegistFragmentDirections.actionStudyRegistFragmentToMyStudyFragment())
                     }
                 }
-                studyRegisteViewModel.studyCreate(Study(mainViewModel.profile.value!!.userSeq, name,
-                                                        introduce, category, people.toInt(), pass, null))
+                if(pass == ""){
+                    pass = null
+                }
+                if(!args.type) {
+                    studyRegisteViewModel.studyCreate(
+                        Study(
+                            mainViewModel.profile.value!!.userSeq, name,
+                            introduce, category, people.toInt(), pass, null
+                        )
+                    )
+                } else{
+                    studyRegisteViewModel.camStudyCreate(
+                        Study(
+                            mainViewModel.profile.value!!.userSeq,
+                        name, introduce, category, people.toInt(), pass, "12345"
+                        ), Alarm(0, "00:00:00", mon_state, tue_state, wed_state, thur_state, fri_state, sat_state, sun_state)
+                    )
+                }
+
+
+
             }
         }
     }

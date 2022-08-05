@@ -195,6 +195,8 @@
             android:name="studySeq"
             app:argType="integer"/>
 
+
+
     </fragment>
     <fragment
         android:id="@+id/camStudyDetailFragment"
@@ -207,6 +209,10 @@
         <action
             android:id="@+id/action_camStudyDetailFragment_to_studySettingFragment"
             app:destination="@+id/studySettingFragment"/>
+
+        <argument
+            android:name="studySeq"
+            app:argType="integer"/>
 
     </fragment>
     <fragment
@@ -233,6 +239,17 @@
         android:id="@+id/studySettingFragment"
         android:name="com.d108.sduty.ui.main.study.StudySettingFragment"
         android:label="StudySettingFragment">
+        <action
+            android:id="@+id/action_studySettingFragment_to_myStudyFragment"
+            app:destination="@id/myStudyFragment" />
+
+        <argument
+            android:name="studySeq"
+            app:argType="integer"/>
+
+        <argument
+            android:name="masterNickname"
+            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/previewFragment"

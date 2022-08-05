@@ -84,7 +84,12 @@ class MyStudyFragment : Fragment() {
         mystudyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
                 // 선택 스터디 입장
-                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment(mystudyList[position].seq))
+                if(mystudyList[position].roomId == null){
+                    findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment(mystudyList[position].seq))
+                } else{
+                    findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToCamStudyDetailFragment(mystudyList[position].seq))
+                }
+
             }
         }
         binding.myStudyList.apply {
