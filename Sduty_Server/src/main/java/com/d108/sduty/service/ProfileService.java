@@ -7,6 +7,6 @@ import com.d108.sduty.dto.Profile;
 public interface ProfileService {
 	Profile insertProfile(Profile profile) throws Exception;
 	boolean checkDupNickname(String nickname) throws Exception;
-	Optional<Profile> selectProfile(int seq);
+	Profile selectProfile(int seq);
 	Profile updateProfile(Profile profile) throws Exception;
 }

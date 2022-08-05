@@ -3,6 +3,7 @@ package com.d108.sduty.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -33,5 +34,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleOwner = this@MainActivity
             mainVM = viewModel
         }
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+
     }
 }

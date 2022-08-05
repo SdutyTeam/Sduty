@@ -1,10 +1,12 @@
 package com.d108.sduty.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -33,8 +35,6 @@ public class Story {
 	private String imageSource;
 	@Column(name="story_thumbnail", updatable = false)
 	private String thumbnail;
-	@Column(name="story_interest_hashtag")
-	private int interestHashtag;
 	@Column(name="story_job_hashtag")
 	private int jobHashtag;
 	@Column(name="story_contents")
@@ -45,12 +45,7 @@ public class Story {
 	private int storyPublic;
 	@Column(name="story_warning")
 	private int warning;
-	
-	@Override
-	public String toString() {
-		return "Story [seq=" + seq + ", writerSeq=" + writerSeq + ", imageSource=" + imageSource + ", thumbnail="
-				+ thumbnail + ", interestHashtag=" + interestHashtag + ", jobHashtag=" + jobHashtag + ", contents="
-				+ contents + ", regtime=" + regtime + ", storyPublic=" + storyPublic + ", warning=" + warning + "]";
-	}
+	@Transient
+	private List<Integer> interestHashtag;
 	
 }
