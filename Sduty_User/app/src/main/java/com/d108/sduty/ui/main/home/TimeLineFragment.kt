@@ -84,7 +84,6 @@ class TimeLineFragment : Fragment() {
     private fun initViewModel(){
         storyViewModel.timelineList.observe(viewLifecycleOwner){
             timeLineAdapter.list = it
-            Log.d(TAG, "initViewModel: ${it}")
         }
         storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
     }

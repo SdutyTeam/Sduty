@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.FragmentManager
@@ -41,7 +42,7 @@ class JoinRegistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentJoinRegistBinding.inflate(inflater, container, false)
-
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 

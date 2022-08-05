@@ -39,6 +39,8 @@ public class Alarm {
 	private boolean fri;
 	private boolean sat;
 	private boolean sun;
+	@Column(name="alarm_cron")
+	private String cron;
 	
 //	public void setScheduler() {
 //		StudyScheduler ts = new StudyScheduler();
