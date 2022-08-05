@@ -4,15 +4,13 @@ import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import com.d108.sduty.service.StudyService;
+import com.d108.sduty.utils.FCMUtil;
 
 @Component
 public class Job extends QuartzJobBean{
@@ -22,22 +20,21 @@ public class Job extends QuartzJobBean{
 	private SchedulerFactoryBean schedulerFactoryBean;
 	@Autowired
 	private StudyService studyService;
+	@Autowired
+	private FCMUtil fcmUtil;
 	
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println("여기 push알림");
+        System.out.println("push알림");
         int studySeq = (int) jobExecutionContext.getJobDetail().getJobDataMap().get("studySeq");
-        System.out.println(studyService.getStudyDetail(studySeq).getParticipants());;
-    	//log.info("매 시간 실행 될 작업 작성 공간");
-//    	Scheduler scheduler = schedulerFactoryBean.getScheduler();
-//    	JobKey jobKey = buildJobDetail("alarm1", "Study", 1).getKey();
-//    	try {
-//    		System.out.println(" scheduler 정지");
-//			//scheduler.pauseJob(jobKey);
-//    		scheduler.deleteJob(jobKey);
-//		} catch (SchedulerException e) {
-//			e.printStackTrace();
-//		}
+        System.out.println(studyService.getStudyDetail(studySeq).getParticipants());
+        //토큰이 없는 사람 = 로그아웃 중
+        for(User user : studyService.getStudyDetail(studySeq).getParticipants()) {
+        	if(user.getFcmToken()!=null) {
+        		fcmUtil.send_FCM(user.getFcmToken(), "스터디", "스터디 일정 알림");
+        	}
+        }
+ 
     }
     
     public JobDetail buildJobDetail(String name, String group, int n) {
