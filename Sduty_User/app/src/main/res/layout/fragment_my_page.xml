@@ -119,7 +119,6 @@
                             android:text="@{vm.profile.nickname}"
                             android:textSize="20sp"
                             app:layout_constraintEnd_toStartOf="@id/tv_count_follow"
-                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toEndOf="@id/iv_achieve"
                             app:layout_constraintTop_toTopOf="@id/iv_achieve" />
 
@@ -250,7 +249,7 @@
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
                 <androidx.constraintlayout.widget.ConstraintLayout

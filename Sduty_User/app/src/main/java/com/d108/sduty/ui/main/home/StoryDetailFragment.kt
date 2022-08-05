@@ -78,7 +78,7 @@ class StoryDetailFragment : Fragment() {
             }
             recyclerReply.apply {
                 adapter = replyAdapter
-                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             }
 
         }
