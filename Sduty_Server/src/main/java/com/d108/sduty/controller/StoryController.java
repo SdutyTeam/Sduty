@@ -268,9 +268,10 @@ public class StoryController {
 	@ApiOperation(value = "댓글 작성 : Reply > Reply 리턴", response = Reply.class)
 	@PostMapping("/reply")
 	public ResponseEntity<?> insertReply(@RequestBody Reply reply) throws Exception {
-		Reply r = storyService.insertReply(reply);
+		Reply r = storyService.insertReply(reply);		
 		if(r!=null) {
-			return new ResponseEntity<Reply>(r, HttpStatus.OK);
+			List<Reply> list = storyService.selectReplyByStorySeq(reply.getStorySeq());
+			return new ResponseEntity<List<Reply>>(list, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -280,7 +281,8 @@ public class StoryController {
 	public ResponseEntity<?> updateReply(@RequestBody Reply reply) throws Exception {
 		Reply r = storyService.updateReply(reply);
 		if(r!=null) {
-			return new ResponseEntity<Reply>(r, HttpStatus.OK);
+			List<Reply> list = storyService.selectReplyByStorySeq(reply.getStorySeq());
+			return new ResponseEntity<List<Reply>>(list, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}

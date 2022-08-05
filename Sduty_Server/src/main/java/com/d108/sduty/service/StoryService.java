@@ -18,6 +18,7 @@ public interface StoryService {
 	List<Story> selectStoryInSeq(List<Integer> storySeqs);
 	void deleteStory(int storySeq);
 	
+	List<Reply> selectReplyByStorySeq(int storySeq);
 	Reply insertReply(Reply reply);
 	Reply updateReply(Reply reply);
 	void deleteReply(int replySeq);

@@ -139,4 +139,8 @@ public class TimelineServiceImpl implements TimelineService {
 		t.setInterestHashtags(listIH);
 	}
 	
+	public List<Reply> findAllReplyByStorySeqOrderByRegtimeDesc(int storySeq){
+		return replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
+	}
+	
 }

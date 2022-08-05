@@ -118,4 +118,9 @@ public class StoryServiceImpl implements StoryService {
 	public void deleteReply(int replySeq) {
 		replyRepo.deleteById(replySeq);
 	}
+
+	@Override
+	public List<Reply> selectReplyByStorySeq(int storySeq) {
+		return replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
+	}
 }
