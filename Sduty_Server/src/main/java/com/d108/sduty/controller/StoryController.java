@@ -141,9 +141,8 @@ public class StoryController {
 		//imageService.fileUpload(mpfImage); - makeThumbnail()에서 저장.
 		
 		Story result = storyService.insertStory(story);
-		Timeline t = timelineService.selectDetailTimeline(result.getSeq());
-		if(t != null) {
-			return new ResponseEntity<Timeline>(t, HttpStatus.OK);
+		if(result != null) {
+			return new ResponseEntity<Story>(story, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -164,14 +163,7 @@ public class StoryController {
 		if(savedStory != null) {
 			story.setImageSource(savedStory.getImageSource());
 			story.setThumbnail(savedStory.getThumbnail());
-			
-			Story result = storyService.updateStory(story);
-			if(result != null) {
-				Timeline t = timelineService.selectDetailTimeline(story.getSeq());
-				if(t != null) {
-					return new ResponseEntity<Timeline>(t, HttpStatus.OK);
-				}
-			}
+			return new ResponseEntity<Story>(storyService.updateStory(story), HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
