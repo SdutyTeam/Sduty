@@ -30,19 +30,30 @@ public class StoryServiceImpl implements StoryService {
 	
 	@Override
 	public Story insertStory(Story story) {
-		for(int i : story.getInterestHashtag())
-			storyInterestHashtagRepo.save(new StoryInterest(story.getSeq(), i));
-		return storyRepo.save(story);
+		Story s = storyRepo.save(story);
+		int storySeq = s.getSeq();
+		if(!story.getInterestHashtag().isEmpty()) {
+			for(int i : story.getInterestHashtag())
+				storyInterestHashtagRepo.save(new StoryInterest(storySeq, i));
+		}
+		return s;
 	}	
 	
 	@Override
 	public Story updateStory(Story story) {
-		for(StoryInterest si : storyInterestHashtagRepo.findAllBySeq(story.getSeq())) {
-			storyInterestHashtagRepo.delete(si);
+		Story s = storyRepo.save(story);
+		int storySeq = s.getSeq();
+		List<StoryInterest> listSI = storyInterestHashtagRepo.findAllBySeq(storySeq);
+		if(!listSI.isEmpty()) {
+			for(StoryInterest si : listSI) {
+				storyInterestHashtagRepo.delete(si);
+			}
 		}
-		for(int i : story.getInterestHashtag())
-			storyInterestHashtagRepo.save(new StoryInterest(story.getSeq(), i));
-		return storyRepo.save(story);
+		if(!story.getInterestHashtag().isEmpty()) {
+			for(int i : story.getInterestHashtag())
+				storyInterestHashtagRepo.save(new StoryInterest(storySeq, i));
+		}
+		return s;
 	}
 
 	@Override
