@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
+import com.d108.sduty.dto.StoryInterest;
 import com.d108.sduty.repo.ReplyRepo;
+import com.d108.sduty.repo.StoryInterestHashtagRepo;
 import com.d108.sduty.repo.StoryRepo;
 
 @Service
@@ -23,8 +25,23 @@ public class StoryServiceImpl implements StoryService {
 	@Autowired
 	private ReplyRepo replyRepo;
 	
+	@Autowired
+	private StoryInterestHashtagRepo storyInterestHashtagRepo;
+	
 	@Override
 	public Story insertStory(Story story) {
+		for(int i : story.getInterestHashtag())
+			storyInterestHashtagRepo.save(new StoryInterest(story.getSeq(), i));
+		return storyRepo.save(story);
+	}	
+	
+	@Override
+	public Story updateStory(Story story) {
+		for(StoryInterest si : storyInterestHashtagRepo.findAllBySeq(story.getSeq())) {
+			storyInterestHashtagRepo.delete(si);
+		}
+		for(int i : story.getInterestHashtag())
+			storyInterestHashtagRepo.save(new StoryInterest(story.getSeq(), i));
 		return storyRepo.save(story);
 	}
 
@@ -34,8 +51,18 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public Optional<Story> findById(int storySeq) {
-		return storyRepo.findById(storySeq);
+	public Story findById(int storySeq) {
+		Story story = null;
+		if(storyRepo.findById(storySeq).isPresent()) {
+			 story = storyRepo.findById(storySeq).get();
+		}
+		List<StoryInterest> listSI = storyInterestHashtagRepo.findAllBySeq(storySeq);
+		List<Integer> ilistSI = new ArrayList<Integer>();
+		for(StoryInterest si : listSI) {
+			ilistSI.add(si.getInterestSeq());
+		}
+		story.setInterestHashtag(ilistSI);
+		return story;
 	}
 
 	@Override
@@ -81,7 +108,4 @@ public class StoryServiceImpl implements StoryService {
 	public void deleteReply(int replySeq) {
 		replyRepo.deleteById(replySeq);
 	}
-	
-	
-
 }
