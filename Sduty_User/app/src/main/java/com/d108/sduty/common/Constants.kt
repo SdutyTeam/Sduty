@@ -32,3 +32,4 @@ const val FIND_PW = 1
 
 const val JOB_TAG = 0
 const val INTEREST_TAG = 1
+const val ALL_TAG = 2

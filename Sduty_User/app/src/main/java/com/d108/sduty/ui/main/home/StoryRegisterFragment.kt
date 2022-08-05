@@ -6,16 +6,23 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Adapter
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
+import com.d108.sduty.adapter.TagAdapter
+import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
@@ -44,8 +51,9 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val args: StoryRegisterFragmentArgs by navArgs()
     private var imageUrl: String? = null
 
-    private lateinit var selectedJobList: MutableList<JobHashtag>
-    private lateinit var selectedInterestList: MutableList<InterestHashtag>
+    private var selectedTagList = mutableListOf<String>()
+    private val tagAdapter = TagAdapter(ALL_TAG)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -166,9 +174,22 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 TagSelectDialog(requireContext()).let {
                     it.show(parentFragmentManager, null)
                     it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
-                        override fun onClick(selectedJobList: MutableList<JobHashtag>, selectedInterestList: MutableList<InterestHashtag>) {
-                            this@StoryRegisterFragment.selectedJobList = selectedJobList
-                            this@StoryRegisterFragment.selectedInterestList = selectedInterestList
+                        override fun onClick(selectedJob: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
+                            selectedTagList.clear()
+                            if(selectedJob != null){
+                                selectedTagList.add(selectedJob.name)
+                            }
+                            if(selectedInterestList.size > 0){
+                                for(i in 0 until selectedInterestList.size){
+                                    selectedTagList.add(selectedInterestList[i].name)
+                                }
+                            }
+                            binding.recyclerSelectedTag.apply {
+                                adapter = tagAdapter
+                                tagAdapter.selectList = selectedTagList
+                                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                            }
+
                         }
                     }
                 }
