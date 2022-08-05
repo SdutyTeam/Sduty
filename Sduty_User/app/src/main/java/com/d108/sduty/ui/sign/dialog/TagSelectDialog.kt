@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TagAdapter
@@ -38,7 +39,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
 
     lateinit var onClickConfirm: OnClickConfirm
 
-    private val tagViewModel: TagViewModel by activityViewModels()
+    private val tagViewModel: TagViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -141,14 +142,18 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
                 layoutManager = GridLayoutManager(requireContext(), 1)
             }
             btnConfirm.setOnClickListener {
-                onClickConfirm.onClick(selectedJobList, selectedInterestList)
+                var selectedJob: JobHashtag? = null
+                if(selectedJobList.size > 0){
+                    selectedJob = selectedJobList[0]
+                }
+                onClickConfirm.onClick(selectedJob, selectedInterestList)
                 dismiss()
             }
         }
     }
 
     interface OnClickConfirm{
-        fun onClick(selectedJobList: MutableList<JobHashtag>, selectedInterestList: MutableList<InterestHashtag>)
+        fun onClick(selectedJobList: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>)
     }
 
 

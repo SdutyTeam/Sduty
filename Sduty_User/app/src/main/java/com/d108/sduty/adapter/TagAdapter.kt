@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.INTEREST_TAG
 import com.d108.sduty.common.JOB_TAG
 import com.d108.sduty.databinding.ItemTagBinding
@@ -21,13 +22,22 @@ class TagAdapter(val flag: Int): RecyclerView.Adapter<TagAdapter.ViewHolder>() {
             field = value
             notifyDataSetChanged()
         }
+    var selectList = mutableListOf<String>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     inner class ViewHolder(var binding: ItemTagBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(name: String){
-            binding.apply {
-                btnTag.text = name
-                btnTag.setOnClickListener {
-                    onClickTagItem.onClick(it, adapterPosition)
+            if(flag != ALL_TAG){
+                binding.apply {
+                    btnTag.text = name
+                    btnTag.setOnClickListener {
+                        onClickTagItem.onClick(it, adapterPosition)
+                    }
                 }
+            }else{
+                binding.btnTag.text = name
             }
         }
     }
@@ -41,6 +51,7 @@ class TagAdapter(val flag: Int): RecyclerView.Adapter<TagAdapter.ViewHolder>() {
         when(flag){
             JOB_TAG -> holder.bind(jobList[position].name)
             INTEREST_TAG -> holder.bind(interestList[position].name)
+            ALL_TAG -> holder.bind(selectList[position])
         }
     }
 
@@ -48,6 +59,7 @@ class TagAdapter(val flag: Int): RecyclerView.Adapter<TagAdapter.ViewHolder>() {
         when(flag){
             JOB_TAG -> return jobList.size
             INTEREST_TAG -> return interestList.size
+            ALL_TAG -> return selectList.size
         }
         return 0
     }
