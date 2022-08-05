@@ -16,7 +16,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
+import com.d108.sduty.model.dto.InterestHashtag
+import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Profile
+import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.sign.viewmodel.ProfileViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.DateFormatUtil
@@ -32,6 +35,8 @@ class ProfileRegistFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
 
     private lateinit var imageUrl: String
+    private var jobHashtag: JobHashtag? = null
+    private var interestHashtagList = mutableListOf<InterestHashtag>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -72,6 +77,23 @@ class ProfileRegistFragment : Fragment() {
             ivProfile.setOnClickListener {
                 loadProfileImage()
             }
+            tvInterest.setOnClickListener{
+                openTagSelectDialog()
+            }
+            tvJob.setOnClickListener {
+                openTagSelectDialog()
+            }
+        }
+    }
+
+    private fun openTagSelectDialog() {
+        TagSelectDialog(requireContext()).let {
+            it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
+                override fun onClick(selectedJobList: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
+
+                }
+            }
+            it.show(parentFragmentManager, null)
         }
     }
 
@@ -93,9 +115,9 @@ class ProfileRegistFragment : Fragment() {
     private fun saveProfile(){
         binding.apply{
             val nickname = etNickname.text.toString()
-            val job = etJob.text.toString()
+
             val publicJob = viewModel.flagJob.value!!
-            val interest = etInterest.text.toString()
+
             val publicInterest = viewModel.flagInterest.value!!
             val birthInput = etBirth.text.toString()
             val publicBirth = viewModel.flagBirth.value!!
@@ -108,11 +130,8 @@ class ProfileRegistFragment : Fragment() {
             }else if(nickname.isEmpty()){
                 msg = "별명을 입력해 주세요"
             }
-            else if(job.isEmpty()){
-                msg = "직업을 선택해 주세요"
-            }
             else if(introduce.isEmpty()){
-                msg = "직업을 선택해 주세요"
+                msg = "자기소개를 입력해 주세요"
             }
             else if(imageUrl.isEmpty()){
                 msg = "이미지를 선택해 주세요"
@@ -126,7 +145,7 @@ class ProfileRegistFragment : Fragment() {
                 return
 
             }else{
-                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", job, publicJob, interest, publicInterest, 1), imageUrl)
+                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", jobHashtag?.seq.toString(), publicJob, interestHashtagList, publicInterest, 1), imageUrl)
             }
 
         }
