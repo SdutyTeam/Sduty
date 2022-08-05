@@ -18,8 +18,8 @@ public class Timeline {
 	private List<Reply> replies;
 	private boolean likes;
 	private boolean scrap;
-	private String jobHashtag;
-	private List<String> subjectHashtag;
+	private JobHashtag jobHashtag;
+	private List<InterestHashtag> interestHashtags;
 	
 	
 }

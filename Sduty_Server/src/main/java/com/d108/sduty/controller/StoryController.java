@@ -124,7 +124,7 @@ public class StoryController {
 	
 	@ApiOperation(value = "스토리 저장 > Story > Story 리턴", response = Story.class)
 	@PostMapping("")
-	public ResponseEntity<?> insertProfile(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("story") String json) throws Exception {
+	public ResponseEntity<?> insertStory(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("story") String json) throws Exception {
 		Gson gson = new Gson();		
 		Story story = gson.fromJson(json, Story.class);
 		System.out.println(story);
@@ -159,13 +159,11 @@ public class StoryController {
 	@ApiOperation(value = "스토리 수정 : Story > Story 리턴", response = Story.class)
 	@PutMapping("")
 	public ResponseEntity<?> updateStory(@RequestBody Story story) throws Exception {
-		Optional<Story> selectedOStory = storyService.findById(story.getSeq());
-		Story savedStory;
-		if(selectedOStory.isPresent()) {
-			savedStory = selectedOStory.get();
+		Story savedStory = storyService.findById(story.getSeq());
+		if(savedStory != null) {
 			story.setImageSource(savedStory.getImageSource());
 			story.setThumbnail(savedStory.getThumbnail());
-			return new ResponseEntity<Story>(storyService.insertStory(story), HttpStatus.OK);
+			return new ResponseEntity<Story>(storyService.updateStory(story), HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -194,10 +192,8 @@ public class StoryController {
 	@ApiOperation(value= "게시글 신고 : StorySeq > HttpStatus", response = HttpStatus.class)
 	@PutMapping("/report/{storySeq}")
 	public ResponseEntity<?> reportStory(@PathVariable int storySeq) {
-		Optional<Story> selectedOStory = storyService.findById(storySeq);
-		Story updatingStory;
-		if(selectedOStory.isPresent()) {
-			updatingStory = selectedOStory.get();
+		Story updatingStory = storyService.findById(storySeq);
+		if(updatingStory !=null ) {
 			updatingStory.setWarning(updatingStory.getWarning() + 1);
 			Story story = storyService.insertStory(updatingStory);
 			if(story != null) {
