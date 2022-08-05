@@ -1,13 +1,18 @@
 package com.d108.sduty.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -25,7 +30,7 @@ import lombok.Setter;
 public class Profile {
 	
 	@Id
-	@Column(name="profile_user_seq")
+	@Column(name="profile_user_seq", insertable = false, updatable = false)
 	private int userSeq;
 	@Column(name="profile_nickname")
 	private String nickname;

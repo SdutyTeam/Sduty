@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Qna {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="qna_seq")
 	private int seq;
 	@Column(name="ques_title")
@@ -36,5 +39,5 @@ public class Qna {
 	@Column(name="ans_writer")
 	private Integer adminSeq;
 	@Column(name="ans_regtime")
-	private String answerRegtime;
+	private LocalDateTime answerRegtime;
 }

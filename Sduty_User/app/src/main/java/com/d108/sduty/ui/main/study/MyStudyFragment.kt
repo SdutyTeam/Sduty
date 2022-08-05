@@ -2,6 +2,7 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.adapter.MyStudyAdapter
 import com.d108.sduty.adapter.StudyListAdapter
@@ -28,7 +30,7 @@ class MyStudyFragment : Fragment() {
     private lateinit var binding: FragmentMyStudyBinding
     private val myStudyViewModel: MyStudyViewModel by viewModels()
 
-    private lateinit var mystudyListAdapter: MyStudyAdapter
+    private lateinit var mystudyListAdapter: StudyListAdapter
     private lateinit var mystudyList: List<Study>
 
     override fun onAttach(context: Context) {
@@ -49,18 +51,15 @@ class MyStudyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
-        mystudyListAdapter.list = mutableListOf(Study())
+
         myStudyViewModel.myStudyList.observe(viewLifecycleOwner){
             if(it != null){
-//                mystudyList = myStudyViewModel.myStudyList.value as List<Study>
-                //initAdapter()
+                mystudyList = myStudyViewModel.myStudyList.value as List<Study>
+                initAdapter()
             }
         }
 
-        //myStudyViewModel.getMyStudyList()
-
-
+        mainViewModel.profile.value?.let { myStudyViewModel.getMyStudyList(it.userSeq) }
 
         binding.btnCreateStudy.setOnClickListener{
             // Dialog만들기
@@ -81,11 +80,11 @@ class MyStudyFragment : Fragment() {
 
 
     private fun initAdapter(){
-        mystudyListAdapter = MyStudyAdapter()
-        mystudyListAdapter.clickListener = object : MyStudyAdapter.ClickListener{
+        mystudyListAdapter = StudyListAdapter(mystudyList)
+        mystudyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
                 // 선택 스터디 입장
-                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToPreviewFragment())
+                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment(mystudyList[position].seq))
             }
         }
         binding.myStudyList.apply {

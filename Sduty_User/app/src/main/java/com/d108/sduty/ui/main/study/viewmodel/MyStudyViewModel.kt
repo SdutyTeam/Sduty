@@ -20,11 +20,11 @@ class MyStudyViewModel: ViewModel() {
         get() = _myStudyList
 
 
-    fun getMyStudyList(profile: Profile){
+    fun getMyStudyList(userSeq: Int){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 내 스터디 리스트 불러오기
-                val response = Retrofit.studyApi.myStudyList(profile.userSeq)
+                val response = Retrofit.studyApi.myStudyList(userSeq)
                 if(response.isSuccessful && response.body() != null){
                     _myStudyList.postValue(response.body() as List<Study>)
                 }

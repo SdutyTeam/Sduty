@@ -49,20 +49,85 @@ class TimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 첫 화면을 설정한다.
-        initView()
         // 뷰모델 초기화한다.
         initViewModel()
 
+        // 첫 화면을 설정한다.
+        initView()
+    }
+
+    private fun initViewModel(){
+        binding.apply {
+            lifecycleOwner = this@TimerFragment
+            timerVM = timerViewModel
+        }
+
+        timerViewModel.apply {
+            // 토스트 메시지 출력 요청
+            toastMessage.observe(viewLifecycleOwner) { message ->
+                requireContext().showToast(message)
+            }
+
+            // 하루 공부한 시간
+            timerViewModel.report.observe(viewLifecycleOwner) { report ->
+                binding.tvTotalTime.text = report.totalTime
+                // TODO: 차트 변경
+            }
+
+            // 타이머
+            timer.observe(viewLifecycleOwner) { time ->
+                val hour = time / 60 / 60
+                val min = time / 60
+                val sec = time % 60
+                binding.tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
+            }
+        }
     }
 
     // 화면 초기화
-    private fun initView(){
+    private fun initView() {
         // 오늘 날짜
         today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
-        binding.commonSelectedDate.text = today
-        timerViewModel.selectDate(today)
+        binding.apply {
+            // 날짜 선택
+            commonSelectedDate.setOnClickListener {
+                showDatePicker()
+            }
+
+            // 공부 시작, 종료
+            ivTimer.setOnClickListener {
+                when (timerViewModel.isRunningTimer.value) {
+                    false -> {
+                        timerViewModel.startTimer()
+                    }
+                    true -> {
+                        timerViewModel.delayTimer()
+                    }
+                }
+                // 측정을 중지하였을 때
+                if (timerViewModel.timer.value!! > 0) {
+                    DelayDialog().show(requireActivity().supportFragmentManager, "DelayDialog")
+                }
+            }
+
+            // 오늘 날짜로 돌아가기
+            btnReturnToday.setOnClickListener {
+                commonSelectedDate.text = today
+                ivTimer.visibility = View.VISIBLE
+                btnReturnToday.visibility = View.INVISIBLE
+                timerViewModel.selectDate(today)
+            }
+
+            // 리포트로 이동
+            fabReport.setOnClickListener {
+                findNavController().safeNavigate(TimerFragmentDirections.actionTimerFragmentToReportFragment())
+            }
+
+            // 첫 화면은 오늘 날짜로 설정
+            commonSelectedDate.text = today
+            timerViewModel.selectDate(today)
+        }
     }
 
     private fun showDatePicker(){
@@ -74,84 +139,24 @@ class TimerFragment : Fragment() {
             timerViewModel.selectDate(selectedDate)
 
             when(selectedDate != today){
-                true -> {
+                true -> { // 오늘
                     binding.apply {
+                        tvTimer.visibility = View.VISIBLE
                         ivTimer.visibility = View.INVISIBLE
                         btnReturnToday.text = "오늘($today) 로 돌아가기"
                         btnReturnToday.visibility = View.VISIBLE
                     }
                 }
-                false -> {
+                false -> { // 다른 날
                     binding.apply {
+                        tvTimer.visibility = View.GONE
                         ivTimer.visibility = View.VISIBLE
-                        btnReturnToday.visibility = View.INVISIBLE
+                        btnReturnToday.visibility = View.GONE
                     }
                 }
             }
         }
         // 캘린더 다이얼로그 출력
         DatePickerDialog(requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
-    }
-
-    private fun initViewModel(){
-
-        timerViewModel.apply {
-            // 토스트 메시지 출력 요청
-            toastMessage.observe(viewLifecycleOwner){ message ->
-                requireContext().showToast(message)
-            }
-
-            // 하루 공부한 시간
-            timerViewModel.report.observe(viewLifecycleOwner){ report ->
-                binding.tvTotalTime.text = report.total_time
-            }
-
-            // 시간 변경 시
-            timer.observe(viewLifecycleOwner){ time ->
-                val hour = time / 60 / 60
-                val min = time / 60
-                val sec = time % 60
-                binding.tvTimer.text = String.format("%02d:%02d:%02d",hour,min, sec)
-            }
-        }
-
-        binding.apply {
-            lifecycleOwner = this@TimerFragment
-            timerVM = timerViewModel
-
-            // 날짜 선택
-            commonSelectedDate.setOnClickListener {
-                showDatePicker()
-            }
-
-            // 공부 시작, 종료
-            ivTimer.setOnClickListener {
-                when(timerViewModel.isRunningTimer.value){
-                    false -> {timerViewModel.startTimer()}
-                    true -> {timerViewModel.delayTimer()}
-                }
-                // 측정을 중지하였을 때
-                if(timerViewModel.timer.value!! > 0){
-                    DelayDialog().show(requireActivity().supportFragmentManager, "DelayDialog")
-                }
-            }
-
-            // 리포트로 이동
-            fabReport.setOnClickListener {
-                Log.d(TAG, "initViewModel: ${timerViewModel.report.value}")
-                // report 데이터 넘겨주기
-                findNavController().safeNavigate(TimerFragmentDirections.actionTimerFragmentToReportFragment(
-                    Report(1,1,"1","1", listOf<Task>(Task(1,"1","1","1","1","","","")))
-                ))
-            }
-
-            // 오늘 날짜로 돌아가기
-            btnReturnToday.setOnClickListener {
-                commonSelectedDate.text = today
-                ivTimer.visibility = View.VISIBLE
-                btnReturnToday.visibility = View.INVISIBLE
-                timerViewModel.selectDate(today)
-            }
-        }
     }
 }

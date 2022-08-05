@@ -27,14 +27,19 @@ class StudyRegisteViewModel: ViewModel() {
 
     fun studyCreate(study: Study){
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d(TAG, "studyCreate: ${study}")
             try {
-                val response = Retrofit.studyApi.studyCreate(study)
-                if(response.isSuccessful && response.body() != null){
-                    _study.postValue((response.body() as Study))
-                    _createSuccess.postValue(true)
+                Retrofit.studyApi.studyCreate(mapOf("Study" to study)).let {
+                    Log.d("TAG", "join: ${it}")
+                    if(it.isSuccessful){
+                        _createSuccess.postValue(true)
+                    }
+                    else if (it.code() == 500) {
+                        _createSuccess.postValue(false)
+                    }
                 }
-            }catch (e: Exception){
-                _createSuccess.postValue(false)
+            } catch (e: Exception){
+                Log.d(TAG, "studyCreate: ${e.message}")
             }
         }
     }

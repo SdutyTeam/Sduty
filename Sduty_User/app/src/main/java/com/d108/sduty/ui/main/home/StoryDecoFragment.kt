@@ -1,27 +1,24 @@
 package com.d108.sduty.ui.main.home
 
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.databinding.FragmentStoryDecoBinding
-import com.d108.sduty.ui.main.home.viewmodel.StoryViewModel
-import com.d108.sduty.utils.dpToPixel
+import com.d108.sduty.ui.main.home.viewmodel.HomeViewModel
 import com.d108.sduty.utils.navigateBack
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
-import java.io.ByteArrayOutputStream
 import java.util.*
 
 //게시물 사진 꾸미기 - 타임스탬프, 텍스트 컬러, 템플릿 선택, 공유, 저장
@@ -29,7 +26,6 @@ private const val TAG ="StoryDecoFragment"
 class StoryDecoFragment : Fragment() {
     private lateinit var binding: FragmentStoryDecoBinding
     private val args: StoryDecoFragmentArgs by navArgs()
-    private val viewModel: StoryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +91,6 @@ class StoryDecoFragment : Fragment() {
     }
 
     private fun saveImageBitmap(bitmap: Bitmap) {
-        viewModel.setBitmap(bitmap)
-        navigateBack(requireActivity())
+        findNavController().safeNavigate(StoryDecoFragmentDirections.actionStoryDecoFragmentToStoryRegisterFragment(bitmap))
     }
 }

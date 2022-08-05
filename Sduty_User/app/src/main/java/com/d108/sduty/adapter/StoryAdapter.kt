@@ -18,7 +18,9 @@ class StoryAdapter(val activity: Activity): RecyclerView.Adapter<StoryAdapter.Vi
         }
     inner class ViewHolder(val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Story){
-
+            binding.apply {
+                data = list[adapterPosition]
+            }
         }
     }
 

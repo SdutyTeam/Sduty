@@ -18,6 +18,7 @@ import com.d108.sduty.dto.User;
 import com.d108.sduty.repo.AlarmRepo;
 import com.d108.sduty.repo.StudyRepo;
 import com.d108.sduty.repo.UserRepo;
+import com.d108.sduty.utils.StudyScheduler;
 
 @Service
 public class StudyServiceImpl implements StudyService {
@@ -65,6 +66,12 @@ public class StudyServiceImpl implements StudyService {
 		}
 		return null;
 	}
+	
+
+	@Override
+	public Study updateStudy(Study study) {
+		return studyRepo.save(study);
+	}
 
 	@Override
 	public boolean deleteStudy(int userSeq, int studySeq) {
@@ -82,7 +89,7 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public List<Study> filterStudy(String category, boolean emptyfilter, boolean camfilter, boolean publicfilter) {
 		Specification<Study> spec = (root, query, criteriaBuilder)->null;
-		if(category!=null) {
+		if(category!=null && !category.equals("전체")) {
 			spec = spec.and(findCategory(category));
 		}
 		if(emptyfilter==true) {

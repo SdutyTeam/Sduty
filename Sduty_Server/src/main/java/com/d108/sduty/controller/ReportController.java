@@ -1,5 +1,7 @@
 package com.d108.sduty.controller;
 
+import java.io.DataInput;
+import java.io.IOException;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import com.d108.sduty.dto.Task;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.service.ReportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -34,11 +38,16 @@ public class ReportController {
 	
 	@ApiOperation(value = "테스크 등록하기")
 	@PostMapping("/tasks")
-	public ResponseEntity<?> regist(@RequestBody ObjectNode reqObject) throws JsonProcessingException, IllegalArgumentException{
+	public ResponseEntity<?> regist(@RequestBody ObjectNode reqObject) throws IllegalArgumentException, IOException{
 		ObjectMapper mapper = new ObjectMapper();
+		//객체 역직렬화 가능 업데이트
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 		int userSeq = reqObject.get("ownerSeq").intValue();
 		String date = reqObject.get("date").asText();
-		Task task = mapper.treeToValue(reqObject.get("task"), Task.class);
+		//리스트 받아오기
+		List<Task> tasks = mapper.convertValue(reqObject.get("tasks"), new TypeReference<List<Task>>() {
+		});
+		Task task = tasks.get(0);
 		reportService.registTask(userSeq, date, task);
 		return new ResponseEntity<Map<String, Object>>(HttpStatus.OK);
 	}

@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,13 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Alarm;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Study;
-import com.d108.sduty.dto.Task;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.service.ProfileService;
 import com.d108.sduty.service.ReportService;
@@ -59,8 +56,8 @@ public class StudyController {
 		Study study = null;
 		Alarm alarm = null;
 		try {
-			study = mapper.treeToValue(reqObject.get("study"), Study.class);
-			JsonNode node = reqObject.get("alarm");
+			study = mapper.treeToValue(reqObject.get("Study"), Study.class);
+			JsonNode node = reqObject.get("Alarm");
 			if((study.getRoomId()!=null && node==null)||(study.getRoomId()==null&& node!=null)) {
 				//캠스터디인데 알람이 없는경우 || 캠스터디 아닌데 알람이 있는 경우
 				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
@@ -119,7 +116,7 @@ public class StudyController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value="스터디 탈퇴")
+	@ApiOperation(value="스터디 탈퇴 & 강퇴")
 	@DeleteMapping("/participation/{study_seq}/{user_seq}")
 	public ResponseEntity<?> disjoinStudy(@PathVariable int study_seq, @PathVariable int user_seq){
 		if(!studyService.disjoinStudy(study_seq, user_seq)) {
@@ -136,6 +133,44 @@ public class StudyController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<Set<Study>>(result, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "스터디 수정")
+	@PutMapping("/{user_seq}/{study_seq}")
+	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
+		Study originStudy = studyService.getStudyDetail(study_seq);
+		//유효한 스터디 & 방장만 수정 가능
+		if(originStudy!=null && user_seq == originStudy.getMasterSeq()) {
+			if(!originStudy.getName().equals(newStudy.getName())) {
+				//이름 중복 체크
+				if(!studyService.checkStudyName(newStudy.getName())) {
+					originStudy.setName(newStudy.getName());
+					return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
+				}
+			}
+			else if(originStudy.getLimitNumber()!=newStudy.getLimitNumber()) {
+				//현재 참여 인원보다 적게 신청했을 경우
+				if(originStudy.getParticipants().size()<=newStudy.getLimitNumber()) {
+					originStudy.setLimitNumber(newStudy.getLimitNumber());
+					return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
+				}
+			}
+			else if(newStudy.getRoomId()!=null && newStudy.getAlarm()!=null) {
+				//캠스터디
+				originStudy.setAlarm(newStudy.getAlarm());
+				return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
+			}
+			else {
+				if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
+				if(newStudy.getMasterSeq()!=0) originStudy.setMasterSeq(newStudy.getMasterSeq());
+				if(newStudy.getCategory()!=null) originStudy.setCategory(newStudy.getCategory());
+				originStudy.setPassword(newStudy.getPassword());
+				originStudy.setIntroduce(newStudy.getIntroduce());
+				return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
+			}
+				
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value="내 스터디 상세 조회")
@@ -190,7 +225,7 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 삭제")
 	@DeleteMapping("/{user_seq}/{study_seq}")
-	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq){
+	public ResponseEntity<?> deleteStudy(@PathVariable int user_seq, @PathVariable int study_seq){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(studyService.deleteStudy(user_seq, study_seq)) {
 			map.put("result", "삭제되었습니다.");
@@ -204,7 +239,7 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 필터링")
 	@GetMapping("filter/{category}/{emptyfilter}/{camfilter}/{publicfilter}")
-	public ResponseEntity<?> filterStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
+	public ResponseEntity<?> filterStudy(@PathVariable String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
 		List<Study> resultList = studyService.filterStudy(category, emptyfilter, camfilter, publicfilter);
 		if(resultList==null) {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -214,7 +249,7 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 검색")
 	@GetMapping("filter/{keyword}")
-	public ResponseEntity<?> searchStudy(String keyword){
+	public ResponseEntity<?> searchStudy(@PathVariable String keyword){
 		if(keyword=="") {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}

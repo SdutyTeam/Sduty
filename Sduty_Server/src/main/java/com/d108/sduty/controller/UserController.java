@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.d108.sduty.config.WebSecurityConfig;
 import com.d108.sduty.dto.AuthInfo;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.service.KakaoLoginService;
@@ -37,12 +38,18 @@ public class UserController {
 	@Autowired
 	private NaverLoginService nService;
 	
+	private WebSecurityConfig security = new WebSecurityConfig();
+	
 	@ApiOperation(value = "로그인 > id, pass 확인 > User 리턴", response = User.class)
 	@PostMapping("")
 	public ResponseEntity<?> selectUser(@RequestBody User user) throws Exception {
 		Optional<User> maybeUser = userService.selectUserById(user.getId());
 		if(maybeUser.isPresent()) {
 			User selectedUser = maybeUser.get();
+			//암호화 - 복호화
+			if(security.passwordEncoder().matches(user.getPass(), selectedUser.getPass2())) {
+				System.out.println("암호화 로그인 완료2!");
+			}
 			if(selectedUser.getPass().equals(user.getPass())) {
 				selectedUser.setPass("");
 				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
@@ -55,9 +62,6 @@ public class UserController {
 	@GetMapping("/join/{id}")
 	public ResponseEntity<?> isUsedId(@PathVariable String id) throws Exception {
 		boolean result = userService.isUsedId(id);
-//		System.out.println(id);
-//		System.out.println(result);
-
 		if(result) {			
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
@@ -67,6 +71,7 @@ public class UserController {
 	@ApiOperation(value = "회원가입 > User 리턴", response = HttpStatus.class)
 	@PostMapping("/join")
 	public ResponseEntity<?> insertUser(@RequestBody User user) throws Exception {
+		user.setPass2(security.passwordEncoder().encode(user.getPass()));
 		User result = userService.insertUser(user);
 		if(result != null) {			
 			return new ResponseEntity<User>(result, HttpStatus.OK);
@@ -145,7 +150,14 @@ public class UserController {
 	public ResponseEntity<?> updateUserInfo(@PathVariable int seq, @RequestBody User user) throws Exception {
 		user.setSeq(seq);
 		User selectUser = userService.selectUser(seq).get();
-		if(user.getPass() != null) selectUser.setPass(user.getPass());
+		if(user.getPass() != null) {
+			//이게 null이면 user.setPass(selectUser.getPass());인거 같습니다!
+			//암호화
+			//selectUser.setPass(security.passwordEncoder().encode(user.getPass()));
+			System.out.println("암호화된 비번도 변경");
+			user.setPass2(security.passwordEncoder().encode(user.getPass()));
+			selectUser.setPass(user.getPass());
+		}
 		user.setTel(selectUser.getTel());
 		user.setEmail(selectUser.getEmail());
 		user.setFcmToken(selectUser.getFcmToken());
@@ -195,8 +207,13 @@ public class UserController {
 	@PutMapping("/pwd")
 	public ResponseEntity<?> setPwdById(@RequestBody User user) throws Exception {
 		//인증이 안되면 수정이 안되므로 거의 not null 확실		
-		User selected_user = userService.selectUserById(user.getId()).get();		
-		selected_user.setPass(user.getPass());		
+		User selected_user = userService.selectUserById(user.getId()).get();
+		//암호화
+//		String securePw = security.passwordEncoder().encode(user.getPass());
+//		selected_user.setPass(securePw);
+		System.out.println("비번 변경 => 암호화");
+		selected_user.setPass2(security.passwordEncoder().encode(user.getPass()));
+		selected_user.setPass(user.getPass());
 		User result = userService.updatePassword(selected_user);
 		if(result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);

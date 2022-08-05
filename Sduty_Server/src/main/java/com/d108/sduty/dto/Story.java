@@ -13,7 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Setter
 @Getter
 @Entity
@@ -23,27 +25,32 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Story {
 	@Id
-	@Column(name="story_seq")
+	@Column(name="story_seq", updatable = false)
 	private int seq;
-	@Column(name="story_writer_seq")
+	@Column(name="story_writer_seq", updatable = false)
 	private int writerSeq;
-	@Column(name="story_image_source")
+	@Column(name="story_image_source", updatable = false)
 	private String imageSource;
-	@Column(name="story_thumbnail")
+	@Column(name="story_thumbnail", updatable = false)
 	private String thumbnail;
-	@Column(name="story_hashtag")
-	private int hashtag;
-	@Column(name="story_regtime")
+	@Column(name="story_interest_hashtag")
+	private int interestHashtag;
+	@Column(name="story_job_hashtag")
+	private int jobHashtag;
+	@Column(name="story_contents")
+	private String contents;
+	@Column(name="story_regtime", updatable = false)
 	private Date regtime;
 	@Column(name="story_public")
 	private int storyPublic;
 	@Column(name="story_warning")
 	private int warning;
-
+	
 	@Override
 	public String toString() {
 		return "Story [seq=" + seq + ", writerSeq=" + writerSeq + ", imageSource=" + imageSource + ", thumbnail="
-				+ thumbnail + ", hashtag=" + hashtag + ", regtime=" + regtime + ", storyPublic=" + storyPublic
-				+ ", warning=" + warning + "]";
+				+ thumbnail + ", interestHashtag=" + interestHashtag + ", jobHashtag=" + jobHashtag + ", contents="
+				+ contents + ", regtime=" + regtime + ", storyPublic=" + storyPublic + ", warning=" + warning + "]";
 	}
+	
 }
