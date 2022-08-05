@@ -142,7 +142,11 @@
     <fragment
         android:id="@+id/storyDetailFragment"
         android:name="com.d108.sduty.ui.main.home.StoryDetailFragment"
-        android:label="StoryDetailFragment" />
+        android:label="StoryDetailFragment">
+        <argument
+            android:name="seq"
+            app:argType="integer"/>
+    </fragment>
     <fragment
         android:id="@+id/timerFragment"
         android:name="com.d108.sduty.ui.main.timer.TimerFragment"
@@ -308,5 +312,8 @@
         <argument
             android:name="userSeq"
             app:argType="integer"/>
+        <action
+            android:id="@+id/action_userProfileFragment_to_storyDetailFragment"
+            app:destination="@id/storyDetailFragment" />
     </fragment>
 </navigation>

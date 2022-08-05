@@ -69,15 +69,15 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _story = MutableLiveData<Story>()
-    val story: LiveData<Story>
-        get() = _story
+    private val _timeLine = MutableLiveData<Timeline>()
+    val timeLine: LiveData<Timeline>
+        get() = _timeLine
 
-    fun getStoryValue(storySeq: Int){
+    fun getTimelineValue(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStudyDetail(storySeq).let {
+            Retrofit.storyApi.getTimelineDetail(storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _story.postValue(it.body() as Story)
+                    _timeLine.postValue(it.body() as Timeline)
                 }else{
                     Log.d(TAG, "getStoryValue: ${it.code()}")
                 }
@@ -160,9 +160,9 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun insertComment(comment: Reply){
+    fun insertReply(reply: Reply){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.insertComment(comment, comment.storySeq).let {
+            Retrofit.storyApi.insertReply(reply).let {
                 if (it.isSuccessful && it.body() != null) {
                     _commentList.postValue(it.body() as MutableList<Reply>)
                 }else{

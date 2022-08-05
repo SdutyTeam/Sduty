@@ -20,8 +20,8 @@ interface StoryApi {
     @PUT("/story")
     suspend fun updateStory(@Body story: Story): Response<List<Story>>
 
-    @GET("/story/{story_seq")
-    suspend fun getStudyDetail(@Path("story_seq") storySeq: Int): Response<Timeline>
+    @GET("/story/{story_seq}")
+    suspend fun getTimelineDetail(@Path("story_seq") storySeq: Int): Response<Timeline>
 
     @GET("/story/writer/{user_seq}")
     suspend fun getUserStoryList(@Path("user_seq")userSeq: Int): Response<List<Story>>
@@ -41,8 +41,8 @@ interface StoryApi {
     @GET("/story/{story_seq}/reply")
     suspend fun getReplyList(@Path("story_seq")storySeq: Int): Response<List<Reply>>
 
-    @POST("/story/{story_seq}/reply")
-    suspend fun insertComment(@Body comment: Reply, @Path("story_seq")storySeq: Int): Response<List<Reply>>
+    @POST("/story/reply")
+    suspend fun insertReply(@Body comment: Reply): Response<MutableList<Reply>>
 
     @PUT("/story/{story_seq}/reply")
     suspend fun updateComment(@Body comment: Reply, @Path("story_seq")storySeq: Int): Response<List<Reply>>

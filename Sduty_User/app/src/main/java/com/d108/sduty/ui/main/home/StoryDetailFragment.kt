@@ -1,20 +1,28 @@
 package com.d108.sduty.ui.main.home
 
-import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.d108.sduty.databinding.FragmentStoryDecoBinding
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
-import com.d108.sduty.databinding.FragmentStudyDetailBinding
+import com.d108.sduty.model.dto.Reply
+import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.showToast
 
 // 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩
 private const val TAG ="StoryDetailFragment"
 class StoryDetailFragment : Fragment() {
     private lateinit var binding: FragmentStoryDetailBinding
+    private val viewModel: StoryViewModel by viewModels()
+    private val args: StoryDetailFragmentArgs by navArgs()
+    private val mainViewModel: MainViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,12 +36,36 @@ class StoryDetailFragment : Fragment() {
         binding.apply {
             ivTimelineContent.layoutParams.width = deviceWidth
             ivTimelineContent.layoutParams.height = deviceHeight
+            lifecycleOwner = this@StoryDetailFragment
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        initViewModel()
+
+    }
+
+    private fun initViewModel() {
+        viewModel.apply {
+            getTimelineValue(args.seq)
+
+        }
+    }
+
+    private fun initView(){
+        binding.apply {
+            vm = viewModel
+            ivRegisterReply.setOnClickListener {
+                if(etReply.text.isEmpty()){
+                    requireContext().showToast("내용을 입력해 주세요")
+                    return@setOnClickListener
+                }
+                viewModel.insertReply(Reply(args.seq, mainViewModel.user.value!!.seq, etReply.text.toString()))
+            }
+        }
     }
 
 }
