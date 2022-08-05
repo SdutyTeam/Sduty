@@ -61,11 +61,11 @@ public class StudyServiceImpl implements StudyService {
 		if(alarm!=null) {
 			alarm.setCron(createCron(alarm));
 			alarm = alarmRepo.save(alarm);
+			study.setAlarm(alarm);
+			//스케쥴러 동작
+			addJob(study);
 		}
-		study.setAlarm(alarm);
 		studyRepo.save(study);
-		//스케쥴러 동작
-		addJob(study);
 	}
 
 	@Override
@@ -92,9 +92,13 @@ public class StudyServiceImpl implements StudyService {
 			if(!originStudy.getName().equals(newStudy.getName())) {
 				//이름 중복 체크
 				if(checkStudyName(newStudy.getName())) { return null;}
-				deleteJob(originStudy);
+				if(originStudy.getRoomId()!=null) {
+					deleteJob(originStudy);
+				}
 				originStudy.setName(newStudy.getName());
-				addJob(originStudy);
+				if(originStudy.getRoomId()!=null) {
+					addJob(originStudy);
+				}
 			}
 			else if(originStudy.getLimitNumber()!=newStudy.getLimitNumber()) {
 				//현재 참여 인원보다 적게 신청했을 경우
@@ -128,7 +132,9 @@ public class StudyServiceImpl implements StudyService {
 			return false;
 		}
 		//2. 삭제
-		deleteJob(study);
+		if(study.getRoomId()!=null) {
+			deleteJob(study);
+		}
 		if(studyRepo.deleteBySeq(studySeq)==0) {
 			return false;
 		}
