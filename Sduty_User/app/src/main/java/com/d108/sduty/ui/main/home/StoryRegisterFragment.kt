@@ -52,6 +52,8 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var imageUrl: String? = null
 
     private var selectedTagList = mutableListOf<String>()
+    private var jobHashtag: JobHashtag? = null
+    private var interestHashtagList: MutableList<Int>? = null
     private val tagAdapter = TagAdapter(ALL_TAG)
 
     override fun onCreateView(
@@ -165,7 +167,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }else if(etWrite.text.isEmpty()) {
                     requireContext().showToast("내용을 입력해 주세요")
                 }else{
-                    storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", etWrite.text.toString(), disclosure), viewModel.bitmap.value!!)
+                    storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", jobHashtag?.seq,  etWrite.text.toString(), disclosure, interestHashtagList), viewModel.bitmap.value!!)
                     requireContext().showToast("스토리가 등록 되었습니다")
                     findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToTimeLineFragment())
                 }
@@ -178,10 +180,14 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                             selectedTagList.clear()
                             if(selectedJob != null){
                                 selectedTagList.add(selectedJob.name)
+                                jobHashtag = selectedJob
                             }
                             if(selectedInterestList.size > 0){
+                                interestHashtagList = mutableListOf()
                                 for(i in 0 until selectedInterestList.size){
                                     selectedTagList.add(selectedInterestList[i].name)
+
+                                    interestHashtagList!!.add(selectedInterestList[i].seq)
                                 }
                             }
                             binding.recyclerSelectedTag.apply {
