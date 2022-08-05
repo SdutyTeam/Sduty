@@ -84,8 +84,7 @@ class MyStudyFragment : Fragment() {
         mystudyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
                 // 선택 스터디 입장
-                Log.d(TAG, "onClick: ${mystudyList[position]}")
-                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment())
+                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment(mystudyList[position].seq))
             }
         }
         binding.myStudyList.apply {

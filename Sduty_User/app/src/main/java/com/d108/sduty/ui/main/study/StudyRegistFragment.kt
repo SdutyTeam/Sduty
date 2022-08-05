@@ -193,10 +193,10 @@ class StudyRegistFragment : Fragment() {
                 context?.showToast("빈 칸을 모두 입력해 주세요.")
             }
             else{
-                studyRegisteViewModel.study.observe(viewLifecycleOwner){
-                    if(it != null){
+                studyRegisteViewModel.createSuccess.observe(viewLifecycleOwner){
+                    if(it){
                         // 성공적으로 스터디 생성 - 스터디 이동? 내 스터디 리스트?
-                        requireContext().showToast("!!!!")
+                        findNavController().navigate(StudyRegistFragmentDirections.actionStudyRegistFragmentToMyStudyFragment())
                     }
                 }
                 studyRegisteViewModel.studyCreate(Study(mainViewModel.profile.value!!.userSeq, name,

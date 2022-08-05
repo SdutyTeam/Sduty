@@ -14,7 +14,7 @@ import com.d108.sduty.common.SERVER_URL
 fun loadImage(view: ImageView, src: String?){
     Glide.with(view.context)
         .load(Uri.parse("${SERVER_URL}/image/${src}"))
-        .error(R.drawable.ic_user)
+        .error(R.drawable.empty_image)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(view)
 }

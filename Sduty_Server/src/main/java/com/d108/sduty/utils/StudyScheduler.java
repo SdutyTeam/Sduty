@@ -6,7 +6,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springframework.scheduling.Trigger;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
@@ -46,13 +45,13 @@ public class StudyScheduler {
 	}
 	
 	//프로젝트가 구동하자마자 동작
-	//@PostConstruct
-	public void init() {
-		startScheduler(0);
-	}
-
-	//@PreDestroy
-	public void destroy() {
-		stopScheduler();
-	}
+//	@PostConstruct
+//	public void init() {
+//		startScheduler(0);
+//	}
+//
+//	@PreDestroy
+//	public void destroy() {
+//		stopScheduler();
+//	}
 }

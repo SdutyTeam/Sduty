@@ -189,11 +189,12 @@
                                     />
                             </FrameLayout>
 
-                            <EditText
-                                android:id="@+id/et_job"
+                            <TextView
+                                android:id="@+id/tv_job"
                                 android:layout_width="0dp"
                                 android:layout_height="50dp"
                                 android:hint="직업"
+                                android:textSize="18sp"
                                 android:gravity="center"
                                 app:layout_constraintTop_toBottomOf="@id/et_nickname"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -209,7 +210,7 @@
                                 android:layout_width="80dp"
                                 android:layout_height="50dp"
                                 android:orientation="vertical"
-                                app:layout_constraintTop_toTopOf="@id/et_job"
+                                app:layout_constraintTop_toTopOf="@id/tv_job"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 android:onClick="@{() -> vm.setPublicFlag(0)}"
                                 >
@@ -227,13 +228,14 @@
                                     android:gravity="center"/>
                             </FrameLayout>
 
-                            <EditText
-                                android:id="@+id/et_interest"
+                            <TextView
+                                android:id="@+id/tv_interest"
                                 android:layout_width="0dp"
                                 android:layout_height="50dp"
                                 android:hint="관심 분야"
+                                android:textSize="18sp"
                                 android:gravity="center"
-                                app:layout_constraintTop_toBottomOf="@id/et_job"
+                                app:layout_constraintTop_toBottomOf="@id/tv_job"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintEnd_toStartOf="@id/frame_check_job"
                                 android:background="@drawable/textview_gray"
@@ -247,7 +249,7 @@
                                 android:layout_width="80dp"
                                 android:layout_height="50dp"
                                 android:orientation="vertical"
-                                app:layout_constraintTop_toTopOf="@id/et_interest"
+                                app:layout_constraintTop_toTopOf="@id/tv_interest"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 android:onClick="@{() -> vm.setPublicFlag(1)}"
                                 >
@@ -272,7 +274,7 @@
                                 android:hint="생년월일 (19990101)"
                                 android:gravity="center"
                                 android:singleLine="true"
-                                app:layout_constraintTop_toBottomOf="@id/et_interest"
+                                app:layout_constraintTop_toBottomOf="@id/tv_interest"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintEnd_toStartOf="@id/frame_check_job"
                                 android:background="@drawable/textview_gray"
