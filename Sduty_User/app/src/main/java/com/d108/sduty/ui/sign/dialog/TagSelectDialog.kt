@@ -20,6 +20,7 @@ import com.d108.sduty.databinding.DialogTagSelectBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
+import com.d108.sduty.utils.showToast
 
 private const val TAG ="TagSelectDialog"
 class TagSelectDialog(val mContext: Context) : DialogFragment() {
@@ -148,6 +149,10 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
                 layoutManager = GridLayoutManager(requireContext(), 1)
             }
             btnConfirm.setOnClickListener {
+                if(flag == PROFILE && selectedJobList.size == 0){
+                    requireContext().showToast("직업을 선택해 주세요")
+                    return@setOnClickListener
+                }
                 var selectedJob: JobHashtag? = null
                 if(selectedJobList.size > 0){
                     selectedJob = selectedJobList[0]

@@ -28,7 +28,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public Profile insertProfile(Profile profile) throws Exception {
 		Profile p = profileRepo.save(profile);
-		if(p != null) {
+		if(p.getInterestHashtags() != null) {
 			if(!profile.getInterestHashtagSeqs().isEmpty()) {
 				for(int i : profile.getInterestHashtagSeqs()) {
 					userInterestRepo.save(new UserInterest(profile.getUserSeq(), i));

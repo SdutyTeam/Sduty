@@ -26,7 +26,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
             android:configChanges="keyboardHidden|orientation"
             android:fitsSystemWindows="true"
             >
