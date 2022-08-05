@@ -21,6 +21,7 @@ class TagViewModel: ViewModel() {
             Retrofit.tagApi.getJobList().let {
                 if(it.isSuccessful && it.body() != null){
                     _jobList.postValue(it.body() as MutableList<JobHashtag>)
+                    setTagMap(it.body() as MutableList<JobHashtag>)
                 }else{
                     Log.d(TAG, "getJobListValue: ${it.code()}")
                 }
@@ -60,5 +61,17 @@ class TagViewModel: ViewModel() {
             _interestSelectVisible.postValue(true)
         }
     }
+
+    private val _jobTagMap = MutableLiveData<HashMap<String, Int>>()
+    val jobTagMap: LiveData<HashMap<String, Int>>
+        get() = _jobTagMap
+    private fun setTagMap(list: MutableList<JobHashtag>){
+        val map = hashMapOf<String, Int>()
+        for(item in list) {
+            map[item.name] = item.seq
+        }
+        _jobTagMap.postValue(map)
+    }
+
 
 }
