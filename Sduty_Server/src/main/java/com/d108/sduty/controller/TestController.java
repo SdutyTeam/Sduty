@@ -28,6 +28,7 @@ public class TestController {
 	//알람 추가
 	@GetMapping("")
 	public ResponseEntity<?> addAlarm(Alarm alarm){
+		//1. create cron
 		String[] time = alarm.getTime().split(":");
 		System.out.println(Arrays.toString(alarm.getTime().split(":")));
 		StringBuilder cron = new StringBuilder(time[2]+" "+time[1]+" "+time[0]+" ? * ");
@@ -45,9 +46,12 @@ public class TestController {
 		}
 		String result = cron.substring(0, cron.length()-1)+" *";
 		System.out.println(result);
-		System.out.println(schedulerFactoryBean);
+//		System.out.println(schedulerFactoryBean);
+		
+		//2. Job 추가
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
 		System.out.println(scheduler);
+		
 		JobDetail jd = JobBuilder.newJob(Job.class)
 				.withIdentity("alarm3", "Study")
 				.usingJobData("studySeq", 3)

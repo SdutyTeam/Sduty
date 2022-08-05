@@ -67,6 +67,7 @@ public class StudyController {
 			}
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
@@ -138,38 +139,10 @@ public class StudyController {
 	@ApiOperation(value = "스터디 수정")
 	@PutMapping("/{user_seq}/{study_seq}")
 	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
-		Study originStudy = studyService.getStudyDetail(study_seq);
-		//유효한 스터디 & 방장만 수정 가능
-		if(originStudy!=null && user_seq == originStudy.getMasterSeq()) {
-			if(!originStudy.getName().equals(newStudy.getName())) {
-				//이름 중복 체크
-				if(!studyService.checkStudyName(newStudy.getName())) {
-					originStudy.setName(newStudy.getName());
-					return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
-				}
-			}
-			else if(originStudy.getLimitNumber()!=newStudy.getLimitNumber()) {
-				//현재 참여 인원보다 적게 신청했을 경우
-				if(originStudy.getParticipants().size()<=newStudy.getLimitNumber()) {
-					originStudy.setLimitNumber(newStudy.getLimitNumber());
-					return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
-				}
-			}
-			else if(newStudy.getRoomId()!=null && newStudy.getAlarm()!=null) {
-				//캠스터디
-				originStudy.setAlarm(newStudy.getAlarm());
-				return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
-			}
-			else {
-				if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
-				if(newStudy.getMasterSeq()!=0) originStudy.setMasterSeq(newStudy.getMasterSeq());
-				if(newStudy.getCategory()!=null) originStudy.setCategory(newStudy.getCategory());
-				originStudy.setPassword(newStudy.getPassword());
-				originStudy.setIntroduce(newStudy.getIntroduce());
-				return new ResponseEntity<Study>(studyService.updateStudy(originStudy), HttpStatus.OK);
-			}
-				
+		if(user_seq==newStudy.getMasterSeq()) {
+			return new ResponseEntity<Study>(studyService.updateStudy(user_seq, newStudy), HttpStatus.OK);
 		}
+		
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
