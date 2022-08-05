@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -64,4 +65,7 @@ public class Profile {
 	private int isProhibitedUser;
 	@Column(name="is_studying")
 	private int isStudying;
+	
+	@Transient
+	private List<UserInterest> interestHashtag;
 }

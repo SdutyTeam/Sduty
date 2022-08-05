@@ -74,9 +74,9 @@ public class ProfileController {
 	@ApiOperation(value = "프로필 조회 > UserSeq > Profile 리턴", response = Profile.class)
 	@GetMapping("/{userSeq}")
 	public ResponseEntity<?> selectProfile(@PathVariable int userSeq) {
-		Optional<Profile> selectedProfile = profileService.selectProfile(userSeq);
-		if(selectedProfile.isPresent()) {
-			return new ResponseEntity<Profile>(selectedProfile.get(), HttpStatus.OK);
+		Profile selectedProfile = profileService.selectProfile(userSeq);
+		if(selectedProfile != null) {
+			return new ResponseEntity<Profile>(selectedProfile, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
@@ -120,9 +120,9 @@ public class ProfileController {
 	@ApiOperation(value = "유저 신고 > UserSeq > HttpStatus", response = HttpStatus.class)
 	@PutMapping("/warning/{userSeq}")
 	public ResponseEntity<?> warnUser(@PathVariable int userSeq) throws Exception {
-		Optional<Profile> selectedProfile = profileService.selectProfile(userSeq);
-		if(selectedProfile.isPresent()) {
-			Profile updatingProfile = selectedProfile.get();
+		Profile selectedProfile = profileService.selectProfile(userSeq);
+		if(selectedProfile != null) {
+			Profile updatingProfile = selectedProfile;
 			updatingProfile.setWarning(updatingProfile.getWarning() + 1);
 			profileService.updateProfile(updatingProfile);
 			return new ResponseEntity<Void>(HttpStatus.OK);
@@ -163,9 +163,9 @@ public class ProfileController {
 	@ApiOperation(value = "대표 업적 설정 > Achievement > ", response = Achievement.class)
 	@PutMapping("/achievement")
 	public ResponseEntity<?> updateRepAchievement(@RequestBody UserAchieve userAchieve) throws Exception {
-		Optional<Profile> selectedProfile = profileService.selectProfile(userAchieve.getUserSeq());
-		if(selectedProfile.isPresent()) {
-			Profile profile = selectedProfile.get();
+		Profile selectedProfile = profileService.selectProfile(userAchieve.getUserSeq());
+		if(selectedProfile != null) {
+			Profile profile = selectedProfile;
 			profile.setMainAchievmentSeq(userAchieve.getAchievementSeq());
 			Profile tempProfile = profileService.updateProfile(profile);
 			if(tempProfile != null) {
