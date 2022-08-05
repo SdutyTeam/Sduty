@@ -145,7 +145,7 @@ class ProfileRegistFragment : Fragment() {
                 return
 
             }else{
-                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", jobHashtag?.seq.toString(), publicJob, interestHashtagList, publicInterest, 1), imageUrl)
+                //viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", jobHashtag?.seq.toString(), publicJob, interestHashtagList, publicInterest, 1), imageUrl)
             }
 
         }
