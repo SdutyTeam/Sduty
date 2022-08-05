@@ -31,6 +31,7 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public Story insertStory(Story story) {
 		Story s = storyRepo.save(story);
+		System.out.println(s.toString());
 		int storySeq = s.getSeq();
 		if(!story.getInterestHashtag().isEmpty()) {
 			for(int i : story.getInterestHashtag())
