@@ -58,6 +58,9 @@ class StoryDetailFragment : Fragment() {
             timeLine.observe(viewLifecycleOwner){
                 replyAdapter.list = timeLine.value!!.replies
             }
+            replyList.observe(viewLifecycleOwner){
+                replyAdapter.list = it
+            }
 
         }
     }
