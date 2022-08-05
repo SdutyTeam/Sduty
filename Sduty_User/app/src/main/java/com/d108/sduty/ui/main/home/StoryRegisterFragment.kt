@@ -14,6 +14,7 @@ import android.widget.Adapter
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TagAdapter
 import com.d108.sduty.common.ALL_TAG
+import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
@@ -45,7 +47,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val viewModel: HomeViewModel by viewModels()
     private val storyViewModel: StoryViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
-    private val tagViewModel: TagViewModel by activityViewModels()
+    private val tagViewModel: TagViewModel by viewModels()
     // (공개 범위) 0 : 전체 공개, 1 : 팔로워만, 2 : 나만 보기
     private var disclosure = 0
     private val args: StoryRegisterFragmentArgs by navArgs()
@@ -99,7 +101,9 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initViewModel() {
-
+        tagViewModel.apply {
+            getJobListValue()
+        }
     }
 
     private fun initView(){
@@ -167,33 +171,33 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }else if(etWrite.text.isEmpty()) {
                     requireContext().showToast("내용을 입력해 주세요")
                 }else{
-                    storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", jobHashtag?.seq,  etWrite.text.toString(), disclosure, interestHashtagList), viewModel.bitmap.value!!)
+                    storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", tagViewModel.jobTagMap.value!![mainViewModel.profile.value!!.job],  etWrite.text.toString(), disclosure, interestHashtagList), viewModel.bitmap.value!!)
                     requireContext().showToast("스토리가 등록 되었습니다")
                     findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToTimeLineFragment())
                 }
             }
+            selectedTagList.clear()
+            selectedTagList.add(mainViewModel.profile.value!!.job)
+            binding.recyclerSelectedTag.apply {
+                adapter = tagAdapter
+                tagAdapter.selectList = selectedTagList
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            }
             btnAddSubject.setOnClickListener {
                 TagSelectDialog(requireContext()).let {
+                    it.arguments = bundleOf("flag" to NOT_PROFILE)
                     it.show(parentFragmentManager, null)
                     it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
                         override fun onClick(selectedJob: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
-                            selectedTagList.clear()
-                            if(selectedJob != null){
-                                selectedTagList.add(selectedJob.name)
-                                jobHashtag = selectedJob
-                            }
                             if(selectedInterestList.size > 0){
+                                selectedTagList.clear()
+                                selectedTagList.add(mainViewModel.profile.value!!.job)
                                 interestHashtagList = mutableListOf()
                                 for(i in 0 until selectedInterestList.size){
                                     selectedTagList.add(selectedInterestList[i].name)
-
                                     interestHashtagList!!.add(selectedInterestList[i].seq)
                                 }
-                            }
-                            binding.recyclerSelectedTag.apply {
-                                adapter = tagAdapter
                                 tagAdapter.selectList = selectedTagList
-                                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                             }
 
                         }

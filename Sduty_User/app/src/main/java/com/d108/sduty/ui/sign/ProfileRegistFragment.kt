@@ -12,9 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.d108.sduty.common.PROFILE
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
@@ -88,6 +90,7 @@ class ProfileRegistFragment : Fragment() {
 
     private fun openTagSelectDialog() {
         TagSelectDialog(requireContext()).let {
+            it.arguments = bundleOf("flag" to PROFILE)
             it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
                 override fun onClick(selectedJobList: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
 
