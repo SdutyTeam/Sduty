@@ -6,30 +6,28 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.Member
 import com.d108.sduty.model.dto.Profile
-import com.d108.sduty.model.dto.Study
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-private const val TAG = "StudyDetailViewModel"
-class StudyDetailViewModel: ViewModel() {
-    private val _myStudyInfo = MutableLiveData<Map<String, Any>>()
-    val myStudyInfo: LiveData<Map<String, Any>>
-        get() = _myStudyInfo
+private const val TAG = "CamStudyDetailViewModel"
+class CamStudyDetailViewModel: ViewModel() {
+    private val _camStudyInfo = MutableLiveData<Map<String, Any>>()
+    val camStudyInfo: LiveData<Map<String, Any>>
+        get() = _camStudyInfo
 
     private val _studyMasterNickname = MutableLiveData<Profile>()
     val studyMasterNickName: LiveData<Profile>
         get() = _studyMasterNickname
 
-    fun getMyStudyInfo(userSeq: Int, studySeq: Int){
+    fun getCamStudyInfo(userSeq: Int, studySeq: Int){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 내 스터디 리스트 불러오기
                 val response = Retrofit.studyApi.getMyStudyInfo(userSeq, studySeq)
                 if(response.isSuccessful && response.body() != null){
-                    _myStudyInfo.postValue(response.body() as Map<String, Any>)
+                    _camStudyInfo.postValue(response.body() as Map<String, Any>)
                 }
 
             }catch (e: Exception){

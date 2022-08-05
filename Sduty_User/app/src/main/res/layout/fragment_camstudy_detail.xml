@@ -79,6 +79,7 @@
                 android:text="공지사항"/>
 
             <TextView
+                android:id="@+id/tv_camstudy_notice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -102,6 +103,7 @@
                 android:layout_weight="3"/>
 
             <Button
+                android:id="@+id/btn_join_camstudy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="입장하기"
