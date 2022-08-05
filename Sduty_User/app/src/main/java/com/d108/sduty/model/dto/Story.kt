@@ -7,13 +7,16 @@ data class Story(
     var writerSeq: Int,
     var imageSource: String,
     var thumbnail: String,
-    var content: String,
+    var contents: String,
     var regtime: Date?,
     var storyPublic: Int,
-    var storyWarning: Int
+    var storyWarning: Int,
 ) {
+    constructor():
+            this(0,0,",",",","",null,0,0)
     constructor(seq: Int):
             this(seq,0,"","","",null, 0, 0)
+    constructor(writerSeq: Int, imageSource: String, contents: String, storyPublic: Int): this(
+        0, writerSeq, imageSource, "", contents, null, storyPublic, 0)
 
-    constructor(): this(0,0,"","","",null,0,0) // 영상촬영용. 삭제해야함
 }

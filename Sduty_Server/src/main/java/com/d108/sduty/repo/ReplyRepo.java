@@ -8,4 +8,5 @@ import com.d108.sduty.dto.Reply;
 
 public interface ReplyRepo extends JpaRepository<Reply, Integer> {
 	List<Reply> findAllByStorySeqOrderByRegtimeDesc(int seq);
+	int countAllByStorySeq(int storySeq);
 }

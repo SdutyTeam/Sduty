@@ -42,17 +42,22 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
 
         val list = mutableListOf<Boolean>()
         for(i in 0..181){
             list.add(Math.random() < 0.5)
         }
-        val list2 = mutableListOf<Story>()
-        for(i in 0 .. 40){
-            list2.add(Story(i))
-        }
+
         contributionAdapter.list = list
-        storyAdapter.list = list2
+    }
+
+    private fun initViewModel() {
+        viewModel.userStoryList.observe(viewLifecycleOwner){
+            storyAdapter.list = it
+        }
+        viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
+        viewModel.getProfileValue(mainViewModel.user.value!!.seq)
     }
 
     private fun initView(){
@@ -60,7 +65,7 @@ class MyPageFragment : Fragment() {
         storyAdapter = StoryAdapter(requireActivity())
         binding.apply {
             lifecycleOwner = this@MyPageFragment
-            vm = mainViewModel
+            vm = viewModel
             recylerStory.apply {
                 adapter = storyAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)

@@ -8,7 +8,7 @@
     <data>
         <variable
             name="vm"
-            type="com.d108.sduty.ui.main.home.viewmodel.StoryViewModel" />
+            type="com.d108.sduty.ui.main.home.viewmodel.HomeViewModel" />
         <import type="com.d108.sduty.R"/>
     </data>
 
@@ -136,7 +136,7 @@
 
             <Button
                 android:enabled="false"
-                android:text="직업"
+                android:text="태그"
                 android:textSize="18sp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
@@ -150,6 +150,11 @@
                 android:src="@drawable/icon_add_circle"
                 android:layout_gravity="center"/>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_selected_tag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

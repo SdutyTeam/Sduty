@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
+import com.d108.sduty.repo.ReplyRepo;
 import com.d108.sduty.repo.StoryRepo;
 
 @Service
@@ -17,6 +19,9 @@ public class StoryServiceImpl implements StoryService {
 
 	@Autowired
 	private StoryRepo storyRepo;
+	
+	@Autowired
+	private ReplyRepo replyRepo;
 	
 	@Override
 	public Story insertStory(Story story) {
@@ -39,8 +44,8 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, PageRequest pageRequest) {
-		return optConverter(storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs, pageRequest));
+	public List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs) {
+		return storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs);
 	}
 
 	@Override
@@ -56,5 +61,27 @@ public class StoryServiceImpl implements StoryService {
 		}
 		return sList;
 	}
+
+	@Override
+	public List<Story> selectStoryInSeq(List<Integer> storySeqs) {
+		return storyRepo.findAllBySeqInOrderByRegtimeDesc(storySeqs);
+	}
+
+	@Override
+	public Reply insertReply(Reply reply) {
+		return replyRepo.save(reply);
+	}
+
+	@Override
+	public Reply updateReply(Reply reply) {
+		return replyRepo.save(reply);
+	}
+
+	@Override
+	public void deleteReply(int replySeq) {
+		replyRepo.deleteById(replySeq);
+	}
+	
+	
 
 }

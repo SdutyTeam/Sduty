@@ -4,7 +4,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -23,7 +27,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Reply {
 	@Id
-	@Column(name="reply_seq", updatable = false)
+	@Column(name="reply_seq", updatable = false, insertable = false)
 	private int seq;
 	@Column(name="reply_user_seq", updatable = false)
 	private int userSeq;
@@ -33,4 +37,8 @@ public class Reply {
 	private String content;
 	@Column(name="reply_regtime", updatable = false)
 	private Date regtime;
+	
+	@Transient
+    private Profile profile;
+
 }

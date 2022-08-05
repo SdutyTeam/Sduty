@@ -13,7 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Setter
 @Getter
 @Entity
@@ -31,8 +33,10 @@ public class Story {
 	private String imageSource;
 	@Column(name="story_thumbnail", updatable = false)
 	private String thumbnail;
-	@Column(name="story_hashtag")
-	private int hashtag;
+	@Column(name="story_interest_hashtag")
+	private int interestHashtag;
+	@Column(name="story_job_hashtag")
+	private int jobHashtag;
 	@Column(name="story_contents")
 	private String contents;
 	@Column(name="story_regtime", updatable = false)
@@ -41,11 +45,12 @@ public class Story {
 	private int storyPublic;
 	@Column(name="story_warning")
 	private int warning;
-
+	
 	@Override
 	public String toString() {
 		return "Story [seq=" + seq + ", writerSeq=" + writerSeq + ", imageSource=" + imageSource + ", thumbnail="
-				+ thumbnail + ", hashtag=" + hashtag + ", regtime=" + regtime + ", storyPublic=" + storyPublic
-				+ ", warning=" + warning + "]";
+				+ thumbnail + ", interestHashtag=" + interestHashtag + ", jobHashtag=" + jobHashtag + ", contents="
+				+ contents + ", regtime=" + regtime + ", storyPublic=" + storyPublic + ", warning=" + warning + "]";
 	}
+	
 }
