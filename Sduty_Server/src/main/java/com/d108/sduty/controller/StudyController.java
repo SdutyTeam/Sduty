@@ -166,9 +166,8 @@ public class StudyController {
 			Map<String, Object> user_info = new HashMap<>();
 			user_info.put("userSeq", participant.getSeq());
 			
-			Optional<Profile> profileOp = profileService.selectProfile(participant.getSeq());
-			if(profileOp.isPresent()) {
-				Profile profile = profileOp.get();
+			Profile profile = profileService.selectProfile(participant.getSeq());
+			if(profile!=null) {
 				user_info.put("nickname", profile.getNickname());
 				user_info.put("is_studying", profile.getIsStudying());
 			}
