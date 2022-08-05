@@ -7,10 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.Profile
-import com.d108.sduty.model.dto.Reply
-import com.d108.sduty.model.dto.Story
-import com.d108.sduty.model.dto.Timeline
+import com.d108.sduty.model.dto.*
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -237,6 +234,7 @@ class StoryViewModel: ViewModel() {
             Retrofit.profileApi.getProfileValue(userSeq).let {
                 if(it.isSuccessful && it.body() != null) {
                     _profile.postValue(it.body() as Profile)
+                    Log.d(TAG, "getProfileValue: ${it.body()}")
                 }else{
                     Log.d(TAG, "getProfileValue: ${it.code()}")
                 }
