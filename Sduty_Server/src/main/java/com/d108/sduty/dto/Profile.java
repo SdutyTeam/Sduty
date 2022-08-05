@@ -67,5 +67,7 @@ public class Profile {
 	private int isStudying;
 	
 	@Transient
-	private List<UserInterest> interestHashtag;
+	private List<Integer> interestHashtagSeqs;
+	@Transient
+	private List<InterestHashtag> interestHashtags;
 }
