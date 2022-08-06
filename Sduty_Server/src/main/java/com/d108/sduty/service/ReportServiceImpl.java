@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class ReportServiceImpl implements ReportService {
 	private ReportRepo reportRepo;
 
 	@Override
+	@Transactional
 	public void registTask(int userSeq, String date, Task task) {
 		// 1. 해당 날짜 report 가져오기(없으면 만들어서 반환)
 		Report report = reportRepo.findByDateAndOwnerSeq(date, userSeq);
@@ -82,6 +85,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
+	@Transactional
 	public Task updateTask(Task task) {
 		if (taskRepo.existsBySeq(task.getSeq())) {
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
@@ -100,6 +104,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteTask(int taskSeq) {
 		taskRepo.deleteBySeq(taskSeq);
 	}
