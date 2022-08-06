@@ -1,15 +1,21 @@
 package com.d108.sduty.ui.main.home
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.d108.sduty.R
 import com.d108.sduty.adapter.ReplyAdapter
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
 import com.d108.sduty.model.dto.Likes
@@ -17,11 +23,12 @@ import com.d108.sduty.model.dto.Reply
 import com.d108.sduty.model.dto.Scrap
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
 
 // 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩
 private const val TAG ="StoryDetailFragment"
-class StoryDetailFragment : Fragment() {
+class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     private lateinit var binding: FragmentStoryDetailBinding
     private val viewModel: StoryViewModel by viewModels()
     private val args: StoryDetailFragmentArgs by navArgs()
@@ -89,7 +96,34 @@ class StoryDetailFragment : Fragment() {
             ivScrap.setOnClickListener {
                 viewModel.scrapStory(Scrap(mainViewModel.user.value!!.seq, args.seq))
             }
-
+            ivMenu.setOnClickListener {
+                @IdRes var menuId = 0
+                if(viewModel.timeLine.value!!.story.writerSeq == mainViewModel.user.value!!.seq){
+                    menuId = R.menu.menu_story_own_writer
+                }else{
+                    menuId = R.menu.menu_story_visiters
+                }
+                PopupMenu(requireContext(), it).apply {
+                    setOnMenuItemClickListener(this@StoryDetailFragment)
+                    inflate(menuId)
+                    show()
+                }
+            }
         }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.story_delete -> {
+                requireActivity().showAlertDialog("삭제","스토리를 삭제하시겠습니까?", object : DialogInterface.OnClickListener{
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        viewModel.deleteStory(args.seq)
+                        requireContext().showToast("삭제 되었습니다.")
+                        findNavController().popBackStack()
+                    }
+                })
+            }
+        }
+        return true
     }
 }
