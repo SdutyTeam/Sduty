@@ -1,5 +1,6 @@
 package com.d108.sduty.model.dto
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
 
 data class Story(
@@ -9,7 +10,8 @@ data class Story(
     var thumbnail: String,
     var jobHashtag: Int?,
     var contents: String,
-    var regtime: Date?,
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
+    var regtime: String?,
     var storyPublic: Int,
     var storyWarning: Int,
     var interestHashtag: MutableList<Int>?

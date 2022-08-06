@@ -130,6 +130,18 @@ class StoryViewModel: ViewModel() {
         }
     }
 
+    fun updateStory(story: Story){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.updateStory(story).let {
+                if(it.isSuccessful && it.body() != null){
+                    _timeLine.postValue(it.body() as Timeline)
+                }else{
+                    Log.d(TAG, "updateStory: ${it.code()}")
+                }
+            }
+        }
+    }
+
     fun deleteStory(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.deleteStory(storySeq).let {
@@ -190,7 +202,7 @@ class StoryViewModel: ViewModel() {
                 if (it.isSuccessful && it.body() != null) {
                     _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "updateReply: ${it.code()}")
+                    Log.d(TAG, "deleteReply: ${it.code()}")
                 }
             }
         }

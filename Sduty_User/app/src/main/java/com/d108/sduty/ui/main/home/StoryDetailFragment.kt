@@ -3,12 +3,14 @@ package com.d108.sduty.ui.main.home
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -17,10 +19,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.ReplyAdapter
+import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
-import com.d108.sduty.model.dto.Likes
-import com.d108.sduty.model.dto.Reply
-import com.d108.sduty.model.dto.Scrap
+import com.d108.sduty.model.dto.*
+import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.showAlertDialog
@@ -66,6 +68,8 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             getTimelineValue(args.seq)
             timeLine.observe(viewLifecycleOwner){
                 replyAdapter.list = timeLine.value!!.replies
+                binding.vm = viewModel
+                Log.d(TAG, "initViewModel: ${it}")
             }
             replyList.observe(viewLifecycleOwner){
                 replyAdapter.list = it
@@ -122,6 +126,24 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                         findNavController().popBackStack()
                     }
                 })
+            }
+            R.id.story_update_tag -> {
+                TagSelectDialog(requireContext()).let {
+                    it.arguments = bundleOf("flag" to NOT_PROFILE)
+                    it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
+                        override fun onClick(selectedJobList: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
+                            var story = viewModel.timeLine.value!!.story
+                            var list = mutableListOf<Int>()
+                            for(item in selectedInterestList){
+                                list.add(item.seq)
+                            }
+                            story.interestHashtag = list
+                            Log.d(TAG, "onClick: $story")
+                            viewModel.updateStory(story)
+                        }
+                    }
+                    it.show(parentFragmentManager, null)
+                }
             }
         }
         return true

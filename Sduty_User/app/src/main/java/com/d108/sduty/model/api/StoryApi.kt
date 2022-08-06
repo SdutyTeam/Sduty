@@ -16,7 +16,7 @@ interface StoryApi {
     suspend fun insertStory(@Part imageFile: MultipartBody.Part, @Part("story") story: RequestBody): Response<List<Story>>
 
     @PUT("/story")
-    suspend fun updateStory(@Body story: Story): Response<List<Story>>
+    suspend fun updateStory(@Body story: Story): Response<Timeline>
 
     @GET("/story/{story_seq}")
     suspend fun getTimelineDetail(@Path("story_seq") storySeq: Int): Response<Timeline>
