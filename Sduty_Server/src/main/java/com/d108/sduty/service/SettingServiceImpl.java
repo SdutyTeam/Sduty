@@ -3,6 +3,8 @@ package com.d108.sduty.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ public class SettingServiceImpl implements SettingService {
 	private NoticeRepo noticeRepo;
 	
 	@Override
+	@Transactional
 	public int registQuestion(Qna qna) {
 		Qna newQna = qnaRepo.save(qna);
 		if(newQna!=null) {return 1;}
@@ -36,6 +39,7 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
+	@Transactional
 	public Qna updateQuestion(int qnaSeq, Qna qna) {
 		Optional<Qna> qnaOp = qnaRepo.findById(qnaSeq);
 		if(qnaOp.isPresent()) {
@@ -49,6 +53,7 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteQna(int qnaSeq) {
 		qnaRepo.deleteById(qnaSeq);
 	}
