@@ -139,7 +139,7 @@ public class StudyController {
 	@ApiOperation(value = "스터디 수정")
 	@PutMapping("/{user_seq}/{study_seq}")
 	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
-		if(user_seq==newStudy.getMasterSeq()) {
+		if(study_seq==newStudy.getSeq()) {
 			return new ResponseEntity<Study>(studyService.updateStudy(user_seq, newStudy), HttpStatus.OK);
 		}
 		
