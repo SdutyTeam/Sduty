@@ -8,10 +8,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.d108.sduty.dto.Report;
 import com.d108.sduty.dto.Task;
@@ -27,7 +26,7 @@ public class ReportServiceImpl implements ReportService {
 	private ReportRepo reportRepo;
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void registTask(int userSeq, String date, Task task) {
 		// 1. 해당 날짜 report 가져오기(없으면 만들어서 반환)
 		Report report = reportRepo.findByDateAndOwnerSeq(date, userSeq);
@@ -96,6 +95,7 @@ public class ReportServiceImpl implements ReportService {
 				sec += ed.getTime() / 1000 - sd.getTime() / 1000;
 			} catch (ParseException e) {
 				e.printStackTrace();
+				return null;
 			}
 			task.setDurationTime(sec);
 			return taskRepo.save(task);
