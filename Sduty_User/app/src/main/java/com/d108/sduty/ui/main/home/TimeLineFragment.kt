@@ -86,5 +86,6 @@ class TimeLineFragment : Fragment() {
             timeLineAdapter.list = it
         }
         storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
+        mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
     }
 }

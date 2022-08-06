@@ -1,5 +1,6 @@
 package com.d108.sduty.model.api
 
+import com.d108.sduty.model.dto.Follow
 import com.d108.sduty.model.dto.Profile
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -16,5 +17,8 @@ interface ProfileApi {
 
     @GET("/profile/{userSeq}")
     suspend fun getProfileValue(@Path("userSeq")userSeq: Int): Response<Profile>
+
+    @POST("/profile/follow")
+    suspend fun doFollow(@Body follow: Follow): Response<Void>
 
 }

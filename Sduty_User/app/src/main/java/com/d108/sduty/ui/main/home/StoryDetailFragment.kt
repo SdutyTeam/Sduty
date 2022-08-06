@@ -4,10 +4,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
@@ -27,6 +24,7 @@ import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
+import com.google.android.material.navigation.NavigationView
 
 // 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩
 private const val TAG ="StoryDetailFragment"
@@ -69,12 +67,13 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             timeLine.observe(viewLifecycleOwner){
                 replyAdapter.list = timeLine.value!!.replies
                 binding.vm = viewModel
-                Log.d(TAG, "initViewModel: ${it}")
             }
             replyList.observe(viewLifecycleOwner){
                 replyAdapter.list = it
             }
-
+        }
+        mainViewModel.apply {
+            mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
         }
     }
 
@@ -117,35 +116,50 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        when(item!!.itemId){
+        when(item!!.itemId) {
             R.id.story_delete -> {
-                requireActivity().showAlertDialog("삭제","스토리를 삭제하시겠습니까?", object : DialogInterface.OnClickListener{
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        viewModel.deleteStory(args.seq)
-                        requireContext().showToast("삭제 되었습니다.")
-                        findNavController().popBackStack()
-                    }
-                })
+                requireActivity().showAlertDialog(
+                    "삭제",
+                    "스토리를 삭제하시겠습니까?",
+                    object : DialogInterface.OnClickListener {
+                        override fun onClick(dialog: DialogInterface?, which: Int) {
+                            viewModel.deleteStory(args.seq)
+                            requireContext().showToast("삭제 되었습니다.")
+                            findNavController().popBackStack()
+                        }
+                    })
             }
             R.id.story_update_tag -> {
                 TagSelectDialog(requireContext()).let {
                     it.arguments = bundleOf("flag" to NOT_PROFILE)
-                    it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
-                        override fun onClick(selectedJobList: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
+                    it.onClickConfirm = object : TagSelectDialog.OnClickConfirm {
+                        override fun onClick(
+                            selectedJobList: JobHashtag?,
+                            selectedInterestList: MutableList<InterestHashtag>
+                        ) {
                             var story = viewModel.timeLine.value!!.story
                             var list = mutableListOf<Int>()
-                            for(item in selectedInterestList){
+                            for (item in selectedInterestList) {
                                 list.add(item.seq)
                             }
                             story.interestHashtag = list
-                            Log.d(TAG, "onClick: $story")
                             viewModel.updateStory(story)
                         }
                     }
                     it.show(parentFragmentManager, null)
                 }
             }
+            R.id.follow -> {
+                viewModel.doFollow(
+                    Follow(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story.writerSeq))
+                if (mainViewModel.checkFollowUser(viewModel.timeLine.value!!.story.writerSeq)) {
+                    item.title = "언팔로우"
+                }else{
+                    item.title = "팔로우"
+                }
+            }
         }
+
         return true
     }
 }
