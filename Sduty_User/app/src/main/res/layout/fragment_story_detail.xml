@@ -45,14 +45,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
             app:layout_constraintTop_toBottomOf="@id/common_top"
             app:layout_constraintBottom_toTopOf="@id/common_bottom">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+
+                >
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_profile"
@@ -97,7 +101,7 @@
                     app:layout_constraintTop_toBottomOf="@id/iv_profile" />
 
                 <ImageView
-                    android:id="@+id/iv_favorite"
+                    android:id="@+id/iv_likes"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginVertical="8dp"
@@ -111,8 +115,8 @@
                     android:layout_height="30dp"
                     android:src="@drawable/ic_bookmark"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_favorite"
-                    app:layout_constraintTop_toTopOf="@id/iv_favorite" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_likes"
+                    app:layout_constraintTop_toTopOf="@id/iv_likes" />
 
                 <TextView
                     android:id="@+id/tv_content"
@@ -121,7 +125,7 @@
                     android:layout_marginVertical="20dp"
                     android:text="@{vm.timeLine.story.contents}"
                     android:textSize="20sp"
-                    app:layout_constraintTop_toBottomOf="@id/iv_favorite"
+                    app:layout_constraintTop_toBottomOf="@id/iv_likes"
 
                     tools:text="글 영역" />
 
@@ -160,9 +164,11 @@
             android:id="@+id/common_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/scroll_view"
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/gradient_border"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="20dp"
             >
 
             <EditText

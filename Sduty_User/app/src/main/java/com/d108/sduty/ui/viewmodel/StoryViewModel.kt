@@ -196,9 +196,24 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun likeStory(userSeq: Int, story: Story){
+    fun likeStory(likes: Likes){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.likeStory(userSeq, story).let {
+            Retrofit.storyApi.likeStory(likes).let {
+                if (it.code() == 200) {
+
+                }else if(it.code() == 401){
+
+                }
+                else{
+
+                }
+            }
+        }
+    }
+
+    fun scrapStory(scrap: Scrap){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.scrapStory(scrap).let {
                 if (it.code() == 200) {
 
                 }else if(it.code() == 401){

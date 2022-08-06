@@ -12,7 +12,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.adapter.ReplyAdapter
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
+import com.d108.sduty.model.dto.Likes
 import com.d108.sduty.model.dto.Reply
+import com.d108.sduty.model.dto.Scrap
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.showToast
@@ -75,13 +77,19 @@ class StoryDetailFragment : Fragment() {
                     return@setOnClickListener
                 }
                 viewModel.insertReply(Reply(args.seq, mainViewModel.user.value!!.seq, etReply.text.toString()))
+                etReply.setText("")
             }
             recyclerReply.apply {
                 adapter = replyAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             }
+            ivLikes.setOnClickListener {
+                viewModel.likeStory(Likes(mainViewModel.user.value!!.seq, args.seq))
+            }
+            ivScrap.setOnClickListener {
+                viewModel.scrapStory(Scrap(mainViewModel.user.value!!.seq, args.seq))
+            }
 
         }
     }
-
 }

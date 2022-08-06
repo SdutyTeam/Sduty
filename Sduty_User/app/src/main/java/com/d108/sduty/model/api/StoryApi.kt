@@ -1,8 +1,6 @@
 package com.d108.sduty.model.api
 
-import com.d108.sduty.model.dto.Reply
-import com.d108.sduty.model.dto.Story
-import com.d108.sduty.model.dto.Timeline
+import com.d108.sduty.model.dto.*
 import com.d108.sduty.utils.Resource
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -50,11 +48,11 @@ interface StoryApi {
     @DELETE("/story/{story_seq}/reply/{reply_seq}")
     suspend fun deleteReply(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
 
-    @PUT("/story/like/{user_seq}")
-    suspend fun likeStory(@Path("user_seq")userSeq: Int, @Body story: Story): Response<Void>
+    @POST("/story/like")
+    suspend fun likeStory(@Body likes: Likes): Response<Void>
 
-    @PUT("/story/scrap/{user_seq}")
-    suspend fun scrapStory(@Path("user_seq")userSeq: Int, @Body story: Story): Response<Void>
+    @POST("/story/scrap")
+    suspend fun scrapStory(@Body scrap: Scrap): Response<Void>
 
     @PUT("story/report")
     suspend fun reportStory(@Body story: Story): Response<Void>
