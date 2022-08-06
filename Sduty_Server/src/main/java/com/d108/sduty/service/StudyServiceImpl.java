@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.transaction.Transactional;
-
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -22,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.d108.sduty.dto.Alarm;
 import com.d108.sduty.dto.Job;
@@ -121,9 +120,9 @@ public class StudyServiceImpl implements StudyService {
 				originStudy.setPassword(newStudy.getPassword());
 				originStudy.setIntroduce(newStudy.getIntroduce());
 			}
-				
+			return studyRepo.save(originStudy);
 		}
-		return studyRepo.save(originStudy);
+		return null;
 	}
 
 	@Override
@@ -245,7 +244,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public boolean addJob(Study study) {
 		String cron = study.getAlarm().getCron();
 		if(cron==null) {
@@ -269,7 +268,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteJob(Study study) {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
 		JobDetail jd = JobBuilder.newJob(Job.class)

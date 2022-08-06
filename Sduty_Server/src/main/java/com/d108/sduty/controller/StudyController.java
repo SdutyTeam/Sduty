@@ -140,7 +140,10 @@ public class StudyController {
 	@PutMapping("/{user_seq}/{study_seq}")
 	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
 		if(study_seq==newStudy.getSeq()) {
-			return new ResponseEntity<Study>(studyService.updateStudy(user_seq, newStudy), HttpStatus.OK);
+			Study result = studyService.updateStudy(user_seq, newStudy);
+			if(result!=null) {
+				return new ResponseEntity<Study>(result, HttpStatus.OK);
+			}	
 		}
 		
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
