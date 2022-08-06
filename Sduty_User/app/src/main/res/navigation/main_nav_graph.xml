@@ -250,6 +250,8 @@
         <argument
             android:name="masterNickname"
             app:argType="string"/>
+
+
     </fragment>
     <fragment
         android:id="@+id/previewFragment"

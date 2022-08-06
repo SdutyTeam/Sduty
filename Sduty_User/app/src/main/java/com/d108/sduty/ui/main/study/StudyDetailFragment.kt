@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudyDetailBinding
+import com.d108.sduty.model.dto.Member
+import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.StudyDetailViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
