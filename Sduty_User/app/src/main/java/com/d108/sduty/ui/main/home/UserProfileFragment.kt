@@ -1,18 +1,22 @@
 package com.d108.sduty.ui.main.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.StoryAdapter
 import com.d108.sduty.databinding.FragmentUserProfileBinding
+import com.d108.sduty.model.dto.Follow
 import com.d108.sduty.model.dto.Story
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.safeNavigate
 
@@ -22,6 +26,7 @@ private const val TAG = "UserProfileFragment"
 class UserProfileFragment : Fragment() {
     private lateinit var binding: FragmentUserProfileBinding
     private val viewModel: StoryViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var storyAdapter: StoryAdapter
     override fun onCreateView(
@@ -44,8 +49,17 @@ class UserProfileFragment : Fragment() {
     private fun initViewModel() {
         viewModel.getUserStoryListValue(args.userSeq)
         viewModel.getProfileValue(args.userSeq)
+        mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
         viewModel.userStoryList.observe(viewLifecycleOwner){
             storyAdapter.list = it
+        }
+        mainViewModel.profile.observe(viewLifecycleOwner){
+            Log.d(TAG, "initViewModel: ${it.follows}")
+            binding.apply {
+                vm = viewModel
+                mainVM = mainViewModel
+            }
+
         }
     }
 
@@ -58,9 +72,14 @@ class UserProfileFragment : Fragment() {
         }
         binding.apply {
             vm = viewModel
+            mainVM = mainViewModel
             recylerStory.apply {
                 layoutManager = GridLayoutManager(requireContext(), 3)
                 adapter = storyAdapter
+            }
+            btnFollow.setOnClickListener {
+                viewModel.doFollow(Follow(mainViewModel.user.value!!.seq, viewModel.profile.value!!.userSeq))
+                mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
             }
         }
     }

@@ -60,7 +60,11 @@ class TimeLineFragment : Fragment() {
                 override fun onMenuClicked(view: View, position: Int) {
                 }
                 override fun onProfileClicked(view: View, position: Int) {
-                    findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToUserProfileFragment(timeLineAdapter.list[position].profile.userSeq))
+                    if(timeLineAdapter.list[position].profile.userSeq != mainViewModel.user.value!!.seq)
+                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToUserProfileFragment(timeLineAdapter.list[position].profile.userSeq))
+                    else{
+                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToMyPageFragment())
+                    }
                 }
             }
         }

@@ -1,7 +1,11 @@
 package com.d108.sduty.adapter
 
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -45,5 +49,17 @@ fun interestHashTagText(view: TextView, list: MutableList<InterestHashtag>?){
             text = "${text} #${item.name} "
         }
         view.text = text
+    }
+}
+
+@SuppressLint("ResourceAsColor")
+@BindingAdapter("userProfile", "myProfile")
+fun followButtonText(view: Button, userProfile: Profile?, myProfile: Profile){
+    if(myProfile.follows?.get("${userProfile?.userSeq}") != null){
+        view.text = "팔로우 취소"
+        view.backgroundTintList = ColorStateList.valueOf(R.color.onlight_04)
+    }else{
+        view.text = "팔로우"
+        view.backgroundTintList = ColorStateList.valueOf(R.color.app_blue)
     }
 }
