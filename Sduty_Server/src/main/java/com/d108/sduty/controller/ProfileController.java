@@ -1,7 +1,13 @@
 package com.d108.sduty.controller;
 
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -195,5 +201,15 @@ public class ProfileController {
 			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "날짜별 유저 스토리 게시 여부 > UserSeq > List<Boolean>", response = Boolean.class)
+	@GetMapping("/chart/{userSeq}")
+	public ResponseEntity<?> getGrassChart(@PathVariable int userSeq){
+		try {
+			return new ResponseEntity<List<Boolean>>(profileService.selectAllRegtime(userSeq), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 	}
 }

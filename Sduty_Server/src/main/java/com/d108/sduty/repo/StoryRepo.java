@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.d108.sduty.dto.Story;
 
@@ -17,4 +18,7 @@ public interface StoryRepo extends JpaRepository<Story, Integer>{
 	List<Story> findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(List<Integer> writerSeqs, int jobSeq);//팔로우한 작성자들로 조회
 	List<Story> findAllBySeqInOrderByRegtimeDesc(List<Integer> storySeqs);//게시글 목록들로 조회
 	Story findTopByWriterSeqOrderByRegtimeDesc(int writerSeq);
+	
+	@Query(value="SELECT distinct dayofyear(substr(story_regtime, 1,10)) as dayofyear FROM sduty.story where story_writer_seq = ?1", nativeQuery=true)
+	List<Integer> findAllRegtime(int userSeq);
 }
