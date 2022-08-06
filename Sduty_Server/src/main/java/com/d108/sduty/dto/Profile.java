@@ -6,7 +6,11 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -20,7 +24,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Setter
 @Getter
 @Entity
@@ -70,4 +76,7 @@ public class Profile {
 	private List<Integer> interestHashtagSeqs;
 	@Transient
 	private List<InterestHashtag> interestHashtags;
+	
+	@OneToMany(mappedBy = "followerSeq", fetch = FetchType.EAGER)	
+	private List<Follow> follows;
 }
