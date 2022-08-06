@@ -1,6 +1,5 @@
 package com.d108.sduty.ui.main.study
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -11,22 +10,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudySettingBinding
+import com.d108.sduty.model.dto.Member
 import com.d108.sduty.model.dto.Study
-import com.d108.sduty.ui.MainActivity
-import com.d108.sduty.ui.main.study.viewmodel.StudySearchViewModel
 import com.d108.sduty.ui.main.study.viewmodel.StudySettingViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
-import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showEditDialog
 import com.d108.sduty.utils.showToast
-import okhttp3.internal.notify
+import com.sendbird.calls.shadow.com.google.gson.Gson
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 private const val TAG = "StudySettingFragment"
 class StudySettingFragment : Fragment() {
@@ -36,6 +34,8 @@ class StudySettingFragment : Fragment() {
     private val studySettingViewModel: StudySettingViewModel by viewModels()
     private val args: StudySettingFragmentArgs by navArgs()
     private lateinit var studyDetail: Study
+    private lateinit var myStudyMember: List<Map<String, Any>>
+    private lateinit var nicknameList: ArrayList<String>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,7 +53,17 @@ class StudySettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        studySettingViewModel.getMyStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
         studySettingViewModel.studyDetail(args.studySeq)
+        
+        studySettingViewModel.myStudyInfo.observe(viewLifecycleOwner){
+            val studyInfo = studySettingViewModel.myStudyInfo.value as Map<String, Any>
+            myStudyMember = studyInfo["members"] as List<Map<String, Any>>
+            nicknameList = ArrayList<String>()
+            for(member in myStudyMember){
+                nicknameList.add(member["nickname"] as String)
+            }
+        }
 
         studySettingViewModel.studyDetail.observe(viewLifecycleOwner){ study ->
             if(study != null){
@@ -139,6 +149,32 @@ class StudySettingFragment : Fragment() {
                         }
                     }
                 }
+            }
+
+            ivStudyMasterUpdate.setOnClickListener {
+                val items = Array<String>(nicknameList.size) { "" }
+                for(i in 0 until nicknameList.size){
+                    items[i] = nicknameList[i]
+                }
+                var selectedItem: String? = null
+                val builder = AlertDialog.Builder(context)
+                    .setTitle("그룹 장 변경")
+                    .setSingleChoiceItems(items, -1) { dialog, which ->
+                        selectedItem = items[which]        }
+                    .setPositiveButton("변경") { dialog, which ->
+                        for(member in myStudyMember){
+                            if(member["nickname"] as String == selectedItem.toString()){
+                                studyDetail.masterSeq = member["userSeq"].toString().toDouble().roundToInt()
+                                binding.tvStudyMaster.text = selectedItem.toString()
+                            }
+                        }
+                        studySettingViewModel.studyUpdate(
+                            mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
+                        )
+                    }
+                    .setNegativeButton("취소", null)
+                    .show()
+
             }
 
             ivStudyCategoryUpdate.setOnClickListener {

@@ -213,7 +213,7 @@ class StudyRegistFragment : Fragment() {
                         Study(
                             mainViewModel.profile.value!!.userSeq,
                         name, introduce, category, people.toInt(), pass, "12345"
-                        ), Alarm(0, "00:00:00", mon_state, tue_state, wed_state, thur_state, fri_state, sat_state, sun_state)
+                        ), Alarm(0, "${hour}:${minute}:00", mon_state, tue_state, wed_state, thur_state, fri_state, sat_state, sun_state)
                     )
                 }
 

@@ -30,6 +30,25 @@ class StudySettingViewModel: ViewModel() {
     val isStudyUpdate: LiveData<Boolean>
         get() = _isStudyUpdate
 
+    private val _myStudyInfo = MutableLiveData<Map<String, Any>>()
+    val myStudyInfo: LiveData<Map<String, Any>>
+        get() = _myStudyInfo
+
+    fun getMyStudyInfo(userSeq: Int, studySeq: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // 내 스터디 리스트 불러오기
+                val response = Retrofit.studyApi.getMyStudyInfo(userSeq, studySeq)
+                if(response.isSuccessful && response.body() != null){
+                    _myStudyInfo.postValue(response.body() as Map<String, Any>)
+                }
+
+            }catch (e: Exception){
+                Log.d(TAG, "getList: ${e.message}")
+            }
+        }
+    }
+
     // 스터디 수정
     fun studyUpdate(userSeq: Int, studySeq: Int, study: Study){
         viewModelScope.launch(Dispatchers.IO) {
