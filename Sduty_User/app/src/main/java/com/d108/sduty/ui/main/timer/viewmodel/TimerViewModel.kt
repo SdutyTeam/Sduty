@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Report
+import com.d108.sduty.model.dto.Task
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.utils.convertTimeDateToString
 import com.d108.sduty.utils.convertTimeStringToDate
@@ -40,10 +41,12 @@ class TimerViewModel() : ViewModel() {
     val delayTime: LiveData<Int>
         get() = _delayTime
 
+    // 현재 동작 중인지 검사
     private val _isRunningTimer = MutableLiveData<Boolean>(false)
     val isRunningTimer: LiveData<Boolean>
         get() = _isRunningTimer
 
+    // 현재 유예 중인지 검사
     private var isDelayingTimer = false
 
     // 시간 측정 시작 시간
@@ -59,37 +62,48 @@ class TimerViewModel() : ViewModel() {
         getReport(userSeq, convertedDate)
     }
 
-    // TODO: SharedPreferences 또는 SaveStateViewModel 
     // 앱이 종료 되었을 경우 측정 시간을 복구한다.
     fun restoreTime() {
-        val time = ApplicationClass.timerPref.getString("StartTime", "")!!
+        val savedStartTime = ApplicationClass.timerPref.getString("StartTime", "")!!
 
         // 측정하던 정보가 남아 있을 경우
-        if(time.isNotEmpty()){
-            val curTime = Date(System.currentTimeMillis())
-            val time = convertTimeStringToDate(time, "hh:mm:ss").time.toInt()
-            _timer.value = time
+        if (savedStartTime.isNotEmpty() && !isRunningTimer.value!!) {
+            val convertedStartTime =
+                convertTimeStringToDate(savedStartTime!!, "yyyy-MM-dd hh:mm:ss")
+            // 공부한 시간
+            val studyTime = System.currentTimeMillis() - convertedStartTime.time
+
+            _startTime = convertTimeDateToString(convertedStartTime, "hh:mm:ss")
+
+            _timer.value = (studyTime / 1000).toInt()
+
             startTimer()
         }
     }
+
     // 시간 측정을 시작한다.
     fun startTimer() {
-        // 측정 시작 시간을 저장한다.
-        _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
-
-        // 시작 시간을 디바이스에 저장
-        ApplicationClass.timerPref.edit().putString("StartTime", _startTime).apply()
-
         // TODO: 스터디에 시작 정보 알림
 
         _isRunningTimer.value = true
 
         timerTask = timer(period = 1000) {
-            _timer.postValue(timer.value!! +1)
-            if(isDelayingTimer){
-                _delayTime.postValue(delayTime.value!! +1)
+            _timer.postValue(timer.value!! + 1)
+            if (isDelayingTimer) {
+                _delayTime.postValue(delayTime.value!! + 1)
             }
         }
+    }
+
+    // 측정 시작 시간을 저장한다.
+    fun saveTime() {
+        _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
+
+        // 시작 시간을 디바이스에 저장
+        ApplicationClass.timerPref.edit().putString(
+            "StartTime",
+            convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd hh:mm:ss")
+        ).apply()
     }
 
     // 측정 시간을 유예한다.

@@ -100,6 +100,7 @@ class TimerFragment : Fragment() {
                 when (timerViewModel.isRunningTimer.value) {
                     false -> {
                         timerViewModel.startTimer()
+                        timerViewModel.saveTime()
                     }
                     true -> {
                         timerViewModel.delayTimer()
@@ -139,20 +140,20 @@ class TimerFragment : Fragment() {
             binding.commonSelectedDate.text = selectedDate
             timerViewModel.selectDate(selectedDate)
 
-            when(selectedDate != today){
+            when(selectedDate == today){
                 true -> { // 오늘
                     binding.apply {
                         tvTimer.visibility = View.VISIBLE
-                        ivTimer.visibility = View.INVISIBLE
-                        btnReturnToday.text = "오늘($today) 로 돌아가기"
-                        btnReturnToday.visibility = View.VISIBLE
+                        ivTimer.visibility = View.VISIBLE
+                        btnReturnToday.visibility = View.GONE
                     }
                 }
                 false -> { // 다른 날
                     binding.apply {
                         tvTimer.visibility = View.GONE
-                        ivTimer.visibility = View.VISIBLE
-                        btnReturnToday.visibility = View.GONE
+                        ivTimer.visibility = View.INVISIBLE
+                        btnReturnToday.text = "오늘($today) 로 돌아가기"
+                        btnReturnToday.visibility = View.VISIBLE
                     }
                 }
             }
