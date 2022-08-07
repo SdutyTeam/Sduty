@@ -1,15 +1,17 @@
 package com.d108.sduty.ui.main.home
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,9 +25,8 @@ import java.util.*
 
 //게시물 사진 꾸미기 - 타임스탬프, 텍스트 컬러, 템플릿 선택, 공유, 저장
 private const val TAG ="StoryDecoFragment"
-class StoryDecoFragment : Fragment() {
+class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogFragment() {
     private lateinit var binding: FragmentStoryDecoBinding
-    private val args: StoryDecoFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +34,7 @@ class StoryDecoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStoryDecoBinding.inflate(inflater, container, false)
-        val fileUriStr = args.fileUriStr
+        val fileUriStr = fileUriStr
         if (fileUriStr.equals("")) {
             requireContext().showToast("값이 비어 있습니다!!")
         }
@@ -91,6 +92,32 @@ class StoryDecoFragment : Fragment() {
     }
 
     private fun saveImageBitmap(bitmap: Bitmap) {
-        findNavController().safeNavigate(StoryDecoFragmentDirections.actionStoryDecoFragmentToStoryRegisterFragment(bitmap))
+        //findNavController().safeNavigate(StoryDecoFragmentDirections.actionStoryDecoFragmentToStoryRegisterFragment(bitmap))
+        onSaveBtnClickListener.onClick(bitmap)
+        dismiss()
+    }
+    lateinit var onSaveBtnClickListener: OnSaveBtnClickListener
+    interface OnSaveBtnClickListener{
+        fun onClick(bitmap: Bitmap)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        resizeDialog()
+    }
+
+    private fun resizeDialog() {
+        val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
+        val deviceWidth = size.x
+        val deviceHeight = size.y
+        params?.width = (deviceWidth * 1).toInt()
+        params?.height = (deviceHeight * 1).toInt()
+        dialog?.window?.attributes = params as WindowManager.LayoutParams
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 }

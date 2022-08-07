@@ -279,6 +279,8 @@
             android:defaultValue=""/>
         <action
             android:id="@+id/action_storyDecoFragment_to_storyRegisterFragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/main_nav_graph"
             app:destination="@id/storyRegisterFragment" />
     </fragment>
     <fragment

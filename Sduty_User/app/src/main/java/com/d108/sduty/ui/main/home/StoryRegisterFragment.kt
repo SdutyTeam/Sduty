@@ -1,6 +1,7 @@
 package com.d108.sduty.ui.main.home
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -57,7 +58,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var jobHashtag: JobHashtag? = null
     private var interestHashtagList: MutableList<Int>? = null
     private val tagAdapter = TagAdapter(ALL_TAG)
-
+    private var storyImage: Bitmap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,13 +92,9 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         initView()
         initViewModel()
-        if(args.storyImage != null){
-            viewModel.setStoryImage(args.storyImage)
-        }
+
     }
 
     private fun initViewModel() {
@@ -119,11 +116,14 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     binding.apply {
                         //imgStory.setImageURI(fileUri)
                         imageUrl = UriPathUtil().getPath(requireContext(), fileUri)
-                        Log.d(TAG, "initView: ${imageUrl}")
-                        findNavController().safeNavigate(
-                            StoryRegisterFragmentDirections
-                                .actionStoryRegisterFragmentToStoryDecoFragment(fileUri.toString())
-                        )
+                        StoryDecoFragment(requireContext(), fileUri.toString()).let {
+                            it.onSaveBtnClickListener = object : StoryDecoFragment.OnSaveBtnClickListener{
+                                override fun onClick(bitmap: Bitmap) {
+                                    viewModel.setStoryImage(bitmap)
+                                }
+                            }
+                            it.show(parentFragmentManager, null)
+                        }
                     }
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
                     requireContext().showToast(ImagePicker.getError(data))
@@ -173,7 +173,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }else{
                     storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", tagViewModel.jobTagMap.value!![mainViewModel.profile.value!!.job],  etWrite.text.toString(), disclosure, interestHashtagList), viewModel.bitmap.value!!)
                     requireContext().showToast("스토리가 등록 되었습니다")
-                    findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToTimeLineFragment())
+                    navigateBack(requireActivity())
                 }
             }
             selectedTagList.clear()
