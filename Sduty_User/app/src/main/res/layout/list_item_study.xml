@@ -78,25 +78,13 @@
             android:id="@+id/iv_type_cam"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/img_type_camstduy"
+            android:src="@{studyList.roomId != null ?  @drawable/img_type_camstduy : @drawable/img_type_study}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="@{studyList.roomId != null ?  View.VISIBLE : View.INVISIBLE}"
             android:layout_marginRight="15dp"
             />
 
-        <ImageView
-            android:id="@+id/iv_type_normal"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/img_type_study"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="@{studyList.roomId != null ? View.INVISIBLE : View.VISIBLE}"
-            android:layout_marginRight="15dp"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

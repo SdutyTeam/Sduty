@@ -49,6 +49,7 @@ class PreviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         previewView = binding.previewPreviewView
+
         setViewEventListeners()
         observeViewModel()
         initCameraPreview()        
@@ -68,6 +69,20 @@ class PreviewFragment : Fragment() {
         binding.previewImageViewClose.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.previewAudioCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+
+            }
+        }
+        binding.previewVideoCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+
+            } else{
+                initCameraPreview()
+            }
+
+        }
+
     }
 
 
@@ -87,9 +102,8 @@ class PreviewFragment : Fragment() {
                 Status.SUCCESS -> {
                     val roomId = args.roomId
                     Log.d(TAG, "observeViewModelrroomm: ${args.roomId}")
-//                    val isAudioEnabled = !binding.previewAudioCheckbox.isChecked
-//                    val isVideoEnabled = !binding.previewVideoCheckbox.isChecked
-//                    viewModel.enter(roomId, isAudioEnabled, isVideoEnabled)
+
+//                  viewModel.enter(roomId, isAudioEnabled, isVideoEnabled)
                     viewModel.fetchRoomById(roomId)
                 }
                 Status.ERROR -> Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
@@ -100,7 +114,9 @@ class PreviewFragment : Fragment() {
             Log.d(TAG, "observeViewModel: ${it.status}")
             when (it.status) {
                 Status.SUCCESS -> {
-                    viewModel.enter(it.data.toString(), true, true)
+                    val isAudioEnabled = !binding.previewAudioCheckbox.isChecked
+                    val isVideoEnabled = !binding.previewVideoCheckbox.isChecked
+                    viewModel.enter(it.data.toString(), isAudioEnabled, isVideoEnabled)
                     Log.d(TAG, "observeViewModel: ${it.data.toString()}")
                 }
                 Status.ERROR -> {
@@ -138,6 +154,9 @@ class PreviewFragment : Fragment() {
         preview?.setSurfaceProvider(previewView.surfaceProvider)
 
         var camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+
+
+
     }
 
     private fun goToRoomActivity() {

@@ -68,7 +68,7 @@ class StudyRegisteViewModel: ViewModel() {
                 if (e != null){
                     _createRoomId.postValue(Resource.error(e.message, e.code, null))
                 } else{
-                    room?.enter(EnterParams().setAudioEnabled(true).setVideoEnabled(true), object : CompletionHandler{
+                    room?.enter(EnterParams().setAudioEnabled(false).setVideoEnabled(false), object : CompletionHandler{
                         override fun onResult(e: SendBirdException?) {
                             if (e != null){
                                 _createRoomId.postValue(Resource.error(e.message, e.code, null))
