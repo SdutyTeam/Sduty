@@ -1,6 +1,7 @@
 package com.d108.sduty.model.dto
 
 import java.util.*
+import kotlin.collections.HashSet
 
 data class Profile(var userSeq: Int = 2,
                    var nickname: String,
@@ -20,10 +21,11 @@ data class Profile(var userSeq: Int = 2,
                    var isProhibitedUser: Int,
                    var isStudying: Int,
                    var interestHashtagSeqs: MutableList<Int>?,
-                   var interestHashtags: List<InterestHashtag>?
+                   var interestHashtags: List<InterestHashtag>?,
+                   var follows: Map<String, Follow>?
 
 ) {
     // 프로필 등록용
     constructor(userSeq: Int, nickname: String, birthday: Date, public_birth: Int, short_introduce: String, image: String, job: String, public_job: Int, public_interest: Int, main_achievement_seq: Int?, interestHashtagSeqs: MutableList<Int>?)
-            :this(userSeq, nickname, birthday, public_birth, short_introduce, image, job, public_job, 0, public_interest, 0, 0, main_achievement_seq, 0, 0, 0,0, interestHashtagSeqs, null)
+            :this(userSeq, nickname, birthday, public_birth, short_introduce, image, job, public_job, 0, public_interest, 0, 0, main_achievement_seq, 0, 0, 0,0, interestHashtagSeqs, null, null)
 }

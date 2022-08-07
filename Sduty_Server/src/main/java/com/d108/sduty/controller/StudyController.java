@@ -139,8 +139,11 @@ public class StudyController {
 	@ApiOperation(value = "스터디 수정")
 	@PutMapping("/{user_seq}/{study_seq}")
 	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
-		if(user_seq==newStudy.getMasterSeq()) {
-			return new ResponseEntity<Study>(studyService.updateStudy(user_seq, newStudy), HttpStatus.OK);
+		if(study_seq==newStudy.getSeq()) {
+			Study result = studyService.updateStudy(user_seq, newStudy);
+			if(result!=null) {
+				return new ResponseEntity<Study>(result, HttpStatus.OK);
+			}	
 		}
 		
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);

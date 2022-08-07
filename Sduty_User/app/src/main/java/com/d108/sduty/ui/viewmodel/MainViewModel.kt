@@ -60,5 +60,8 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    fun checkFollowUser(userSeq: Int): Boolean{
+        return _profile.value!!.follows?.get("${userSeq}")!= null
+    }
 
 }

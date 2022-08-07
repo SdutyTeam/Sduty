@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.transaction.Transactional;
-
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -22,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.d108.sduty.dto.Alarm;
 import com.d108.sduty.dto.Job;
@@ -55,6 +54,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
+	@Transactional
 	public void registStudy(Study study, Alarm alarm) {
 		//1. 방장 참여
 		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
@@ -85,6 +85,7 @@ public class StudyServiceImpl implements StudyService {
 	
 
 	@Override
+	@Transactional
 	public Study updateStudy(int userSeq, Study newStudy) {
 		Study originStudy = getStudyDetail(newStudy.getSeq());
 		//유효한 스터디 & 방장만 수정 가능
@@ -119,12 +120,13 @@ public class StudyServiceImpl implements StudyService {
 				originStudy.setPassword(newStudy.getPassword());
 				originStudy.setIntroduce(newStudy.getIntroduce());
 			}
-				
+			return studyRepo.save(originStudy);
 		}
-		return studyRepo.save(originStudy);
+		return null;
 	}
 
 	@Override
+	@Transactional
 	public boolean deleteStudy(int userSeq, int studySeq) {
 		//1. user_seq가 방장인지 확인
 		Study study = studyRepo.findBySeq(studySeq).get();
@@ -188,6 +190,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
+	@Transactional
 	public boolean joinStudy(int studySeq, int userSeq) {
 		Study study = studyRepo.findBySeq(studySeq).get();
 		User user = userRepo.findBySeq(userSeq).get();
@@ -203,6 +206,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
+	@Transactional
 	public boolean disjoinStudy(int studySeq, int userSeq) {
 		System.out.println(studySeq+", "+userSeq);
 		Study study = studyRepo.findBySeq(studySeq).get();
@@ -240,6 +244,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
+	@Transactional(rollbackFor=Exception.class)
 	public boolean addJob(Study study) {
 		String cron = study.getAlarm().getCron();
 		if(cron==null) {
@@ -263,6 +268,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteJob(Study study) {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
 		JobDetail jd = JobBuilder.newJob(Job.class)
