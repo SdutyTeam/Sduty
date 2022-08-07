@@ -15,6 +15,8 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -73,6 +75,7 @@ public class Profile {
 	private List<InterestHashtag> interestHashtags;
 	
 	@MapKey(name = "followeeSeq")
+	@JsonBackReference
 	@OneToMany(mappedBy = "followerSeq", fetch = FetchType.EAGER)	
 	private Map<String, Follow> follows;
 }
