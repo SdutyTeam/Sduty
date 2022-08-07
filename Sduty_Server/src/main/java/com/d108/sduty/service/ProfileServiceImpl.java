@@ -103,4 +103,18 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		return listUploaded;
 	}
+
+	@Override
+	public int changeStudying(int userSeq, int flag) {
+		Optional<Profile> OP = profileRepo.findById(userSeq);
+		if(OP.isPresent()) {
+			Profile p = OP.get();
+			p.setIsStudying(flag);
+			profileRepo.save(p);
+			return p.getIsStudying();
+		}
+		return -1;
+	}
+
+
 }

@@ -11,4 +11,5 @@ public interface ProfileService {
 	Profile selectProfile(int seq);
 	Profile updateProfile(Profile profile) throws Exception;
 	List<Boolean> selectAllRegtime(int userSeq);
+	int changeStudying(int userSeq, int flag);
 }
