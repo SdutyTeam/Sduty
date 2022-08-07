@@ -334,5 +334,11 @@
         <argument
             android:name="flag"
             app:argType="integer"/>
+        <action
+            android:id="@+id/action_followFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+        <action
+            android:id="@+id/action_followFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
 </navigation>
