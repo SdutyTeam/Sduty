@@ -26,6 +26,8 @@ class CamStudyDetailFragment : Fragment() {
     private val camStudyDetailViewModel: CamStudyDetailViewModel by viewModels()
     private val args: CamStudyDetailFragmentArgs by navArgs()
     lateinit var nickname: String
+    lateinit var studyRoomId: String
+    lateinit var studyName: String
 
 
     override fun onAttach(context: Context) {
@@ -47,10 +49,12 @@ class CamStudyDetailFragment : Fragment() {
         camStudyDetailViewModel.camStudyInfo.observe(viewLifecycleOwner){map ->
             if(map != null){
                 val studyInfo = camStudyDetailViewModel.camStudyInfo.value as Map<String, Any>
-                var asd = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
+                var studyJoinNumber = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
                 binding.commonTopTitle.text = (studyInfo["study"] as Map<String, Any>)["name"].toString()
-                binding.commonTopJoin.text = asd.roundToInt().toString()
+                binding.commonTopJoin.text = studyJoinNumber.roundToInt().toString()
                 binding.tvCamstudyNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
+                studyRoomId = (studyInfo["study"] as Map<String, Any>)["roomId"].toString()
+                studyName = (studyInfo["study"] as Map<String, Any>)["name"].toString()
 
                 camStudyDetailViewModel.masterNickname((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt())
                 camStudyDetailViewModel.studyMasterNickName.observe(viewLifecycleOwner) {
@@ -64,7 +68,7 @@ class CamStudyDetailFragment : Fragment() {
         binding.apply {
 
             btnJoinCamstudy.setOnClickListener {
-                findNavController().safeNavigate(CamStudyDetailFragmentDirections.actionCamStudyDetailFragmentToPreviewFragment())
+                findNavController().safeNavigate(CamStudyDetailFragmentDirections.actionCamStudyDetailFragmentToPreviewFragment(studyRoomId, studyName))
             }
 
             btnStudySetting.setOnClickListener {

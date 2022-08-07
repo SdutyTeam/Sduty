@@ -182,9 +182,6 @@
         <action
             android:id="@+id/action_myStudyFragment_to_studyListFragment"
             app:destination="@+id/studyListFragment"/>
-        <action
-            android:id="@+id/action_myStudyFragment_to_previewFragment"
-            app:destination="@id/previewFragment" />
     </fragment>
     <fragment
         android:id="@+id/studyDetailFragment"
@@ -260,7 +257,16 @@
     <fragment
         android:id="@+id/previewFragment"
         android:name="com.d108.sduty.ui.camstudy.preview.PreviewFragment"
-        android:label="PreviewFragment" />
+        android:label="PreviewFragment">
+
+        <argument
+            android:name="roomId"
+            app:argType="string"/>
+
+        <argument
+            android:name="studyName"
+            app:argType="string"/>
+    </fragment>
     <fragment
         android:id="@+id/studySearchFragment"
         android:name="com.d108.sduty.ui.main.study.StudySearchFragment"

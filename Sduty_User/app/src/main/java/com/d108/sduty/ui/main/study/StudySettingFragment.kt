@@ -36,6 +36,7 @@ class StudySettingFragment : Fragment() {
     private lateinit var studyDetail: Study
     private lateinit var myStudyMember: List<Map<String, Any>>
     private lateinit var nicknameList: ArrayList<String>
+    private lateinit var nickname: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,6 +54,7 @@ class StudySettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        nickname = args.masterNickname
         studySettingViewModel.getMyStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
         studySettingViewModel.studyDetail(args.studySeq)
         
@@ -71,7 +73,7 @@ class StudySettingFragment : Fragment() {
                 binding.tvStudyName.text = studyDetail.name
                 binding.tvStudyCategory.text = studyDetail.category
                 binding.tvStudyPeople.text = studyDetail.joinNumber.toString()
-                binding.tvStudyMaster.text = args.masterNickname
+                binding.tvStudyMaster.text = nickname
 
                 if(studyDetail.password == null || studyDetail.password == ""){
                     binding.tvStudyPublic.text = "공개"
@@ -157,7 +159,7 @@ class StudySettingFragment : Fragment() {
                     items[i] = nicknameList[i]
                 }
                 var selectedItem: String? = null
-                val builder = AlertDialog.Builder(context)
+                AlertDialog.Builder(context)
                     .setTitle("그룹 장 변경")
                     .setSingleChoiceItems(items, -1) { dialog, which ->
                         selectedItem = items[which]        }
@@ -165,12 +167,13 @@ class StudySettingFragment : Fragment() {
                         for(member in myStudyMember){
                             if(member["nickname"] as String == selectedItem.toString()){
                                 studyDetail.masterSeq = member["userSeq"].toString().toDouble().roundToInt()
-                                binding.tvStudyMaster.text = selectedItem.toString()
+                                nickname = selectedItem.toString()
+                                studySettingViewModel.studyUpdate(
+                                    mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
+                                )
                             }
                         }
-                        studySettingViewModel.studyUpdate(
-                            mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                        )
+
                     }
                     .setNegativeButton("취소", null)
                     .show()
