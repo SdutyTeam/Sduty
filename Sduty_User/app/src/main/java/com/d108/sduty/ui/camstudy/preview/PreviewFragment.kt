@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentPreviewBinding
 import com.d108.sduty.ui.MainActivity
@@ -33,6 +34,8 @@ class PreviewFragment : Fragment() {
     private lateinit var previewView: PreviewView
     private var preview: Preview? = null
     private val mainViewModel: MainViewModel by activityViewModels()
+    private val args: PreviewFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,7 +65,9 @@ class PreviewFragment : Fragment() {
 
     private fun setViewEventListeners() {
         binding.previewEnterButton.setOnClickListener(this::onEnterButtonClicked)
-        binding.previewImageViewClose.setOnClickListener { findNavController().popBackStack() }
+        binding.previewImageViewClose.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 
@@ -80,7 +85,8 @@ class PreviewFragment : Fragment() {
                     Log.d(TAG, "observeViewModel: LOADING")
                 }
                 Status.SUCCESS -> {
-                    val roomId = "6aab79c4-250b-4175-b2ee-8f8a2d2be6fd"
+                    val roomId = args.roomId
+                    Log.d(TAG, "observeViewModelrroomm: ${args.roomId}")
 //                    val isAudioEnabled = !binding.previewAudioCheckbox.isChecked
 //                    val isVideoEnabled = !binding.previewVideoCheckbox.isChecked
 //                    viewModel.enter(roomId, isAudioEnabled, isVideoEnabled)
@@ -135,11 +141,12 @@ class PreviewFragment : Fragment() {
     }
 
     private fun goToRoomActivity() {
-        Log.d(TAG, "goToRoomActivity: ")
-        val roomId = "6aab79c4-250b-4175-b2ee-8f8a2d2be6fd"
+        Log.d(TAG, "goToRoomActivity: ${args.roomId}")
+        val roomId = args.roomId
         val intent = Intent(requireContext(), RoomActivity::class.java).apply {
             putExtra(EXTRA_ROOM_ID, roomId)
             putExtra(EXTRA_IS_NEWLY_CREATED, false)
+            putExtra("studyName", args.studyName)
         }
         startActivity(intent)
     }

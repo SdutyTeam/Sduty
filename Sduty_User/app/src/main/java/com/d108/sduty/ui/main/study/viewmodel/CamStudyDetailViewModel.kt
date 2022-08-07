@@ -24,7 +24,6 @@ class CamStudyDetailViewModel: ViewModel() {
     fun getCamStudyInfo(userSeq: Int, studySeq: Int){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // 내 스터디 리스트 불러오기
                 val response = Retrofit.studyApi.getMyStudyInfo(userSeq, studySeq)
                 if(response.isSuccessful && response.body() != null){
                     _camStudyInfo.postValue(response.body() as Map<String, Any>)
