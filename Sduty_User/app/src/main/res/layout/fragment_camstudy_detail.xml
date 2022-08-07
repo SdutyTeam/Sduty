@@ -42,13 +42,14 @@
             <TextView
                 android:id="@+id/common_top_join"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:text="15"
-                android:layout_marginLeft="15dp"
+                android:layout_margin="10dp"
                 android:textColor="@color/navy_400"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:gravity="center"
                 app:layout_constraintStart_toEndOf="@id/common_top_title"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
 
             <Button
@@ -79,6 +80,7 @@
                 android:text="공지사항"/>
 
             <TextView
+                android:id="@+id/tv_camstudy_notice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -102,6 +104,7 @@
                 android:layout_weight="3"/>
 
             <Button
+                android:id="@+id/btn_join_camstudy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="입장하기"

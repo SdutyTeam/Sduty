@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +38,14 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	@Transactional
 	public boolean registNotice(Notice notice) {
 		Notice newNotice = noticeRepo.save(notice);
 		return (newNotice!=null);
 	}
 
 	@Override
+	@Transactional
 	public Notice updateNotice(Notice notice) {
 		Optional<Notice> noticeOp = noticeRepo.findById(notice.getSeq());
 		if(noticeOp.isPresent()) {
@@ -53,6 +57,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteNotice(int noticeSeq) {
 		noticeRepo.deleteById(noticeSeq);
 	}
@@ -76,6 +81,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	@Transactional
 	public boolean registDailyQuestion(DailyQuestion dailyq) {
 		DailyQuestion result = dailyqRepo.save(dailyq);
 		return (result!=null);
@@ -96,6 +102,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	@Transactional
 	public DailyQuestion updateDailyQuestion(DailyQuestion dailyq) {
 		Optional<DailyQuestion> dqOp = dailyqRepo.findById(dailyq.getSeq());
 		if(dqOp.isPresent()) {
@@ -107,6 +114,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteDailyQuestion(int dailyQuestionSeq) {
 		dailyqRepo.deleteById(dailyQuestionSeq);
 	}
@@ -126,6 +134,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	@Transactional
 	public Qna registAnswer(Qna qna) {
 		Optional<Qna> qnaOp = qnaRepo.findById(qna.getSeq());
 		if(qnaOp.isPresent()) {
@@ -139,6 +148,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	@Transactional
 	public Qna deleteAnswer(int qnaSeq) {
 		Optional<Qna> qnaOp = qnaRepo.findById(qnaSeq);
 		if(qnaOp.isPresent()) {

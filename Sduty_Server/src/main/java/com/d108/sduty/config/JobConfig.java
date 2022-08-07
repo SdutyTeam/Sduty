@@ -4,6 +4,7 @@ import static org.quartz.JobBuilder.newJob;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -47,6 +48,16 @@ public class JobConfig {
 //			e.printStackTrace();
 //		}
 	}
+	
+//	@PreDestroy
+//	public void destroy() {
+//		try {
+//			scheduler.shutdown();
+//		} catch (SchedulerException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	
 	 public Trigger buildJobTrigger(String scheduleExp){
 	        return TriggerBuilder.newTrigger()

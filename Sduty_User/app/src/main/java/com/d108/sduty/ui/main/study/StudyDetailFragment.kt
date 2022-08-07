@@ -13,9 +13,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudyDetailBinding
+import com.d108.sduty.model.dto.Member
+import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.StudyDetailViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
+import kotlin.math.roundToInt
 
 // 스터디 상세 -
 private const val TAG = "StudyDetailFragment"
@@ -24,6 +27,7 @@ class StudyDetailFragment : Fragment() {
     private lateinit var binding: FragmentStudyDetailBinding
     private val studyDetailViewModel: StudyDetailViewModel by viewModels()
     private val args: StudyDetailFragmentArgs by navArgs()
+    lateinit var nickname: String
 
 
     override fun onAttach(context: Context) {
@@ -43,23 +47,32 @@ class StudyDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        studyDetailViewModel.myStudyInfo.observe(viewLifecycleOwner){ map ->
+            if(map != null){
+                val studyInfo = studyDetailViewModel.myStudyInfo.value as Map<String, Any>
+                var asd = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
+                binding.commonTopTitle.text = (studyInfo["study"] as Map<String, Any>)["name"].toString()
+                binding.commonTopJoin.text = asd.roundToInt().toString()
+                binding.tvMyStudyNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
+
+                studyDetailViewModel.masterNickname((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt())
+                studyDetailViewModel.studyMasterNickName.observe(viewLifecycleOwner) {
+                    nickname = it.nickname
+                }
+            }
+        }
+
         studyDetailViewModel.getMyStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
 
         binding.apply {
-
-
-
-
             btnStudySetting.setOnClickListener {
-                findNavController().safeNavigate(StudyDetailFragmentDirections.actionStudyDetailFragmentToStudySettingFragment())
+                findNavController().safeNavigate(StudyDetailFragmentDirections.actionStudyDetailFragmentToStudySettingFragment(args.studySeq, nickname))
             }
 
             commonTopBack.setOnClickListener {
                 findNavController().popBackStack()
             }
-
         }
-
     }
 
     override fun onDestroy() {

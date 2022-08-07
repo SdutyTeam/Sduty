@@ -51,7 +51,7 @@
                     android:id="@+id/tv_job_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1개 선택"
+                    android:text="1개 필수"
                     app:layout_constraintStart_toEndOf="@id/tv_job"
                     app:layout_constraintBottom_toBottomOf="@id/tv_job"
                     android:layout_marginHorizontal="10dp"

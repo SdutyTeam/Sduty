@@ -12,8 +12,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
+import com.d108.sduty.common.FLAG_FOLLOWEE
+import com.d108.sduty.common.FLAG_FOLLOWER
 import com.d108.sduty.databinding.FragmentMyPageBinding
 import com.d108.sduty.model.dto.Story
+import com.d108.sduty.ui.sign.viewmodel.TagViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.safeNavigate
@@ -36,35 +39,34 @@ class MyPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initViewModel()
-
-        val list = mutableListOf<Boolean>()
-        for(i in 0..181){
-            list.add(Math.random() < 0.5)
-        }
-
-        contributionAdapter.list = list
+        initView()
     }
 
     private fun initViewModel() {
+        viewModel.getProfileValue(mainViewModel.user.value!!.seq)
         viewModel.userStoryList.observe(viewLifecycleOwner){
             storyAdapter.list = it
         }
         viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
-        viewModel.getProfileValue(mainViewModel.user.value!!.seq)
     }
 
     private fun initView(){
         contributionAdapter = ContributionAdapter()
         storyAdapter = StoryAdapter(requireActivity())
+        storyAdapter.onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
+            override fun onClick(story: Story, position: Int) {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToStoryDetailFragment(story.seq))
+            }
+        }
         binding.apply {
-            lifecycleOwner = this@MyPageFragment
+
             vm = viewModel
             recylerStory.apply {
                 adapter = storyAdapter
@@ -80,6 +82,17 @@ class MyPageFragment : Fragment() {
             ivSetting.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())
             }
+            tvCountFollow.setOnClickListener {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWER))
+            }
+            tvCountFollower.setOnClickListener {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWEE))
+            }
         }
+        val list = mutableListOf<Boolean>()
+        for(i in 0..181){
+            list.add(Math.random() < 0.5)
+        }
+        contributionAdapter.list = list
     }
 }

@@ -4,12 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Entity
 @Getter
 @Setter
@@ -28,4 +31,8 @@ public class Follow {
 	public String toString() {
 		return "Follow [followerSeq=" + followerSeq + ", followeeSeq=" + followeeSeq + "]";
 	}
+	
+	@Transient
+	private Profile profile;
+	
 }

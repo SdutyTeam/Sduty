@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="vm"
             type="com.d108.sduty.ui.viewmodel.StoryViewModel" />
@@ -120,18 +119,19 @@
                             android:text="@{vm.profile.nickname}"
                             android:textSize="20sp"
                             app:layout_constraintEnd_toStartOf="@id/tv_count_follow"
-                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toEndOf="@id/iv_achieve"
                             app:layout_constraintTop_toTopOf="@id/iv_achieve" />
 
                         <TextView
                             android:id="@+id/tv_job"
+                            profileHashTagText="@{vm.profile}"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
-                            android:text="직업 / 관심분야"
-                            android:textSize="16sp"
+                            android:layout_marginTop="4dp"
+                            android:textSize="14sp"
                             app:layout_constraintEnd_toStartOf="@id/tv_count_follow"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="@id/iv_achieve"
                             app:layout_constraintTop_toBottomOf="@id/iv_achieve" />
 
@@ -249,7 +249,7 @@
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
                 <androidx.constraintlayout.widget.ConstraintLayout

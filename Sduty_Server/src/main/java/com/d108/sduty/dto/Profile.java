@@ -1,25 +1,30 @@
 package com.d108.sduty.dto;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Setter
 @Getter
 @Entity
@@ -64,4 +69,14 @@ public class Profile {
 	private int isProhibitedUser;
 	@Column(name="is_studying")
 	private int isStudying;
+	
+	@Transient
+	private List<Integer> interestHashtagSeqs;
+	@Transient
+	private List<InterestHashtag> interestHashtags;
+	
+	@MapKey(name = "followeeSeq")	
+	
+	@OneToMany(mappedBy = "followerSeq", fetch = FetchType.EAGER)	
+	private Map<String, Follow> follows;
 }

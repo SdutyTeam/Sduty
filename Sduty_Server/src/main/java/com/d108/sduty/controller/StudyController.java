@@ -139,8 +139,11 @@ public class StudyController {
 	@ApiOperation(value = "스터디 수정")
 	@PutMapping("/{user_seq}/{study_seq}")
 	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
-		if(user_seq==newStudy.getMasterSeq()) {
-			return new ResponseEntity<Study>(studyService.updateStudy(user_seq, newStudy), HttpStatus.OK);
+		if(study_seq==newStudy.getSeq()) {
+			Study result = studyService.updateStudy(user_seq, newStudy);
+			if(result!=null) {
+				return new ResponseEntity<Study>(result, HttpStatus.OK);
+			}	
 		}
 		
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -166,9 +169,8 @@ public class StudyController {
 			Map<String, Object> user_info = new HashMap<>();
 			user_info.put("userSeq", participant.getSeq());
 			
-			Optional<Profile> profileOp = profileService.selectProfile(participant.getSeq());
-			if(profileOp.isPresent()) {
-				Profile profile = profileOp.get();
+			Profile profile = profileService.selectProfile(participant.getSeq());
+			if(profile!=null) {
 				user_info.put("nickname", profile.getNickname());
 				user_info.put("is_studying", profile.getIsStudying());
 			}

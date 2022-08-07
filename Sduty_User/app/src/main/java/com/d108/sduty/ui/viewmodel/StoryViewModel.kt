@@ -7,10 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.Profile
-import com.d108.sduty.model.dto.Reply
-import com.d108.sduty.model.dto.Story
-import com.d108.sduty.model.dto.Timeline
+import com.d108.sduty.model.dto.*
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,6 +60,7 @@ class StoryViewModel: ViewModel() {
                 val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
                 Log.d(TAG, "insertStory: ${response.code()}")
                 if(response.isSuccessful && response.body() != null){
+
                     _storyList.postValue(response.body() as MutableList<Story>)
                 }
             }catch (e: Exception){
@@ -71,15 +69,16 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _story = MutableLiveData<Story>()
-    val story: LiveData<Story>
-        get() = _story
+    private val _timeLine = MutableLiveData<Timeline>()
+    val timeLine: LiveData<Timeline>
+        get() = _timeLine
 
-    fun getStoryValue(storySeq: Int){
+    fun getTimelineValue(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStudyDetail(storySeq).let {
+            Retrofit.storyApi.getTimelineDetail(storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _story.postValue(it.body() as Story)
+                    _timeLine.postValue(it.body() as Timeline)
+                    Log.d(TAG, "getTimelineValue: ${it.body()}")
                 }else{
                     Log.d(TAG, "getStoryValue: ${it.code()}")
                 }
@@ -132,6 +131,18 @@ class StoryViewModel: ViewModel() {
         }
     }
 
+    fun updateStory(story: Story){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.updateStory(story).let {
+                if(it.isSuccessful && it.body() != null){
+                    _timeLine.postValue(it.body() as Timeline)
+                }else{
+                    Log.d(TAG, "updateStory: ${it.code()}")
+                }
+            }
+        }
+    }
+
     fun deleteStory(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.deleteStory(storySeq).let {
@@ -147,60 +158,75 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _commentList = MutableLiveData<MutableList<Reply>>()
-    val commentList: LiveData<MutableList<Reply>>
-        get() = _commentList
-    fun getCommentListValue(storySeq: Int){
+    private val _replyList = MutableLiveData<MutableList<Reply>>()
+    val replyList: LiveData<MutableList<Reply>>
+        get() = _replyList
+    fun getReplyListValue(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.getReplyList(storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "getCommentListValue: ${it.code()}")
+                    Log.d(TAG, "getReplyListValue: ${it.code()}")
                 }
             }
         }
     }
 
-    fun insertComment(comment: Reply){
+    fun insertReply(reply: Reply){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.insertComment(comment, comment.storySeq).let {
+            Retrofit.storyApi.insertReply(reply).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "insertComment: ${it.code()}")
+                    Log.d(TAG, "insertReply: ${it.code()}")
                 }
             }
         }
     }
 
-    fun updateComment(comment: Reply){
+    fun updateReply(reply: Reply){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.updateComment(comment, comment.storySeq).let {
+            Retrofit.storyApi.updateReply(reply, reply.storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "updateComment: ${it.code()}")
+                    Log.d(TAG, "updateReply: ${it.code()}")
                 }
             }
         }
     }
 
-    fun deleteComment(comment: Reply){
+    fun deleteReply(reply: Reply){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.deleteComment(comment.storySeq, comment.seq).let {
+            Retrofit.storyApi.deleteReply(reply.storySeq, reply.seq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _commentList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body() as MutableList<Reply>)
                 }else{
-                    Log.d(TAG, "updateComment: ${it.code()}")
+                    Log.d(TAG, "deleteReply: ${it.code()}")
                 }
             }
         }
     }
 
-    fun likeStory(userSeq: Int, story: Story){
+    fun likeStory(likes: Likes){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.likeStory(userSeq, story).let {
+            Retrofit.storyApi.likeStory(likes).let {
+                if (it.code() == 200) {
+
+                }else if(it.code() == 401){
+
+                }
+                else{
+
+                }
+            }
+        }
+    }
+
+    fun scrapStory(scrap: Scrap){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.scrapStory(scrap).let {
                 if (it.code() == 200) {
 
                 }else if(it.code() == 401){
@@ -238,6 +264,22 @@ class StoryViewModel: ViewModel() {
                     _profile.postValue(it.body() as Profile)
                 }else{
                     Log.d(TAG, "getProfileValue: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    private val _isFollowSucceed = MutableLiveData<Boolean>(false)
+    val isFollowSucceed: LiveData<Boolean>
+        get() = _isFollowSucceed
+    fun doFollow(follow: Follow){
+        Log.d(TAG, "doFollow: $follow")
+        viewModelScope.launch(Dispatchers.IO) {
+            Retrofit.profileApi.doFollow(follow).let {
+                if (it.isSuccessful) {
+                    _isFollowSucceed.postValue(!_isFollowSucceed.value!!)
+                } else {
+                    Log.d(TAG, "doFollow: ${it.code()}")
                 }
             }
         }

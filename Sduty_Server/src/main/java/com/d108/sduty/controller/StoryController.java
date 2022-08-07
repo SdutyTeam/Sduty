@@ -141,8 +141,9 @@ public class StoryController {
 		//imageService.fileUpload(mpfImage); - makeThumbnail()에서 저장.
 		
 		Story result = storyService.insertStory(story);
-		if(result != null) {
-			return new ResponseEntity<Story>(story, HttpStatus.OK);
+		Timeline t = timelineService.selectDetailTimeline(result.getSeq());
+		if(t != null) {
+			return new ResponseEntity<Timeline>(t, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -163,7 +164,14 @@ public class StoryController {
 		if(savedStory != null) {
 			story.setImageSource(savedStory.getImageSource());
 			story.setThumbnail(savedStory.getThumbnail());
-			return new ResponseEntity<Story>(storyService.updateStory(story), HttpStatus.OK);
+			
+			Story result = storyService.updateStory(story);
+			if(result != null) {
+				Timeline t = timelineService.selectDetailTimeline(result.getSeq());
+				if(t != null) {
+					return new ResponseEntity<Timeline>(t, HttpStatus.OK);
+				}
+			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -260,9 +268,10 @@ public class StoryController {
 	@ApiOperation(value = "댓글 작성 : Reply > Reply 리턴", response = Reply.class)
 	@PostMapping("/reply")
 	public ResponseEntity<?> insertReply(@RequestBody Reply reply) throws Exception {
-		Reply r = storyService.insertReply(reply);
+		Reply r = storyService.insertReply(reply);		
 		if(r!=null) {
-			return new ResponseEntity<Reply>(r, HttpStatus.OK);
+			List<Reply> list = storyService.selectReplyByStorySeq(reply.getStorySeq());
+			return new ResponseEntity<List<Reply>>(list, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -272,7 +281,8 @@ public class StoryController {
 	public ResponseEntity<?> updateReply(@RequestBody Reply reply) throws Exception {
 		Reply r = storyService.updateReply(reply);
 		if(r!=null) {
-			return new ResponseEntity<Reply>(r, HttpStatus.OK);
+			List<Reply> list = storyService.selectReplyByStorySeq(reply.getStorySeq());
+			return new ResponseEntity<List<Reply>>(list, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -287,6 +297,20 @@ public class StoryController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 	}
+	
+//	@ApiOperation(value = "추천 스토리 조회(유저 시퀀스로) : JobHashtag > List<Timeline> 리턴", response = Timeline.class)
+//	@GetMapping("/recommand/{userSeq}")
+//	public ResponseEntity<?> selectRecommand(@PathVariable int userSeq) throws Exception {
+//		try {
+//			Timeline t = timelineService.selectRecommandTimeline(userSeq);
+//			if(t != null) {
+//				return new ResponseEntity<Timeline>(t, HttpStatus.OK);
+//			}
+//		} catch (Exception e) {
+//			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+//	}
 	
 	public void makeThumbnail(MultipartFile mpImage) throws Exception {
 		//Make Thumbnail

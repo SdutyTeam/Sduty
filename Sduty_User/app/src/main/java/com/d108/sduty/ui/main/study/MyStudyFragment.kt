@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.adapter.MyStudyAdapter
 import com.d108.sduty.adapter.StudyListAdapter
@@ -30,8 +31,8 @@ class MyStudyFragment : Fragment() {
     private lateinit var binding: FragmentMyStudyBinding
     private val myStudyViewModel: MyStudyViewModel by viewModels()
 
-    private lateinit var mystudyListAdapter: StudyListAdapter
-    private lateinit var mystudyList: List<Study>
+    private lateinit var myStudyListAdapter: MyStudyAdapter
+    private lateinit var myStudyList: List<Study>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,7 +55,7 @@ class MyStudyFragment : Fragment() {
 
         myStudyViewModel.myStudyList.observe(viewLifecycleOwner){
             if(it != null){
-                mystudyList = myStudyViewModel.myStudyList.value as List<Study>
+                myStudyList = myStudyViewModel.myStudyList.value as List<Study>
                 initAdapter()
             }
         }
@@ -80,16 +81,21 @@ class MyStudyFragment : Fragment() {
 
 
     private fun initAdapter(){
-        mystudyListAdapter = StudyListAdapter(mystudyList)
-        mystudyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
+        myStudyListAdapter = MyStudyAdapter(myStudyList)
+        myStudyListAdapter.onStudyItemClick = object : MyStudyAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
                 // 선택 스터디 입장
-                findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment(mystudyList[position].seq))
+                if(myStudyList[position].roomId == null){
+                    findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToStudyDetailFragment(myStudyList[position].seq))
+                } else{
+                    findNavController().navigate(MyStudyFragmentDirections.actionMyStudyFragmentToCamStudyDetailFragment(myStudyList[position].seq))
+                }
+
             }
         }
         binding.myStudyList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = mystudyListAdapter
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = myStudyListAdapter
         }
     }
 }

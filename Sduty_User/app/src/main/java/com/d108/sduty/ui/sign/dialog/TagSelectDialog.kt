@@ -5,24 +5,22 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.d108.sduty.R
 import com.d108.sduty.adapter.TagAdapter
 import com.d108.sduty.common.INTEREST_TAG
 import com.d108.sduty.common.JOB_TAG
+import com.d108.sduty.common.PROFILE
 import com.d108.sduty.databinding.DialogTagSelectBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
+import com.d108.sduty.utils.showToast
 
 private const val TAG ="TagSelectDialog"
 class TagSelectDialog(val mContext: Context) : DialogFragment() {
@@ -40,6 +38,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
     lateinit var onClickConfirm: OnClickConfirm
 
     private val tagViewModel: TagViewModel by viewModels()
+    private var flag = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,7 +50,11 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        flag = requireArguments().getInt("flag")
+        if(flag != PROFILE){
+            tagViewModel.setJobVisible()
+            binding.recyclerSelectedJob.visibility = View.GONE
+        }
         initViewModel()
 
     }
@@ -72,7 +75,6 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
 
             }
         }
-
     }
 
     private fun initView(){
@@ -135,13 +137,22 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
             }
             recyclerSelectedInterest.apply {
                 adapter = selectedInterestAdapter
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                if(flag != PROFILE) {
+                    layoutManager = GridLayoutManager(requireContext(), 3)
+                }
+                else{
+                    layoutManager = GridLayoutManager(requireContext(), 2)
+                }
             }
             recyclerSelectedJob.apply {
                 adapter = selectedJobAdapter
                 layoutManager = GridLayoutManager(requireContext(), 1)
             }
             btnConfirm.setOnClickListener {
+                if(flag == PROFILE && selectedJobList.size == 0){
+                    requireContext().showToast("직업을 선택해 주세요")
+                    return@setOnClickListener
+                }
                 var selectedJob: JobHashtag? = null
                 if(selectedJobList.size > 0){
                     selectedJob = selectedJobList[0]

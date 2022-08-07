@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.StoryInterest;
+import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.repo.ReplyRepo;
 import com.d108.sduty.repo.StoryInterestHashtagRepo;
 import com.d108.sduty.repo.StoryRepo;
@@ -28,20 +29,33 @@ public class StoryServiceImpl implements StoryService {
 	@Autowired
 	private StoryInterestHashtagRepo storyInterestHashtagRepo;
 	
+	@Autowired
+	private ProfileRepo profileRepo;
+	
 	@Override
 	public Story insertStory(Story story) {
-		for(int i : story.getInterestHashtag())
-			storyInterestHashtagRepo.save(new StoryInterest(story.getSeq(), i));
-		return storyRepo.save(story);
+		Story s = storyRepo.save(story);
+		int storySeq = storyRepo.findTopByWriterSeqOrderByRegtimeDesc(s.getWriterSeq()).getSeq();
+		if(!story.getInterestHashtag().isEmpty()) {
+			for(int i : story.getInterestHashtag())
+				storyInterestHashtagRepo.save(new StoryInterest(storySeq, i));
+		}
+		return s;
 	}	
 	
 	@Override
 	public Story updateStory(Story story) {
-		for(StoryInterest si : storyInterestHashtagRepo.findAllBySeq(story.getSeq())) {
-			storyInterestHashtagRepo.delete(si);
+		int storySeq = story.getSeq();
+		List<StoryInterest> listSI = storyInterestHashtagRepo.findAllBySeq(storySeq);
+		if(!listSI.isEmpty()) {
+			for(StoryInterest si : listSI) {
+				storyInterestHashtagRepo.delete(si);
+			}
 		}
-		for(int i : story.getInterestHashtag())
-			storyInterestHashtagRepo.save(new StoryInterest(story.getSeq(), i));
+		if(!story.getInterestHashtag().isEmpty()) {
+			for(int i : story.getInterestHashtag())
+				storyInterestHashtagRepo.save(new StoryInterest(storySeq, i));
+		}
 		return storyRepo.save(story);
 	}
 
@@ -107,5 +121,14 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public void deleteReply(int replySeq) {
 		replyRepo.deleteById(replySeq);
+	}
+
+	@Override
+	public List<Reply> selectReplyByStorySeq(int storySeq) {
+		List<Reply> list = replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
+		for(Reply item: list) {
+			item.setProfile(profileRepo.findById(item.getUserSeq()).get());
+		}
+		return list;
 	}
 }

@@ -17,6 +17,10 @@ class StudyListViewModel: ViewModel() {
     val studyList: LiveData<List<Study>>
         get() = _studyList
 
+    private val _isJoinStudySuccess = MutableLiveData<Boolean>()
+    val isJoinStudySuccess: LiveData<Boolean>
+        get() = _isJoinStudySuccess
+
     fun getStudyList(){
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -42,6 +46,23 @@ class StudyListViewModel: ViewModel() {
                 }
             } catch (e: Exception){
                 Log.d(TAG, "getStudyFilter: ${e.message}")
+            }
+        }
+    }
+
+    fun studyJoin(studySeq: Int, userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.studyApi.studyJoin(studySeq, userSeq)
+                if(response.code() == 200){
+                    _isJoinStudySuccess.postValue(true)
+                }
+                else if (response.code() == 403) {
+                    _isJoinStudySuccess.postValue(false)
+                }
+
+            } catch (e: Exception){
+                Log.d(TAG, "studyJoin: ${e.message}")
             }
         }
     }

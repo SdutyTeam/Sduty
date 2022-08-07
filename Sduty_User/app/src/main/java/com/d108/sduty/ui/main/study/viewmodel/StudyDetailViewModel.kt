@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Member
+import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.model.dto.Study
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,29 +19,34 @@ class StudyDetailViewModel: ViewModel() {
     val myStudyInfo: LiveData<Map<String, Any>>
         get() = _myStudyInfo
 
-    private val _memberList = MutableLiveData<List<Member>>()
-    val memberList: LiveData<List<Member>>
-        get() = _memberList
-
+    private val _studyMasterNickname = MutableLiveData<Profile>()
+    val studyMasterNickName: LiveData<Profile>
+        get() = _studyMasterNickname
 
     fun getMyStudyInfo(userSeq: Int, studySeq: Int){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 내 스터디 리스트 불러오기
                 val response = Retrofit.studyApi.getMyStudyInfo(userSeq, studySeq)
-                Log.d(TAG, "getMyStudyInfo1: ${response}")
-                Log.d(TAG, "getMyStudyInfo2: ${response.body()}")
                 if(response.isSuccessful && response.body() != null){
-                    val obj = response.body() as Map<String, Any>
-                    //Log.d(TAG, "getMyStudyInfo: ${obj["study"] as Study}")
-                    Log.d(TAG, "getMyStudyInfo: ${obj["members"] as List<Member>}")
-//                    val meee = obj["members"] as List<Member>
-//                    meee[0].is_studying
-                    //_memberList.postValue(listOf(response.body() as Member))
+                    _myStudyInfo.postValue(response.body() as Map<String, Any>)
                 }
 
             }catch (e: Exception){
                 Log.d(TAG, "getList: ${e.message}")
+            }
+        }
+    }
+
+    fun masterNickname(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.profileApi.getProfileValue(userSeq)
+                if(response.isSuccessful && response.body() != null){
+                    _studyMasterNickname.postValue(response.body() as Profile)
+                }
+            } catch (e: Exception){
+                Log.d(TAG, "masterNickname: ${e.message}")
             }
         }
     }

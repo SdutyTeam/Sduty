@@ -10,11 +10,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.d108.sduty.common.PROFILE
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
@@ -43,6 +46,7 @@ class ProfileRegistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileRegistBinding.inflate(inflater, container, false)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 
@@ -88,9 +92,20 @@ class ProfileRegistFragment : Fragment() {
 
     private fun openTagSelectDialog() {
         TagSelectDialog(requireContext()).let {
+            it.arguments = bundleOf("flag" to PROFILE)
             it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
                 override fun onClick(selectedJobList: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
-
+                    jobHashtag = selectedJobList
+                    interestHashtagList = selectedInterestList
+                    binding.apply {
+                        tvJob.text = jobHashtag!!.name
+                        if(interestHashtagList.isNotEmpty()){
+                            tvInterest.text = ""
+                            for(item in interestHashtagList){
+                                tvInterest.text = "${tvInterest.text} ${item.name} "
+                            }
+                        }
+                    }
                 }
             }
             it.show(parentFragmentManager, null)
@@ -124,6 +139,15 @@ class ProfileRegistFragment : Fragment() {
             val introduce = etIntroduce.text.toString()
             var msg = ""
             var birth = DateFormatUtil.converYYYYMMDD(birthInput)
+            var mainAchievement: Int? = null
+            var interestHashtagSeqs: MutableList<Int>? = null
+            if(interestHashtagList.isNotEmpty()){
+                mainAchievement = interestHashtagList[0].seq
+                interestHashtagSeqs = mutableListOf()
+                for(item in interestHashtagList){
+                    interestHashtagSeqs.add(item.seq)
+                }
+            }
             Log.d(TAG, "saveProfile: ${birth}")
             if(birthInput.isEmpty()){
                 msg = "생년월일을 정확히 입력해 주세요"
@@ -132,6 +156,9 @@ class ProfileRegistFragment : Fragment() {
             }
             else if(introduce.isEmpty()){
                 msg = "자기소개를 입력해 주세요"
+            }
+            else if(jobHashtag == null){
+                msg = "직업을 입력해 주세요"
             }
             else if(imageUrl.isEmpty()){
                 msg = "이미지를 선택해 주세요"
@@ -145,7 +172,7 @@ class ProfileRegistFragment : Fragment() {
                 return
 
             }else{
-                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", jobHashtag?.seq.toString(), publicJob, interestHashtagList, publicInterest, 1), imageUrl)
+                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", tvJob.text.toString(), publicJob, publicInterest, mainAchievement, interestHashtagSeqs), imageUrl)
             }
 
         }

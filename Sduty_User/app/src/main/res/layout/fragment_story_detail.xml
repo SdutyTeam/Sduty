@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?><!--// 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩-->
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.d108.sduty.ui.viewmodel.StoryViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -41,113 +48,166 @@
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/common_top">
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
+            app:layout_constraintBottom_toTopOf="@id/common_bottom">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/const_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
 
+                >
 
-                <LinearLayout
-                    android:id="@+id/divider_1"
-                    style="@style/divider"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_profile"
+                    loadImage="@{vm.timeLine.profile.image}"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_marginVertical="12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:text="@{vm.timeLine.profile.nickname}"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+                    app:layout_constraintStart_toEndOf="@id/iv_profile"
+                    app:layout_constraintTop_toTopOf="@id/iv_profile"
+                    tools:text="테스트" />
+
+                <ImageView
+                    android:id="@+id/iv_menu"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:src="@drawable/icon_more_vert"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/iv_profile" />
+
+                <ImageView
+                    android:id="@+id/iv_timeline_content"
+                    loadImage="@{vm.timeLine.story.imageSource}"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="12dp">
+                    android:layout_height="400dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/indigo_50"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_profile" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/iv_profile"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginHorizontal="2dp"
-                        android:layout_marginVertical="12dp"
-                        android:src="@drawable/icon_avatar"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/iv_likes"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginVertical="8dp"
+                    android:src="@drawable/ic_baseline_favorite_border_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_timeline_content" />
 
-                    <TextView
-                        android:id="@+id/tv_nickname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="15dp"
-                        android:text="테스트 사용자"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_profile"
-                        app:layout_constraintStart_toEndOf="@id/iv_profile"
-                        app:layout_constraintTop_toTopOf="@id/iv_profile" />
+                <ImageView
+                    android:id="@+id/iv_scrap"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_bookmark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_likes"
+                    app:layout_constraintTop_toTopOf="@id/iv_likes" />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginHorizontal="20dp"
-                        android:src="@drawable/icon_more_vert"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_profile"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/iv_profile" />
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20dp"
+                    android:text="@{vm.timeLine.story.contents}"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toBottomOf="@id/iv_likes"
 
-                    <ImageView
-                        android:id="@+id/iv_timeline_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="400dp"
-                        android:layout_marginVertical="10dp"
-                        android:background="@color/indigo_50"
-                        android:src="@drawable/empty_image"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/iv_profile" />
+                    tools:text="글 영역" />
 
-                    <ImageView
-                        android:id="@+id/iv_favorite"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginVertical="8dp"
-                        android:src="@drawable/ic_baseline_favorite_border_24"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/iv_timeline_content" />
+                <TextView
+                    android:id="@+id/tv_job_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/app_blue"
+                    android:textSize="20sp"
+                    android:text="@{`#`+vm.timeLine.profile.job}"
+                    tools:text="태그 영역"
+                    android:layout_marginVertical="10dp"/>
 
-                    <ImageView
-                        android:id="@+id/iv_scrap"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/ic_bookmark"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/iv_favorite"
-                        app:layout_constraintTop_toTopOf="@id/iv_favorite" />
+                <TextView
+                    android:id="@+id/tv_interest_tag"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    tools:text="공부 분야 태그"
+                    android:textSize="20sp"
+                    android:textColor="@color/app_blue"
+                    interestHashTagText="@{vm.timeLine.interestHashtags}"
+                    app:layout_constraintStart_toEndOf="@id/tv_job_tag"
+                    app:layout_constraintTop_toTopOf="@id/tv_job_tag"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginHorizontal="8dp"/>
 
-                    <TextView
-                        android:id="@+id/tv_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="10dp"
-                        android:background="@drawable/textview_regular"
-                        android:text="테스트 글 내용 입니다.\n안녕하세요."
-                        android:textSize="16sp"
-                        app:layout_constraintTop_toBottomOf="@id/iv_favorite" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_reply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_job_tag"
+                    android:nestedScrollingEnabled="false"
+                    />
 
-                    <TextView
-                        android:id="@+id/tv_reply"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:background="@drawable/textview_regular"
-                        android:text="댓글 영역 입니다.\n안녕하세요."
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_content" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.core.widget.NestedScrollView>
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/common_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/scroll_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/gradient_border"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="20dp"
+            >
+
+            <EditText
+                android:id="@+id/et_reply"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_register_reply"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="10dp"
+                android:hint="댓글을 남겨보세요"
+                android:background="@drawable/dialog_white_border"/>
+
+            <ImageView
+                android:id="@+id/iv_register_reply"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/icon_send_right"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

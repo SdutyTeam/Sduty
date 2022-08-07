@@ -1,8 +1,6 @@
 package com.d108.sduty.model.api
 
-import com.d108.sduty.model.dto.Reply
-import com.d108.sduty.model.dto.Story
-import com.d108.sduty.model.dto.Timeline
+import com.d108.sduty.model.dto.*
 import com.d108.sduty.utils.Resource
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -18,10 +16,10 @@ interface StoryApi {
     suspend fun insertStory(@Part imageFile: MultipartBody.Part, @Part("story") story: RequestBody): Response<List<Story>>
 
     @PUT("/story")
-    suspend fun updateStory(@Body story: Story): Response<List<Story>>
+    suspend fun updateStory(@Body story: Story): Response<Timeline>
 
-    @GET("/story/{story_seq")
-    suspend fun getStudyDetail(@Path("story_seq") storySeq: Int): Response<Timeline>
+    @GET("/story/{story_seq}")
+    suspend fun getTimelineDetail(@Path("story_seq") storySeq: Int): Response<Timeline>
 
     @GET("/story/writer/{user_seq}")
     suspend fun getUserStoryList(@Path("user_seq")userSeq: Int): Response<List<Story>>
@@ -41,20 +39,20 @@ interface StoryApi {
     @GET("/story/{story_seq}/reply")
     suspend fun getReplyList(@Path("story_seq")storySeq: Int): Response<List<Reply>>
 
-    @POST("/story/{story_seq}/reply")
-    suspend fun insertComment(@Body comment: Reply, @Path("story_seq")storySeq: Int): Response<List<Reply>>
+    @POST("/story/reply")
+    suspend fun insertReply(@Body reply: Reply): Response<MutableList<Reply>>
 
     @PUT("/story/{story_seq}/reply")
-    suspend fun updateComment(@Body comment: Reply, @Path("story_seq")storySeq: Int): Response<List<Reply>>
+    suspend fun updateReply(@Body reply: Reply, @Path("story_seq")storySeq: Int): Response<MutableList<Reply>>
 
     @DELETE("/story/{story_seq}/reply/{reply_seq}")
-    suspend fun deleteComment(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<List<Reply>>
+    suspend fun deleteReply(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
 
-    @PUT("/story/like/{user_seq}")
-    suspend fun likeStory(@Path("user_seq")userSeq: Int, @Body story: Story): Response<Void>
+    @POST("/story/like")
+    suspend fun likeStory(@Body likes: Likes): Response<Void>
 
-    @PUT("/story/scrap/{user_seq}")
-    suspend fun scrapStory(@Path("user_seq")userSeq: Int, @Body story: Story): Response<Void>
+    @POST("/story/scrap")
+    suspend fun scrapStory(@Body scrap: Scrap): Response<Void>
 
     @PUT("story/report")
     suspend fun reportStory(@Body story: Story): Response<Void>

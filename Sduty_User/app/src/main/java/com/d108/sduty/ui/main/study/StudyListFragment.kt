@@ -23,6 +23,7 @@ import com.d108.sduty.ui.main.study.dialog.StudyDetailDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudyListViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.showToast
 
 // 스터디 전체 리스트
 private const val TAG = "StudyListFragment"
@@ -57,6 +58,14 @@ class StudyListFragment : Fragment(){
         val categoryData:Array<String> = resources.getStringArray(R.array.array_category)
         val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
         binding.spinnerCategoryFilter.adapter = categoryAdapter
+
+        studyListViewModel.isJoinStudySuccess.observe(viewLifecycleOwner){
+            if(it){
+                context?.showToast("가입이 완료되었습니다.")
+            }else{
+                context?.showToast("이미 가입된 그룹입니다.")
+            }
+        }
 
         studyListViewModel.studyList.observe(viewLifecycleOwner){
             if(it != null){
@@ -124,8 +133,8 @@ class StudyListFragment : Fragment(){
                 dialog.showDialog()
                 dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
                     override fun onClicked() {
+                        studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
                     }
-
                 })
             }
         }

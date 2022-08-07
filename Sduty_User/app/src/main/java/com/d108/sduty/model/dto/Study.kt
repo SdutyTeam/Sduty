@@ -10,14 +10,14 @@ data class Study(
     var category: String,
     var limitNumber: Int,
     var joinNumber: Int,
-    var password: String,
+    var password: String?,
     var studyRegtime: Date?,
     var notice: String,
-    var roomId: String?
+    var roomId: String?,
 ) {
     constructor(
         masterSeq: Int, name: String, introduce: String, category: String, limitNumber: Int,
-        password: String, roomId: String?):
+        password: String?, roomId: String?):
             this(0, masterSeq, name, introduce, category,
             limitNumber, 0, password, null, "공지사항", roomId)
 

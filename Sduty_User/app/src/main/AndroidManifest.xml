@@ -25,7 +25,11 @@
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
+            android:configChanges="keyboardHidden|orientation"
+            android:fitsSystemWindows="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
