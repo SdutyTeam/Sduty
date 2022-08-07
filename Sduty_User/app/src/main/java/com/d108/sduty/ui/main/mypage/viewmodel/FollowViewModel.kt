@@ -1,4 +1,4 @@
-package com.d108.sduty.ui.main.mypage.setting.viewmodel
+package com.d108.sduty.ui.main.mypage.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -44,5 +44,12 @@ class FollowViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+    private val _isMyFollowPage = MutableLiveData<Boolean>()
+    val isMyFollowPage: LiveData<Boolean>
+        get() = _isMyFollowPage
+    fun setMyFollowPage(myFollowPage: Boolean){
+        _isMyFollowPage.postValue(myFollowPage)
     }
 }

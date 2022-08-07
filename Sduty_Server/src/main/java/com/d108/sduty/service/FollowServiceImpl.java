@@ -25,8 +25,12 @@ public class FollowServiceImpl implements FollowService {
 		List<Optional<Follow>> followers = followRepo.findByFollowerSeq(seq);
 		List<Follow> followerList = new ArrayList<>();
 		for(Optional<Follow> f : followers) {
-			if(f.isPresent())
+			if(f.isPresent()) {
 				followerList.add(f.get());
+				Profile profile = profileRepo.findById(f.get().getFolloweeSeq()).get(); 
+				followerList.get(followerList.size() - 1).setProfile(profile);
+			}
+			
 		}
 		return followerList;
 	}

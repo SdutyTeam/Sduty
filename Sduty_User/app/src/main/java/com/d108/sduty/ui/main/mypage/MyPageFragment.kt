@@ -47,11 +47,6 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         initView()
-
-
-
-
-
     }
 
     private fun initViewModel() {
@@ -65,6 +60,11 @@ class MyPageFragment : Fragment() {
     private fun initView(){
         contributionAdapter = ContributionAdapter()
         storyAdapter = StoryAdapter(requireActivity())
+        storyAdapter.onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
+            override fun onClick(story: Story, position: Int) {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToStoryDetailFragment(story.seq))
+            }
+        }
         binding.apply {
 
             vm = viewModel

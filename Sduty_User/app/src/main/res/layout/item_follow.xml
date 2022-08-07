@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
+        <variable
+            name="vm"
+            type="com.d108.sduty.ui.main.mypage.viewmodel.FollowViewModel" />
         <variable
             name="data"
             type="com.d108.sduty.model.dto.Follow" />
@@ -19,6 +23,7 @@
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_follow"
+            android:visibility="@{vm.isMyFollowPage ? View.GONE : View.VISIBLE}"
             >
 
             <de.hdodenhof.circleimageview.CircleImageView

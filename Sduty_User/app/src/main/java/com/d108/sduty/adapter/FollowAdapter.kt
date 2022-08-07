@@ -1,31 +1,57 @@
 package com.d108.sduty.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.d108.sduty.common.FLAG_FOLLOWEE
+import com.d108.sduty.common.FLAG_FOLLOWER
 import com.d108.sduty.databinding.ItemFollowBinding
 import com.d108.sduty.model.dto.Follow
+import com.d108.sduty.model.dto.Profile
 
-class FollowAdapter(val userSeq: Int, var tabFlag: Int): RecyclerView.Adapter<FollowAdapter.ViewHolder>() {
+private const val TAG ="FollowAdapter"
+class FollowAdapter(val mySeq: Int, var myProfile: Profile): RecyclerView.Adapter<FollowAdapter.ViewHolder>() {
     var list = mutableListOf<Follow>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+    var tabFlag = 0
     inner class ViewHolder(val binding: ItemFollowBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(follow: Follow){
             binding.apply {
                 data = follow
-                if(userSeq == follow.followerSeq){
-                    btnFollow.text = "취소"
+                Log.d(TAG, "bind: ${follow}")
+                var flagMe = false
+                if(mySeq != follow.profile!!.userSeq){
+                    if(tabFlag == FLAG_FOLLOWER) {
+                        if(mySeq == follow.followerSeq)
+                            btnFollow.text = "취소"
+                        else
+                            btnFollow.text = "팔로우"
+                        btnFollow.visibility = View.VISIBLE
+                    }
+                    else{
+                        btnFollow.visibility = View.GONE
+                    }
+
                 }else{
-                    btnFollow.text = "팔로잉"
+                    flagMe = true
+                    btnFollow.text = "본인"
                 }
-                constProfile.setOnClickListener {
+                if(myProfile.follows!!.get("${follow.followeeSeq}") != null){
+                    btnFollow.text = "취소"
+                }
+
+               constProfile.setOnClickListener {
                     onClickFollowListener.onClickProfile(follow)
                 }
-                btnFollow.setOnClickListener {
-                    onClickFollowListener.onClickFollowBtn(follow)
+                if(!flagMe) {
+                    btnFollow.setOnClickListener {
+                        onClickFollowListener.onClickFollowBtn(follow)
+                    }
                 }
             }
         }
