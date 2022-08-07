@@ -269,11 +269,16 @@ class StoryViewModel: ViewModel() {
         }
     }
 
+    private val _isFollowSucceed = MutableLiveData<Boolean>(false)
+    val isFollowSucceed: LiveData<Boolean>
+        get() = _isFollowSucceed
     fun doFollow(follow: Follow){
         viewModelScope.launch(Dispatchers.IO) {
             Retrofit.profileApi.doFollow(follow).let {
                 if (it.isSuccessful) {
+                    _isFollowSucceed.postValue(!_isFollowSucceed.value!!)
                 } else {
+                    Log.d(TAG, "doFollow: ${it.code()}")
                 }
             }
         }

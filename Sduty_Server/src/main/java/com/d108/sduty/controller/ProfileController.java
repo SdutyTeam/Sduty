@@ -180,6 +180,7 @@ public class ProfileController {
 	public ResponseEntity<?> doFollow(@RequestBody Follow follow) throws Exception {
 		int followerSeq = follow.getFollowerSeq();
 		int followeeSeq = follow.getFolloweeSeq();
+		System.out.println(follow);
 		boolean alreadyFollowing = followService.findFollowing(followerSeq, followeeSeq);
 		Follow result;
 		if(alreadyFollowing) {
@@ -194,6 +195,6 @@ public class ProfileController {
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
 		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

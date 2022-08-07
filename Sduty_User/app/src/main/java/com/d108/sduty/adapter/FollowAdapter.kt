@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ItemFollowBinding
 import com.d108.sduty.model.dto.Follow
 
-class FollowAdapter(val userSeq: Int): RecyclerView.Adapter<FollowAdapter.ViewHolder>() {
+class FollowAdapter(val userSeq: Int, var tabFlag: Int): RecyclerView.Adapter<FollowAdapter.ViewHolder>() {
     var list = mutableListOf<Follow>()
         set(value) {
             field = value
@@ -22,7 +22,7 @@ class FollowAdapter(val userSeq: Int): RecyclerView.Adapter<FollowAdapter.ViewHo
                     btnFollow.text = "팔로잉"
                 }
                 constProfile.setOnClickListener {
-                    onClickProfileListener.onClickProfile(follow)
+                    onClickFollowListener.onClickProfile(follow)
                 }
                 btnFollow.setOnClickListener {
                     onClickFollowListener.onClickFollowBtn(follow)
@@ -43,7 +43,6 @@ class FollowAdapter(val userSeq: Int): RecyclerView.Adapter<FollowAdapter.ViewHo
     override fun getItemCount(): Int = list.size
 
     lateinit var onClickFollowListener: OnClickFollowListener
-    lateinit var onClickProfileListener: OnClickFollowListener
     interface OnClickFollowListener{
         fun onClickFollowBtn(follow: Follow)
         fun onClickProfile(follow: Follow)
