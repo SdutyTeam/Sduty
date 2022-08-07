@@ -213,4 +213,17 @@ public class ProfileController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 	}
+
+	@ApiOperation(value = "유저 공부중 상태 변경 > UserSeq > int", response = Boolean.class)
+	@PutMapping("/timer/{userSeq}/{flag}")
+	public ResponseEntity<?> changeIsStudying(@PathVariable int userSeq, @PathVariable int flag){
+		int result = profileService.changeStudying(userSeq, flag);
+		if(result != -1) {
+			if(result == 1)
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			else
+				return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
 }
