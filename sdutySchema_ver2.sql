@@ -45,8 +45,7 @@ DROP TABLE IF EXISTS `sduty`.`follow` ;
 
 CREATE TABLE IF NOT EXISTS `sduty`.`follow` (
   `follower_seq` INT NOT NULL,
-  `followee_seq` INT NOT NULL,
-  PRIMARY KEY (`follower_seq`, `followee_seq`),
+  `followee_seq` INT NOT NULL,  
   INDEX `followee_seq_idx` (`followee_seq` ASC) VISIBLE,
   CONSTRAINT `followee_seq`
     FOREIGN KEY (`followee_seq`)
@@ -61,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `sduty`.`follow` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+
 
 
 -- -----------------------------------------------------
