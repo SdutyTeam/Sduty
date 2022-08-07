@@ -119,6 +119,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_achievementFragment"
             app:destination="@id/achievementFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_followFragment"
+            app:destination="@id/followFragment" />
     </fragment>
     <fragment
         android:id="@+id/storyRegisterFragment"
@@ -317,5 +320,19 @@
         <action
             android:id="@+id/action_userProfileFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_followFragment"
+            app:destination="@id/followFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followFragment"
+        android:name="com.d108.sduty.ui.main.mypage.FollowFragment"
+        android:label="FollowFragment">
+        <argument
+            android:name="userSeq"
+            app:argType="integer"/>
+        <argument
+            android:name="flag"
+            app:argType="integer"/>
     </fragment>
 </navigation>
