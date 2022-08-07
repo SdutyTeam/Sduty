@@ -106,6 +106,15 @@ class StudyListFragment : Fragment(){
                 studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, isChecked)
             }
 
+//            test.setOnCheckedChangeListener { buttonView, isChecked ->
+//                if(isChecked){
+//                    test.setBackgroundResource(R.drawable.gradient_study_border)
+//
+//                } else{
+//                    test.setBackgroundResource(R.drawable.gradient_border)
+//                }
+//            }
+
 
 
 

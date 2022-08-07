@@ -1,11 +1,13 @@
 package com.d108.sduty.ui.main.study
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +18,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
+import com.d108.sduty.common.SENDBIRD_APP_ID
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
 import com.d108.sduty.model.dto.Alarm
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.StudyRegisteViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.Status
+import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
+import com.sendbird.calls.SendBirdCall
+import com.sendbird.calls.SendBirdError
 
 // 스터디 등록 - 스터디 명, 공개 설정, 비밀번호 설정, 최대 인원, 카테고리, 스터디 설명, 일반/캠스터디 설정
 private const val TAG ="StudyRegistFragment"
@@ -56,6 +66,9 @@ class StudyRegistFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        SendBirdCall.init(requireActivity().applicationContext, SENDBIRD_APP_ID)
+        studyRegisteViewModel.authenticate(mainViewModel.user.value!!.name)
 
         when(args.type){
             false -> {
@@ -185,9 +198,6 @@ class StudyRegistFragment : Fragment() {
             val hour = binding.timePicker.hour.toString()
             val minute = binding.timePicker.minute
 
-
-
-
             if(name.isEmpty() || introduce.isEmpty()){
                 context?.showToast("빈 칸을 모두 입력해 주세요.")
             }
@@ -209,12 +219,39 @@ class StudyRegistFragment : Fragment() {
                         )
                     )
                 } else{
-                    studyRegisteViewModel.camStudyCreate(
-                        Study(
-                            mainViewModel.profile.value!!.userSeq,
-                        name, introduce, category, people.toInt(), pass, "12345"
-                        ), Alarm(0, "${hour}:${minute}:00", mon_state, tue_state, wed_state, thur_state, fri_state, sat_state, sun_state)
-                    )
+                    studyRegisteViewModel.createRoom()
+                    studyRegisteViewModel.createRoomId.observe(requireActivity()){ resources ->
+                        Log.d(TAG, "room: ${resources}")
+                        when (resources.status){
+                            Status.LOADING -> {
+                                // TODO : show loading view
+                            }
+                            Status.SUCCESS -> {
+                                resources.data?.let {
+                                    studyRegisteViewModel.camStudyCreate(
+                                        Study(
+                                            mainViewModel.profile.value!!.userSeq,
+                                            name, introduce, category, people.toInt(), pass, it
+                                        ), Alarm(0, "${hour}:${minute}:00", mon_state, tue_state, wed_state, thur_state, fri_state, sat_state, sun_state)
+                                    )
+                                }
+                            }
+                            Status.ERROR -> {
+                                val message = if (resources?.errorCode == SendBirdError.ERR_INVALID_PARAMS){
+                                    getString(R.string.dashboard_invalid_room_params)
+                                } else{
+                                    resources?.message
+                                }
+                                AlertDialog.Builder(context)
+                                    .setTitle(getString(R.string.dashboard_can_not_create_room))
+                                    .setMessage(message ?: "unknown sendbird error")
+                                    .setPositiveButton(R.string.ok, null)
+                                    .create()
+                                    .show()
+                            }
+                        }
+                    }
+
                 }
 
 

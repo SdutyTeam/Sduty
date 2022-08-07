@@ -113,7 +113,7 @@ class GroupCallViewModel(
                 "onAudioDeviceChanged() called with: currentAudioDevice = $currentAudioDevice, availableAudioDevices = $availableAudioDevices"
             )
 
-            _currentAudioDevice.postValue(currentAudioDevice)
+            _currentAudioDevice.postValue(currentAudioDevice!!)
         }
 
         override fun onError(e: SendBirdException, participant: Participant?) {
