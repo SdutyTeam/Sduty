@@ -77,7 +77,7 @@ class TimerFragment : Fragment() {
             // 타이머
             timer.observe(viewLifecycleOwner) { time ->
                 val hour = time / 60 / 60
-                val min = time / 60
+                val min = (time / 60) % 60
                 val sec = time % 60
                 binding.tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
             }
