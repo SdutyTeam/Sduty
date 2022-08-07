@@ -98,6 +98,20 @@ public class TimelineServiceImpl implements TimelineService {
 		return tList;
 	}
 	
+	@Override
+	public Timeline selectRecommandTimeline(int userSeq) {
+		Story s = storyRepo.findRecommanded(getProfile(userSeq).getJob());
+		Timeline t = new Timeline();
+		t.setProfile(getProfile(s.getWriterSeq()));
+		t.setStory(s);
+		t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+		t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+		t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+		setInterestList(t, s);
+
+		return t;
+	}
+	
 	public Timeline selectDetailTimeline(int storySeq) {
 		Optional<Story> selectedOStory = storyRepo.findById(storySeq);
 		if(selectedOStory.isPresent()) {

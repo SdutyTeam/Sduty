@@ -45,7 +45,7 @@ public class Profile {
 	@Column(name="profile_image")
 	private String image;
 	@Column(name="profile_job")
-	private String job;
+	private int job;
 	@Column(name="profile_public_job")
 	private int publicJob;
 	@Column(name="profile_interest")
