@@ -1,13 +1,15 @@
 package com.d108.sduty.ui.main.timer.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ListItemTaskBinding
 import com.d108.sduty.model.dto.Task
 
-class TaskListAdapter(var list: List<Task>): RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
+class TaskListAdapter(val fragmentActivity: FragmentActivity, var list: List<Task>): RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ListItemTaskBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Task){
@@ -15,7 +17,7 @@ class TaskListAdapter(var list: List<Task>): RecyclerView.Adapter<TaskListAdapte
         }
         fun bindClickListener(listener: OnClickTaskItem){
             binding.root.setOnClickListener{
-                listener.onClick(it, adapterPosition)
+                listener.onClick(it, fragmentActivity, adapterPosition)
             }
         }
 
@@ -38,7 +40,7 @@ class TaskListAdapter(var list: List<Task>): RecyclerView.Adapter<TaskListAdapte
 
 
     interface OnClickTaskItem{
-        fun onClick(view: View, position: Int)
+        fun onClick(view: View, fragmentActivity: FragmentActivity, position: Int)
     }
     lateinit var onClickTaskItem: OnClickTaskItem
 }
