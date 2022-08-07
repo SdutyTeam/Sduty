@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
+import com.d108.sduty.common.FLAG_FOLLOWEE
+import com.d108.sduty.common.FLAG_FOLLOWER
 import com.d108.sduty.databinding.FragmentMyPageBinding
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
@@ -79,6 +81,12 @@ class MyPageFragment : Fragment() {
             }
             ivSetting.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())
+            }
+            tvCountFollow.setOnClickListener {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWER))
+            }
+            tvCountFollower.setOnClickListener {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWEE))
             }
         }
         val list = mutableListOf<Boolean>()
