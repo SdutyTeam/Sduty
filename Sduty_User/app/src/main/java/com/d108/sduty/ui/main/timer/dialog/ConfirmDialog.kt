@@ -69,8 +69,22 @@ class ConfirmDialog() : DialogFragment() {
                 // ConfirmDialog 종료
                 dismiss()
             }
+        }
+    }
 
-            btnCancel.setOnClickListener {
+    private fun removeTask() {
+        val position = arguments?.getInt("Position", 0)
+        timerViewModel.removeTask(position!!)
+
+        dismiss()
+    }
+
+    private fun errorMessage() {
+        val message = arguments?.getString("Message", "")
+        binding.apply {
+            tvWarningMessage.text = message
+            btnCancel.visibility = View.GONE
+            btnConfirm.setOnClickListener {
                 dismiss()
             }
         }

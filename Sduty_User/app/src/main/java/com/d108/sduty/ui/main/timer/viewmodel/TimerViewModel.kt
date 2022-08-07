@@ -108,18 +108,25 @@ class TimerViewModel() : ViewModel() {
 
         // TODO: 스터디에 종료 정보 알림
 
-        // TODO: 서버에 종료 정보 알림 
-
-        ApplicationClass.timerPref.edit().putString("StartTime", "00:00:00").apply()
+        ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
         _timer.postValue(0)
         resetDelayTimer()
     }
 
-    fun saveTask(report: Report){
+    fun saveTask(report: Report) {
         // Task 저장
         insertTask(report)
+    }
+
+    fun removeTask(position: Int) {
+        val seq = report.value!!.tasks[position].seq
+        deleteTask(seq)
+    }
+
+    fun modifyTask(task: Task){
+        updateTask(task)
     }
 
     /* API */
@@ -133,11 +140,11 @@ class TimerViewModel() : ViewModel() {
                 if (it.isSuccessful && it.body() != null) {
                     Log.d(TAG, "getReport: body ${it.body()}")
                     _report.postValue(it.body())
-                } else if(it.code() == 401) {
+                } else if (it.code() == 401) {
                     // 못 받았을 때
                     Log.d(TAG, "getReport: error ${it.errorBody()}")
-                    _report.postValue(Report(0,0,selectedDate,"00:00:00", listOf()))
-                }else {
+                    _report.postValue(Report(0, 0, selectedDate, "00:00:00", listOf()))
+                } else {
                     _toastMessage.postValue("서버에서 불러오는데 실패했습니다..")
                 }
             }
@@ -145,15 +152,45 @@ class TimerViewModel() : ViewModel() {
     }
 
     // 시간 측정 기록 저장
-    private fun insertTask(report: Report){
+    private fun insertTask(report: Report) {
         Log.d(TAG, "insertTask: ${report}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.insertTask(report).let {
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     _toastMessage.postValue("측정 기록 등록을 완료하였습니다.")
                 } else {
-                    Log.e(TAG, "saveTask: ${it.code()}", )
+                    Log.e(TAG, "saveTask: ${it.code()}")
                     _toastMessage.postValue("서버에 등록하는데 실패하였습니다.")
+                }
+            }
+        }
+    }
+
+    // 삭제
+    private fun deleteTask(seq: Int) {
+        Log.d(TAG, "deleteTask: ${seq}")
+        CoroutineScope(Dispatchers.IO).launch {
+            Retrofit.timerApi.deleteTask(seq).let {
+                if (it.isSuccessful) {
+                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                } else {
+                    Log.e(TAG, "saveTask: ${it.code()}")
+                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
+                }
+            }
+        }
+    }
+
+    // 수정
+    private fun updateTask(task: Task){
+        Log.d(TAG, "updateTask: ${task}")
+        CoroutineScope(Dispatchers.IO).launch {
+            Retrofit.timerApi.updateTask(task.seq, task).let {
+                if (it.isSuccessful) {
+                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                } else {
+                    Log.e(TAG, "saveTask: ${it.code()}")
+                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
                 }
             }
         }
