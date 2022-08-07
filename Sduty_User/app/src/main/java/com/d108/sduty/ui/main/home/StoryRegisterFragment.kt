@@ -152,14 +152,6 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         startForProfileImageResult.launch(intent)
                     }
             }
-            imgStory.setOnClickListener {
-                ImagePicker.with(requireActivity())
-                    .crop(3f, 4f)	    //Crop image and let user choose aspect ratio.
-                    .compress(1024)
-                    .createIntent {
-                        startForProfileImageResult.launch(it)
-                    }
-            }
             ivBack.setOnClickListener {
                 navigateBack(requireActivity())
             }
