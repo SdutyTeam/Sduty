@@ -94,26 +94,36 @@ class TaskDialog : DialogFragment() {
 
                 val newTask = Task(-1,-1,endTime, startTime, 0, title, content1, content2, content3)
 
-                // TODO: userSeq 변경 필요 
+                // TODO: userSeq 변경 필요
                 val report = Report(-1, 47, today, "",listOf(newTask))
 
                 // title 은 필수로 입력해야한다.
                 if(title.isNotEmpty()){
                     timerViewModel.saveTask(report)
+                    timerViewModel.stopTimer()
                     dismiss()
                 } else {
                     ConfirmDialog().apply {
                         // 경고창에 출력할 메시지를 담아 보낸다.
                         arguments = Bundle().apply {
+                            putString("Action","Error")
                             putString("Message","제목을 입력해주세요!!")
                         }
-                        show(this@TaskDialog.requireActivity().supportFragmentManager, "TaskDialog")
+                        show(this@TaskDialog.requireActivity().supportFragmentManager, "ConfirmDialog")
                     }
                 }
             }
 
+            btnModify.visibility = View.GONE
+
             btnDelete.setOnClickListener {
-                ConfirmDialog().show(requireActivity().supportFragmentManager, "ConfirmDialog")
+                ConfirmDialog().apply {
+                    // 삭제 경고
+                    arguments = Bundle().apply {
+                        putString("Action","RemoveTimer")
+                    }
+                    show(this@TaskDialog.requireActivity().supportFragmentManager, "ConfirmDialog")
+                }
             }
         }
 
