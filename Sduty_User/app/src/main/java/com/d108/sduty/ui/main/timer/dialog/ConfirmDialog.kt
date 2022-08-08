@@ -31,14 +31,33 @@ class ConfirmDialog() : DialogFragment() {
         // 여백 터치 시 다이얼로그 종료 방지
         isCancelable = false
 
-        binding.apply {
+        initView()
 
-            if(!arguments?.getString("Message").isNullOrEmpty()){
-                tvWarningMessage.text = requireArguments().getString("Message")
-                btnConfirm.visibility = View.GONE
-                btnCancel.text = "확인"
+        val action = arguments?.getString("Action", "RemoveTimer")
+
+        when(action){
+            "RemoveTimer" -> {
+                removeTimer()
             }
+            "RemoveTask" -> {
+                removeTask()
+            }
+            "Error" -> {
+                errorMessage()
+            }
+        }
+    }
 
+    private fun initView() {
+        binding.apply {
+            btnCancel.setOnClickListener {
+                dismiss()
+            }
+        }
+    }
+
+    private fun removeTimer() {
+        binding.apply {
             btnConfirm.setOnClickListener {
                 // DelayDialog 종료
                 val fragment = requireActivity().supportFragmentManager.findFragmentByTag("TaskDialog")
@@ -50,8 +69,22 @@ class ConfirmDialog() : DialogFragment() {
                 // ConfirmDialog 종료
                 dismiss()
             }
+        }
+    }
 
-            btnCancel.setOnClickListener {
+    private fun removeTask() {
+        val position = arguments?.getInt("Position", 0)
+        timerViewModel.removeTask(position!!)
+
+        dismiss()
+    }
+
+    private fun errorMessage() {
+        val message = arguments?.getString("Message", "")
+        binding.apply {
+            tvWarningMessage.text = message
+            btnCancel.visibility = View.GONE
+            btnConfirm.setOnClickListener {
                 dismiss()
             }
         }

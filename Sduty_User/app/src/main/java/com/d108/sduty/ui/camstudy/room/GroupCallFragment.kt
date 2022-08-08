@@ -49,7 +49,7 @@ class GroupCallFragment : Fragment() {
         val room = SendBirdCall.getCachedRoomById(roomId)
 
         // views
-        binding.groupCallTextViewRoomId.text = "구미 1반 8팀"
+        binding.groupCallTextViewRoomId.text = (activity as? RoomActivity)?.getStudyName()
         setAudioEnabledImage(room?.localParticipant?.isAudioEnabled ?: false)
         setVideoEnabledImage(room?.localParticipant?.isVideoEnabled ?: false)
 

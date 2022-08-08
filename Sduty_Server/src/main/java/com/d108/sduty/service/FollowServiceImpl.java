@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Follow;
+import com.d108.sduty.dto.Profile;
 import com.d108.sduty.repo.FollowRepo;
+import com.d108.sduty.repo.ProfileRepo;
 
 @Service
 public class FollowServiceImpl implements FollowService {
@@ -16,13 +18,19 @@ public class FollowServiceImpl implements FollowService {
 	@Autowired
 	private FollowRepo followRepo;
 	
+	@Autowired ProfileRepo profileRepo;
+	
 	@Override
 	public List<Follow> selectFollower(int seq) {
 		List<Optional<Follow>> followers = followRepo.findByFollowerSeq(seq);
 		List<Follow> followerList = new ArrayList<>();
 		for(Optional<Follow> f : followers) {
-			if(f.isPresent())
+			if(f.isPresent()) {
 				followerList.add(f.get());
+				Profile profile = profileRepo.findById(f.get().getFolloweeSeq()).get(); 
+				followerList.get(followerList.size() - 1).setProfile(profile);
+			}
+			
 		}
 		return followerList;
 	}
@@ -32,8 +40,11 @@ public class FollowServiceImpl implements FollowService {
 		List<Optional<Follow>> followees = followRepo.findByFolloweeSeq(seq);
 		List<Follow> followeeList = new ArrayList<>();
 		for(Optional<Follow> f : followees) {
-			if(f.isPresent())
+			if(f.isPresent()) {
 				followeeList.add(f.get());
+				Profile profile = profileRepo.findById(f.get().getFollowerSeq()).get(); 
+				followeeList.get(followeeList.size() - 1).setProfile(profile);
+			}
 		}
 		return followeeList;
 	}

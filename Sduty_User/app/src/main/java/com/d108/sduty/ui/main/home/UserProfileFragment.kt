@@ -16,12 +16,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.StoryAdapter
+import com.d108.sduty.common.FLAG_FOLLOWEE
+import com.d108.sduty.common.FLAG_FOLLOWER
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentUserProfileBinding
 import com.d108.sduty.model.dto.Follow
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Story
+import com.d108.sduty.ui.main.mypage.MyPageFragmentDirections
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
@@ -57,18 +60,26 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     private fun initViewModel() {
         viewModel.getUserStoryListValue(args.userSeq)
-        viewModel.getProfileValue(args.userSeq)
-        mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
         viewModel.userStoryList.observe(viewLifecycleOwner){
             storyAdapter.list = it
         }
         mainViewModel.profile.observe(viewLifecycleOwner){
-            Log.d(TAG, "initViewModel: ${it.follows}")
             binding.apply {
                 vm = viewModel
                 mainVM = mainViewModel
+                Log.d(TAG, "initViewModel: story: ${it}")
             }
-
+        }
+        viewModel.profile.observe(viewLifecycleOwner){
+            binding.apply {
+                vm = viewModel
+                mainVM = mainViewModel
+                Log.d(TAG, "initViewModel: main: ${it}")
+            }
+        }
+        viewModel.isFollowSucceed.observe(viewLifecycleOwner){
+            mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+            viewModel.getProfileValue(args.userSeq)
         }
     }
 
@@ -102,6 +113,12 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     }
                     show()
                 }
+            }
+            tvCountFollow.setOnClickListener {
+                findNavController().safeNavigate(UserProfileFragmentDirections.actionUserProfileFragmentToFollowFragment(args.userSeq, FLAG_FOLLOWER))
+            }
+            tvCountFollower.setOnClickListener {
+                findNavController().safeNavigate(UserProfileFragmentDirections.actionUserProfileFragmentToFollowFragment(args.userSeq, FLAG_FOLLOWEE))
             }
         }
     }

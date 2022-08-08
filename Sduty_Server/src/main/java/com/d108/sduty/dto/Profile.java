@@ -15,6 +15,9 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +48,7 @@ public class Profile {
 	@Column(name="profile_image")
 	private String image;
 	@Column(name="profile_job")
-	private int job;
+	private String job;
 	@Column(name="profile_public_job")
 	private int publicJob;
 	@Column(name="profile_interest")
@@ -72,7 +75,8 @@ public class Profile {
 	@Transient
 	private List<InterestHashtag> interestHashtags;
 	
-	@MapKey(name = "followeeSeq")
+	@MapKey(name = "followeeSeq")	
+	
 	@OneToMany(mappedBy = "followerSeq", fetch = FetchType.EAGER)	
 	private Map<String, Follow> follows;
 }

@@ -12,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +54,7 @@ public class ProfileController {
 	@Autowired
 	private UserAchieveService userAchieveService;
 	
+	@Transactional
 	@ApiOperation(value = "프로필 저장 > Profile > Profile 리턴", response = Profile.class)
 	@PostMapping("")
 	public ResponseEntity<?> insertProfile(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
@@ -88,6 +90,7 @@ public class ProfileController {
 		}
 	}
 	
+	@Transactional
 	@ApiOperation(value = "프로필 수정 > UserSeq > Profile 리턴", response = Profile.class)
 	@PutMapping()
 	public ResponseEntity<?> updateProfile(@RequestParam MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
@@ -123,6 +126,7 @@ public class ProfileController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "유저 신고 > UserSeq > HttpStatus", response = HttpStatus.class)
 	@PutMapping("/warning/{userSeq}")
 	public ResponseEntity<?> warnUser(@PathVariable int userSeq) throws Exception {
@@ -136,6 +140,7 @@ public class ProfileController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "업적 달성 > Achievement > ", response = HttpStatus.class)
 	@PostMapping("/achievement")
 	public ResponseEntity<?> achieveAchievement(@RequestBody UserAchieve userAchieve) {
@@ -145,6 +150,7 @@ public class ProfileController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
+	
 	
 	@ApiOperation(value = "유저 달성 업적 조회 > Achievement > ", response = Achievement.class)
 	@GetMapping("/achievement/{userSeq}")
@@ -166,6 +172,7 @@ public class ProfileController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "대표 업적 설정 > Achievement > ", response = Achievement.class)
 	@PutMapping("/achievement")
 	public ResponseEntity<?> updateRepAchievement(@RequestBody UserAchieve userAchieve) throws Exception {
@@ -181,11 +188,13 @@ public class ProfileController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "팔로우/취소 > Follow > HttpStatus", response = HttpStatus.class)
 	@PostMapping("/follow")
 	public ResponseEntity<?> doFollow(@RequestBody Follow follow) throws Exception {
 		int followerSeq = follow.getFollowerSeq();
 		int followeeSeq = follow.getFolloweeSeq();
+		System.out.println(follow);
 		boolean alreadyFollowing = followService.findFollowing(followerSeq, followeeSeq);
 		Follow result;
 		if(alreadyFollowing) {
@@ -200,10 +209,10 @@ public class ProfileController {
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
 		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "날짜별 유저 스토리 게시 여부 > UserSeq > List<Boolean>", response = Boolean.class)
+	@ApiOperation(value = "날짜별 유저 스토리 게시 여부 (잔디차트) > UserSeq > List<Boolean>", response = Boolean.class)
 	@GetMapping("/chart/{userSeq}")
 	public ResponseEntity<?> getGrassChart(@PathVariable int userSeq){
 		try {
@@ -211,5 +220,19 @@ public class ProfileController {
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
+	}
+
+	@Transactional
+	@ApiOperation(value = "유저 공부중 상태 변경 > UserSeq > int", response = Boolean.class)
+	@PutMapping("/timer/{userSeq}/{flag}")
+	public ResponseEntity<?> changeIsStudying(@PathVariable int userSeq, @PathVariable int flag){
+		int result = profileService.changeStudying(userSeq, flag);
+		if(result != -1) {
+			if(result == 1)
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			else
+				return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 }

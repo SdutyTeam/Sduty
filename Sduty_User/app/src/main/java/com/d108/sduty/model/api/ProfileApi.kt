@@ -21,4 +21,9 @@ interface ProfileApi {
     @POST("/profile/follow")
     suspend fun doFollow(@Body follow: Follow): Response<Void>
 
+    @GET("/profile/follower/{userSeq}")
+    suspend fun getFollower(@Path("userSeq") userSeq: Int): Response<MutableList<Follow>>
+
+    @GET("/profile/followee/{userSeq}")
+    suspend fun getFollowee(@Path("userSeq") userSeq: Int): Response<MutableList<Follow>>
 }
