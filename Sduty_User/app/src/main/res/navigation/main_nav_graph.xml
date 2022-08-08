@@ -119,6 +119,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_achievementFragment"
             app:destination="@id/achievementFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_followFragment"
+            app:destination="@id/followFragment" />
     </fragment>
     <fragment
         android:id="@+id/storyRegisterFragment"
@@ -182,9 +185,6 @@
         <action
             android:id="@+id/action_myStudyFragment_to_studyListFragment"
             app:destination="@+id/studyListFragment"/>
-        <action
-            android:id="@+id/action_myStudyFragment_to_previewFragment"
-            app:destination="@id/previewFragment" />
     </fragment>
     <fragment
         android:id="@+id/studyDetailFragment"
@@ -260,7 +260,16 @@
     <fragment
         android:id="@+id/previewFragment"
         android:name="com.d108.sduty.ui.camstudy.preview.PreviewFragment"
-        android:label="PreviewFragment" />
+        android:label="PreviewFragment">
+
+        <argument
+            android:name="roomId"
+            app:argType="string"/>
+
+        <argument
+            android:name="studyName"
+            app:argType="string"/>
+    </fragment>
     <fragment
         android:id="@+id/studySearchFragment"
         android:name="com.d108.sduty.ui.main.study.StudySearchFragment"
@@ -276,6 +285,8 @@
             android:defaultValue=""/>
         <action
             android:id="@+id/action_storyDecoFragment_to_storyRegisterFragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/main_nav_graph"
             app:destination="@id/storyRegisterFragment" />
     </fragment>
     <fragment
@@ -317,5 +328,25 @@
         <action
             android:id="@+id/action_userProfileFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_followFragment"
+            app:destination="@id/followFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followFragment"
+        android:name="com.d108.sduty.ui.main.mypage.FollowFragment"
+        android:label="FollowFragment">
+        <argument
+            android:name="userSeq"
+            app:argType="integer"/>
+        <argument
+            android:name="flag"
+            app:argType="integer"/>
+        <action
+            android:id="@+id/action_followFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+        <action
+            android:id="@+id/action_followFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
 </navigation>

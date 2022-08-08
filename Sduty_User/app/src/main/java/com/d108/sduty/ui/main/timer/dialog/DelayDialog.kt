@@ -34,6 +34,12 @@ class DelayDialog : DialogFragment() {
         // 여백 터치 시 다이얼로그 종료 방지
         isCancelable = false
 
+        initViewModel()
+
+        initView()
+    }
+
+    private fun initViewModel(){
         binding.apply {
             timerViewModel.timer.observe(viewLifecycleOwner) { time ->
                 val hour = time / 60 / 60
@@ -42,28 +48,43 @@ class DelayDialog : DialogFragment() {
                 tvTimer.text = String.format("%02d:%02d:%02d",hour,min, sec)
             }
 
-            timerViewModel.delayTime.observe(viewLifecycleOwner) { delayTime ->
-                // 20초가 경과하면 종료
-                if(delayTime == 20){
-                    TaskDialog().show(requireActivity().supportFragmentManager, "TaskDialog")
-                    timerViewModel.resetDelayTimer()
-                    dismiss()
-                }
-                tvCountdown.text = "측정을 이어서 하려면 \n[${20 - delayTime}]초 이내에 클릭하세요"
-            }
-
             btnContinue.setOnClickListener {
                 timerViewModel.resetDelayTimer()
                 dismiss()
             }
 
             btnFinish.setOnClickListener {
-                TaskDialog().show(requireActivity().supportFragmentManager, "TaskDialog")
+                TaskDialog().apply {
+                    arguments = Bundle().apply {
+                        putString("Action","Add")
+                    }
+                    show(this@DelayDialog.requireActivity().supportFragmentManager, "TaskDialog")
+                }
 
                 dismiss()
             }
         }
     }
+
+    private fun initView(){
+        timerViewModel.delayTime.observe(viewLifecycleOwner) { delayTime ->
+            // 20초가 경과하면 종료
+            if(delayTime == 20){
+                TaskDialog().apply {
+                    arguments = Bundle().apply {
+                        putString("Action","Add")
+                    }
+                    show(this@DelayDialog.requireActivity().supportFragmentManager, "TaskDialog")
+                }
+                timerViewModel.resetDelayTimer()
+                timerViewModel.stopTimer()
+                dismiss()
+            }
+            binding.tvCountdown.text = "측정을 이어서 하려면 \n[${20 - delayTime}]초 이내에 클릭하세요"
+        }
+    }
+
+
 
     override fun onResume() {
         super.onResume()

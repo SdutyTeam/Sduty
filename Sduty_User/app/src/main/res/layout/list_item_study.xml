@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View" />
         <variable
@@ -8,18 +9,14 @@
             type="com.d108.sduty.model.dto.Study" />
     </data>
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/gradient_study_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/background_200"
-        android:padding="10dp"
-        android:layout_margin="5dp"
-        >
+        android:layout_margin="12dp"
+        android:layout_gravity="center">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
         <TextView
             android:id="@+id/study_name"
             android:layout_width="wrap_content"
@@ -27,61 +24,68 @@
             tools:text="그룹 이름"
             android:text="@{studyList.name}"
             android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
             />
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="10dp"
-                android:visibility="@{studyList.roomId != null ?  View.VISIBLE : View.GONE}"
-                android:src="@drawable/ic_photo_camera_black_48dp"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/study_category"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/study_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="그룹 카테고리"
-                android:text="@{studyList.category}"
-                />
+            android:layout_height="wrap_content"
+            tools:text="그룹 카테고리"
+            android:text="@{studyList.category}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/study_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            />
 
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/study_join"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:text="15명"
+            android:text="@{studyList.joinNumber+`명`}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/study_category"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="15dp"
+            />
 
-                        <TextView
-                            android:id="@+id/study_join"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="15명"
-                            android:text="@{studyList.joinNumber+`명`}"
-                            />
+        <TextView
+            android:id="@+id/slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            app:layout_constraintStart_toEndOf="@id/study_join"
+            app:layout_constraintTop_toBottomOf="@id/study_category"
+            />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" / "
-                            />
+        <TextView
+            android:id="@+id/study_limit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="20명"
+            android:text="@{studyList.limitNumber+`명`}"
+            app:layout_constraintStart_toEndOf="@id/slash"
+            app:layout_constraintTop_toBottomOf="@id/study_category"
+            />
 
-                        <TextView
-                            android:id="@+id/study_limit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="20명"
-                            android:text="@{studyList.limitNumber+`명`}"
-                            />
+        <ImageView
+            android:id="@+id/iv_type_cam"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@{studyList.roomId != null ?  @drawable/img_type_camstduy : @drawable/img_type_study}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginRight="15dp"
+            />
 
 
-        </LinearLayout>
-
-
-
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

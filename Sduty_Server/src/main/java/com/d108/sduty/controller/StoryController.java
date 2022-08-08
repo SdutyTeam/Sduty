@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -122,6 +123,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "스토리 저장 > Story > Story 리턴", response = Story.class)
 	@PostMapping("")
 	public ResponseEntity<?> insertStory(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("story") String json) throws Exception {
@@ -157,6 +159,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "스토리 수정 : Story > Story 리턴", response = Story.class)
 	@PutMapping("")
 	public ResponseEntity<?> updateStory(@RequestBody Story story) throws Exception {
@@ -176,6 +179,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "스토리 삭제 : StorySeq > HttpStatus", response = HttpStatus.class)
 	@DeleteMapping("/{storySeq}")
 	public ResponseEntity<?> deleteByStorySeq(@PathVariable int storySeq) throws Exception {
@@ -197,6 +201,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value= "게시글 신고 : StorySeq > HttpStatus", response = HttpStatus.class)
 	@PutMapping("/report/{storySeq}")
 	public ResponseEntity<?> reportStory(@PathVariable int storySeq) {
@@ -211,6 +216,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "좋아요/취소 : Like > HttpStatus", response = HttpStatus.class)
 	@PostMapping("/like")
 	public ResponseEntity<?> doLike(@RequestBody Likes likes) throws Exception {
@@ -230,6 +236,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "스크랩/취소 : Scrap > HttpStatus", response = HttpStatus.class)
 	@PostMapping("/scrap")
 	public ResponseEntity<?> doScrap(@RequestBody Scrap scrap) throws Exception {
@@ -265,6 +272,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "댓글 작성 : Reply > Reply 리턴", response = Reply.class)
 	@PostMapping("/reply")
 	public ResponseEntity<?> insertReply(@RequestBody Reply reply) throws Exception {
@@ -276,6 +284,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "댓글 수정 : Reply > Reply 리턴", response = Reply.class)
 	@PutMapping("/reply")
 	public ResponseEntity<?> updateReply(@RequestBody Reply reply) throws Exception {
@@ -287,6 +296,7 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "댓글 삭제 : ReplySeq > HttpStatus 리턴", response = HttpStatus.class)
 	@DeleteMapping("/reply/{replySeq}")
 	public ResponseEntity<?> deleteReply(@PathVariable int replySeq) throws Exception {
@@ -297,6 +307,20 @@ public class StoryController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 	}
+	
+//	@ApiOperation(value = "추천 스토리 조회(유저 시퀀스로) : JobHashtag > List<Timeline> 리턴", response = Timeline.class)
+//	@GetMapping("/recommand/{userSeq}")
+//	public ResponseEntity<?> selectRecommand(@PathVariable int userSeq) throws Exception {
+//		try {
+//			Timeline t = timelineService.selectRecommandTimeline(userSeq);
+//			if(t != null) {
+//				return new ResponseEntity<Timeline>(t, HttpStatus.OK);
+//			}
+//		} catch (Exception e) {
+//			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+//	}
 	
 	public void makeThumbnail(MultipartFile mpImage) throws Exception {
 		//Make Thumbnail

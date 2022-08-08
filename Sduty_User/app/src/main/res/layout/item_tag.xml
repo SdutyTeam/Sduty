@@ -6,14 +6,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginHorizontal="5dp"
         android:id="@+id/tag"
         >
 
         <Button
             android:id="@+id/btn_tag"
             android:layout_width="80dp"
-            android:layout_height="28dp"
+            android:layout_height="34dp"
             android:background="@drawable/gradient_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
