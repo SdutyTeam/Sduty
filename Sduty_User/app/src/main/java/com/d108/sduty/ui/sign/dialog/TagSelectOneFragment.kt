@@ -52,14 +52,14 @@ class TagSelectOneFragment(var mContext: Context, var flag: Int) : DialogFragmen
         jobAdapter = TagAdapter(JOB_TAG)
         jobAdapter.onClickTagItem = object: TagAdapter.OnClickTagListener{
             override fun onClick(view: View, position: Int, tagName: String) {
-                onDismissDialogListener.onDismiss(tagName)
+                onDismissDialogListener.onDismiss(tagName, JOB_TAG)
                 dismiss()
             }
         }
         interestAdapter = TagAdapter(INTEREST_TAG)
         interestAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
             override fun onClick(view: View, position: Int, tagName: String) {
-                onDismissDialogListener.onDismiss(tagName)
+                onDismissDialogListener.onDismiss(tagName, INTEREST_TAG)
                 dismiss()
             }
         }
@@ -72,6 +72,10 @@ class TagSelectOneFragment(var mContext: Context, var flag: Int) : DialogFragmen
             recyclerInterest.apply {
                 adapter = interestAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)
+            }
+            tvSelectAll.setOnClickListener {
+                onDismissDialogListener.onDismiss("전체선택", ALL_TAG)
+                dismiss()
             }
         }
     }
@@ -106,15 +110,15 @@ class TagSelectOneFragment(var mContext: Context, var flag: Int) : DialogFragmen
         val deviceHeight = size.y
         params?.width = (deviceWidth * 0.9).toInt()
         if(flag == FLAG_STUDY)
-            params?.height = (deviceHeight * 0.50).toInt()
+            params?.height = (deviceHeight * 0.70).toInt()
         else
-            params?.height = (deviceHeight * 0.60).toInt()
+            params?.height = (deviceHeight * 0.80).toInt()
         dialog?.window?.attributes = params as WindowManager.LayoutParams
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     lateinit var onDismissDialogListener: OnDismissDialogListener
     interface OnDismissDialogListener{
-        fun onDismiss(tagName: String)
+        fun onDismiss(tagName: String, flag: Int)
     }
 }

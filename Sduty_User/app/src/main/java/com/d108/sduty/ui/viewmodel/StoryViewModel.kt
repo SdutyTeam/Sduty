@@ -117,16 +117,40 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _filteredStoryList = MutableLiveData<List<Story>>()
-    val filteredStoryList: LiveData<List<Story>>
-        get() = _filteredStoryList
-    fun getFilteredStoryList(userSeq: Int, hashTag: String){
+    private val _filteredTimelineList = MutableLiveData<MutableList<Timeline>>()
+    val filteredTimelineList: LiveData<MutableList<Timeline>>
+        get() = _filteredTimelineList
+    fun getTimelineJobFollowList(userSeq: Int, jobName: String){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getFilteredStoryList(userSeq, hashTag).let {
+            Retrofit.storyApi.getStoryJobAndFollowList(userSeq, jobName).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _filteredStoryList.postValue(it.body() as MutableList<Story>)
+                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
                 }else{
-                    Log.d(TAG, "getFilteredStoryList: ${it.code()}")
+                    Log.d(TAG, "getTimelineJobFollowList: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    fun getTimelineJobAllList(userSeq: Int, jobName: String){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getStoryJobAndAllList(userSeq, jobName).let {
+                if (it.isSuccessful && it.body() != null) {
+                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
+                }else{
+                    Log.d(TAG, "getTimelineJobAllList: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    fun getTimelineInterestList(userSeq: Int, jobName: String){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getStoryInterestAndAllList(userSeq, jobName).let {
+                if (it.isSuccessful && it.body() != null) {
+                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
+                }else{
+                    Log.d(TAG, "getTimelineInterestList: ${it.code()}")
                 }
             }
         }

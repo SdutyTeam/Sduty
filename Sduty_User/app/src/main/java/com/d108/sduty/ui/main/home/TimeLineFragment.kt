@@ -12,7 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
+import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.FLAG_TIMELINE
+import com.d108.sduty.common.INTEREST_TAG
+import com.d108.sduty.common.JOB_TAG
 import com.d108.sduty.databinding.FragmentTimeLineBinding
 import com.d108.sduty.model.dto.*
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
@@ -114,8 +117,12 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                 TagSelectOneFragment(requireContext(), FLAG_TIMELINE).let{
                     it.show(parentFragmentManager, null)
                     it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
-                        override fun onDismiss(tagName: String) {
-
+                        override fun onDismiss(tagName: String, flag: Int) {
+                            when(flag){
+                                JOB_TAG -> storyViewModel.getTimelineJobAllList(mainViewModel.user.value!!.seq, tagName)
+                                INTEREST_TAG -> storyViewModel.getTimelineInterestList(mainViewModel.user.value!!.seq, tagName)
+                                ALL_TAG -> storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
+                            }
                         }
                     }
                 }
@@ -129,6 +136,12 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             timeLineList = it
             timeLineAdapter.list = it
         }
+
+        storyViewModel.filteredTimelineList.observe(viewLifecycleOwner){
+            timeLineList = it
+            timeLineAdapter.list = it
+        }
+
         storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
         mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
     }
