@@ -329,6 +329,21 @@ class StoryViewModel: ViewModel() {
         }
     }
 
+    private val _grassList = MutableLiveData<List<Boolean>>()
+    val grassList: LiveData<List<Boolean>>
+        get() = _grassList
+    fun getGrass(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            Retrofit.profileApi.getGrass(userSeq).let {
+                if (it.isSuccessful) {
+                    _grassList.postValue(it.body())
+                } else {
+                    Log.d(TAG, "getGrass: ${it.code()}")
+                }
+            }
+        }
+    }
+
     inner class BitmapRequestBody(private val bitmap: Bitmap) : RequestBody() {
         override fun contentType(): MediaType = "image/*".toMediaType()
         override fun writeTo(sink: BufferedSink) {
