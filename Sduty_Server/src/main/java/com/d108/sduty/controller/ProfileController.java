@@ -27,6 +27,7 @@ import com.d108.sduty.dto.UserAchieve;
 import com.d108.sduty.dto.Achievement;
 import com.d108.sduty.dto.Follow;
 import com.d108.sduty.dto.Profile;
+import com.d108.sduty.dto.Timeline;
 import com.d108.sduty.service.FollowService;
 import com.d108.sduty.service.ImageService;
 import com.d108.sduty.service.ProfileService;
@@ -232,6 +233,20 @@ public class ProfileController {
 				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 			else
 				return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "추천 사용자 조회(유저 시퀀스로) : JobHashtag > Profile 리턴", response = Profile.class)
+	@GetMapping("/recommand/{userSeq}")
+	public ResponseEntity<?> selectRecommand(@PathVariable int userSeq) throws Exception {
+		try {
+			Profile p = profileService.selectRecommand(userSeq);
+			if(p != null) {
+				return new ResponseEntity<Profile>(p, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}

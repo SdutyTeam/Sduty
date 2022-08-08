@@ -122,5 +122,16 @@ public class ProfileServiceImpl implements ProfileService {
 		return -1;
 	}
 
+	@Override
+	public Profile selectRecommand(int userSeq) {
+		Optional<Profile> p = profileRepo.findById(userSeq);
+		Profile recommandedProfile;
+		if(p.isPresent()) {
+			recommandedProfile = profileRepo.findRecommanded(p.get().getJob(), userSeq);
+			return recommandedProfile;
+		}
+		return null;
+	}
+
 
 }
