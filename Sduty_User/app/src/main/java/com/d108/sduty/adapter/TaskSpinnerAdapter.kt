@@ -32,10 +32,6 @@ class TaskSpinnerAdapter(
         val model = values[position]
         try {
             binding.tvTask.text = "${model.title}"
-//            binding.imgSpinner.setImageResource(model.image)
-//            binding.imgSpinner.setColorFilter(ContextCompat.getColor(context, R.color.white))
-//            binding.txtName.text = model.name
-//            binding.txtName.setTextColor(ContextCompat.getColor(context, R.color.white))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -46,8 +42,6 @@ class TaskSpinnerAdapter(
         val binding = ItemSpinnerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val model = values[position]
         try {
-//            binding.imgSpinner.setImageResource(model.image)
-//            binding.txtName.text = model.name
             binding.tvTask.text = "${model.title}"
 
         } catch (e: Exception) {

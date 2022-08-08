@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.navOptions
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.*
 import com.google.gson.Gson
@@ -214,10 +215,24 @@ class StoryViewModel: ViewModel() {
             Retrofit.storyApi.likeStory(likes).let {
                 if (it.code() == 200) {
                     var timeline = _timeLine.value!!
-                    if(timeline!!.likes) timeline.numLikes--
+                    if(timeline.likes) timeline.numLikes--
                     else timeline.numLikes++
                     timeline.likes = !timeline.likes
                     _timeLine.postValue(timeline)
+                }else if(it.code() == 401){
+
+                }
+                else{
+
+                }
+            }
+        }
+    }
+
+    fun likeStoryInTimeLine(likes: Likes){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.likeStory(likes).let {
+                if (it.code() == 200) {
                 }else if(it.code() == 401){
 
                 }

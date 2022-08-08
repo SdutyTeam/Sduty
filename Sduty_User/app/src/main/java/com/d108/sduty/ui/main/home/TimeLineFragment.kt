@@ -56,7 +56,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         timeLineAdapter.apply {
             onClickTimelineItem = object : TimeLineAdapter.TimeLineClickListener{
                 override fun onFavoriteClicked(view: View, position: Int) {
-                    storyViewModel.likeStory(Likes(mainViewModel.user.value!!.seq, timeLineAdapter.list[position].story.seq))
+                    storyViewModel.likeStoryInTimeLine(Likes(mainViewModel.user.value!!.seq, timeLineAdapter.list[position].story.seq))
                     if(timeLineList[position].likes)timeLineList[position].numLikes--
                     else timeLineList[position].numLikes++
                     timeLineList[position].likes = !timeLineList[position].likes
