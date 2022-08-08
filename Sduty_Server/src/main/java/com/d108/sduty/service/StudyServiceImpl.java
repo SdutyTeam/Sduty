@@ -122,7 +122,9 @@ public class StudyServiceImpl implements StudyService {
 				originStudy.setPassword(newStudy.getPassword());
 				originStudy.setIntroduce(newStudy.getIntroduce());
 			}
-			return studyRepo.save(originStudy);
+			Study result = studyRepo.save(originStudy);
+			//System.out.println(result.getCategories());
+			return result;
 		}
 		return null;
 	}

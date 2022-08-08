@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -66,7 +67,7 @@ public class Study {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "category", joinColumns = @JoinColumn(name = "category_study_seq"), inverseJoinColumns = @JoinColumn(name = "category_interest_hashtag_seq"))
-	@JsonBackReference(value="categories")
+	//@JsonBackReference(value="categories")
 	private Set<InterestHashtag> categories = new HashSet<>();
 
 	@Override
