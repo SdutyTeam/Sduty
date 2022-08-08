@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,6 +69,7 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
+	@Transactional
 	@ApiOperation(value = "회원가입 > User 리턴", response = HttpStatus.class)
 	@PostMapping("/join")
 	public ResponseEntity<?> insertUser(@RequestBody User user) throws Exception {
@@ -109,6 +111,7 @@ public class UserController {
 		}		
 	}
 
+	@Transactional
 	@ApiOperation(value = "카카오 회원가입 : token > User 리턴", response = HttpStatus.class)
 	@PostMapping("/kakao/join")
 	public ResponseEntity<?> kakaoJoin(@RequestBody String token) throws Exception {
@@ -127,6 +130,7 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);	
 	}
 
+	@Transactional
 	@ApiOperation(value = "네이버 회원가입 : token > User 리턴", response = HttpStatus.class)
 	@PostMapping("/naver/join")
 	public ResponseEntity<?> naverJoin(@RequestBody String token) throws Exception {
@@ -145,6 +149,7 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
 	}
 	
+	@Transactional
 	@ApiOperation(value = "회원정보 수정 > User/401 리턴", response = HttpStatus.class)
 	@PutMapping("/{seq}")
 	public ResponseEntity<?> updateUserInfo(@PathVariable int seq, @RequestBody User user) throws Exception {
@@ -180,6 +185,7 @@ public class UserController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@Transactional
 	@ApiOperation(value = "회원정보 탈퇴 > 200/401 리턴", response = HttpStatus.class)
 	@DeleteMapping("/{seq}")
 	public ResponseEntity<?> deleteUser(@PathVariable int seq) throws Exception {
@@ -202,7 +208,7 @@ public class UserController {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-
+	@Transactional
 	@ApiOperation(value = "비밀번호 변경 > 200/401 리턴", response = HttpStatus.class)
 	@PutMapping("/pwd")
 	public ResponseEntity<?> setPwdById(@RequestBody User user) throws Exception {
@@ -222,6 +228,7 @@ public class UserController {
 	}
 
 	
+	@Transactional
 	@ApiOperation(value = "인증정보 저장 > 200/401 리턴", response = HttpStatus.class)
 	@PostMapping("/auth")
 	public ResponseEntity<?> authTest(@RequestBody AuthInfo authInfo) throws Exception {
