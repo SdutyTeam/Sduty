@@ -108,17 +108,49 @@ public class StoryController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value = "태그를 적용하여 유저별 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
-	@GetMapping("/user/{userSeq}/{jobSeq}")
-	public ResponseEntity<?> selectByUserSeqAndJob(@PathVariable int userSeq, @PathVariable int jobSeq) throws Exception {
-		List<Follow> follows = followService.selectFollower(userSeq);
-		List<Integer> writerSeqs = new ArrayList<Integer>();
-		for(Follow f : follows) {
-			writerSeqs.add(f.getFolloweeSeq());
+	@ApiOperation(value = "직업 태그를 적용하여 팔로우한 유저들의 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
+	@GetMapping("/user/{userSeq}/{jobName}")
+	public ResponseEntity<?> selectByUserSeqAndJob(@PathVariable int userSeq, @PathVariable String jobName) throws Exception {
+		try {
+			List<Follow> follows = followService.selectFollower(userSeq);
+			List<Integer> writerSeqs = new ArrayList<Integer>();
+			for(Follow f : follows) {
+				writerSeqs.add(f.getFolloweeSeq());
+			}
+			List<Timeline> listTimeline = timelineService.selectAllByUserSeqsWithTag(userSeq, writerSeqs, jobName);
+			if(listTimeline != null) {
+				return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+			}
+		}catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
-		List<Timeline> listTimeline = timelineService.selectAllByUserSeqsWithTag(userSeq, writerSeqs, jobSeq);
-		if(listTimeline != null) {
-			return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "직업 태그를 적용하여 전체 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
+	@GetMapping("/job/{userSeq}/{jobName}")
+	public ResponseEntity<?> selectAllByJob(@PathVariable int userSeq, @PathVariable String jobName) throws Exception {
+		try {
+			List<Timeline> listTimeline = timelineService.selectAllByJobName(userSeq, jobName);
+			if(listTimeline != null) {
+				return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "관심사 태그를 적용하여 전체 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
+	@GetMapping("/interest/{userSeq}/{interestName}")
+	public ResponseEntity<?> selectAllByInterest(@PathVariable int userSeq, @PathVariable String interestName) throws Exception {
+		try {
+			List<Timeline> listTimeline = timelineService.selectAllByInterestName(userSeq, interestName);
+			if(listTimeline != null) {
+				return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
