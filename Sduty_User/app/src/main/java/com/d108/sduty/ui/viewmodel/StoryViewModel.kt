@@ -213,7 +213,11 @@ class StoryViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.likeStory(likes).let {
                 if (it.code() == 200) {
-
+                    var timeline = _timeLine.value!!
+                    if(timeline!!.likes) timeline.numLikes--
+                    else timeline.numLikes++
+                    timeline.likes = !timeline.likes
+                    _timeLine.postValue(timeline)
                 }else if(it.code() == 401){
 
                 }
@@ -228,7 +232,9 @@ class StoryViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.scrapStory(scrap).let {
                 if (it.code() == 200) {
-
+                    var timeline = _timeLine.value!!
+                    timeline.scrap = !timeline.scrap
+                    _timeLine.postValue(timeline)
                 }else if(it.code() == 401){
 
                 }

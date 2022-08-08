@@ -93,7 +93,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 adapter = replyAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             }
-            ivLikes.setOnClickListener {
+            ivFavorite.setOnClickListener {
                 viewModel.likeStory(Likes(mainViewModel.user.value!!.seq, args.seq))
             }
             ivScrap.setOnClickListener {
