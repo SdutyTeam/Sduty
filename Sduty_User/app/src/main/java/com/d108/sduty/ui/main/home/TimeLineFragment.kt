@@ -12,11 +12,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
+import com.d108.sduty.common.FLAG_TIMELINE
 import com.d108.sduty.databinding.FragmentTimeLineBinding
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.showToast
 
 // 타임라인 - 게시글(스크롤 뷰), 게시글 쓰기, 닉네임(게시글 상세페이지 이동) 더보기(신고, 스크랩, 팔로잉) ,좋아요, 댓글, 필터, 데일리 질문, 추천 팔로우
 private const val TAG ="TimeLineFragment"
@@ -106,6 +109,16 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             recyclerTimeline.apply {
                 adapter = timeLineAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
+            ivFilter.setOnClickListener {
+                TagSelectOneFragment(requireContext(), FLAG_TIMELINE).let{
+                    it.show(parentFragmentManager, null)
+                    it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
+                        override fun onDismiss(tagName: String) {
+
+                        }
+                    }
+                }
             }
         }
 
