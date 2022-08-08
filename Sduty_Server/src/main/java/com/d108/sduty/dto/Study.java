@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -61,8 +62,13 @@ public class Study {
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "participation", joinColumns = @JoinColumn(name = "participation_study_seq"), inverseJoinColumns = @JoinColumn(name = "participation_user_seq"))
-	@JsonBackReference
+	@JsonBackReference(value="participants")
 	private Set<User> participants = new HashSet<User>();
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "category", joinColumns = @JoinColumn(name = "category_study_seq"), inverseJoinColumns = @JoinColumn(name = "category_interest_hashtag_seq"))
+	//@JsonBackReference(value="categories")
+	private Set<InterestHashtag> categories = new HashSet<>();
 
 	@Override
 	public boolean equals(Object obj) {
