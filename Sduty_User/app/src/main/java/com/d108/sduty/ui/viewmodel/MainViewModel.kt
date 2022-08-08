@@ -39,9 +39,9 @@ class MainViewModel: ViewModel() {
         }
     }
 
-    private val _isRegisterdProfile = MutableLiveData<Boolean>()
-    val isRegisterdProfile: LiveData<Boolean>
-        get() = _isRegisterdProfile
+    private val _isRegisterProfile = MutableLiveData<Boolean>()
+    val isRegisterProfile: LiveData<Boolean>
+        get() = _isRegisterProfile
     private val _profile = MutableLiveData<Profile>()
     val profile: LiveData<Profile>
         get() = _profile
@@ -51,14 +51,17 @@ class MainViewModel: ViewModel() {
             Retrofit.profileApi.getProfileValue(userSeq).let {
                 if(it.isSuccessful && it.body() != null) {
                     _profile.postValue(it.body() as Profile)
-                    _isRegisterdProfile.postValue(true)
+                    _isRegisterProfile.postValue(true)
                 }else{
-                    _isRegisterdProfile.postValue(false)
+                    _isRegisterProfile.postValue(false)
                     Log.d(TAG, "getProfileValue: ${it.code()}")
                 }
             }
         }
     }
 
+    fun checkFollowUser(userSeq: Int): Boolean{
+        return _profile.value!!.follows?.get("${userSeq}")!= null
+    }
 
 }

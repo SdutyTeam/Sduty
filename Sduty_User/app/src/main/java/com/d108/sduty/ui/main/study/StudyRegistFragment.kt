@@ -1,7 +1,8 @@
 package com.d108.sduty.ui.main.study
 
+import android.app.AlertDialog
 import android.content.Context
-import android.opengl.Visibility
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -12,18 +13,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
-import androidx.core.widget.addTextChangedListener
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
+import com.d108.sduty.common.SENDBIRD_APP_ID
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
+import com.d108.sduty.model.dto.Alarm
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.StudyRegisteViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.Status
+import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
+import com.sendbird.calls.SendBirdCall
+import com.sendbird.calls.SendBirdError
 
 // 스터디 등록 - 스터디 명, 공개 설정, 비밀번호 설정, 최대 인원, 카테고리, 스터디 설명, 일반/캠스터디 설정
 private const val TAG ="StudyRegistFragment"
@@ -32,6 +41,13 @@ class StudyRegistFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val studyRegisteViewModel: StudyRegisteViewModel by viewModels()
     private val args: StudyRegistFragmentArgs by navArgs()
+    private var mon_state: Boolean = false
+    private var tue_state: Boolean = false
+    private var wed_state: Boolean = false
+    private var thur_state: Boolean = false
+    private var fri_state: Boolean = false
+    private var sat_state: Boolean = false
+    private var sun_state: Boolean = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -47,8 +63,12 @@ class StudyRegistFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        SendBirdCall.init(requireActivity().applicationContext, SENDBIRD_APP_ID)
+        studyRegisteViewModel.authenticate(mainViewModel.user.value!!.name)
 
         when(args.type){
             false -> {
@@ -66,12 +86,7 @@ class StudyRegistFragment : Fragment() {
         val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
         binding.spinnerCategory.adapter = categoryAdapter
 
-        binding.btnCreateStudy.setOnClickListener {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                val hour = binding.timePicker.hour
-                val minute = binding.timePicker.minute
-            }
-        }
+
 
         binding.apply {
             btnCreateStudy.setOnClickListener { studyCreate() }
@@ -80,28 +95,167 @@ class StudyRegistFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
+            btnMon.setOnClickListener {
+                if(!mon_state){
+                    mon_state = true
+                    btnMon.setBackgroundColor(Color.GRAY)
+                } else{
+                    mon_state = false
+                    btnMon.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnTue.setOnClickListener {
+                if(!tue_state){
+                    tue_state = true
+                    btnTue.setBackgroundColor(Color.GRAY)
+                } else{
+                    tue_state = false
+                    btnTue.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnWed.setOnClickListener {
+                if(!wed_state){
+                    wed_state = true
+                    btnWed.setBackgroundColor(Color.GRAY)
+                } else{
+                    wed_state = false
+                    btnWed.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnThur.setOnClickListener {
+                if(!thur_state){
+                    thur_state = true
+                    btnThur.setBackgroundColor(Color.GRAY)
+                } else{
+                    thur_state = false
+                    btnThur.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnFri.setOnClickListener {
+                if(!fri_state){
+                    fri_state = true
+                    btnFri.setBackgroundColor(Color.GRAY)
+                } else{
+                    fri_state = false
+                    btnFri.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnSat.setOnClickListener {
+                if(!sat_state){
+                    sat_state = true
+                    btnSat.setBackgroundColor(Color.GRAY)
+                } else{
+                    sat_state = false
+                    btnSat.setBackgroundColor(Color.WHITE)
+                }
+            }
+            btnSun.setOnClickListener {
+                if(!sun_state){
+                    sun_state = true
+                    btnSun.setBackgroundColor(Color.GRAY)
+                } else{
+                    sun_state = false
+                    btnSun.setBackgroundColor(Color.WHITE)
+                }
+            }
+
+
+            checkBoxDaily.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnMon.setBackgroundColor(Color.GRAY)
+                    btnTue.setBackgroundColor(Color.GRAY)
+                    btnWed.setBackgroundColor(Color.GRAY)
+                    btnThur.setBackgroundColor(Color.GRAY)
+                    btnFri.setBackgroundColor(Color.GRAY)
+                    btnSat.setBackgroundColor(Color.GRAY)
+                    btnSun.setBackgroundColor(Color.GRAY)
+                }else{
+                    btnMon.setBackgroundColor(Color.WHITE)
+                    btnTue.setBackgroundColor(Color.WHITE)
+                    btnWed.setBackgroundColor(Color.WHITE)
+                    btnThur.setBackgroundColor(Color.WHITE)
+                    btnFri.setBackgroundColor(Color.WHITE)
+                    btnSat.setBackgroundColor(Color.WHITE)
+                    btnSun.setBackgroundColor(Color.WHITE)
+                }
+            }
+
+
             lifecycleOwner = this@StudyRegistFragment
             studyRegisteVM = studyRegisteViewModel
 
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun studyCreate(){
         binding.apply {
             val name = etStudyName.text.toString().trim()
-            val pass = etStduyPass.text.toString().trim()
+            var pass = etStduyPass.text?.toString()?.trim()
             val introduce = etStudyIntroduce.text.toString().trim()
-            if(name.isEmpty() || pass.isEmpty() || introduce.isEmpty()){
+            val people = spinnerPeople.selectedItem.toString()
+            val category = spinnerCategory.selectedItem.toString()
+            val hour = binding.timePicker.hour.toString()
+            val minute = binding.timePicker.minute
+
+            if(name.isEmpty() || introduce.isEmpty()){
                 context?.showToast("빈 칸을 모두 입력해 주세요.")
             }
             else{
-                studyRegisteViewModel.study.observe(viewLifecycleOwner){
-                    if(it != null){
+                studyRegisteViewModel.createSuccess.observe(viewLifecycleOwner){
+                    if(it){
                         // 성공적으로 스터디 생성 - 스터디 이동? 내 스터디 리스트?
-
+                        findNavController().navigate(StudyRegistFragmentDirections.actionStudyRegistFragmentToMyStudyFragment())
                     }
                 }
-                //studyRegisteViewModel.studyCreate(Study())
+                if(pass == ""){
+                    pass = null
+                }
+                if(!args.type) {
+                    studyRegisteViewModel.studyCreate(
+                        Study(
+                            mainViewModel.profile.value!!.userSeq, name,
+                            introduce, category, people.toInt(), pass, null
+                        )
+                    )
+                } else{
+                    studyRegisteViewModel.createRoom()
+                    studyRegisteViewModel.createRoomId.observe(requireActivity()){ resources ->
+                        Log.d(TAG, "room: ${resources}")
+                        when (resources.status){
+                            Status.LOADING -> {
+                                // TODO : show loading view
+                            }
+                            Status.SUCCESS -> {
+                                resources.data?.let {
+                                    studyRegisteViewModel.camStudyCreate(
+                                        Study(
+                                            mainViewModel.profile.value!!.userSeq,
+                                            name, introduce, category, people.toInt(), pass, it
+                                        ), Alarm(0, "${hour}:${minute}:00", mon_state, tue_state, wed_state, thur_state, fri_state, sat_state, sun_state)
+                                    )
+                                }
+                            }
+                            Status.ERROR -> {
+                                val message = if (resources?.errorCode == SendBirdError.ERR_INVALID_PARAMS){
+                                    getString(R.string.dashboard_invalid_room_params)
+                                } else{
+                                    resources?.message
+                                }
+                                AlertDialog.Builder(context)
+                                    .setTitle(getString(R.string.dashboard_can_not_create_room))
+                                    .setMessage(message ?: "unknown sendbird error")
+                                    .setPositiveButton(R.string.ok, null)
+                                    .create()
+                                    .show()
+                            }
+                        }
+                    }
+
+                }
+
+
+
             }
         }
     }

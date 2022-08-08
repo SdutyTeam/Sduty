@@ -5,9 +5,9 @@ import java.util.List;
 import com.d108.sduty.dto.Follow;
 
 public interface FollowService {
-	int insertFollow(int followerSeq, int followeeSeq);
+	Follow insertFollow(Follow follow);
 	boolean findFollowing(int followerSeq, int followeeSeq);
-	int deleteFollow(int followerSeq, int followeeSeq);
+	void deleteFollow(Follow follow);
 	List<Follow> selectFollower(int seq);
 	List<Follow> selectFollowee(int seq);
 }

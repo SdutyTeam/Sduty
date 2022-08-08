@@ -8,11 +8,17 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Insets
 import android.graphics.Point
+import android.text.Spannable
 import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.text.set
+import androidx.core.text.toSpannable
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
@@ -46,6 +52,20 @@ fun Activity.showAlertDialog(
         .setTitle(title)
         .setMessage(message)
         .setPositiveButton("확인", listener)
+        .setNegativeButton("취소", null)
+        .create()
+        .show()
+}
+
+fun Activity.showEditDialog(
+    title: String,
+    message: EditText,
+    listener: DialogInterface.OnClickListener?
+) {
+    AlertDialog.Builder(this)
+        .setTitle(title)
+        .setView(message)
+        .setPositiveButton("변경", listener)
         .setNegativeButton("취소", null)
         .create()
         .show()
@@ -88,6 +108,10 @@ fun convertTimeDateToString(date: Date, format: String): String {
     return simpleDateFormat.format(date)
 }
 
+fun convertTimeHHMMDDToLong(str: String){
+    val time = str.split(":")
+}
+
 // device size
 fun getDeviceSize(activity: Activity): Point {
     val windowManager = activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -116,6 +140,14 @@ fun WindowManager.currentWindowMetricsPointCompat() : Point {
             defaultDisplay.getSize(this)
         }
     }
+}
 
+fun textViewGradient(context: Context): Spannable {
+    val text = "SDUTY"
+    val appBlue = ContextCompat.getColor(context, R.color.app_blue)
+    val appPurple = ContextCompat.getColor(context, R.color.app_purple)
+    val spannable = text.toSpannable()
+    spannable[0..text.length] = TextViewGradientUtil(text, text, appBlue, appPurple)
+    return spannable
 }
 

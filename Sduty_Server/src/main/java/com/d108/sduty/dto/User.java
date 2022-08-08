@@ -39,6 +39,8 @@ public class User {
 	private String id;
 	@Column(name = "user_password")
 	private String pass;
+	@Column(name = "user_password2")
+	private String pass2;
 	@Column(name = "user_name")
 	private String name;
 	@Column(name = "user_tel")
@@ -94,6 +96,9 @@ public class User {
 
 	@OneToMany(mappedBy = "masterSeq", fetch = FetchType.EAGER)
 	private Set<Study> masterStudies = new HashSet<Study>();
+	
+	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.EAGER)
+	private Set<Qna> qnas = new HashSet<Qna>();
 
 	@ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER)
 	private Set<Study> studies = new HashSet<Study>();

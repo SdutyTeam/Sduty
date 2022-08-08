@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +23,7 @@ import com.d108.sduty.ui.main.study.dialog.StudyDetailDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudyListViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.showToast
 
 // 스터디 전체 리스트
 private const val TAG = "StudyListFragment"
@@ -32,6 +35,7 @@ class StudyListFragment : Fragment(){
     private val studyListViewModel: StudyListViewModel by viewModels()
     private lateinit var studyListAdapter: StudyListAdapter
     private lateinit var studyList: List<Study>
+    private lateinit var category: String
 
 
     override fun onAttach(context: Context) {
@@ -51,6 +55,18 @@ class StudyListFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val categoryData:Array<String> = resources.getStringArray(R.array.array_category)
+        val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
+        binding.spinnerCategoryFilter.adapter = categoryAdapter
+
+        studyListViewModel.isJoinStudySuccess.observe(viewLifecycleOwner){
+            if(it){
+                context?.showToast("가입이 완료되었습니다.")
+            }else{
+                context?.showToast("이미 가입된 그룹입니다.")
+            }
+        }
+
         studyListViewModel.studyList.observe(viewLifecycleOwner){
             if(it != null){
                 studyList = studyListViewModel.studyList.value as List<Study>
@@ -59,13 +75,55 @@ class StudyListFragment : Fragment(){
         }
         studyListViewModel.getStudyList()
 
+        binding.apply {
+            spinnerCategoryFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    category = spinnerCategoryFilter.selectedItem.toString()
+                    Log.d(TAG, "onItemSelected: ${category}")
+                    studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+                }
 
-        binding.btnSearch.setOnClickListener {
-            findNavController().safeNavigate(StudyListFragmentDirections.actionStudyListFragmentToStudySearchFragment())
-        }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
 
-        binding.commonTopBack.setOnClickListener {
-            findNavController().popBackStack()
+            }
+
+            cbPeople.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+            }
+
+            cbCamstudy.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, cbPeople.isChecked, isChecked, cbPublic.isChecked)
+            }
+
+            cbPublic.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, isChecked)
+            }
+
+//            test.setOnCheckedChangeListener { buttonView, isChecked ->
+//                if(isChecked){
+//                    test.setBackgroundResource(R.drawable.gradient_study_border)
+//
+//                } else{
+//                    test.setBackgroundResource(R.drawable.gradient_border)
+//                }
+//            }
+
+
+
+
+            btnSearch.setOnClickListener {
+                findNavController().safeNavigate(StudyListFragmentDirections.actionStudyListFragmentToStudySearchFragment())
+            }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 
@@ -80,12 +138,12 @@ class StudyListFragment : Fragment(){
             override fun onClick(view: View, position: Int) {
                 Log.d(TAG, "onClick: ${studyList}")
                 // 전체 스터디 조회 - 스터디 클릭 시 상세정보 다이얼로그
-                val dialog = StudyDetailDialog(mainActivity)
+                val dialog = StudyDetailDialog(mainActivity, studyList[position])
                 dialog.showDialog()
                 dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
                     override fun onClicked() {
+                        studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
                     }
-
                 })
             }
         }

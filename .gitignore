@@ -3,3 +3,6 @@ Sduty_User/.idea/misc.xml
 /.metadata/
 Sduty_Server/src/main/resources/key.jks
 Sduty_Server/src/main/resources/t_key.jks
+Sduty_Admin/.idea/gradle.xml
+Sduty_Admin/.idea/misc.xml
+Sduty_User/.idea/gradle.xml

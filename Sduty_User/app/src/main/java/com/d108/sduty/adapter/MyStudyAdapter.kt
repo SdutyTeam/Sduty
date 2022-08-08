@@ -5,44 +5,42 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ListItemMystudyBinding
+import com.d108.sduty.databinding.ListItemStudyBinding
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.MyStudyViewModel
 
-class MyStudyAdapter() : RecyclerView.Adapter<MyStudyAdapter.ViewHolder>() {
-    var list = mutableListOf<Study>()
-        set(value){
-            field = value
-            notifyDataSetChanged()
-        }
+class MyStudyAdapter(var list: List<Study>) : RecyclerView.Adapter<MyStudyAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ListItemMystudyBinding): RecyclerView.ViewHolder(binding.root){
-        init {
-
+        fun bind(item: Study){
+            binding.studyList = item
         }
-        fun bind(){
-            binding.data = list[adapterPosition]
+        fun bindClickListener(listener: OnStudyItemClick){
             binding.root.setOnClickListener {
-                clickListener.onClick(it, adapterPosition)
+                listener.onClick(it, adapterPosition)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val listItemMystudyBinding =
+        val mylistStudyItemBinding =
             ListItemMystudyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(listItemMystudyBinding)
+        return ViewHolder(mylistStudyItemBinding).apply {
+            bindClickListener(onStudyItemClick)
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind()
+        val item = list[position]
+        holder.bind(item)
     }
 
     override fun getItemCount(): Int = list.size
 
-    interface ClickListener{
+    interface OnStudyItemClick{
         fun onClick(view: View, position: Int)
     }
-    lateinit var clickListener: ClickListener
+    lateinit var onStudyItemClick: OnStudyItemClick
 
 
 

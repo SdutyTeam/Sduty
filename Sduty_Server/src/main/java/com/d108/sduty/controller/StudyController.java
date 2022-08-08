@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,19 +19,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Alarm;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Study;
-import com.d108.sduty.dto.Task;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.service.ProfileService;
 import com.d108.sduty.service.ReportService;
 import com.d108.sduty.service.StudyService;
 import com.d108.sduty.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -56,11 +54,12 @@ public class StudyController {
 	@PostMapping("")
 	public ResponseEntity<?> registStudy(@RequestBody ObjectNode reqObject){
 		ObjectMapper mapper = new ObjectMapper();
+		//mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 		Study study = null;
 		Alarm alarm = null;
 		try {
-			study = mapper.treeToValue(reqObject.get("study"), Study.class);
-			JsonNode node = reqObject.get("alarm");
+			study = mapper.treeToValue(reqObject.get("Study"), Study.class);
+			JsonNode node = reqObject.get("Alarm");
 			if((study.getRoomId()!=null && node==null)||(study.getRoomId()==null&& node!=null)) {
 				//캠스터디인데 알람이 없는경우 || 캠스터디 아닌데 알람이 있는 경우
 				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
@@ -70,8 +69,10 @@ public class StudyController {
 			}
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		
 		//1. form 제출 후, 이름 중복 검사
@@ -97,7 +98,11 @@ public class StudyController {
 	@ApiOperation(value="스터디 전체 조회")
 	@GetMapping("")
 	public ResponseEntity<?> getAllStudy(){
-		return new ResponseEntity<List<Study>>(studyService.getAllStudy(), HttpStatus.OK);
+		List<Study> studies = studyService.getAllStudy();
+		if(studies==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<List<Study>>(studies, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="스터디 상세 조회")
@@ -115,7 +120,7 @@ public class StudyController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value="스터디 탈퇴")
+	@ApiOperation(value="스터디 탈퇴 & 강퇴")
 	@DeleteMapping("/participation/{study_seq}/{user_seq}")
 	public ResponseEntity<?> disjoinStudy(@PathVariable int study_seq, @PathVariable int user_seq){
 		if(!studyService.disjoinStudy(study_seq, user_seq)) {
@@ -128,7 +133,22 @@ public class StudyController {
 	@GetMapping("/{user_seq}")
 	public ResponseEntity<?> getMyStudies(@PathVariable int user_seq){
 		Set<Study> result = studyService.getMyStudies(user_seq);
+		if(result==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<Set<Study>>(result, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "스터디 수정")
+	@PutMapping("/{user_seq}/{study_seq}")
+	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
+		if(study_seq==newStudy.getSeq()) {
+			Study result = studyService.updateStudy(user_seq, newStudy);
+			if(result!=null) {
+				return new ResponseEntity<Study>(result, HttpStatus.OK);
+			}	
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value="내 스터디 상세 조회")
@@ -151,9 +171,8 @@ public class StudyController {
 			Map<String, Object> user_info = new HashMap<>();
 			user_info.put("userSeq", participant.getSeq());
 			
-			Optional<Profile> profileOp = profileService.selectProfile(participant.getSeq());
-			if(profileOp.isPresent()) {
-				Profile profile = profileOp.get();
+			Profile profile = profileService.selectProfile(participant.getSeq());
+			if(profile!=null) {
 				user_info.put("nickname", profile.getNickname());
 				user_info.put("is_studying", profile.getIsStudying());
 			}
@@ -183,7 +202,7 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 삭제")
 	@DeleteMapping("/{user_seq}/{study_seq}")
-	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq){
+	public ResponseEntity<?> deleteStudy(@PathVariable int user_seq, @PathVariable int study_seq){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(studyService.deleteStudy(user_seq, study_seq)) {
 			map.put("result", "삭제되었습니다.");
@@ -197,15 +216,24 @@ public class StudyController {
 	
 	@ApiOperation(value = "스터디 필터링")
 	@GetMapping("filter/{category}/{emptyfilter}/{camfilter}/{publicfilter}")
-	public ResponseEntity<?> filterStudy(String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
+	public ResponseEntity<?> filterStudy(@PathVariable String category, @PathVariable boolean emptyfilter, @PathVariable boolean camfilter, @PathVariable boolean publicfilter){
 		List<Study> resultList = studyService.filterStudy(category, emptyfilter, camfilter, publicfilter);
+		if(resultList==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<List<Study>>(resultList, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스터디 검색")
 	@GetMapping("filter/{keyword}")
-	public ResponseEntity<?> searchStudy(String keyword){
+	public ResponseEntity<?> searchStudy(@PathVariable String keyword){
+		if(keyword=="") {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		List<Study> resultList = studyService.searchStudy(keyword);
+		if(resultList==null) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<List<Study>>(resultList, HttpStatus.OK);
 	}
 }

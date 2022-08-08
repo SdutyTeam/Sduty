@@ -3,6 +3,7 @@ package com.d108.sduty.adapter
 import android.app.Activity
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.marginEnd
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,12 @@ class StoryAdapter(val activity: Activity): RecyclerView.Adapter<StoryAdapter.Vi
         }
     inner class ViewHolder(val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Story){
-
+            binding.apply {
+                data = list[adapterPosition]
+                ivStory.setOnClickListener {
+                    onClickStoryListener.onClick(list[adapterPosition], adapterPosition)
+                }
+            }
         }
     }
 
@@ -33,7 +39,7 @@ class StoryAdapter(val activity: Activity): RecyclerView.Adapter<StoryAdapter.Vi
         val displaymetrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(displaymetrics)
         val deviceWidth = displaymetrics.widthPixels / 3
-        val deviceHeight = displaymetrics.heightPixels / 4
+        val deviceHeight = deviceWidth * 4 / 3
         holder.binding.apply {
             ivStory.layoutParams.width = deviceWidth
             ivStory.layoutParams.height = deviceHeight
@@ -41,4 +47,9 @@ class StoryAdapter(val activity: Activity): RecyclerView.Adapter<StoryAdapter.Vi
     }
 
     override fun getItemCount(): Int = list.size
+
+    lateinit var onClickStoryListener: OnClickStoryListener
+    interface OnClickStoryListener{
+        fun onClick(story: Story, position: Int)
+    }
 }

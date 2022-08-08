@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,10 +17,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.d108.sduty.R
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentLoginBinding
-import com.d108.sduty.ui.camstudy.preview.PreviewFragment
 import com.d108.sduty.ui.main.home.TimeLineFragment
 import com.d108.sduty.ui.main.mypage.MyPageFragment
 import com.d108.sduty.ui.sign.dialog.DialogFindInfo
@@ -53,6 +52,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 
@@ -83,9 +83,9 @@ class LoginFragment : Fragment() {
 
 
     private fun initViewModel(){
-        mainViewModel.isRegisterdProfile.observeOnce(this, object : Observer<Boolean>{
+        mainViewModel.isRegisterProfile.observeOnce(this, object : Observer<Boolean>{
             override fun onChanged(t: Boolean?) {
-                when(mainViewModel.isRegisterdProfile.value){
+                when(mainViewModel.isRegisterProfile.value){
                     true -> {
                         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
                         requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")

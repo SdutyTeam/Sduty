@@ -16,7 +16,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.sign.dialog.DialogFindInfo">
+        tools:context=".ui.sign.dialog.DialogFindInfo"
+        android:background="@drawable/dialog_white_border"
+    >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_top"

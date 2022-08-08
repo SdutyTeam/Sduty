@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -39,13 +42,14 @@
             <TextView
                 android:id="@+id/common_top_join"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:text="15"
-                android:layout_marginLeft="15dp"
+                android:layout_margin="10dp"
                 android:textColor="@color/navy_400"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:gravity="center"
                 app:layout_constraintStart_toEndOf="@id/common_top_title"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
 
             <Button
@@ -58,6 +62,59 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/common_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
+            android:layout_marginVertical="10dp"
+            android:weightSum="5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:text="공지사항"/>
+
+            <TextView
+                android:id="@+id/tv_camstudy_notice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:textSize="18sp"
+                tools:text="공지사항입니다."/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/common_notice"
+            android:layout_marginVertical="20dp"
+
+            android:weightSum="5"
+            tools:ignore="MissingConstraints">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="3"/>
+
+            <Button
+                android:id="@+id/btn_join_camstudy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="입장하기"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+
+        </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

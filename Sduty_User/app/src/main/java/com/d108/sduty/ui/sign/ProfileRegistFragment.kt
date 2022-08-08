@@ -10,13 +10,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.d108.sduty.common.PROFILE
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
+import com.d108.sduty.model.dto.InterestHashtag
+import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Profile
+import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.sign.viewmodel.ProfileViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.DateFormatUtil
@@ -32,18 +38,21 @@ class ProfileRegistFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
 
     private lateinit var imageUrl: String
+    private var jobHashtag: JobHashtag? = null
+    private var interestHashtagList = mutableListOf<InterestHashtag>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileRegistBinding.inflate(inflater, container, false)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        imageUrl = "profile/default.png"
+        imageUrl = ""
         initView()
         initViewModel()
     }
@@ -72,27 +81,34 @@ class ProfileRegistFragment : Fragment() {
             ivProfile.setOnClickListener {
                 loadProfileImage()
             }
+            tvInterest.setOnClickListener{
+                openTagSelectDialog()
+            }
+            tvJob.setOnClickListener {
+                openTagSelectDialog()
+            }
         }
     }
 
-    private fun saveProfile(){
-        binding.apply{
-            val nickname = etNickname.text.toString()
-            val job = etJob.text.toString()
-            val publicJob = viewModel.flagJob.value!!
-            val interest = etInterest.text.toString()
-            val publicInterest = viewModel.flagInterest.value!!
-            val birthInput = etBirth.text.toString().toInt()
-            val publicBirth = viewModel.flagBirth.value!!
-            val introduce = etIntroduce.text.toString()
-            val birth = DateFormatUtil.converYYYYMMDD(birthInput.toString())
-
-            Log.d(TAG, "saveProfile: ${birth}")
-            if(nickname.isEmpty() || job.isEmpty() || interest.isEmpty() || birthInput < 19000101 || birthInput > 20220731 || etBirth.text.toString().length != 8 || introduce.isEmpty()){
-                requireContext().showToast("모든 항목을 정확히 입력해 주세요")
-            }else{
-                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth, publicBirth, introduce, "", job, publicJob, interest, publicInterest, 1), imageUrl)
+    private fun openTagSelectDialog() {
+        TagSelectDialog(requireContext()).let {
+            it.arguments = bundleOf("flag" to PROFILE)
+            it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
+                override fun onClick(selectedJobList: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
+                    jobHashtag = selectedJobList
+                    interestHashtagList = selectedInterestList
+                    binding.apply {
+                        tvJob.text = jobHashtag!!.name
+                        if(interestHashtagList.isNotEmpty()){
+                            tvInterest.text = ""
+                            for(item in interestHashtagList){
+                                tvInterest.text = "${tvInterest.text} ${item.name} "
+                            }
+                        }
+                    }
+                }
             }
+            it.show(parentFragmentManager, null)
         }
     }
 
@@ -101,6 +117,7 @@ class ProfileRegistFragment : Fragment() {
         intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         resultLauncher.launch(intent);
     }
+
     val resultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
@@ -109,4 +126,55 @@ class ProfileRegistFragment : Fragment() {
                 binding.ivProfile.setImageURI(imageUri)
             }
         }
+
+    private fun saveProfile(){
+        binding.apply{
+            val nickname = etNickname.text.toString()
+
+            val publicJob = viewModel.flagJob.value!!
+
+            val publicInterest = viewModel.flagInterest.value!!
+            val birthInput = etBirth.text.toString()
+            val publicBirth = viewModel.flagBirth.value!!
+            val introduce = etIntroduce.text.toString()
+            var msg = ""
+            var birth = DateFormatUtil.converYYYYMMDD(birthInput)
+            var mainAchievement: Int? = null
+            var interestHashtagSeqs: MutableList<Int>? = null
+            if(interestHashtagList.isNotEmpty()){
+                mainAchievement = interestHashtagList[0].seq
+                interestHashtagSeqs = mutableListOf()
+                for(item in interestHashtagList){
+                    interestHashtagSeqs.add(item.seq)
+                }
+            }
+            Log.d(TAG, "saveProfile: ${birth}")
+            if(birthInput.isEmpty()){
+                msg = "생년월일을 정확히 입력해 주세요"
+            }else if(nickname.isEmpty()){
+                msg = "별명을 입력해 주세요"
+            }
+            else if(introduce.isEmpty()){
+                msg = "자기소개를 입력해 주세요"
+            }
+            else if(jobHashtag == null){
+                msg = "직업을 입력해 주세요"
+            }
+            else if(imageUrl.isEmpty()){
+                msg = "이미지를 선택해 주세요"
+            }
+            else if(birth == null) {
+                msg = "생년월일을 정확히 입력해 주세요"
+            }
+
+            if(!msg.isEmpty()){
+                requireContext().showToast(msg)
+                return
+
+            }else{
+                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", tvJob.text.toString(), publicJob, publicInterest, mainAchievement, interestHashtagSeqs), imageUrl)
+            }
+
+        }
+    }
 }

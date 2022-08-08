@@ -1,24 +1,41 @@
 package com.d108.sduty.ui.main.home
 
 import android.app.Activity
-import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Adapter
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.widget.addTextChangedListener
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
-import com.d108.sduty.common.KAKAO_JOIN
+import com.d108.sduty.adapter.TagAdapter
+import com.d108.sduty.common.ALL_TAG
+import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
-import com.d108.sduty.ui.main.home.viewmodel.StoryViewModel
-import com.d108.sduty.ui.sign.LoginFragmentDirections
+import com.d108.sduty.model.dto.InterestHashtag
+import com.d108.sduty.model.dto.JobHashtag
+import com.d108.sduty.model.dto.Story
+import com.d108.sduty.ui.main.home.viewmodel.HomeViewModel
+import com.d108.sduty.ui.sign.dialog.TagSelectDialog
+import com.d108.sduty.ui.sign.viewmodel.TagViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.UriPathUtil
 import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
@@ -28,10 +45,20 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 private const val TAG ="StoryRegisterFragment"
 class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private lateinit var binding: FragmentStoryRegisterBinding
-    private val viewModel: StoryViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by viewModels()
+    private val storyViewModel: StoryViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val tagViewModel: TagViewModel by viewModels()
     // (공개 범위) 0 : 전체 공개, 1 : 팔로워만, 2 : 나만 보기
     private var disclosure = 0
+    private val args: StoryRegisterFragmentArgs by navArgs()
+    private var imageUrl: String? = null
 
+    private var selectedTagList = mutableListOf<String>()
+    private var jobHashtag: JobHashtag? = null
+    private var interestHashtagList: MutableList<Int>? = null
+    private val tagAdapter = TagAdapter(ALL_TAG)
+    private var storyImage: Bitmap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,12 +92,22 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        initViewModel()
 
+    }
+
+    private fun initViewModel() {
+        tagViewModel.apply {
+            getJobListValue()
+        }
+    }
+
+    private fun initView(){
         val startForProfileImageResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result : ActivityResult ->
                 val resultCode = result.resultCode
                 val data = result.data
-
                 if (resultCode == Activity.RESULT_OK) {
                     // Image Uri will not be null for RESULT_OK
                     val fileUri = data?.data!!
@@ -78,11 +115,15 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     // mProfileUri = fileUri
                     binding.apply {
                         //imgStory.setImageURI(fileUri)
-                        val fileUriStr = fileUri.toString()
-                        findNavController().safeNavigate(
-                            StoryRegisterFragmentDirections
-                                .actionStoryRegisterFragmentToStoryDecoFragment(fileUriStr)
-                        )
+                        imageUrl = UriPathUtil().getPath(requireContext(), fileUri)
+                        StoryDecoFragment(requireContext(), fileUri.toString()).let {
+                            it.onSaveBtnClickListener = object : StoryDecoFragment.OnSaveBtnClickListener{
+                                override fun onClick(bitmap: Bitmap) {
+                                    viewModel.setStoryImage(bitmap)
+                                }
+                            }
+                            it.show(parentFragmentManager, null)
+                        }
                     }
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
                     requireContext().showToast(ImagePicker.getError(data))
@@ -92,6 +133,8 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
 
         binding.apply {
+            vm = viewModel
+            lifecycleOwner = this@StoryRegisterFragment
             // 공개 범위 설정 버튼 클릭 시, 팝업 메뉴 보이기
             btnDisclosure.setOnClickListener {
                 PopupMenu(requireContext(), it).apply {
@@ -109,32 +152,51 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         startForProfileImageResult.launch(intent)
                     }
             }
-            imgStory.setOnClickListener {
-                ImagePicker.with(requireActivity())
-                    .crop(3f, 4f)	    //Crop image and let user choose aspect ratio.
-                    .compress(1024)
-                    .createIntent { intent ->
-                        startForProfileImageResult.launch(intent)
-                    }
-            }
             ivBack.setOnClickListener {
                 navigateBack(requireActivity())
             }
             ivRegisterStory.setOnClickListener {
                 // 게시물 정보 등록
                 // 등록할 때, 초기 화면으로 visibility 다시 세팅...
+                if(viewModel.bitmap.value == null){
+                    requireContext().showToast("사진을 등록해 주세요")
+                }else if(etWrite.text.isEmpty()) {
+                    requireContext().showToast("내용을 입력해 주세요")
+                }else{
+                    storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", tagViewModel.jobTagMap.value!![mainViewModel.profile.value!!.job],  etWrite.text.toString(), disclosure, interestHashtagList), viewModel.bitmap.value!!)
+                    requireContext().showToast("스토리가 등록 되었습니다")
+                    navigateBack(requireActivity())
+                }
+            }
+            selectedTagList.clear()
+            selectedTagList.add(mainViewModel.profile.value!!.job)
+            binding.recyclerSelectedTag.apply {
+                adapter = tagAdapter
+                tagAdapter.selectList = selectedTagList
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            }
+            btnAddSubject.setOnClickListener {
+                TagSelectDialog(requireContext()).let {
+                    it.arguments = bundleOf("flag" to NOT_PROFILE)
+                    it.show(parentFragmentManager, null)
+                    it.onClickConfirm = object : TagSelectDialog.OnClickConfirm{
+                        override fun onClick(selectedJob: JobHashtag?, selectedInterestList: MutableList<InterestHashtag>) {
+                            if(selectedInterestList.size > 0){
+                                selectedTagList.clear()
+                                selectedTagList.add(mainViewModel.profile.value!!.job)
+                                interestHashtagList = mutableListOf()
+                                for(i in 0 until selectedInterestList.size){
+                                    selectedTagList.add(selectedInterestList[i].name)
+                                    interestHashtagList!!.add(selectedInterestList[i].seq)
+                                }
+                                tagAdapter.selectList = selectedTagList
+                            }
 
-                navigateBack(requireActivity())
+                        }
+                    }
+                }
             }
 
-            // 템플릿 적용한 이미지 변화 인식해 보여주기
-            viewModel.bitmap.observe(viewLifecycleOwner) { bitmap ->
-                // bitmap값
-                // requireContext().showToast("$bitmap")
-                imgStory.visibility = View.VISIBLE
-                btnAddImg.visibility = View.GONE
-                binding.imgStory.setImageBitmap(bitmap)
-            }
         }
     }
 

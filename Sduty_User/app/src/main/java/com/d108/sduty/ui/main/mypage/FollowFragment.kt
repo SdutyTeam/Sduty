@@ -1,60 +1,132 @@
 package com.d108.sduty.ui.main.mypage
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.d108.sduty.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.d108.sduty.adapter.FollowAdapter
+import com.d108.sduty.common.FLAG_FOLLOWEE
+import com.d108.sduty.common.FLAG_FOLLOWER
+import com.d108.sduty.databinding.FragmentFollowBinding
+import com.d108.sduty.model.dto.Follow
+import com.d108.sduty.ui.main.mypage.viewmodel.FollowViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.safeNavigate
+import com.google.android.material.tabs.TabLayout
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FollowFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+private const val TAG ="FollowFragment"
 class FollowFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentFollowBinding
+    private val viewModel: FollowViewModel by viewModels()
+    private val storyViewModel: StoryViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val args: FollowFragmentArgs by navArgs()
+    private lateinit var followAdapter: FollowAdapter
+    var flagTab = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentFollowBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViewModel()
+        initView()
+    }
+
+    private fun initViewModel(){
+        viewModel.apply {
+
+            if(args.flag == FLAG_FOLLOWER){
+                binding.tabFollow.selectTab(binding.tabFollow.getTabAt(0))
+                flagTab = FLAG_FOLLOWER
+                getFollower(args.userSeq)
+            }else{
+                binding.tabFollow.selectTab(binding.tabFollow.getTabAt(1))
+                flagTab = FLAG_FOLLOWER
+                getFollowee(args.userSeq)
+
+            }
+            followerList.observe(viewLifecycleOwner){
+                followAdapter.tabFlag = FLAG_FOLLOWER
+                followAdapter.list = followerList.value!!
+                setMyFollowPage(false)
+            }
+            followeeList.observe(viewLifecycleOwner){
+                if(args.userSeq == mainViewModel.user.value!!.seq){
+                    setMyFollowPage(true)
+                }else{
+                    setMyFollowPage(false)
+                }
+                followAdapter.tabFlag = FLAG_FOLLOWEE
+                followAdapter.list = followeeList.value!!
+            }
+        }
+        storyViewModel.isFollowSucceed.observe(viewLifecycleOwner){
+            mainViewModel.getProfileValue(mainViewModel.profile.value!!.userSeq)
+        }
+        mainViewModel.profile.observe(viewLifecycleOwner){
+            when(flagTab){
+                FLAG_FOLLOWER -> viewModel.getFollower(args.userSeq)
+                FLAG_FOLLOWEE -> viewModel.getFollowee(args.userSeq)
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_follow, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FollowFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FollowFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun initView(){
+        followAdapter = FollowAdapter(mainViewModel.user.value!!.seq, mainViewModel.profile.value!!)
+        followAdapter.apply {
+            onClickFollowListener = object : FollowAdapter.OnClickFollowListener{
+                override fun onClickFollowBtn(follow: Follow) {
+                    storyViewModel.doFollow(Follow(mainViewModel.user.value!!.seq, follow.profile!!.userSeq))
+                }
+                override fun onClickProfile(follow: Follow) {
+                    findNavController().safeNavigate(FollowFragmentDirections.actionFollowFragmentToUserProfileFragment(follow.profile!!.userSeq))
                 }
             }
+        }
+        binding.apply {
+            tabFollow.addOnTabSelectedListener(object :TabLayout.OnTabSelectedListener{
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when(tab!!.position){
+                        0 -> {
+                            viewModel.getFollower(args.userSeq)
+                        }
+                        1 -> {
+                            viewModel.getFollowee(args.userSeq)
+                        }
+                    }
+                }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    when(tab!!.position){
+                        0 -> {
+                            viewModel.getFollower(args.userSeq)
+                        }
+                        1 -> {
+                            viewModel.getFollowee(args.userSeq)
+                        }
+                    }
+                }
+            })
+            recyclerFollow.apply {
+                adapter = followAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
+        }
     }
 }

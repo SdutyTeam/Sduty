@@ -8,11 +8,14 @@ import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import com.d108.sduty.R
+import com.d108.sduty.model.dto.Study
 
-class StudyDetailDialog(context: Context) {
+class StudyDetailDialog(context: Context, studyInfo: Study) {
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
+    private val studyInfo = studyInfo
 
     fun setOnClickListener(listener: OnDialogClickListener)
     {
@@ -29,8 +32,13 @@ class StudyDetailDialog(context: Context) {
         dialog.setCancelable(true)
         dialog.show()
 
-        val studyJoinButton = dialog.findViewById<Button>(R.id.btn_study_cancel)
-        val cancelButton = dialog.findViewById<Button>(R.id.btn_study_join)
+        val studyJoinButton = dialog.findViewById<Button>(R.id.btn_study_join)
+        val cancelButton = dialog.findViewById<Button>(R.id.btn_study_cancel)
+        val studyName = dialog.findViewById<TextView>(R.id.study_name)
+        val studyIntroduce = dialog.findViewById<TextView>(R.id.study_intoduce)
+
+        studyName.text = studyInfo.name
+        studyIntroduce.text = studyInfo.introduce
 
         studyJoinButton.setOnClickListener {
             onClickListener.onClicked()

@@ -78,10 +78,38 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="카테고리"
+                        android:text="그룹 명"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/divider_a"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_study_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/divider_a"
+                        android:layout_marginRight="20dp"
+                        tools:text="그룹 명"/>
+
+                    <LinearLayout
+                        android:id="@+id/divider_a"
+                        style="@style/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_study_name"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_study_category"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="카테고리"
+                        app:layout_constraintTop_toBottomOf="@id/divider_a"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/divider_b"
                         />
 
                     <TextView
@@ -89,13 +117,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/divider_a"
+                        app:layout_constraintTop_toBottomOf="@id/divider_a"
+                        app:layout_constraintBottom_toTopOf="@id/divider_b"
                         android:layout_marginRight="20dp"
                         tools:text="대학생"/>
 
                     <LinearLayout
-                        android:id="@+id/divider_a"
+                        android:id="@+id/divider_b"
                         style="@style/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -107,8 +135,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="인원 수"
-                        app:layout_constraintTop_toBottomOf="@id/divider_a"
-                        app:layout_constraintBottom_toTopOf="@id/divider_b"
+                        app:layout_constraintTop_toBottomOf="@id/divider_b"
+                        app:layout_constraintBottom_toTopOf="@id/divider_c"
                         app:layout_constraintStart_toStartOf="parent"
                         />
 
@@ -117,13 +145,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider_a"
-                        app:layout_constraintBottom_toTopOf="@id/divider_b"
+                        app:layout_constraintTop_toBottomOf="@id/divider_b"
+                        app:layout_constraintBottom_toTopOf="@id/divider_c"
                         android:layout_marginRight="20dp"
                         tools:text="15명"/>
 
                     <LinearLayout
-                        android:id="@+id/divider_b"
+                        android:id="@+id/divider_c"
                         style="@style/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -135,8 +163,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="그룹 장"
-                        app:layout_constraintTop_toBottomOf="@id/divider_b"
-                        app:layout_constraintBottom_toBottomOf="@id/divider_c"
+                        app:layout_constraintTop_toBottomOf="@id/divider_c"
+                        app:layout_constraintBottom_toBottomOf="@id/divider_d"
                         app:layout_constraintStart_toStartOf="parent"
                         />
 
@@ -145,13 +173,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider_b"
-                        app:layout_constraintBottom_toBottomOf="@id/divider_c"
+                        app:layout_constraintTop_toBottomOf="@id/divider_c"
+                        app:layout_constraintBottom_toBottomOf="@id/divider_d"
                         android:layout_marginRight="20dp"
                         tools:text="알리미"/>
 
                     <LinearLayout
-                        android:id="@+id/divider_c"
+                        android:id="@+id/divider_d"
                         style="@style/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -163,8 +191,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="공개 / 비공개"
-                        app:layout_constraintTop_toBottomOf="@id/divider_c"
-                        app:layout_constraintBottom_toTopOf="@id/divider_d"
+                        app:layout_constraintTop_toBottomOf="@id/divider_d"
+                        app:layout_constraintBottom_toTopOf="@id/divider_e"
                         app:layout_constraintStart_toStartOf="parent"
                         />
 
@@ -173,13 +201,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider_c"
-                        app:layout_constraintBottom_toTopOf="@id/divider_d"
+                        app:layout_constraintTop_toBottomOf="@id/divider_d"
+                        app:layout_constraintBottom_toTopOf="@id/divider_e"
                         android:layout_marginRight="20dp"
                         tools:text="비공개"/>
 
                     <LinearLayout
-                        android:id="@+id/divider_d"
+                        android:id="@+id/divider_e"
                         style="@style/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -191,8 +219,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="그룹 소개"
-                        app:layout_constraintTop_toBottomOf="@id/divider_d"
-                        app:layout_constraintBottom_toTopOf="@id/divider_e"
+                        app:layout_constraintTop_toBottomOf="@id/divider_e"
+                        app:layout_constraintBottom_toTopOf="@id/divider_f"
                         app:layout_constraintStart_toStartOf="parent"
                         />
 
@@ -201,13 +229,13 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider_d"
-                        app:layout_constraintBottom_toTopOf="@id/divider_e"
+                        app:layout_constraintTop_toBottomOf="@id/divider_e"
+                        app:layout_constraintBottom_toTopOf="@id/divider_f"
                         android:layout_marginRight="20dp"
                         android:src="@drawable/icon_join"/>
 
                     <LinearLayout
-                        android:id="@+id/divider_e"
+                        android:id="@+id/divider_f"
                         style="@style/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -219,7 +247,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="일정"
-                        app:layout_constraintTop_toBottomOf="@id/divider_e"
+                        app:layout_constraintTop_toBottomOf="@id/divider_f"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         />
@@ -229,7 +257,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider_e"
+                        app:layout_constraintTop_toBottomOf="@id/divider_f"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginRight="20dp"
                         android:src="@drawable/icon_join"/>
@@ -511,7 +539,7 @@
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/btn_study_exit"
+                android:id="@+id/btn_study_quit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="그룹 탈퇴"
@@ -522,12 +550,12 @@
                 />
 
             <Button
-                android:id="@+id/btn_study_bomb"
+                android:id="@+id/btn_study_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="그룹 해체"
                 android:background="@color/red_200"
-                app:layout_constraintTop_toBottomOf="@id/btn_study_exit"
+                app:layout_constraintTop_toBottomOf="@id/btn_study_quit"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="5dp"
                 />

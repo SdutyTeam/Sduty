@@ -13,7 +13,7 @@ import com.d108.sduty.databinding.DialogConfirmBinding
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.utils.getDeviceSize
 
-class ConfirmDialog : DialogFragment() {
+class ConfirmDialog() : DialogFragment() {
     private lateinit var binding: DialogConfirmBinding
     private val timerViewModel : TimerViewModel by viewModels({requireActivity()})
 
@@ -27,6 +27,36 @@ class ConfirmDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 여백 터치 시 다이얼로그 종료 방지
+        isCancelable = false
+
+        initView()
+
+        val action = arguments?.getString("Action", "RemoveTimer")
+
+        when(action){
+            "RemoveTimer" -> {
+                removeTimer()
+            }
+            "RemoveTask" -> {
+                removeTask()
+            }
+            "Error" -> {
+                errorMessage()
+            }
+        }
+    }
+
+    private fun initView() {
+        binding.apply {
+            btnCancel.setOnClickListener {
+                dismiss()
+            }
+        }
+    }
+
+    private fun removeTimer() {
         binding.apply {
             btnConfirm.setOnClickListener {
                 // DelayDialog 종료
@@ -39,8 +69,22 @@ class ConfirmDialog : DialogFragment() {
                 // ConfirmDialog 종료
                 dismiss()
             }
+        }
+    }
 
-            btnCancel.setOnClickListener {
+    private fun removeTask() {
+        val position = arguments?.getInt("Position", 0)
+        timerViewModel.removeTask(position!!)
+
+        dismiss()
+    }
+
+    private fun errorMessage() {
+        val message = arguments?.getString("Message", "")
+        binding.apply {
+            tvWarningMessage.text = message
+            btnCancel.visibility = View.GONE
+            btnConfirm.setOnClickListener {
                 dismiss()
             }
         }
