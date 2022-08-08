@@ -13,7 +13,7 @@ import com.d108.sduty.databinding.DialogConfirmBinding
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.utils.getDeviceSize
 
-class ConfirmDialog() : DialogFragment() {
+class ConfirmDialog : DialogFragment() {
     private lateinit var binding: DialogConfirmBinding
     private val timerViewModel : TimerViewModel by viewModels({requireActivity()})
 
@@ -36,12 +36,15 @@ class ConfirmDialog() : DialogFragment() {
         val action = arguments?.getString("Action", "RemoveTimer")
 
         when(action){
+            // 시간 측정 기록 삭제
             "RemoveTimer" -> {
                 removeTimer()
             }
+            // 서버에 Task 삭제 요청
             "RemoveTask" -> {
                 removeTask()
             }
+            // 경고
             "Error" -> {
                 errorMessage()
             }
@@ -74,9 +77,16 @@ class ConfirmDialog() : DialogFragment() {
 
     private fun removeTask() {
         val position = arguments?.getInt("Position", 0)
-        timerViewModel.removeTask(position!!)
 
-        dismiss()
+        binding.apply {
+            btnCancel.setOnClickListener {
+                dismiss()
+            }
+            btnConfirm.setOnClickListener {
+                timerViewModel.removeTask(position!!)
+                dismiss()
+            }
+        }
     }
 
     private fun errorMessage() {

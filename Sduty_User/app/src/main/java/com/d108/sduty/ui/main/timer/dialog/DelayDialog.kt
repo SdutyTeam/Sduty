@@ -43,7 +43,7 @@ class DelayDialog : DialogFragment() {
         binding.apply {
             timerViewModel.timer.observe(viewLifecycleOwner) { time ->
                 val hour = time / 60 / 60
-                val min = time / 60
+                val min = (time / 60) % 60
                 val sec = time % 60
                 tvTimer.text = String.format("%02d:%02d:%02d",hour,min, sec)
             }

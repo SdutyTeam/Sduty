@@ -64,9 +64,9 @@ class TimerFragment : Fragment() {
 
         timerViewModel.apply {
             // 토스트 메시지 출력 요청
-            toastMessage.observe(viewLifecycleOwner) { message ->
-                requireContext().showToast(message)
-            }
+//            toastMessage.observe(viewLifecycleOwner) { message ->
+//                requireContext().showToast(message)
+//            }
 
             // 하루 공부한 시간
             timerViewModel.report.observe(viewLifecycleOwner) { report ->
@@ -115,6 +115,7 @@ class TimerFragment : Fragment() {
             // 오늘 날짜로 돌아가기
             btnReturnToday.setOnClickListener {
                 commonSelectedDate.text = today
+                tvTimer.visibility = View.VISIBLE
                 ivTimer.visibility = View.VISIBLE
                 btnReturnToday.visibility = View.INVISIBLE
                 timerViewModel.selectDate(today)
