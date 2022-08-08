@@ -2,6 +2,7 @@ package com.d108.sduty.ui.main.mypage
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.d108.sduty.ui.sign.viewmodel.TagViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.safeNavigate
+import com.google.android.material.tabs.TabLayout
 
 // 마이페이지 - 내 닉네임, 프로필 사진, 숫자 표시(게시물, 팔로우, 팔로워), 한줄소개, 프로필 편집, 통계, 잔디그래프, 탭(내 게시물/ 스크랩), 내 게시물(그리드+스크롤) , 설정, 업적
 private const val TAG ="MyPageFragment"
@@ -54,6 +56,9 @@ class MyPageFragment : Fragment() {
         viewModel.userStoryList.observe(viewLifecycleOwner){
             storyAdapter.list = it
         }
+        viewModel.scrapStoryList.observe(viewLifecycleOwner){
+            storyAdapter.list = it
+        }
         viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
     }
 
@@ -68,6 +73,20 @@ class MyPageFragment : Fragment() {
         binding.apply {
 
             vm = viewModel
+            tabMyPage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when(tab!!.position){
+                        0 -> {
+                            viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
+                        }
+                        1 -> {
+                            viewModel.getScrapStoryListValue(mainViewModel.user.value!!.seq)
+                        }
+                    }
+                }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+            })
             recylerStory.apply {
                 adapter = storyAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)
@@ -89,10 +108,5 @@ class MyPageFragment : Fragment() {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWEE))
             }
         }
-        val list = mutableListOf<Boolean>()
-        for(i in 0..181){
-            list.add(Math.random() < 0.5)
-        }
-        contributionAdapter.list = list
     }
 }
