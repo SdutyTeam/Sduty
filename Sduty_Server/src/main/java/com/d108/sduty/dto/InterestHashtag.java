@@ -1,8 +1,17 @@
 package com.d108.sduty.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +28,7 @@ public class InterestHashtag {
 	@Column(name="interest_hashtag_name")
 	private String name;
 
+	@ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
+	@JsonIgnore
+	private Set<Study> studies = new HashSet<Study>();
 }

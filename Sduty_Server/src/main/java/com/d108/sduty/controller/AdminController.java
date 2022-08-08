@@ -20,6 +20,7 @@ import com.d108.sduty.dto.Admin;
 import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
 import com.d108.sduty.dto.Qna;
+import com.d108.sduty.dto.Story;
 import com.d108.sduty.service.AdminService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,7 +87,12 @@ public class AdminController {
 	}
 
 	// 신고 관리
-
+	@ApiOperation(value = "신고된 게시물 목록 조회")
+	@GetMapping("/bad-story")
+	public ResponseEntity<?> getBadStories(){
+		return new ResponseEntity<List<Story>>(adminService.getBadStories(), HttpStatus.OK);
+	}
+	
 	// 데일리 질문
 	@ApiOperation(value = "데일리질문 등록")
 	@PostMapping("/question")

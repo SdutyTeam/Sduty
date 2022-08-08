@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.InterestHashtag;
+import com.d108.sduty.dto.JobHashtag;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.StoryInterest;
 import com.d108.sduty.dto.Timeline;
 import com.d108.sduty.repo.InterestHashtagRepo;
+import com.d108.sduty.repo.JobHashtagRepo;
 import com.d108.sduty.repo.LikesRepo;
 import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.repo.ReplyRepo;
@@ -41,6 +43,9 @@ public class TimelineServiceImpl implements TimelineService {
 	private ScrapRepo scrapRepo;
 	
 	@Autowired
+	private JobHashtagRepo jobHashtagRepo;
+	
+	@Autowired
 	private InterestHashtagRepo interestHashtagRepo;
 	
 	@Autowired
@@ -57,6 +62,7 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			timelineList.add(t);
 		}
@@ -74,16 +80,16 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			tList.add(t);
 		}
 		return tList;
 	}
 	
-
 	@Override
-	public List<Timeline> selectAllByUserSeqsWithTag(int userSeq, List<Integer> writerSeq, int jobSeq) {
-		List<Story> selectedOStory =  storyRepo.findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(writerSeq, jobSeq);
+	public List<Timeline> selectAllByUserSeqsWithTag(int userSeq, List<Integer> writerSeq, String jobName) {
+		List<Story> selectedOStory =  storyRepo.findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(writerSeq, getJobHashtag(jobName).getSeq());
 		List<Timeline> tList = new ArrayList<>();
 		for(Story s : selectedOStory) {
 			Timeline t = new Timeline();
@@ -92,26 +98,73 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			tList.add(t);
 		}
 		return tList;
 	}
 	
-//	@Override
-//	public Timeline selectRecommandTimeline(int userSeq) {
-//		Story s = storyRepo.findRecommanded(getProfile(userSeq).getJob());
-//		Timeline t = new Timeline();
-//		t.setProfile(getProfile(s.getWriterSeq()));
-//		t.setStory(s);
-//		t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
-//		t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
-//		t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
-//		setInterestList(t, s);
-//
-//		return t;
-//	}
+	@Override
+	public List<Timeline> selectAllByJobName(int userSeq, String jobName){
+		JobHashtag JH = getJobHashtag(jobName);
+		List<Story> selectedStory = storyRepo.findAllByjobHashtagOrderByRegtimeDesc(JH.getSeq());
+		List<Timeline> tList = new ArrayList<>();
+		for(Story s : selectedStory) {
+			Timeline t = new Timeline();
+			t.setProfile(getProfile(s.getWriterSeq()));
+			t.setStory(s);
+			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
+			setInterestList(t, s);
+			tList.add(t);
+		}
+		return tList;
+	}
 	
+	@Override
+	public List<Timeline> selectAllByInterestName(int userSeq, String interestName){
+		InterestHashtag IH = getInterestHashtag(interestName);
+		List<StoryInterest> SI = storyInterestRepo.findAllByinterestSeq(IH.getSeq());
+		List<Integer> siSeqs = new ArrayList<Integer>();
+		for(StoryInterest si : SI) {
+			siSeqs.add(si.getSeq());
+		}
+		List<Story> selectedStory = storyRepo.findAllBySeqInOrderByRegtimeDesc(siSeqs);
+		List<Timeline> tList = new ArrayList<>();
+		for(Story s : selectedStory) {
+			Timeline t = new Timeline();
+			t.setProfile(getProfile(s.getWriterSeq()));
+			t.setStory(s);
+			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
+			setInterestList(t, s);
+			tList.add(t);
+		}
+		return tList;
+	}
+	
+	
+	@Override
+	public Timeline selectRecommandTimeline(int userSeq) {
+		Story s = storyRepo.findRecommanded(getProfile(userSeq).getJob());
+		Timeline t = new Timeline();
+		t.setProfile(getProfile(s.getWriterSeq()));
+		t.setStory(s);
+		t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+		t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+		t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+		t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
+		setInterestList(t, s);
+
+		return t;
+	}
+	
+	@Override
 	public Timeline selectDetailTimeline(int storySeq) {
 		Optional<Story> selectedOStory = storyRepo.findById(storySeq);
 		if(selectedOStory.isPresent()) {
@@ -121,6 +174,7 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setProfile(getProfile(userSeq));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			List<Reply> listReply = replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
 			for(Reply r : listReply) {
 				r.setProfile(profileRepo.findById((r.getUserSeq())).get());
@@ -135,6 +189,7 @@ public class TimelineServiceImpl implements TimelineService {
 		return null;
 	}
 	
+	@Override
 	public Profile getProfile(int userSeq) {
 		Optional<Profile> OProfile = profileRepo.findById(userSeq);
 		if(OProfile.isPresent()) {
@@ -143,6 +198,7 @@ public class TimelineServiceImpl implements TimelineService {
 		return null;
 	}
 
+	@Override
 	public void setInterestList(Timeline t, Story s) {
 		List<StoryInterest> listSI = storyInterestRepo.findAllBySeq(s.getSeq());
 		List<InterestHashtag> listIH = new ArrayList<InterestHashtag>();
@@ -153,8 +209,18 @@ public class TimelineServiceImpl implements TimelineService {
 		t.setInterestHashtags(listIH);
 	}
 	
+	@Override
 	public List<Reply> findAllReplyByStorySeqOrderByRegtimeDesc(int storySeq){
 		return replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
 	}
+
+	@Override
+	public JobHashtag getJobHashtag(String jobName) {
+		return jobHashtagRepo.findByName(jobName);
+	}
 	
+	@Override
+	public InterestHashtag getInterestHashtag(String interestName) {
+		return interestHashtagRepo.findByName(interestName);
+	}
 }

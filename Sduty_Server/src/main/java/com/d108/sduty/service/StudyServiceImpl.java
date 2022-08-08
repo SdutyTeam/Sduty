@@ -56,6 +56,7 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	@Transactional
 	public void registStudy(Study study, Alarm alarm) {
+		System.out.println("here!!");
 		//1. 방장 참여
 		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
 		if(alarm!=null) {
@@ -117,10 +118,13 @@ public class StudyServiceImpl implements StudyService {
 				if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
 				if(newStudy.getMasterSeq()!=0) originStudy.setMasterSeq(newStudy.getMasterSeq());
 				if(newStudy.getCategory()!=null) originStudy.setCategory(newStudy.getCategory());
+				if(newStudy.getCategories()!=null) originStudy.setCategories(newStudy.getCategories());;
 				originStudy.setPassword(newStudy.getPassword());
 				originStudy.setIntroduce(newStudy.getIntroduce());
 			}
-			return studyRepo.save(originStudy);
+			Study result = studyRepo.save(originStudy);
+			//System.out.println(result.getCategories());
+			return result;
 		}
 		return null;
 	}

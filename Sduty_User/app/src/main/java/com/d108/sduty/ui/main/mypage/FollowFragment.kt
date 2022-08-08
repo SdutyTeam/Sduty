@@ -65,7 +65,6 @@ class FollowFragment : Fragment() {
                 followAdapter.tabFlag = FLAG_FOLLOWER
                 followAdapter.list = followerList.value!!
                 setMyFollowPage(false)
-                Log.d(TAG, "initViewModel: $it")
             }
             followeeList.observe(viewLifecycleOwner){
                 if(args.userSeq == mainViewModel.user.value!!.seq){
@@ -75,7 +74,6 @@ class FollowFragment : Fragment() {
                 }
                 followAdapter.tabFlag = FLAG_FOLLOWEE
                 followAdapter.list = followeeList.value!!
-                Log.d(TAG, "initViewModel: $it")
             }
         }
         storyViewModel.isFollowSucceed.observe(viewLifecycleOwner){
@@ -94,7 +92,7 @@ class FollowFragment : Fragment() {
         followAdapter.apply {
             onClickFollowListener = object : FollowAdapter.OnClickFollowListener{
                 override fun onClickFollowBtn(follow: Follow) {
-                    storyViewModel.doFollow(Follow(mainViewModel.user.value!!.seq, follow.profile!!.userSeq))
+                    findNavController().safeNavigate(FollowFragmentDirections.actionFollowFragmentToUserProfileFragment(follow.profile!!.userSeq))
                 }
                 override fun onClickProfile(follow: Follow) {
                     findNavController().safeNavigate(FollowFragmentDirections.actionFollowFragmentToUserProfileFragment(follow.profile!!.userSeq))

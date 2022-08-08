@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.UserInterest;
+import com.d108.sduty.repo.FollowRepo;
 import com.d108.sduty.repo.InterestHashtagRepo;
 import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.repo.StoryRepo;
@@ -30,6 +31,9 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Autowired
 	private StoryRepo storyRepo;
+	
+	@Autowired
+	private FollowRepo followRepo;
 	
 	@Override
 	public Profile insertProfile(Profile profile) throws Exception {
@@ -65,6 +69,8 @@ public class ProfileServiceImpl implements ProfileService {
 		Profile p;
 		if(OProfile.isPresent()) {
 			p = OProfile.get();
+			p.setFollowers(followRepo.countByFollowerSeq(userSeq).intValue());
+			p.setFollowees(followRepo.countByFolloweeSeq(userSeq).intValue());
 			p.setInterestHashtags(listIH);
 			return p;
 		}
@@ -114,6 +120,19 @@ public class ProfileServiceImpl implements ProfileService {
 			return p.getIsStudying();
 		}
 		return -1;
+	}
+
+	@Override
+	public Profile selectRecommand(int userSeq) {
+		Optional<Profile> OP = profileRepo.findById(userSeq);
+		Profile p;
+		if(OP.isPresent()) {
+			p = profileRepo.findRecommanded(OP.get().getJob(), userSeq);
+			p.setFollowers(followRepo.countByFollowerSeq(p.getUserSeq()).intValue());
+			p.setFollowees(followRepo.countByFolloweeSeq(p.getUserSeq()).intValue());
+			return p;
+		}
+		return null;
 	}
 
 

@@ -17,4 +17,6 @@ public interface FollowRepo extends JpaRepository<Follow, Integer>{
 	void deleteByFollowerSeqAndFolloweeSeq(int followerSeq, int followeeSeq);
 	List<Optional<Follow>> findByFollowerSeq(int seq);
 	List<Optional<Follow>> findByFolloweeSeq(int seq);
+	Long countByFollowerSeq(int followerSeq);
+	Long countByFolloweeSeq(int followeeSeq);
 }
