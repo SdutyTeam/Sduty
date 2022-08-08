@@ -57,6 +57,7 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			timelineList.add(t);
 		}
@@ -74,6 +75,7 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			tList.add(t);
 		}
@@ -92,6 +94,7 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			tList.add(t);
 		}
@@ -107,6 +110,7 @@ public class TimelineServiceImpl implements TimelineService {
 		t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
 		t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 		t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+		t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 		setInterestList(t, s);
 
 		return t;
@@ -121,6 +125,7 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setProfile(getProfile(userSeq));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			List<Reply> listReply = replyRepo.findAllByStorySeqOrderByRegtimeDesc(storySeq);
 			for(Reply r : listReply) {
 				r.setProfile(profileRepo.findById((r.getUserSeq())).get());
