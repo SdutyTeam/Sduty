@@ -18,7 +18,7 @@ import com.d108.sduty.model.dto.Task
 class TaskSpinnerAdapter(
     context: Context,
     @LayoutRes private val resId: Int,
-    private val values: MutableList<Task>
+    private val values: List<Task>
 ) : ArrayAdapter<Task>(context, resId, values) {
 
     override fun getCount() = values.size
@@ -31,6 +31,7 @@ class TaskSpinnerAdapter(
         val binding = ItemSpinnerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val model = values[position]
         try {
+            binding.tvTask.text = "${model.title}"
 //            binding.imgSpinner.setImageResource(model.image)
 //            binding.imgSpinner.setColorFilter(ContextCompat.getColor(context, R.color.white))
 //            binding.txtName.text = model.name
@@ -47,6 +48,7 @@ class TaskSpinnerAdapter(
         try {
 //            binding.imgSpinner.setImageResource(model.image)
 //            binding.txtName.text = model.name
+            binding.tvTask.text = "${model.title}"
 
         } catch (e: Exception) {
             e.printStackTrace()

@@ -14,6 +14,7 @@ import com.d108.sduty.utils.convertTimeStringToDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -141,6 +142,11 @@ class TimerViewModel() : ViewModel() {
 
     fun modifyTask(task: Task){
         updateTask(task)
+    }
+
+    fun getTodayReport(userSeq: Int){
+        val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
+        getReport(userSeq, today)
     }
 
     /* API */
