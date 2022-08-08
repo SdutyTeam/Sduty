@@ -30,6 +30,7 @@ import com.d108.sduty.service.ReportService;
 import com.d108.sduty.service.StudyService;
 import com.d108.sduty.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -53,6 +54,7 @@ public class StudyController {
 	@PostMapping("")
 	public ResponseEntity<?> registStudy(@RequestBody ObjectNode reqObject){
 		ObjectMapper mapper = new ObjectMapper();
+		//mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 		Study study = null;
 		Alarm alarm = null;
 		try {
@@ -70,6 +72,7 @@ public class StudyController {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		
 		//1. form 제출 후, 이름 중복 검사

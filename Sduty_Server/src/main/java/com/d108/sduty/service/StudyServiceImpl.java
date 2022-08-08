@@ -56,6 +56,7 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	@Transactional
 	public void registStudy(Study study, Alarm alarm) {
+		System.out.println("here!!");
 		//1. 방장 참여
 		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
 		if(alarm!=null) {
