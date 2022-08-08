@@ -28,7 +28,7 @@ interface StoryApi {
     @GET("/story/scrap/{user_seq}")
     suspend fun getScrapList(@Path("user_seq")userSeq: Int): Response<List<Story>>
 
-    @GET("/story/chart/{userSeq}")
+    @GET("/profile/chart/{userSeq}")
     suspend fun getContributionList(@Path("userSeq")userSeq: Int): Response<List<Boolean>>
 
     @GET("/story/user/{userSeq}/{jobName}")

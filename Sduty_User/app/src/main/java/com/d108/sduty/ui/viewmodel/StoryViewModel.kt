@@ -329,16 +329,16 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _grassList = MutableLiveData<List<Boolean>>()
-    val grassList: LiveData<List<Boolean>>
-        get() = _grassList
-    fun getGrass(userSeq: Int){
-        viewModelScope.launch(Dispatchers.IO) {
-            Retrofit.profileApi.getGrass(userSeq).let {
-                if (it.isSuccessful) {
-                    _grassList.postValue(it.body())
-                } else {
-                    Log.d(TAG, "getGrass: ${it.code()}")
+    private val _contributionList = MutableLiveData<List<Boolean>>()
+    val contributionList: LiveData<List<Boolean>>
+        get() = _contributionList
+    fun getContribution(userSeq: Int){  
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getContributionList(userSeq).let { 
+                if(it.isSuccessful && it.body() != null){
+                    _contributionList.postValue(it.body())
+                }else{
+                    Log.d(TAG, "getContribution: ${it.code()}")
                 }
             }
         }
