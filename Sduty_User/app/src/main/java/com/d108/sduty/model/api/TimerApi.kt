@@ -22,5 +22,5 @@ interface TimerApi {
 
     // 태스크 하나를 삭제한다.
     @DELETE("/report/tasks/{task_seq}")
-    suspend fun removeTask(@Path("task_seq") task_seq: Int) : Response<Unit>
+    suspend fun deleteTask(@Path("task_seq") task_seq: Int) : Response<Unit>
 }
