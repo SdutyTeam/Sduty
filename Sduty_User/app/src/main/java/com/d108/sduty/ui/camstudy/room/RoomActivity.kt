@@ -11,6 +11,11 @@ class RoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
     }
+
+    fun getStudyName(): String {
+        return intent.getStringExtra("studyName") ?: throw IllegalStateException()
+    }
+
     fun getRoomId(): String {
         return intent.getStringExtra(EXTRA_ROOM_ID) ?: throw IllegalStateException()
     }

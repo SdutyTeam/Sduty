@@ -108,6 +108,10 @@ fun convertTimeDateToString(date: Date, format: String): String {
     return simpleDateFormat.format(date)
 }
 
+fun convertTimeHHMMDDToLong(str: String){
+    val time = str.split(":")
+}
+
 // device size
 fun getDeviceSize(activity: Activity): Point {
     val windowManager = activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager

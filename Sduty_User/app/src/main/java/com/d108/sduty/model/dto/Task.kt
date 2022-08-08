@@ -12,9 +12,9 @@ data class Task(
     val startTime: String,
     val durationTime: Int,
     val title: String,
-    val content1: String,
-    val content2: String,
-    val content3: String
+    var content1: String,
+    var content2: String,
+    var content3: String
 ) : Parcelable {
     override fun describeContents(): Int {
         return 0
