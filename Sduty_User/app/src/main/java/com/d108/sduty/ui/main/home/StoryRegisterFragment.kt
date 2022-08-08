@@ -23,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
+import com.d108.sduty.adapter.SelectedTagAdapter
 import com.d108.sduty.adapter.TagAdapter
 import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.NOT_PROFILE
@@ -57,7 +58,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var selectedTagList = mutableListOf<String>()
     private var jobHashtag: JobHashtag? = null
     private var interestHashtagList: MutableList<Int>? = null
-    private val tagAdapter = TagAdapter(ALL_TAG)
+    private val tagAdapter = SelectedTagAdapter(ALL_TAG)
     private var storyImage: Bitmap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
