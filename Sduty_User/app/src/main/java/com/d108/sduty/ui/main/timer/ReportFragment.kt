@@ -9,7 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -27,6 +31,7 @@ import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.convertTimeDateToString
 import com.d108.sduty.utils.safeNavigate
+import com.google.firebase.database.collection.LLRBNode
 import java.util.*
 
 private const val TAG = "ReportFragment"
@@ -71,6 +76,7 @@ class ReportFragment : Fragment() {
     private fun initViewModel() {
         timerViewModel.report.observe(viewLifecycleOwner) { report ->
             updateAdapter(report)
+            updatePlanner(report)
         }
     }
 
@@ -113,6 +119,15 @@ class ReportFragment : Fragment() {
                 showDatePicker()
             }
 
+            commonShare.setOnClickListener {
+                TaskDialog().apply {
+                    arguments = Bundle().apply {
+                        putString("Action", "CustomAdd")
+                    }
+                    show(this@ReportFragment.requireActivity().supportFragmentManager, "TaskDialog")
+                }
+            }
+
             fabTimer.setOnClickListener {
                 findNavController().safeNavigate(ReportFragmentDirections.actionReportFragmentToTimerFragment())
             }
@@ -143,4 +158,35 @@ class ReportFragment : Fragment() {
             adapter = taskListAdapter
         }
     }
+
+    private fun updatePlanner(report: Report) {
+        binding.tlPlanner.removeAllViews()
+
+        for (i in 1..24){
+            val tableRow = TableRow(requireContext())
+            tableRow.layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,TableLayout.LayoutParams.WRAP_CONTENT)
+
+            val tv = TextView(requireContext())
+            tv.layoutParams = TableRow.LayoutParams(60,60)
+            tv.text = i.toString()
+            Log.d(TAG, "updatePlanner: $i")
+            tableRow.addView(tv)
+
+            for (j in 1..6) {
+                val view = View(requireContext())
+                view.layoutParams = TableRow.LayoutParams(60, 60)
+
+                when (j % 2) {
+                    0 -> view.setBackgroundResource(R.color.app_purple)
+                    1 -> view.setBackgroundResource(R.color.app_blue)
+                }
+                tableRow.addView(view)
+            }
+
+            binding.tlPlanner.addView(tableRow)
+        }
+
+
+    }
+
 }
