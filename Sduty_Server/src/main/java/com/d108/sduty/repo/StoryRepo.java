@@ -24,6 +24,6 @@ public interface StoryRepo extends JpaRepository<Story, Integer>{
 	
 	List<Story> findByWarningGreaterThan(int zero);
 	
-//	@Query(value="select * from story as s where story_public = 2 and story_job_hashtag = ?1 and datediff(now(), story_regtime) < 7 order by rand() limit 1", nativeQuery=true)
-//	Story findRecommanded(int storyJobHashtag);
+	@Query(value="select * from story as s where story_public = 2 and story_job_hashtag = ?1 and datediff(now(), story_regtime) < 7 order by rand() limit 1", nativeQuery=true)
+	Story findRecommanded(String storyJobHashtag);
 }
