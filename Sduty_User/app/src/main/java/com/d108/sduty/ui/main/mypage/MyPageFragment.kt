@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -54,6 +55,11 @@ class MyPageFragment : Fragment() {
         viewModel.userStoryList.observe(viewLifecycleOwner){
             storyAdapter.list = it
         }
+        viewModel.grassList.observe(viewLifecycleOwner){
+            contributionAdapter.list = it
+        }
+
+        viewModel.getGrass(mainViewModel.user.value!!.seq)
         viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
     }
 
@@ -89,10 +95,5 @@ class MyPageFragment : Fragment() {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWEE))
             }
         }
-        val list = mutableListOf<Boolean>()
-        for(i in 0..181){
-            list.add(Math.random() < 0.5)
-        }
-        contributionAdapter.list = list
     }
 }

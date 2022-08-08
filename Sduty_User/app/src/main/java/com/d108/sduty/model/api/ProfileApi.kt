@@ -26,4 +26,7 @@ interface ProfileApi {
 
     @GET("/profile/followee/{userSeq}")
     suspend fun getFollowee(@Path("userSeq") userSeq: Int): Response<MutableList<Follow>>
+
+    @GET("/profile/chart/{userSeq}")
+    suspend fun getGrass(@Path("userSeq") userSeq: Int): Response<List<Boolean>>
 }
