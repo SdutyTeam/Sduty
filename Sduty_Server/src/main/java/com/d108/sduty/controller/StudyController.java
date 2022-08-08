@@ -148,7 +148,6 @@ public class StudyController {
 				return new ResponseEntity<Study>(result, HttpStatus.OK);
 			}	
 		}
-		
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	

@@ -118,6 +118,7 @@ public class StudyServiceImpl implements StudyService {
 				if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
 				if(newStudy.getMasterSeq()!=0) originStudy.setMasterSeq(newStudy.getMasterSeq());
 				if(newStudy.getCategory()!=null) originStudy.setCategory(newStudy.getCategory());
+				if(newStudy.getCategories()!=null) originStudy.setCategories(newStudy.getCategories());;
 				originStudy.setPassword(newStudy.getPassword());
 				originStudy.setIntroduce(newStudy.getIntroduce());
 			}
