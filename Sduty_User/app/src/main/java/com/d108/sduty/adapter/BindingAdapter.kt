@@ -54,12 +54,12 @@ fun interestHashTagText(view: TextView, list: MutableList<InterestHashtag>?){
 
 @SuppressLint("ResourceAsColor")
 @BindingAdapter("userProfile", "myProfile")
-fun followButtonText(view: Button, userProfile: Profile?, myProfile: Profile){
+fun followButtonText(view: TextView, userProfile: Profile?, myProfile: Profile){
     if(myProfile.follows?.get("${userProfile?.userSeq}") != null){
         view.text = "팔로우 취소"
-        view.backgroundTintList = ColorStateList.valueOf(R.color.onlight_04)
+        view.setBackgroundResource(R.drawable.button_gray)
     }else{
         view.text = "팔로우"
-        view.backgroundTintList = ColorStateList.valueOf(R.color.app_blue)
+        view.setBackgroundResource(R.drawable.button_app_blue)
     }
 }

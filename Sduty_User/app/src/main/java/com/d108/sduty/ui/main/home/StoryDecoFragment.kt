@@ -8,11 +8,15 @@ import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.AdapterView
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.d108.sduty.R
+import com.d108.sduty.adapter.TaskSpinnerAdapter
 import com.d108.sduty.databinding.FragmentStoryDecoBinding
 import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
@@ -25,8 +29,9 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
     private lateinit var binding: FragmentStoryDecoBinding
     private val timerViewModel: TimerViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+    private lateinit var spinnerAdapter: TaskSpinnerAdapter
 
-    private lateinit var taskList: MutableList<Task>
+    private var taskList = listOf<Task>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +54,7 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+
             // 템플릿 미적용
             btnDecoNone.setOnClickListener {
                 val layoutParams = imgPreview.layoutParams as FrameLayout.LayoutParams
@@ -89,11 +95,27 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
                 saveImageBitmap(bitmap)
             }
         }
+        initViewModel()
     }
 
     private fun initViewModel(){
-        timerViewModel.report.observe(viewLifecycleOwner){
-
+        timerViewModel.apply {
+            getTodayReport(47)
+            report.observe(viewLifecycleOwner){
+                taskList = it.tasks
+                spinnerAdapter = TaskSpinnerAdapter(requireContext(), android.R.layout.simple_list_item_1, it.tasks)
+                binding.spinnerStoryDeco.apply {
+                    adapter = spinnerAdapter
+                    this.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+                        override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                            Log.d(TAG, "onItemSelected: ${timerViewModel.report.value}")
+                            binding.tvTime.text = "${timerViewModel.report.value?.date} ${taskList[p2].startTime.substring(0, 5)} ~ ${taskList[p2].endTime.substring(0, 5)}"
+                        }
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
+                        }
+                    }
+                }
+            }
         }
     }
 
