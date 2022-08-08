@@ -49,7 +49,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:drawableTop="@drawable/search"
-                android:background="@color/white"
                 android:src="@drawable/img_study_search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
