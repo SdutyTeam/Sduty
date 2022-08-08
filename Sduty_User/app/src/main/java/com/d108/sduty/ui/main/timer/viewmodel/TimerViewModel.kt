@@ -49,6 +49,9 @@ class TimerViewModel() : ViewModel() {
     // 현재 유예 중인지 검사
     private var isDelayingTimer = false
 
+    // 선택된 날짜
+    private var selectedDate = "1970-01-01"
+
     // 시간 측정 시작 시간
     private var _startTime: String = "00:00:00"
     val startTime: String
@@ -56,10 +59,11 @@ class TimerViewModel() : ViewModel() {
 
     // 사용자가 날짜 선택
     fun selectDate(strDate: String) {
-        val selectedDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
-        val convertedDate = convertTimeDateToString(selectedDate, "yyyy-MM-dd")
+        val beforeDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
+        val convertedDate = convertTimeDateToString(beforeDate, "yyyy-MM-dd")
         val userSeq = ApplicationClass.userPref.getInt("seq", 47)
         getReport(userSeq, convertedDate)
+        selectedDate = convertedDate
     }
 
     // 앱이 종료 되었을 경우 측정 시간을 복구한다.
@@ -83,8 +87,6 @@ class TimerViewModel() : ViewModel() {
 
     // 시간 측정을 시작한다.
     fun startTimer() {
-        // TODO: 스터디에 시작 정보 알림
-
         _isRunningTimer.value = true
 
         timerTask = timer(period = 1000) {
@@ -92,6 +94,7 @@ class TimerViewModel() : ViewModel() {
             if (isDelayingTimer) {
                 _delayTime.postValue(delayTime.value!! + 1)
             }
+
         }
     }
 
@@ -111,22 +114,19 @@ class TimerViewModel() : ViewModel() {
         isDelayingTimer = true
     }
 
-    // 측정을 계속 한다.
-    fun resetDelayTimer() {
-        isDelayingTimer = false
-        _delayTime.value = 0
-    }
-
     // 시간 측정을 종료한다.
     fun stopTimer() {
-
-        // TODO: 스터디에 종료 정보 알림
-
         ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
         _timer.postValue(0)
         resetDelayTimer()
+    }
+
+    // 측정을 계속 한다.
+    fun resetDelayTimer() {
+        isDelayingTimer = false
+        _delayTime.value = 0
     }
 
     fun saveTask(report: Report) {
@@ -172,6 +172,8 @@ class TimerViewModel() : ViewModel() {
             Retrofit.timerApi.insertTask(report).let {
                 if (it.isSuccessful) {
                     _toastMessage.postValue("측정 기록 등록을 완료하였습니다.")
+                    val userSeq = ApplicationClass.userPref.getInt("seq", 47)
+                    getReport(userSeq, selectedDate)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
                     _toastMessage.postValue("서버에 등록하는데 실패하였습니다.")
@@ -187,6 +189,8 @@ class TimerViewModel() : ViewModel() {
             Retrofit.timerApi.deleteTask(seq).let {
                 if (it.isSuccessful) {
                     _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                    val userSeq = ApplicationClass.userPref.getInt("seq", 47)
+                    getReport(userSeq, selectedDate)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
                     _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
@@ -202,6 +206,8 @@ class TimerViewModel() : ViewModel() {
             Retrofit.timerApi.updateTask(task.seq, task).let {
                 if (it.isSuccessful) {
                     _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                    val userSeq = ApplicationClass.userPref.getInt("seq", 47)
+                    getReport(userSeq, selectedDate)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
                     _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")

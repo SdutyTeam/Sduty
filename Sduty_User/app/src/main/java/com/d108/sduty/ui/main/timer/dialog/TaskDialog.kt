@@ -1,6 +1,9 @@
 package com.d108.sduty.ui.main.timer.dialog
 
+import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +17,15 @@ import com.d108.sduty.model.dto.Report
 import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.utils.convertTimeDateToString
+import com.d108.sduty.utils.convertTimeHHMMDDToLong
+import com.d108.sduty.utils.convertTimeStringToDate
 import com.d108.sduty.utils.getDeviceSize
 import java.util.*
 
+private const val TAG = "TaskDialog"
+
 class TaskDialog : DialogFragment() {
-    private lateinit var binding : DialogTaskBinding
+    private lateinit var binding: DialogTaskBinding
     private val timerViewModel: TimerViewModel by viewModels({ requireActivity() })
 
     override fun onCreateView(
@@ -35,41 +42,48 @@ class TaskDialog : DialogFragment() {
         // 여백 터치 시 다이얼로그 종료 방지
         isCancelable = false
 
-        val action = arguments?.getString("Action","Add")
+        val action = arguments?.getString("Action", "Add")
 
-        when(action){
+        when (action) {
+            // Task 신규 등록
             "Add" -> {
                 addTask()
             }
+            // Task 사용자 설정 추가
+            "CustomAdd" -> {
+                customAddTask()
+            }
+            // Task 조회
             "Info" -> {
                 infoTask()
             }
+            // Task 수정
             "Modify" -> {
                 modifyTask()
             }
         }
     }
 
-    private fun addTask(){
+    private fun addTask() {
         binding.apply {
             val time = timerViewModel.timer.value!!
             val hour = time / 60 / 60
             val min = time / 60
             val sec = time % 60
-            tvTimer.text = String.format("%02d:%02d:%02d",hour,min, sec)
+            tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
 
             etStartTime.setText(timerViewModel.startTime)
             etStartTime.isEnabled = false
 
-            etEndTime.setText(convertTimeDateToString(Date(System.currentTimeMillis()),"hh:mm:ss"))
+            etEndTime.setText(convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss"))
             etEndTime.isEnabled = false
 
             // 내용 2, 3 추가 버튼
             ivAddContent.setOnClickListener {
-                if(etContent2.visibility == View.GONE && etContent3.visibility == View.GONE){
+                if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
                     etContent2.visibility = View.VISIBLE
                     ivRemoveContent2.visibility = View.VISIBLE
-                } else if(etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE){
+                } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
                     ivAddContent.visibility = View.INVISIBLE
                     ivRemoveContent2.visibility = View.INVISIBLE
                     etContent3.visibility = View.VISIBLE
@@ -93,7 +107,7 @@ class TaskDialog : DialogFragment() {
                 ivAddContent.visibility = View.VISIBLE
                 ivRemoveContent2.visibility = View.VISIBLE
                 etContent3.setText("")
-                etContent3.visibility= View.GONE
+                etContent3.visibility = View.GONE
                 ivRemoveContent3.visibility = View.GONE
             }
 
@@ -108,13 +122,14 @@ class TaskDialog : DialogFragment() {
 
                 val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
 
-                val newTask = Task(-1,-1,endTime, startTime, 0, title, content1, content2, content3)
+                val newTask =
+                    Task(-1, -1, endTime, startTime, 0, title, content1, content2, content3)
 
                 // TODO: userSeq 변경 필요
-                val report = Report(-1, 47, today, "",listOf(newTask))
+                val report = Report(-1, 47, today, "", listOf(newTask))
 
                 // title 은 필수로 입력해야한다.
-                if(title.isNotEmpty()){
+                if (title.isNotEmpty()) {
                     timerViewModel.saveTask(report)
                     timerViewModel.stopTimer()
                     dismiss()
@@ -122,10 +137,13 @@ class TaskDialog : DialogFragment() {
                     ConfirmDialog().apply {
                         // 경고창에 출력할 메시지를 담아 보낸다.
                         arguments = Bundle().apply {
-                            putString("Action","Error")
-                            putString("Message","제목을 입력해주세요!!")
+                            putString("Action", "Error")
+                            putString("Message", "제목을 입력해주세요!!")
                         }
-                        show(this@TaskDialog.requireActivity().supportFragmentManager, "ConfirmDialog")
+                        show(
+                            this@TaskDialog.requireActivity().supportFragmentManager,
+                            "ConfirmDialog"
+                        )
                     }
                 }
             }
@@ -136,7 +154,7 @@ class TaskDialog : DialogFragment() {
                 ConfirmDialog().apply {
                     // 삭제 경고
                     arguments = Bundle().apply {
-                        putString("Action","RemoveTimer")
+                        putString("Action", "RemoveTimer")
                     }
                     show(this@TaskDialog.requireActivity().supportFragmentManager, "ConfirmDialog")
                 }
@@ -147,7 +165,177 @@ class TaskDialog : DialogFragment() {
         timerViewModel.stopTimer()
     }
 
-    private fun infoTask(){
+    private fun customAddTask() {
+        binding.apply {
+            tvTimerInfo.text = "전체 시간"
+
+            etStartTime.inputType = InputType.TYPE_NULL
+            etStartTime.isFocusable = false
+            etStartTime.isCursorVisible = false
+
+            etStartTime.setOnClickListener {
+                val startTimeListener =
+                    TimePickerDialog.OnTimeSetListener { timePicker, hour, min ->
+                        // 시작 시간이 종료시간보다 빨라야한다.
+                        if (etEndTime.text.toString().isNotEmpty()) {
+                            val startTime = convertTimeStringToDate(
+                                String.format("%02d:%02d:00", hour, min),
+                                "hh:mm:ss"
+                            ).time
+
+                            val endTime =
+                                convertTimeStringToDate(
+                                    etEndTime.text.toString(),
+                                    "hh:mm:ss"
+                                ).time
+
+                            if (endTime > startTime) {
+                                etStartTime.setText(String.format("%02d:%02d:00", hour, min))
+                            } else {
+                                ConfirmDialog().apply {
+                                    // 경고창에 출력할 메시지를 담아 보낸다.
+                                    arguments = Bundle().apply {
+                                        putString("Action", "Error")
+                                        putString("Message", "시작 시간은 종료시간보다 빨라야합니다!")
+                                    }
+                                    show(
+                                        this@TaskDialog.requireActivity().supportFragmentManager,
+                                        "ConfirmDialog"
+                                    )
+                                    etStartTime.setText("")
+                                    etEndTime.setText("")
+                                }
+                            }
+                        } else {
+                            etStartTime.setText(String.format("%02d:%02d:00", hour, min))
+                        }
+
+                    }
+                TimePickerDialog(requireActivity(), startTimeListener, 0, 0, true).show()
+            }
+
+            etEndTime.inputType = InputType.TYPE_NULL
+            etEndTime.isFocusable = false
+            etEndTime.isCursorVisible = false
+
+            etEndTime.setOnClickListener {
+                val endTimeListener =
+                    TimePickerDialog.OnTimeSetListener { timePicker, hour, min ->
+                        // 시작 시간이 종료시간보다 빨라야한다.
+                        if (etStartTime.text.toString().isNotEmpty()) {
+                            val startTime =
+                                convertTimeStringToDate(
+                                    etStartTime.text.toString(),
+                                    "hh:mm:ss"
+                                ).time
+                            val endTime = convertTimeStringToDate(
+                                String.format("%02d:%02d:00", hour, min),
+                                "hh:mm:ss"
+                            ).time
+
+                            if (endTime > startTime) {
+                                etEndTime.setText(String.format("%02d:%02d:00", hour, min))
+                            } else {
+                                ConfirmDialog().apply {
+                                    // 경고창에 출력할 메시지를 담아 보낸다.
+                                    arguments = Bundle().apply {
+                                        putString("Action", "Error")
+                                        putString("Message", "시작 시간은 종료시간보다 빨라야합니다!")
+                                    }
+                                    show(
+                                        this@TaskDialog.requireActivity().supportFragmentManager,
+                                        "ConfirmDialog"
+                                    )
+                                    etStartTime.setText("")
+                                    etEndTime.setText("")
+                                }
+                            }
+                        } else {
+                            etStartTime.setText(String.format("%02d:%02d:00", hour, min))
+                        }
+
+                    }
+                TimePickerDialog(requireActivity(), endTimeListener, 0, 0, true).show()
+            }
+
+            // 내용 2, 3 추가 버튼
+            ivAddContent.setOnClickListener {
+                if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
+                    etContent2.visibility = View.VISIBLE
+                    ivRemoveContent2.visibility = View.VISIBLE
+                } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
+                    ivAddContent.visibility = View.INVISIBLE
+                    ivRemoveContent2.visibility = View.INVISIBLE
+                    etContent3.visibility = View.VISIBLE
+                    ivRemoveContent3.visibility = View.VISIBLE
+                }
+            }
+
+            // 내용 2
+            etContent2.visibility = View.GONE
+            ivRemoveContent2.visibility = View.GONE
+            ivRemoveContent2.setOnClickListener {
+                etContent2.setText("")
+                etContent2.visibility = View.GONE
+                ivRemoveContent2.visibility = View.GONE
+            }
+
+            // 내용 3
+            etContent3.visibility = View.GONE
+            ivRemoveContent3.visibility = View.GONE
+            ivRemoveContent3.setOnClickListener {
+                ivAddContent.visibility = View.VISIBLE
+                ivRemoveContent2.visibility = View.VISIBLE
+                etContent3.setText("")
+                etContent3.visibility = View.GONE
+                ivRemoveContent3.visibility = View.GONE
+            }
+
+            btnSave.setOnClickListener {
+                // 등록 수행
+                val startTime = etStartTime.text.toString()
+                val endTime = etEndTime.text.toString()
+                val title = etTitle.text.toString()
+                val content1 = etContent1.text.toString()
+                val content2 = etContent2.text.toString()
+                val content3 = etContent3.text.toString()
+
+                val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
+
+                val newTask =
+                    Task(-1, -1, endTime, startTime, 0, title, content1, content2, content3)
+
+                // TODO: userSeq 변경 필요
+                val report = Report(-1, 47, today, "", listOf(newTask))
+
+                // title 은 필수로 입력해야한다.
+                if (title.isNotEmpty()) {
+                    timerViewModel.saveTask(report)
+                    timerViewModel.stopTimer()
+                    dismiss()
+                } else {
+                    ConfirmDialog().apply {
+                        // 경고창에 출력할 메시지를 담아 보낸다.
+                        arguments = Bundle().apply {
+                            putString("Action", "Error")
+                            putString("Message", "제목을 입력해주세요!!")
+                        }
+                        show(
+                            this@TaskDialog.requireActivity().supportFragmentManager,
+                            "ConfirmDialog"
+                        )
+                    }
+                }
+            }
+
+            btnDelete.setOnClickListener {
+                dismiss()
+            }
+            btnModify.visibility = View.GONE
+        }
+    }
+
+    private fun infoTask() {
         val position = arguments?.getInt("Position", 0)
         val task = timerViewModel.report.value!!.tasks[position!!]
         binding.apply {
@@ -155,7 +343,7 @@ class TaskDialog : DialogFragment() {
             val min = (task.durationTime / 60) % 60
             val sec = task.durationTime % 60
 
-            tvTimer.text = String.format("%02d:%02d:%02d",hour,min,sec)
+            tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
 
             etStartTime.setText(task.startTime)
             etStartTime.isEnabled = false
@@ -171,7 +359,7 @@ class TaskDialog : DialogFragment() {
             ivAddContent.visibility = View.INVISIBLE
 
             etContent2.setText(task.content2)
-            if(task.content2.isNotEmpty()){
+            if (task.content2.isNotEmpty()) {
                 etContent2.visibility = View.VISIBLE
             } else {
                 etContent2.visibility = View.GONE
@@ -180,7 +368,7 @@ class TaskDialog : DialogFragment() {
             ivRemoveContent2.visibility = View.GONE
 
             etContent3.setText(task.content3)
-            if(task.content3.isNotEmpty()){
+            if (task.content3.isNotEmpty()) {
                 etContent3.visibility = View.VISIBLE
             } else {
                 etContent3.visibility = View.GONE
@@ -191,11 +379,12 @@ class TaskDialog : DialogFragment() {
             btnDelete.setOnClickListener {
                 ConfirmDialog().apply {
                     arguments = Bundle().apply {
-                        putString("Action","RemoveTask")
+                        putString("Action", "RemoveTask")
                         putInt("Position", position)
                     }
-                    show(this@TaskDialog.requireActivity().supportFragmentManager, "TaskDialog")
+                    show(this@TaskDialog.requireActivity().supportFragmentManager, "ConfirmDialog")
                 }
+                dismiss()
             }
 
             btnModify.visibility = View.VISIBLE
@@ -210,12 +399,12 @@ class TaskDialog : DialogFragment() {
         }
     }
 
-    private fun modifyTask(){
+    private fun modifyTask() {
         val position = arguments?.getInt("Position", 0)
         binding.apply {
-            if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE){
+            if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
                 ivAddContent.visibility = View.VISIBLE
-            } else if(etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE){
+            } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
                 ivAddContent.visibility = View.VISIBLE
                 ivRemoveContent2.visibility = View.VISIBLE
             } else {
@@ -226,10 +415,10 @@ class TaskDialog : DialogFragment() {
 
             // 내용 2, 3 추가 버튼
             ivAddContent.setOnClickListener {
-                if(etContent2.visibility == View.GONE && etContent3.visibility == View.GONE){
+                if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
                     etContent2.visibility = View.VISIBLE
                     ivRemoveContent2.visibility = View.VISIBLE
-                } else if(etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
+                } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
                     ivAddContent.visibility = View.INVISIBLE
                     ivRemoveContent2.visibility = View.INVISIBLE
                     etContent3.visibility = View.VISIBLE
@@ -249,7 +438,7 @@ class TaskDialog : DialogFragment() {
                 ivAddContent.visibility = View.VISIBLE
                 ivRemoveContent2.visibility = View.VISIBLE
                 etContent3.setText("")
-                etContent3.visibility= View.GONE
+                etContent3.visibility = View.GONE
                 ivRemoveContent3.visibility = View.GONE
             }
 
