@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
 import com.d108.sduty.databinding.FragmentTimeLineBinding
-import com.d108.sduty.model.dto.Follow
-import com.d108.sduty.model.dto.Likes
-import com.d108.sduty.model.dto.Scrap
-import com.d108.sduty.model.dto.Story
+import com.d108.sduty.model.dto.*
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.safeNavigate
@@ -29,6 +26,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private val storyViewModel: StoryViewModel by activityViewModels()
     private lateinit var timeLineAdapter: TimeLineAdapter
     private var selectedPosition = 0
+    private var timeLineList = mutableListOf<Timeline>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,16 +54,23 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             onClickTimelineItem = object : TimeLineAdapter.TimeLineClickListener{
                 override fun onFavoriteClicked(view: View, position: Int) {
                     storyViewModel.likeStory(Likes(mainViewModel.user.value!!.seq, timeLineAdapter.list[position].story.seq))
+                    if(timeLineList[position].likes)timeLineList[position].numLikes--
+                    else timeLineList[position].numLikes++
+                    timeLineList[position].likes = !timeLineList[position].likes
+                    timeLineAdapter.list = timeLineList
                 }
                 override fun onScrapClicked(view: View, position: Int) {
                     storyViewModel.scrapStory(Scrap(mainViewModel.user.value!!.seq, timeLineAdapter.list[position].story.seq))
+                    timeLineList[position].scrap = !timeLineList[position].scrap
+                    timeLineAdapter.list = timeLineList
                 }
                 override fun onReplyClicked(view: View, position: Int) {
-                    if(timeLineAdapter.list[position].profile.userSeq != mainViewModel.user.value!!.seq)
-                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToUserProfileFragment(timeLineAdapter.list[position].profile.userSeq))
-                    else{
-                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToMyPageFragment())
-                    }
+                    findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToStoryDetailFragment(timeLineList[position].story.seq))
+//                    if(timeLineAdapter.list[position].profile.userSeq != mainViewModel.user.value!!.seq)
+//                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToUserProfileFragment(timeLineAdapter.list[position].profile.userSeq))
+//                    else{
+//                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToMyPageFragment())
+//                    }
                 }
                 override fun onMenuClicked(view: View, position: Int) {
                     selectedPosition = position
@@ -108,6 +113,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     private fun initViewModel(){
         storyViewModel.timelineList.observe(viewLifecycleOwner){
+            timeLineList = it
             timeLineAdapter.list = it
         }
         storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
