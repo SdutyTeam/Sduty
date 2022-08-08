@@ -23,7 +23,6 @@ class FollowAdapter(val mySeq: Int, var myProfile: Profile): RecyclerView.Adapte
         fun bind(follow: Follow){
             binding.apply {
                 data = follow
-                Log.d(TAG, "bind: ${follow}")
                 var flagMe = false
                 if(mySeq != follow.profile!!.userSeq){
                     if(tabFlag == FLAG_FOLLOWER) {
@@ -41,9 +40,9 @@ class FollowAdapter(val mySeq: Int, var myProfile: Profile): RecyclerView.Adapte
                     flagMe = true
                     btnFollow.text = "본인"
                 }
-                if(myProfile.follows!!.get("${follow.followeeSeq}") != null){
-                    btnFollow.text = "취소"
-                }
+//                if(myProfile.follows!!.get("${follow.followeeSeq}") != null){
+//                    btnFollow.text = "취소"
+//                }
 
                constProfile.setOnClickListener {
                     onClickFollowListener.onClickProfile(follow)

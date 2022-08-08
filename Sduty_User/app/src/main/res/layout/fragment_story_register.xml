@@ -38,13 +38,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <TextView
+            <ImageView
                 android:id="@+id/common_top_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                tools:text="새 게시물"
-                android:textSize="18sp"
-                android:gravity="center"
+                android:src="@drawable/menu_logo_text_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="16dp"
@@ -54,9 +52,10 @@
             <Button
                 android:id="@+id/btn_disclosure"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="공개 범위"
-                android:textSize="14sp"
+                android:textSize="12sp"
+                android:background="@drawable/dialog_white_border"
                 android:onClick="showDisclosurePopup"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintTop_toTopOf="parent"
@@ -67,11 +66,12 @@
             <!-- AppBar 게시물 등록 버튼 : 게시물 등록 & 타임라인으로 돌아감 -->
             <ImageView
                 android:id="@+id/iv_register_story"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/icon_edit_square"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_menu_library_add_black_24"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -177,6 +177,7 @@
                     android:layout_height="match_parent"
                     android:text="이미지 추가"
                     android:src="@{vm.image == null ? @drawable/empty_image : vm.image}"
+                    tools:src="@drawable/empty_image"
                     app:layout_constraintTop_toBottomOf="@id/btn_add_img"
                     />
 

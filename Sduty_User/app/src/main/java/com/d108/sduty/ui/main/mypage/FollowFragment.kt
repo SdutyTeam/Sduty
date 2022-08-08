@@ -65,7 +65,6 @@ class FollowFragment : Fragment() {
                 followAdapter.tabFlag = FLAG_FOLLOWER
                 followAdapter.list = followerList.value!!
                 setMyFollowPage(false)
-                Log.d(TAG, "initViewModel: $it")
             }
             followeeList.observe(viewLifecycleOwner){
                 if(args.userSeq == mainViewModel.user.value!!.seq){
@@ -75,7 +74,6 @@ class FollowFragment : Fragment() {
                 }
                 followAdapter.tabFlag = FLAG_FOLLOWEE
                 followAdapter.list = followeeList.value!!
-                Log.d(TAG, "initViewModel: $it")
             }
         }
         storyViewModel.isFollowSucceed.observe(viewLifecycleOwner){

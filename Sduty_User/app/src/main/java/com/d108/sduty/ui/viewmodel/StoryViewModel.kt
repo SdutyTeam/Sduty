@@ -273,7 +273,6 @@ class StoryViewModel: ViewModel() {
     val isFollowSucceed: LiveData<Boolean>
         get() = _isFollowSucceed
     fun doFollow(follow: Follow){
-        Log.d(TAG, "doFollow: $follow")
         viewModelScope.launch(Dispatchers.IO) {
             Retrofit.profileApi.doFollow(follow).let {
                 if (it.isSuccessful) {

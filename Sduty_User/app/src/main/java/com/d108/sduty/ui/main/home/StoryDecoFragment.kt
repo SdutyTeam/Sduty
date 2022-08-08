@@ -9,24 +9,24 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.d108.sduty.databinding.FragmentStoryDecoBinding
-import com.d108.sduty.ui.main.home.viewmodel.HomeViewModel
-import com.d108.sduty.utils.navigateBack
-import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.model.dto.Task
+import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.showToast
-import java.util.*
 
 //게시물 사진 꾸미기 - 타임스탬프, 텍스트 컬러, 템플릿 선택, 공유, 저장
 private const val TAG ="StoryDecoFragment"
 class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogFragment() {
     private lateinit var binding: FragmentStoryDecoBinding
+    private val timerViewModel: TimerViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
+
+    private lateinit var taskList: MutableList<Task>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +35,7 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
     ): View? {
         binding = FragmentStoryDecoBinding.inflate(inflater, container, false)
         val fileUriStr = fileUriStr
-        if (fileUriStr.equals("")) {
+        if (fileUriStr.isEmpty()) {
             requireContext().showToast("값이 비어 있습니다!!")
         }
         else {
@@ -90,6 +90,13 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
             }
         }
     }
+
+    private fun initViewModel(){
+        timerViewModel.report.observe(viewLifecycleOwner){
+
+        }
+    }
+
 
     private fun saveImageBitmap(bitmap: Bitmap) {
         //findNavController().safeNavigate(StoryDecoFragmentDirections.actionStoryDecoFragmentToStoryRegisterFragment(bitmap))

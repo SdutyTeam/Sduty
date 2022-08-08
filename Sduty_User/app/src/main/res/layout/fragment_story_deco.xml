@@ -32,13 +32,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <TextView
+            <ImageView
                 android:id="@+id/common_top_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                tools:text="이미지 템플릿 적용"
-                android:textSize="18sp"
-                android:gravity="center"
+                android:src="@drawable/menu_logo_text_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="16dp"
@@ -56,6 +54,21 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
+            android:layout_marginVertical="12dp"
+            >
+        <Spinner
+            android:id="@+id/spinner_story_deco"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
+        </androidx.cardview.widget.CardView>
+
         <!-- 템플릿 적용된 이미지 미리보기 -->
         <FrameLayout
             android:id="@+id/layout_preview"
@@ -64,7 +77,7 @@
             android:layout_marginTop="12dp"
             android:background="@color/black"
             app:layout_constraintDimensionRatio="3:4"
-            app:layout_constraintTop_toBottomOf="@id/common_top">
+            app:layout_constraintTop_toBottomOf="@id/card_spinner">
 
             <ImageView
                 android:id="@+id/img_preview"
