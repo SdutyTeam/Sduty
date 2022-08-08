@@ -78,6 +78,7 @@ class StoryViewModel: ViewModel() {
             Retrofit.storyApi.getTimelineDetail(storySeq).let {
                 if (it.isSuccessful && it.body() != null) {
                     _timeLine.postValue(it.body() as Timeline)
+                    Log.d(TAG, "getTimelineValue: ${it.body()}")
                 }else{
                     Log.d(TAG, "getStoryValue: ${it.code()}")
                 }
@@ -261,9 +262,23 @@ class StoryViewModel: ViewModel() {
             Retrofit.profileApi.getProfileValue(userSeq).let {
                 if(it.isSuccessful && it.body() != null) {
                     _profile.postValue(it.body() as Profile)
-                    Log.d(TAG, "getProfileValue: ${it.body()}")
                 }else{
                     Log.d(TAG, "getProfileValue: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    private val _isFollowSucceed = MutableLiveData<Boolean>(false)
+    val isFollowSucceed: LiveData<Boolean>
+        get() = _isFollowSucceed
+    fun doFollow(follow: Follow){
+        viewModelScope.launch(Dispatchers.IO) {
+            Retrofit.profileApi.doFollow(follow).let {
+                if (it.isSuccessful) {
+                    _isFollowSucceed.postValue(!_isFollowSucceed.value!!)
+                } else {
+                    Log.d(TAG, "doFollow: ${it.code()}")
                 }
             }
         }

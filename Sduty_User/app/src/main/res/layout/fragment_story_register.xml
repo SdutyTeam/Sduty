@@ -38,13 +38,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <TextView
+            <ImageView
                 android:id="@+id/common_top_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                tools:text="새 게시물"
-                android:textSize="18sp"
-                android:gravity="center"
+                android:src="@drawable/menu_logo_text_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="16dp"
@@ -54,9 +52,10 @@
             <Button
                 android:id="@+id/btn_disclosure"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="공개 범위"
-                android:textSize="14sp"
+                android:textSize="12sp"
+                android:background="@drawable/dialog_white_border"
                 android:onClick="showDisclosurePopup"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintTop_toTopOf="parent"
@@ -65,27 +64,84 @@
 
 
             <!-- AppBar 게시물 등록 버튼 : 게시물 등록 & 타임라인으로 돌아감 -->
-            cd <ImageView
+            <ImageView
                 android:id="@+id/iv_register_story"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/icon_edit_square"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_menu_library_add_black_24"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_tag"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/common_top">
+
+            <!-- 관심분야 리스트뷰 : 관심분야 text 버튼으로 이루어져 있음 -->
+
+            <!-- 추가 버튼 : 관심 분야를 추가할 수 있는 버튼 -->
+            <Button
+                android:id="@+id/btn_add_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:src="@drawable/icon_add_circle"
+                android:text="공부 분야 +"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:background="@drawable/gradient_border"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_selected_tag"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                app:layout_constraintTop_toTopOf="@id/btn_add_subject"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_add_subject"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         <!-- 게시물 글 작성란 -->
-        <EditText
-            android:id="@+id/et_write"
+        <!--android:maxLength="200"-->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_write"
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/common_top"/>
-        <!--android:maxLength="200"-->
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_tag"
+            android:layout_margin="3dp"
+            app:cardCornerRadius="15dp"
+            >
+
+            <EditText
+                android:id="@+id/et_write"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:background="@drawable/dialog_white_border"
+                android:gravity="start|top"
+                android:layout_margin="10dp"
+                android:hint="적고 싶은 이야기를 써보세요 :)"
+                />
+
+
+        </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/tv_word_length"
@@ -94,7 +150,8 @@
             android:gravity="end"
             android:textSize="16sp"
             android:text="글자 수 200자 제한"
-            app:layout_constraintTop_toBottomOf="@id/et_write"/>
+            android:textColor="@color/onlight_03"
+            app:layout_constraintTop_toBottomOf="@id/card_view_write"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -103,59 +160,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_word_length"
-            app:layout_constraintBottom_toTopOf="@id/layout_tag">
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <!-- 이미지 추가 버튼 : 촬영 또는 갤러리의 이미지를 가져올 수 있다. -->
 
-            <ImageView
-                android:id="@+id/btn_add_img"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="이미지 추가"
-                android:src="@{vm.image == null ? @drawable/btn_call_end : vm.image}"
-                />
+                android:layout_margin="5dp"
+                app:cardCornerRadius="15dp"
+                >
 
-            <ImageView
-                android:id="@+id/img_story"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/btn_add_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="이미지 추가"
+                    android:src="@{vm.image == null ? @drawable/empty_image : vm.image}"
+                    tools:src="@drawable/empty_image"
+                    app:layout_constraintTop_toBottomOf="@id/btn_add_img"
+                    />
+
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_tag"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
 
-            <!-- 관심분야 리스트뷰 : 관심분야 text 버튼으로 이루어져 있음 -->
-
-            <Button
-                android:enabled="false"
-                android:text="태그"
-                android:textSize="18sp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <!-- 추가 버튼 : 관심 분야를 추가할 수 있는 버튼 -->
-            <ImageView
-                android:id="@+id/btn_add_subject"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/icon_add_circle"
-                android:layout_gravity="center"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_selected_tag"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

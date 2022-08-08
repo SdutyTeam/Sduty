@@ -77,7 +77,7 @@ class TimerFragment : Fragment() {
             // 타이머
             timer.observe(viewLifecycleOwner) { time ->
                 val hour = time / 60 / 60
-                val min = time / 60
+                val min = (time / 60) % 60
                 val sec = time % 60
                 binding.tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
             }
@@ -100,6 +100,7 @@ class TimerFragment : Fragment() {
                 when (timerViewModel.isRunningTimer.value) {
                     false -> {
                         timerViewModel.startTimer()
+                        timerViewModel.saveTime()
                     }
                     true -> {
                         timerViewModel.delayTimer()
@@ -127,6 +128,7 @@ class TimerFragment : Fragment() {
             // 첫 화면은 오늘 날짜로 설정
             commonSelectedDate.text = today
             timerViewModel.selectDate(today)
+            timerViewModel.restoreTime()
         }
     }
 
@@ -138,20 +140,20 @@ class TimerFragment : Fragment() {
             binding.commonSelectedDate.text = selectedDate
             timerViewModel.selectDate(selectedDate)
 
-            when(selectedDate != today){
+            when(selectedDate == today){
                 true -> { // 오늘
                     binding.apply {
                         tvTimer.visibility = View.VISIBLE
-                        ivTimer.visibility = View.INVISIBLE
-                        btnReturnToday.text = "오늘($today) 로 돌아가기"
-                        btnReturnToday.visibility = View.VISIBLE
+                        ivTimer.visibility = View.VISIBLE
+                        btnReturnToday.visibility = View.GONE
                     }
                 }
                 false -> { // 다른 날
                     binding.apply {
                         tvTimer.visibility = View.GONE
-                        ivTimer.visibility = View.VISIBLE
-                        btnReturnToday.visibility = View.GONE
+                        ivTimer.visibility = View.INVISIBLE
+                        btnReturnToday.text = "오늘($today) 로 돌아가기"
+                        btnReturnToday.visibility = View.VISIBLE
                     }
                 }
             }

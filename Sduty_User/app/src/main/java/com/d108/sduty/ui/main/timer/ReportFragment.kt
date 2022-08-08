@@ -2,6 +2,7 @@ package com.d108.sduty.ui.main.timer
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +22,7 @@ import com.d108.sduty.model.dto.Report
 import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.study.MyStudyFragmentDirections
 import com.d108.sduty.ui.main.timer.adapter.TaskListAdapter
+import com.d108.sduty.ui.main.timer.dialog.TaskDialog
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.convertTimeDateToString
@@ -27,16 +30,17 @@ import com.d108.sduty.utils.safeNavigate
 import java.util.*
 
 private const val TAG = "ReportFragment"
+
 class ReportFragment : Fragment() {
-    private lateinit var binding : FragmentReportBinding
+    private lateinit var binding: FragmentReportBinding
 
-    private val mainViewModel : MainViewModel by activityViewModels()
-    private val timerViewModel : TimerViewModel by viewModels({requireActivity()})
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val timerViewModel: TimerViewModel by viewModels({ requireActivity() })
 
-    private lateinit var today : String
+    private lateinit var today: String
 
-    private lateinit var taskList : List<Task>
-    private lateinit var taskListAdapter : TaskListAdapter
+    private lateinit var taskList: List<Task>
+    private lateinit var taskListAdapter: TaskListAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,13 +68,13 @@ class ReportFragment : Fragment() {
 
     }
 
-    private fun initViewModel(){
-        timerViewModel.report.observe(viewLifecycleOwner){ report ->
+    private fun initViewModel() {
+        timerViewModel.report.observe(viewLifecycleOwner) { report ->
             updateAdapter(report)
         }
     }
 
-    private fun showDatePicker(){
+    private fun showDatePicker() {
         val cal = Calendar.getInstance()
         // 날짜 선택 후 동작할 리스너
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, day ->
@@ -78,7 +82,7 @@ class ReportFragment : Fragment() {
             binding.commonSelectedDate.text = selectedDate
             timerViewModel.selectDate(selectedDate)
 
-            when(selectedDate != today){
+            when (selectedDate != today) {
                 true -> { // 오늘
                     binding.apply {
                         btnReturnToday.text = "오늘($today) 로 돌아가기"
@@ -93,11 +97,14 @@ class ReportFragment : Fragment() {
             }
         }
         // 캘린더 다이얼로그 출력
-        DatePickerDialog(requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(
-            Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
+        DatePickerDialog(
+            requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(
+                Calendar.MONTH
+            ), cal.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 
-    private fun initView(){
+    private fun initView() {
         today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
         binding.apply {
@@ -117,12 +124,18 @@ class ReportFragment : Fragment() {
     }
 
     // 리사이클러뷰 갱신
-    private fun updateAdapter(report : Report){
-        taskListAdapter = TaskListAdapter(report.tasks)
-        taskListAdapter.onClickTaskItem = object : TaskListAdapter.OnClickTaskItem{
-            override fun onClick(view: View, position: Int) {
-                // TODO: 상세조회 다이얼로그
-                Toast.makeText(requireContext(), "${position}번 상세조회", Toast.LENGTH_SHORT).show()
+    private fun updateAdapter(report: Report) {
+        taskListAdapter = TaskListAdapter(requireActivity(), report.tasks)
+        taskListAdapter.onClickTaskItem = object : TaskListAdapter.OnClickTaskItem {
+            override fun onClick(view: View, fragmentActivity: FragmentActivity, position: Int) {
+
+                TaskDialog().apply {
+                    arguments = Bundle().apply {
+                        putString("Action", "Info")
+                        putInt("Position", position)
+                    }
+                    show(fragmentActivity.supportFragmentManager, "TaskDialog")
+                }
             }
         }
         binding.rvReport.apply {

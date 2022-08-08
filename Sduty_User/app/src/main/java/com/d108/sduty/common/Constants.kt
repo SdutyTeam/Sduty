@@ -36,3 +36,6 @@ const val ALL_TAG = 2
 
 const val PROFILE = 0
 const val NOT_PROFILE = 1
+
+const val FLAG_FOLLOWER = 0
+const val FLAG_FOLLOWEE = 1

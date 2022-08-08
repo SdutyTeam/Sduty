@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Report
+import com.d108.sduty.model.dto.Task
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.utils.convertTimeDateToString
 import com.d108.sduty.utils.convertTimeStringToDate
@@ -40,10 +41,12 @@ class TimerViewModel() : ViewModel() {
     val delayTime: LiveData<Int>
         get() = _delayTime
 
+    // 현재 동작 중인지 검사
     private val _isRunningTimer = MutableLiveData<Boolean>(false)
     val isRunningTimer: LiveData<Boolean>
         get() = _isRunningTimer
 
+    // 현재 유예 중인지 검사
     private var isDelayingTimer = false
 
     // 시간 측정 시작 시간
@@ -59,37 +62,48 @@ class TimerViewModel() : ViewModel() {
         getReport(userSeq, convertedDate)
     }
 
-    // TODO: SharedPreferences 또는 SaveStateViewModel 
     // 앱이 종료 되었을 경우 측정 시간을 복구한다.
     fun restoreTime() {
-        _startTime = ApplicationClass.timerPref.getString("StartTime", "00:00:00")!!
+        val savedStartTime = ApplicationClass.timerPref.getString("StartTime", "")!!
 
         // 측정하던 정보가 남아 있을 경우
-        if(_startTime != "00:00:00"){
-            val curTime = Date(System.currentTimeMillis())
-            val time = convertTimeStringToDate(_startTime, "hh:mm:ss").time.toInt()
-            _timer.value = time
+        if (savedStartTime.isNotEmpty() && !isRunningTimer.value!!) {
+            val convertedStartTime =
+                convertTimeStringToDate(savedStartTime!!, "yyyy-MM-dd hh:mm:ss")
+            // 공부한 시간
+            val studyTime = System.currentTimeMillis() - convertedStartTime.time
+
+            _startTime = convertTimeDateToString(convertedStartTime, "hh:mm:ss")
+
+            _timer.value = (studyTime / 1000).toInt()
+
             startTimer()
         }
     }
+
     // 시간 측정을 시작한다.
     fun startTimer() {
-        // 측정 시작 시간을 저장한다.
-        _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
-
-        // 시작 시간을 디바이스에 저장
-        ApplicationClass.timerPref.edit().putString("StartTime", startTime).apply()
-
         // TODO: 스터디에 시작 정보 알림
 
         _isRunningTimer.value = true
 
         timerTask = timer(period = 1000) {
-            _timer.postValue(timer.value!! +1)
-            if(isDelayingTimer){
-                _delayTime.postValue(delayTime.value!! +1)
+            _timer.postValue(timer.value!! + 1)
+            if (isDelayingTimer) {
+                _delayTime.postValue(delayTime.value!! + 1)
             }
         }
+    }
+
+    // 측정 시작 시간을 저장한다.
+    fun saveTime() {
+        _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
+
+        // 시작 시간을 디바이스에 저장
+        ApplicationClass.timerPref.edit().putString(
+            "StartTime",
+            convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd hh:mm:ss")
+        ).apply()
     }
 
     // 측정 시간을 유예한다.
@@ -108,18 +122,25 @@ class TimerViewModel() : ViewModel() {
 
         // TODO: 스터디에 종료 정보 알림
 
-        // TODO: 서버에 종료 정보 알림 
-
-        ApplicationClass.timerPref.edit().putString("StartTime", "00:00:00").apply()
+        ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
         _timer.postValue(0)
         resetDelayTimer()
     }
 
-    fun saveTask(report: Report){
+    fun saveTask(report: Report) {
         // Task 저장
         insertTask(report)
+    }
+
+    fun removeTask(position: Int) {
+        val seq = report.value!!.tasks[position].seq
+        deleteTask(seq)
+    }
+
+    fun modifyTask(task: Task){
+        updateTask(task)
     }
 
     /* API */
@@ -133,11 +154,11 @@ class TimerViewModel() : ViewModel() {
                 if (it.isSuccessful && it.body() != null) {
                     Log.d(TAG, "getReport: body ${it.body()}")
                     _report.postValue(it.body())
-                } else if(it.code() == 401) {
+                } else if (it.code() == 401) {
                     // 못 받았을 때
                     Log.d(TAG, "getReport: error ${it.errorBody()}")
-                    _report.postValue(Report(0,0,selectedDate,"00:00:00", listOf()))
-                }else {
+                    _report.postValue(Report(0, 0, selectedDate, "00:00:00", listOf()))
+                } else {
                     _toastMessage.postValue("서버에서 불러오는데 실패했습니다..")
                 }
             }
@@ -145,15 +166,45 @@ class TimerViewModel() : ViewModel() {
     }
 
     // 시간 측정 기록 저장
-    private fun insertTask(report: Report){
+    private fun insertTask(report: Report) {
         Log.d(TAG, "insertTask: ${report}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.insertTask(report).let {
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     _toastMessage.postValue("측정 기록 등록을 완료하였습니다.")
                 } else {
-                    Log.e(TAG, "saveTask: ${it.code()}", )
+                    Log.e(TAG, "saveTask: ${it.code()}")
                     _toastMessage.postValue("서버에 등록하는데 실패하였습니다.")
+                }
+            }
+        }
+    }
+
+    // 삭제
+    private fun deleteTask(seq: Int) {
+        Log.d(TAG, "deleteTask: ${seq}")
+        CoroutineScope(Dispatchers.IO).launch {
+            Retrofit.timerApi.deleteTask(seq).let {
+                if (it.isSuccessful) {
+                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                } else {
+                    Log.e(TAG, "saveTask: ${it.code()}")
+                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
+                }
+            }
+        }
+    }
+
+    // 수정
+    private fun updateTask(task: Task){
+        Log.d(TAG, "updateTask: ${task}")
+        CoroutineScope(Dispatchers.IO).launch {
+            Retrofit.timerApi.updateTask(task.seq, task).let {
+                if (it.isSuccessful) {
+                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                } else {
+                    Log.e(TAG, "saveTask: ${it.code()}")
+                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
                 }
             }
         }
