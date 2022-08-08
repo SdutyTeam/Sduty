@@ -308,19 +308,19 @@ public class StoryController {
 		}
 	}
 	
-//	@ApiOperation(value = "추천 스토리 조회(유저 시퀀스로) : JobHashtag > List<Timeline> 리턴", response = Timeline.class)
-//	@GetMapping("/recommand/{userSeq}")
-//	public ResponseEntity<?> selectRecommand(@PathVariable int userSeq) throws Exception {
-//		try {
-//			Timeline t = timelineService.selectRecommandTimeline(userSeq);
-//			if(t != null) {
-//				return new ResponseEntity<Timeline>(t, HttpStatus.OK);
-//			}
-//		} catch (Exception e) {
-//			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-//		}
-//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-//	}
+	@ApiOperation(value = "추천 스토리 조회(유저 시퀀스로) : JobHashtag > List<Timeline> 리턴", response = Timeline.class)
+	@GetMapping("/recommand/{userSeq}")
+	public ResponseEntity<?> selectRecommand(@PathVariable int userSeq) throws Exception {
+		try {
+			Timeline t = timelineService.selectRecommandTimeline(userSeq);
+			if(t != null) {
+				return new ResponseEntity<Timeline>(t, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
 	
 	public void makeThumbnail(MultipartFile mpImage) throws Exception {
 		//Make Thumbnail
