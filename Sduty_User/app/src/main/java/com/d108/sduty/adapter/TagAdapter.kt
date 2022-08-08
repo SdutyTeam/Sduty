@@ -33,7 +33,7 @@ class TagAdapter(val flag: Int): RecyclerView.Adapter<TagAdapter.ViewHolder>() {
                 binding.apply {
                     btnTag.text = name
                     btnTag.setOnClickListener {
-                        onClickTagItem.onClick(it, adapterPosition)
+                        onClickTagItem.onClick(it, adapterPosition, name)
                     }
                 }
             }else{
@@ -64,7 +64,7 @@ class TagAdapter(val flag: Int): RecyclerView.Adapter<TagAdapter.ViewHolder>() {
         return 0
     }
     interface OnClickTagListener{
-        fun onClick(view: View, position: Int)
+        fun onClick(view: View, position: Int, tagName: String)
     }
     lateinit var onClickTagItem: OnClickTagListener
 
