@@ -52,14 +52,22 @@ class MyPageFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel.getProfileValue(mainViewModel.user.value!!.seq)
-        viewModel.userStoryList.observe(viewLifecycleOwner){
-            storyAdapter.list = it
+        viewModel.apply {
+            userStoryList.observe(viewLifecycleOwner){
+                storyAdapter.list = it
+            }
+            scrapStoryList.observe(viewLifecycleOwner){
+                storyAdapter.list = it
+            }
+            contributionList.observe(viewLifecycleOwner){
+                contributionAdapter.list = it
+                Log.d(TAG, "initViewModel: $it")
+            }
+            getContribution(mainViewModel.user.value!!.seq)
+            getUserStoryListValue(mainViewModel.user.value!!.seq)
+            getProfileValue(mainViewModel.user.value!!.seq)
+
         }
-        viewModel.scrapStoryList.observe(viewLifecycleOwner){
-            storyAdapter.list = it
-        }
-        viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
     }
 
     private fun initView(){

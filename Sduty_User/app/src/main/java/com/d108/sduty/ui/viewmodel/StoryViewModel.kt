@@ -329,6 +329,21 @@ class StoryViewModel: ViewModel() {
         }
     }
 
+    private val _contributionList = MutableLiveData<List<Boolean>>()
+    val contributionList: LiveData<List<Boolean>>
+        get() = _contributionList
+    fun getContribution(userSeq: Int){  
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getContributionList(userSeq).let { 
+                if(it.isSuccessful && it.body() != null){
+                    _contributionList.postValue(it.body())
+                }else{
+                    Log.d(TAG, "getContribution: ${it.code()}")
+                }
+            }
+        }
+    }
+
     inner class BitmapRequestBody(private val bitmap: Bitmap) : RequestBody() {
         override fun contentType(): MediaType = "image/*".toMediaType()
         override fun writeTo(sink: BufferedSink) {

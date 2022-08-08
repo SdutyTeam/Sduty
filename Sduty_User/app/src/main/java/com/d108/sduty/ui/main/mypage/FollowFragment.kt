@@ -92,7 +92,7 @@ class FollowFragment : Fragment() {
         followAdapter.apply {
             onClickFollowListener = object : FollowAdapter.OnClickFollowListener{
                 override fun onClickFollowBtn(follow: Follow) {
-                    storyViewModel.doFollow(Follow(mainViewModel.user.value!!.seq, follow.profile!!.userSeq))
+                    findNavController().safeNavigate(FollowFragmentDirections.actionFollowFragmentToUserProfileFragment(follow.profile!!.userSeq))
                 }
                 override fun onClickProfile(follow: Follow) {
                     findNavController().safeNavigate(FollowFragmentDirections.actionFollowFragmentToUserProfileFragment(follow.profile!!.userSeq))
