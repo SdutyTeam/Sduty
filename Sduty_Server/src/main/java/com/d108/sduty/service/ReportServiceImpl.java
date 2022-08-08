@@ -70,7 +70,7 @@ public class ReportServiceImpl implements ReportService {
 		String totalTime = String.format("%02d:%02d:%02d", hour, minute, sec);
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("reportDate", report.getDate());
+		resultMap.put("reportDate", date);
 		resultMap.put("totalTime", totalTime);
 		resultMap.put("tasks", report.getTask());
 
