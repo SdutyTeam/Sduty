@@ -128,8 +128,8 @@ public class ProfileServiceImpl implements ProfileService {
 		Profile p;
 		if(OP.isPresent()) {
 			p = profileRepo.findRecommanded(OP.get().getJob(), userSeq);
-			p.setFollowers(followRepo.countByFollowerSeq(userSeq).intValue());
-			p.setFollowees(followRepo.countByFolloweeSeq(userSeq).intValue());
+			p.setFollowers(followRepo.countByFollowerSeq(p.getUserSeq()).intValue());
+			p.setFollowees(followRepo.countByFolloweeSeq(p.getUserSeq()).intValue());
 			return p;
 		}
 		return null;
