@@ -19,6 +19,7 @@ import com.d108.sduty.repo.AdminRepo;
 import com.d108.sduty.repo.DailyQuestionRepo;
 import com.d108.sduty.repo.NoticeRepo;
 import com.d108.sduty.repo.QnaRepo;
+import com.d108.sduty.repo.StoryRepo;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -31,6 +32,8 @@ public class AdminServiceImpl implements AdminService {
 	private DailyQuestionRepo dailyqRepo;
 	@Autowired
 	private QnaRepo qnaRepo;
+	@Autowired
+	private StoryRepo storyRepo;
 	
 	@Override
 	public Optional<Admin> getAdmin(String id) {
@@ -64,8 +67,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<Story> getBadStories() {
-		// TODO Auto-generated method stub
-		return null;
+		return storyRepo.findByWarningGreaterThan(0);
 	}
 
 	@Override
