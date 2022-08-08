@@ -7,10 +7,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.sign.LoginFragment"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="20dp"
-        >
+        android:background="@drawable/bg_gradient"
+        tools:context=".ui.sign.LoginFragment">
+
+<!--        android:layout_marginHorizontal="20dp"-->
+<!--        android:layout_marginBottom="20dp"-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_top"
@@ -179,15 +180,16 @@
                         app:layout_constraintTop_toTopOf="parent"
                         />
 
-                    <Button
-                        android:id="@+id/btn_join"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="회원가입"
-                        app:layout_constraintTop_toBottomOf="@id/btn_login"
-                        />
+<!--                    <Button-->
+<!--                        android:id="@+id/btn_join"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="회원가입"-->
+<!--                        app:layout_constraintTop_toBottomOf="@id/btn_login"-->
+<!--                        />-->
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 
@@ -197,11 +199,16 @@
 
         </androidx.core.widget.NestedScrollView>
 
-
-
-
-
-
+        <TextView
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입하기"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
