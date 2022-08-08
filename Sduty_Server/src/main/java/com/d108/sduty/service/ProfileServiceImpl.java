@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.UserInterest;
+import com.d108.sduty.repo.FollowRepo;
 import com.d108.sduty.repo.InterestHashtagRepo;
 import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.repo.StoryRepo;
@@ -30,6 +31,9 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Autowired
 	private StoryRepo storyRepo;
+	
+	@Autowired
+	private FollowRepo followRepo;
 	
 	@Override
 	public Profile insertProfile(Profile profile) throws Exception {
@@ -65,6 +69,8 @@ public class ProfileServiceImpl implements ProfileService {
 		Profile p;
 		if(OProfile.isPresent()) {
 			p = OProfile.get();
+			p.setFollowers(followRepo.countByFollowerSeq(userSeq).intValue());
+			p.setFollowees(followRepo.countByFolloweeSeq(userSeq).intValue());
 			p.setInterestHashtags(listIH);
 			return p;
 		}
