@@ -33,6 +33,11 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
 
     private var taskList = listOf<Task>()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainViewModel.displayBottomNav(false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
