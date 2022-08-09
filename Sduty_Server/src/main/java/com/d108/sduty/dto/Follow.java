@@ -27,11 +27,6 @@ public class Follow {
 	@Column(name = "followee_seq")
 	private int followeeSeq;
 	
-	@Override
-	public String toString() {
-		return "Follow [followerSeq=" + followerSeq + ", followeeSeq=" + followeeSeq + "]";
-	}
-	
 	@Transient
 	private Profile profile;
 	
