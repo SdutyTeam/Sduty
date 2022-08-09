@@ -111,6 +111,7 @@
                         android:layout_height="50dp"
                         android:layout_marginVertical="20dp"
                         android:hint="ID"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:backgroundTint="@color/white"
                         android:singleLine="true" />
@@ -122,6 +123,7 @@
                         android:layout_marginVertical="20dp"
                         android:hint="Password"
                         android:inputType="textPassword"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:backgroundTint="@color/white"
                         android:singleLine="true"/>
