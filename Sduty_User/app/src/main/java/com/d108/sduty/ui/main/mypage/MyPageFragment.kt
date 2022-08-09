@@ -62,7 +62,6 @@ class MyPageFragment : Fragment() {
             }
             contributionList.observe(viewLifecycleOwner){
                 contributionAdapter.list = it
-                Log.d(TAG, "initViewModel: $it")
             }
             getContribution(mainViewModel.user.value!!.seq)
             getUserStoryListValue(mainViewModel.user.value!!.seq)

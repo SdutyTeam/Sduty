@@ -14,7 +14,7 @@ interface StoryApi {
 
     @Multipart
     @POST("/story")
-    suspend fun insertStory(@Part imageFile: MultipartBody.Part, @Part("story") story: RequestBody): Response<List<Story>>
+    suspend fun insertStory(@Part imageFile: MultipartBody.Part, @Part("story") story: RequestBody): Response<Timeline>
 
     @PUT("/story")
     suspend fun updateStory(@Body story: Story): Response<Timeline>
@@ -44,7 +44,7 @@ interface StoryApi {
     suspend fun getStoryRecommended(@Path("userSeq") userSeq: Int): Response<Timeline>
 
     @DELETE("/story/{story_seq}")
-    suspend fun deleteStory(@Path("story_seq")storySeq: Int): Response<List<Story>>
+    suspend fun deleteStory(@Path("story_seq")storySeq: Int): Response<Void>
 
     @GET("/story/{story_seq}/reply")
     suspend fun getReplyList(@Path("story_seq")storySeq: Int): Response<List<Reply>>

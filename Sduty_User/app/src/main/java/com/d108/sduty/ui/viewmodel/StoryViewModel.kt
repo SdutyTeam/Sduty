@@ -61,7 +61,6 @@ class StoryViewModel: ViewModel() {
                 val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
                 Log.d(TAG, "insertStory: ${response.code()}")
                 if(response.isSuccessful && response.body() != null){
-                    _storyList.postValue(response.body() as MutableList<Story>)
                     getStoryListValue(story.writerSeq)
                 }
             }catch (e: Exception){
