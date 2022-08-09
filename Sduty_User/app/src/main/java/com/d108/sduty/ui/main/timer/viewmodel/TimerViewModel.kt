@@ -21,10 +21,22 @@ import kotlin.concurrent.timer
 private const val TAG = "TimerViewModel"
 
 class TimerViewModel() : ViewModel() {
-    // 토스트 메시지
-    private val _toastMessage = MutableLiveData<String>()
-    val toastMessage: LiveData<String>
-        get() = _toastMessage
+    // 토스트 메시지 출력용
+    private val _isInsertedTask = MutableLiveData<Boolean>()
+    val isInsertedTask: LiveData<Boolean>
+        get() = _isInsertedTask
+
+    private val _isDeletedTask = MutableLiveData<Boolean>()
+    val isDeletedTask: LiveData<Boolean>
+        get() = _isDeletedTask
+
+    private val _isUpdatedTask = MutableLiveData<Boolean>()
+    val isUpdatedTask: LiveData<Boolean>
+        get() = _isUpdatedTask
+
+    private val _isErredConnection = MutableLiveData<Boolean>()
+    val isErredConnection: LiveData<Boolean>
+        get() = _isErredConnection
 
     // 선택된 날짜의 리포트
     private val _report = MutableLiveData<Report>()
@@ -147,6 +159,23 @@ class TimerViewModel() : ViewModel() {
     fun getTodayReport(userSeq: Int){
         val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
         getReport(userSeq, today)
+    }
+
+    fun resetLiveData(varName: String){
+        when(varName){
+            "isInsertedTask" -> {
+                _isInsertedTask.postValue(false)
+            }
+            "isUpdateTask" -> {
+                _isUpdatedTask.postValue(false)
+            }
+            "isDeletedTask" -> {
+                _isDeletedTask.postValue(false)
+            }
+            "isErredConnection" -> {
+                _isErredConnection.postValue(false)
+            }
+        }
     }
 
     /* API */
