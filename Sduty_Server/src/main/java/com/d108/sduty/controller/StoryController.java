@@ -73,7 +73,8 @@ public class StoryController {
 	@ApiOperation(value = "전체 스토리 조회(페이징) : UserSeq > Story", response = Timeline.class)
 	@GetMapping("/test")
 	public ResponseEntity<?> selectAllPagingStory(@RequestParam(value="userSeq") int userSeq, 
-            Pageable pageable) throws Exception {
+            @PageableDefault Pageable pageable) throws Exception {
+
 		System.out.println(userSeq);
 		Page<Timeline> timeLineList = timelineService.selectAllPagingTimelines(pageable, userSeq);
 		System.out.println(timeLineList);
