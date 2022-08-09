@@ -76,9 +76,11 @@ class PreviewFragment : Fragment() {
         }
         binding.previewVideoCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
-
+                binding.previewPreviewView.visibility = View.INVISIBLE
+                binding.imgPreview.visibility = View.VISIBLE
             } else{
-                initCameraPreview()
+                binding.previewPreviewView.visibility = View.VISIBLE
+                binding.imgPreview.visibility = View.INVISIBLE
             }
 
         }

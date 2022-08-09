@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.main.study
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
@@ -13,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -22,11 +24,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
+import com.d108.sduty.common.FLAG_STUDY
 import com.d108.sduty.common.SENDBIRD_APP_ID
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
 import com.d108.sduty.model.dto.Alarm
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.StudyRegisteViewModel
+import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.Status
 import com.d108.sduty.utils.showAlertDialog
@@ -41,13 +45,7 @@ class StudyRegistFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val studyRegisteViewModel: StudyRegisteViewModel by viewModels()
     private val args: StudyRegistFragmentArgs by navArgs()
-    private var mon_state: Boolean = false
-    private var tue_state: Boolean = false
-    private var wed_state: Boolean = false
-    private var thur_state: Boolean = false
-    private var fri_state: Boolean = false
-    private var sat_state: Boolean = false
-    private var sun_state: Boolean = false
+    private var category: String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -74,19 +72,12 @@ class StudyRegistFragment : Fragment() {
             false -> {
                 binding.dailyTime.visibility = View.GONE
                 binding.dailyWeek.visibility = View.GONE
-                binding.dailyCheck.visibility = View.GONE
             }
         }
 
         val peopleData:Array<String> = resources.getStringArray(R.array.array_people)
         val peopleAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, peopleData)
         binding.spinnerPeople.adapter = peopleAdapter
-
-        val categoryData:Array<String> = resources.getStringArray(R.array.array_category)
-        val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
-        binding.spinnerCategory.adapter = categoryAdapter
-
-
 
         binding.apply {
             btnCreateStudy.setOnClickListener { studyCreate() }
@@ -95,91 +86,139 @@ class StudyRegistFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
-            btnMon.setOnClickListener {
-                if(!mon_state){
-                    mon_state = true
-                    btnMon.setBackgroundColor(Color.GRAY)
-                } else{
-                    mon_state = false
-                    btnMon.setBackgroundColor(Color.WHITE)
-                }
-            }
-            btnTue.setOnClickListener {
-                if(!tue_state){
-                    tue_state = true
-                    btnTue.setBackgroundColor(Color.GRAY)
-                } else{
-                    tue_state = false
-                    btnTue.setBackgroundColor(Color.WHITE)
-                }
-            }
-            btnWed.setOnClickListener {
-                if(!wed_state){
-                    wed_state = true
-                    btnWed.setBackgroundColor(Color.GRAY)
-                } else{
-                    wed_state = false
-                    btnWed.setBackgroundColor(Color.WHITE)
-                }
-            }
-            btnThur.setOnClickListener {
-                if(!thur_state){
-                    thur_state = true
-                    btnThur.setBackgroundColor(Color.GRAY)
-                } else{
-                    thur_state = false
-                    btnThur.setBackgroundColor(Color.WHITE)
-                }
-            }
-            btnFri.setOnClickListener {
-                if(!fri_state){
-                    fri_state = true
-                    btnFri.setBackgroundColor(Color.GRAY)
-                } else{
-                    fri_state = false
-                    btnFri.setBackgroundColor(Color.WHITE)
-                }
-            }
-            btnSat.setOnClickListener {
-                if(!sat_state){
-                    sat_state = true
-                    btnSat.setBackgroundColor(Color.GRAY)
-                } else{
-                    sat_state = false
-                    btnSat.setBackgroundColor(Color.WHITE)
-                }
-            }
-            btnSun.setOnClickListener {
-                if(!sun_state){
-                    sun_state = true
-                    btnSun.setBackgroundColor(Color.GRAY)
-                } else{
-                    sun_state = false
-                    btnSun.setBackgroundColor(Color.WHITE)
+            studyRegistJob.text = mainViewModel.profile.value!!.job
+
+
+            studyRegistCategory.setOnClickListener {
+                TagSelectOneFragment(requireContext(), FLAG_STUDY).let{
+                    it.show(parentFragmentManager, null)
+                    it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
+                        @SuppressLint("ResourceAsColor")
+                        override fun onDismiss(tagName: String, flag: Int) {
+                            studyRegistCategory.setTextColor(R.color.purple_200)
+                            studyRegistCategory.setBackgroundResource(R.drawable.btn_study_regist)
+                            studyRegistCategory.text = tagName
+                            category = tagName
+                        }
+                    }
                 }
             }
 
 
-            checkBoxDaily.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            switchPass.setOnCheckedChangeListener { buttonView, isChecked ->
+                etStduyPass.isEnabled = isChecked
                 if(isChecked){
-                    btnMon.setBackgroundColor(Color.GRAY)
-                    btnTue.setBackgroundColor(Color.GRAY)
-                    btnWed.setBackgroundColor(Color.GRAY)
-                    btnThur.setBackgroundColor(Color.GRAY)
-                    btnFri.setBackgroundColor(Color.GRAY)
-                    btnSat.setBackgroundColor(Color.GRAY)
-                    btnSun.setBackgroundColor(Color.GRAY)
-                }else{
-                    btnMon.setBackgroundColor(Color.WHITE)
-                    btnTue.setBackgroundColor(Color.WHITE)
-                    btnWed.setBackgroundColor(Color.WHITE)
-                    btnThur.setBackgroundColor(Color.WHITE)
-                    btnFri.setBackgroundColor(Color.WHITE)
-                    btnSat.setBackgroundColor(Color.WHITE)
-                    btnSun.setBackgroundColor(Color.WHITE)
+                    etStduyPass.setBackgroundResource(0)
+                } else{
+                    etStduyPass.setBackgroundResource(R.drawable.study_gray)
+                    etStduyPass.text = null
+                }
+
+            }
+
+            btnMon.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnMon.setBackgroundResource(R.drawable.daily_click)
+                    btnMon.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnMon.setBackgroundResource(R.drawable.border_study_solid)
+                    btnMon.setTextColor(Color.parseColor("#979797"))
                 }
             }
 
+            btnTue.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnTue.setBackgroundResource(R.drawable.daily_click)
+                    btnTue.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnTue.setBackgroundResource(R.drawable.border_study_solid)
+                    btnTue.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnWed.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnWed.setBackgroundResource(R.drawable.daily_click)
+                    btnWed.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnWed.setBackgroundResource(R.drawable.border_study_solid)
+                    btnWed.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnThur.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnThur.setBackgroundResource(R.drawable.daily_click)
+                    btnThur.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnThur.setBackgroundResource(R.drawable.border_study_solid)
+                    btnThur.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnFri.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnFri.setBackgroundResource(R.drawable.daily_click)
+                    btnFri.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnFri.setBackgroundResource(R.drawable.border_study_solid)
+                    btnFri.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnSat.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnSat.setBackgroundResource(R.drawable.daily_click)
+                    btnSat.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnSat.setBackgroundResource(R.drawable.border_study_solid)
+                    btnSat.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnSun.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnSun.setBackgroundResource(R.drawable.daily_click)
+                    btnSun.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnSun.setBackgroundResource(R.drawable.border_study_solid)
+                    btnSun.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+
+//            checkBoxDaily.setOnCheckedChangeListener { buttonView, isChecked ->
+//                if(isChecked){
+//                    btnMon.setBackgroundResource(R.drawable.daily_click)
+//                    btnTue.setBackgroundResource(R.drawable.daily_click)
+//                    btnWed.setBackgroundResource(R.drawable.daily_click)
+//                    btnThur.setBackgroundResource(R.drawable.daily_click)
+//                    btnFri.setBackgroundResource(R.drawable.daily_click)
+//                    btnSat.setBackgroundResource(R.drawable.daily_click)
+//                    btnSun.setBackgroundResource(R.drawable.daily_click)
+//                }else{
+//                    btnMon.setBackgroundResource(R.drawable.daily_background)
+//                    btnTue.setBackgroundResource(R.drawable.daily_background)
+//                    btnWed.setBackgroundResource(R.drawable.daily_background)
+//                    btnThur.setBackgroundResource(R.drawable.daily_background)
+//                    btnFri.setBackgroundResource(R.drawable.daily_background)
+//                    btnSat.setBackgroundResource(R.drawable.daily_background)
+//                    btnSun.setBackgroundResource(R.drawable.daily_background)
+//                }
+//            }
+
+//            cbDailyRegist.setOnCheckedChangeListener { buttonView, isChecked ->
+//                if(isChecked){
+//                    timePicker.visibility = View.VISIBLE
+//                    dailyWeek.visibility = View.VISIBLE
+//                    dailyCheck.visibility = View.VISIBLE
+//                } else{
+//                    timePicker.visibility = View.GONE
+//                    dailyWeek.visibility = View.GONE
+//                    dailyCheck.visibility = View.GONE
+//                }
+//            }
 
             lifecycleOwner = this@StudyRegistFragment
             studyRegisteVM = studyRegisteViewModel
@@ -194,12 +233,13 @@ class StudyRegistFragment : Fragment() {
             var pass = etStduyPass.text?.toString()?.trim()
             val introduce = etStudyIntroduce.text.toString().trim()
             val people = spinnerPeople.selectedItem.toString()
-            val category = spinnerCategory.selectedItem.toString()
             val hour = binding.timePicker.hour.toString()
             val minute = binding.timePicker.minute
 
             if(name.isEmpty() || introduce.isEmpty()){
                 context?.showToast("빈 칸을 모두 입력해 주세요.")
+            } else if(category == ""){
+                context?.showToast("공부 분야를 선택해주세요.")
             }
             else{
                 studyRegisteViewModel.createSuccess.observe(viewLifecycleOwner){
@@ -228,12 +268,13 @@ class StudyRegistFragment : Fragment() {
                             }
                             Status.SUCCESS -> {
                                 resources.data?.let {
-                                    studyRegisteViewModel.camStudyCreate(
-                                        Study(
-                                            mainViewModel.profile.value!!.userSeq,
-                                            name, introduce, category, people.toInt(), pass, it
-                                        ), Alarm(0, "${hour}:${minute}:00", mon_state, tue_state, wed_state, thur_state, fri_state, sat_state, sun_state)
-                                    )
+                                        studyRegisteViewModel.camStudyCreate(
+                                            Study(
+                                                mainViewModel.profile.value!!.userSeq,
+                                                name, introduce, category, people.toInt(), pass, it
+                                            ), Alarm(0, "${hour}:${minute}:00", btnMon.isChecked, btnTue.isChecked,
+                                                btnWed.isChecked, btnThur.isChecked, btnFri.isChecked, btnSat.isChecked, btnSun.isChecked)
+                                        )
                                 }
                             }
                             Status.ERROR -> {
@@ -273,6 +314,7 @@ class StudyRegistFragment : Fragment() {
         }
 
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
