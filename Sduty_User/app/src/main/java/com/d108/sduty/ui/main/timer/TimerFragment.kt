@@ -64,14 +64,23 @@ class TimerFragment : Fragment() {
 
         timerViewModel.apply {
             // 토스트 메시지 출력 요청
-//            toastMessage.observe(viewLifecycleOwner) { message ->
-//                requireContext().showToast(message)
-//            }
+            isInsertedTask.observe(viewLifecycleOwner) { succeeded ->
+                if (succeeded) {
+                    requireContext().showToast("등록이 완료되었습니다.")
+                    resetLiveData("isInsertedTask")
+                }
+            }
+
+            isErredConnection.observe(viewLifecycleOwner) { erred ->
+                if (erred) {
+                    requireContext().showToast("서버와 연결하는데 실패했습니다.")
+                    resetLiveData("isErredConnection")
+                }
+            }
 
             // 하루 공부한 시간
             timerViewModel.report.observe(viewLifecycleOwner) { report ->
                 binding.tvTotalTime.text = report.totalTime
-                // TODO: 차트 변경
             }
 
             // 타이머
