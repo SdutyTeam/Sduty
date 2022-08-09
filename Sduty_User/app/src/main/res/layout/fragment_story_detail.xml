@@ -226,37 +226,44 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_bottom"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/scroll_view"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@drawable/gradient_border"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_register"
+            android:background="@drawable/gradient_study_border"
             android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
+            android:padding="1dp"
             >
 
             <EditText
                 android:id="@+id/et_reply"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/iv_register_reply"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="10dp"
                 android:hint="댓글을 남겨보세요"
+                android:singleLine="true"
                 android:background="@drawable/dialog_white_border"/>
 
-            <ImageView
-                android:id="@+id/iv_register_reply"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/icon_send_right"/>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="등록"
+            android:textColor="@color/app_blue"
+            app:layout_constraintTop_toTopOf="@id/common_bottom"
+            app:layout_constraintBottom_toBottomOf="@id/common_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="10dp"/>
+
 
 
 

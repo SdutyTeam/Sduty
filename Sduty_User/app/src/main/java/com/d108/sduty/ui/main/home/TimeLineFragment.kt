@@ -9,9 +9,11 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
+import com.d108.sduty.adapter.TimeLinePagingAdapter
 import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.FLAG_TIMELINE
 import com.d108.sduty.common.INTEREST_TAG
@@ -34,6 +36,8 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private var selectedPosition = 0
     private var timeLineList = mutableListOf<Timeline>()
 
+    private lateinit var pageAdapter: TimeLinePagingAdapter
+
     override fun onResume() {
         super.onResume()
         mainViewModel.displayBottomNav(true)
@@ -49,12 +53,24 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
-        initView()
+//        initViewModel()
+//        initView()
+        pageAdapter = TimeLinePagingAdapter(requireActivity())
+        storyViewModel.getTimelineListValue(mainViewModel.user.value!!.seq)
+        storyViewModel.pagingTimelineList.observe(viewLifecycleOwner){
+            Log.d(TAG, "onViewCreated: $it")
+            pageAdapter.submitData(this.lifecycle, it)
+
+
+        }
+        binding.recyclerTimeline.adapter = pageAdapter
+        binding.recyclerTimeline.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
     }
 
     private fun initView(){
         timeLineAdapter = TimeLineAdapter(requireActivity())
+        timeLineAdapter.setHasStableIds(true)
         timeLineAdapter.apply {
             onClickTimelineItem = object : TimeLineAdapter.TimeLineClickListener{
                 override fun onFavoriteClicked(view: View, position: Int) {
@@ -134,11 +150,13 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         storyViewModel.timelineList.observe(viewLifecycleOwner){
             timeLineList = it
             timeLineAdapter.list = it
+            Log.d(TAG, "initViewModel: timeline")
         }
 
         storyViewModel.filteredTimelineList.observe(viewLifecycleOwner){
             timeLineList = it
             timeLineAdapter.list = it
+            Log.d(TAG, "initViewModel: filteredtimeline")
         }
 
         storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)

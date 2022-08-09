@@ -103,4 +103,8 @@ dependencies {
 
     // TextView Gradient
     implementation 'com.github.veeyaarVR:SuperGradientTextView:1.1'
+
+    // Paging 3
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+
 }

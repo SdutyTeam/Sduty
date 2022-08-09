@@ -1,4 +1,4 @@
-package com.d108.sduty.ui.main.mypage
+package com.d108.sduty.ui.main.myposition
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

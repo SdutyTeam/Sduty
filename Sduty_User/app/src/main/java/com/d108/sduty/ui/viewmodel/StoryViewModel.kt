@@ -2,12 +2,14 @@ package com.d108.sduty.ui.viewmodel
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.navigation.navOptions
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.liveData
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.api.TimelinePagingSource
 import com.d108.sduty.model.dto.*
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +74,20 @@ class StoryViewModel: ViewModel() {
     private val _timeLine = MutableLiveData<Timeline>()
     val timeLine: LiveData<Timeline>
         get() = _timeLine
+
+    fun getTimelinePost(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {TimelinePagingSource(Retrofit.storyApi, userSeq)}
+    ).liveData
+
+    private val timeLinePosts = MutableLiveData<Int>()
+    val pagingTimelineList = timeLinePosts.switchMap {
+        getTimelinePost(it).cachedIn(viewModelScope)
+    }
+
+    fun getTimelineListValue(userSeq: Int){
+        timeLinePosts.postValue(userSeq)
+    }
 
     fun getTimelineValue(storySeq: Int){
         viewModelScope.launch(Dispatchers.IO){

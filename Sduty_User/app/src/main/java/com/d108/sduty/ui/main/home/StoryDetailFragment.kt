@@ -57,6 +57,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             ivTimelineContent.layoutParams.height = deviceHeight
             lifecycleOwner = this@StoryDetailFragment
         }
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 
@@ -87,7 +88,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         replyAdapter = ReplyAdapter()
         binding.apply {
             vm = viewModel
-            ivRegisterReply.setOnClickListener {
+            tvRegister.setOnClickListener {
                 if(etReply.text.isEmpty()){
                     requireContext().showToast("내용을 입력해 주세요")
                     return@setOnClickListener

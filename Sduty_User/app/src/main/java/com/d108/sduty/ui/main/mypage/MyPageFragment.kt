@@ -74,7 +74,9 @@ class MyPageFragment : Fragment() {
 
     private fun initView(){
         contributionAdapter = ContributionAdapter()
+        contributionAdapter.setHasStableIds(true)
         storyAdapter = StoryAdapter(requireActivity())
+        storyAdapter.setHasStableIds(true)
         storyAdapter.onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
             override fun onClick(story: Story, position: Int) {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToStoryDetailFragment(story.seq))
@@ -104,6 +106,7 @@ class MyPageFragment : Fragment() {
             recylerContribution.apply {
                 adapter = contributionAdapter
                 layoutManager = GridLayoutManager(requireContext(), 26)
+                setItemViewCacheSize(10)
             }
             ivAchieve.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToAchievementFragment())

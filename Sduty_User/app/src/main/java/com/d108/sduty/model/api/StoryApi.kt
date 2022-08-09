@@ -64,6 +64,10 @@ interface StoryApi {
     @POST("/story/scrap")
     suspend fun scrapStory(@Body scrap: Scrap): Response<Void>
 
-    @PUT("story/report")
+    @PUT("/story/report")
     suspend fun reportStory(@Body story: Story): Response<Void>
+
+    @GET("/story/test")
+    suspend fun getAllPagingTimeline(@Query("userSeq")userSeq: Int, @Query("page")page: Int): Response<List<Timeline>>
+//    suspend fun getAllPagingTimeline(@Query("userSeq")userSeq: Int, @Query("page")page: Int): Response<List<Timeline>>
 }
