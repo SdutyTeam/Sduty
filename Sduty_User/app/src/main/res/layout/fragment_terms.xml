@@ -39,7 +39,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/common_top_back"/>
 
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/divider_0"
+            style="@style/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/common_top"/>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/const_contents"
