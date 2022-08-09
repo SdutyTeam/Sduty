@@ -13,7 +13,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.sign.StudyListFragment">
+        tools:context=".ui.sign.StudyListFragment"
+        android:background="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_top"
@@ -54,6 +55,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginRight="15dp"/>
+
+            <LinearLayout
+                android:id="@+id/divider_a"
+                style="@style/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -61,46 +71,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="10dp"
             app:layout_constraintTop_toBottomOf="@id/common_top">
 
-            <Spinner
-                android:id="@+id/spinner_category_filter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:spinnerMode="dropdown"
-                android:gravity="center"/>
-
-            <CheckBox
-                android:id="@+id/cb_people"
+            <Button
+                android:id="@+id/tb_category"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:text="빈 자리"/>
+                android:layout_height="30dp"
+                android:background="@drawable/btn_study_filter"
+                android:textColor="#616161"
+                android:text="공부 분야 +"/>
 
-            <CheckBox
-                android:id="@+id/cb_camstudy"
+            <ToggleButton
+                android:id="@+id/tb_camstudy"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:text="캠 스터디"/>
+                android:layout_height="30dp"
+                android:background="@drawable/btn_study_filter"
+                android:textColor="#616161"
+                android:layout_marginLeft="10dp"
+                android:textOn="캠 스터디"
+                android:textOff="캠 스터디"/>
 
-            <CheckBox
-                android:id="@+id/cb_public"
+            <ToggleButton
+                android:id="@+id/tb_people"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:text="공개"/>
+                android:layout_height="30dp"
+                android:background="@drawable/btn_study_filter"
+                android:textColor="#616161"
+                android:layout_marginLeft="10dp"
+                android:textOn="빈자리"
+                android:textOff="빈자리"/>
 
-<!--            <ToggleButton-->
-<!--                android:id="@+id/test"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/gradient_study_border"-->
-<!--                android:checked="true"-->
-<!--                android:textOn="캠스터디"-->
-<!--                android:textOff="캠 스터디"-->
-<!--                android:text="das"/>-->
+            <ToggleButton
+                android:id="@+id/tb_public"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_study_filter"
+                android:textColor="#616161"
+                android:layout_marginLeft="10dp"
+                android:textOn="공개"
+                android:textOff="공개"/>
 
 
         </LinearLayout>

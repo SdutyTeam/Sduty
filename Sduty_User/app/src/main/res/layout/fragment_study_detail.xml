@@ -8,6 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".ui.sign.StudyDetailFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,7 +71,6 @@
             android:id="@+id/img_study_lock"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/img_stduy_lock"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/study_detail_category"
@@ -121,7 +121,7 @@
             app:layout_constraintStart_toEndOf="@id/tv_study_detail_master"
             app:layout_constraintTop_toBottomOf="@id/study_detail_category"
             app:layout_constraintBottom_toTopOf="@id/tv_study_detail_people"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="20dp"
             />
 
         <TextView
@@ -139,7 +139,7 @@
             android:id="@+id/study_detail_joinnum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
+            android:layout_marginStart="37dp"
             tools:text="15"
             app:layout_constraintBottom_toTopOf="@id/study_detail"
             app:layout_constraintStart_toEndOf="@id/tv_study_detail_people"
@@ -177,7 +177,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/study_detail"
-            android:background="@drawable/gradient_study_border"
+            android:background="@drawable/border_study_block_solid"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="12dp"
@@ -208,6 +208,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:singleLine="true"
                 />
 
 
@@ -216,7 +217,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/study_notice"
-            android:background="@drawable/gradient_study_border"
+            android:background="@drawable/border_study_solid"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="12dp"
@@ -246,6 +247,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:singleLine="true"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

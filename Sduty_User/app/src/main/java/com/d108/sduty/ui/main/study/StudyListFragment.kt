@@ -1,6 +1,7 @@
 package com.d108.sduty.ui.main.study
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,12 +16,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.StudyListAdapter
+import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentStudyListBinding
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
 import com.d108.sduty.ui.main.study.dialog.StudyDetailDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudyListViewModel
+import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
@@ -35,7 +38,7 @@ class StudyListFragment : Fragment(){
     private val studyListViewModel: StudyListViewModel by viewModels()
     private lateinit var studyListAdapter: StudyListAdapter
     private lateinit var studyList: List<Study>
-    private lateinit var category: String
+    private var category: String = "전체"
 
 
     override fun onAttach(context: Context) {
@@ -55,10 +58,6 @@ class StudyListFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val categoryData:Array<String> = resources.getStringArray(R.array.array_category)
-        val categoryAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, categoryData)
-        binding.spinnerCategoryFilter.adapter = categoryAdapter
-
         studyListViewModel.isJoinStudySuccess.observe(viewLifecycleOwner){
             if(it){
                 context?.showToast("가입이 완료되었습니다.")
@@ -76,44 +75,53 @@ class StudyListFragment : Fragment(){
         studyListViewModel.getStudyList()
 
         binding.apply {
-            spinnerCategoryFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    category = spinnerCategoryFilter.selectedItem.toString()
-                    Log.d(TAG, "onItemSelected: ${category}")
-                    studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+            tbCategory.setOnClickListener {
+                TagSelectOneFragment(requireContext(), FLAG_STUDY).let{
+                    it.show(parentFragmentManager, null)
+                    it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
+                        override fun onDismiss(tagName: String, flag: Int) {
+                            binding.tbCategory.text = tagName
+                            category = tagName
+                            studyListViewModel.getStudyFilter(tagName, tbPeople.isChecked, tbCamstudy.isChecked, tbPublic.isChecked)
+                            tbCategory.setBackgroundResource(R.drawable.gradient_border)
+                            tbCategory.setTextColor(Color.BLACK)
+                        }
+                    }
                 }
+            }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    TODO("Not yet implemented")
+            tbCamstudy.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, tbPeople.isChecked, isChecked, tbPublic.isChecked)
+                if(isChecked){
+                    tbCamstudy.setBackgroundResource(R.drawable.gradient_border)
+                    tbCamstudy.setTextColor(Color.BLACK)
+                } else{
+                    tbCamstudy.setBackgroundResource(R.drawable.btn_study_filter)
+                    tbCamstudy.setTextColor(Color.parseColor("#616161"))
                 }
-
             }
 
-            cbPeople.setOnCheckedChangeListener { buttonView, isChecked ->
-                studyListViewModel.getStudyFilter(category, isChecked, cbCamstudy.isChecked, cbPublic.isChecked)
+            tbPeople.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, isChecked, tbCamstudy.isChecked, tbPublic.isChecked)
+                if(isChecked){
+                    tbPeople.setBackgroundResource(R.drawable.gradient_border)
+                    tbPeople.setTextColor(Color.BLACK)
+                } else{
+                    tbPeople.setBackgroundResource(R.drawable.btn_study_filter)
+                    tbPeople.setTextColor(Color.parseColor("#616161"))
+                }
             }
 
-            cbCamstudy.setOnCheckedChangeListener { buttonView, isChecked ->
-                studyListViewModel.getStudyFilter(category, cbPeople.isChecked, isChecked, cbPublic.isChecked)
+            tbPublic.setOnCheckedChangeListener { buttonView, isChecked ->
+                studyListViewModel.getStudyFilter(category, tbPeople.isChecked, tbCamstudy.isChecked, isChecked)
+                if(isChecked){
+                    tbPublic.setBackgroundResource(R.drawable.gradient_border)
+                    tbPublic.setTextColor(Color.BLACK)
+                } else{
+                    tbPublic.setBackgroundResource(R.drawable.btn_study_filter)
+                    tbPublic.setTextColor(Color.parseColor("#616161"))
+                }
             }
-
-            cbPublic.setOnCheckedChangeListener { buttonView, isChecked ->
-                studyListViewModel.getStudyFilter(category, cbPeople.isChecked, cbCamstudy.isChecked, isChecked)
-            }
-
-//            test.setOnCheckedChangeListener { buttonView, isChecked ->
-//                if(isChecked){
-//                    test.setBackgroundResource(R.drawable.gradient_study_border)
-//
-//                } else{
-//                    test.setBackgroundResource(R.drawable.gradient_border)
-//                }
-//            }
 
 
 

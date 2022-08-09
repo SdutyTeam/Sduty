@@ -2,6 +2,7 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,16 +50,54 @@ class CamStudyDetailFragment : Fragment() {
         camStudyDetailViewModel.camStudyInfo.observe(viewLifecycleOwner){map ->
             if(map != null){
                 val studyInfo = camStudyDetailViewModel.camStudyInfo.value as Map<String, Any>
-                var studyJoinNumber = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
-                binding.commonTopTitle.text = (studyInfo["study"] as Map<String, Any>)["name"].toString()
-                binding.commonTopJoin.text = studyJoinNumber.roundToInt().toString()
-                binding.tvCamstudyNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
-                studyRoomId = (studyInfo["study"] as Map<String, Any>)["roomId"].toString()
-                studyName = (studyInfo["study"] as Map<String, Any>)["name"].toString()
+                Log.d(TAG, "onViewCreated: ${studyInfo}")
+                var joinNum = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
+                var limitNum = ((studyInfo["study"] as Map<String, Any>)["limitNumber"].toString()).toDouble()
+
+
+                if((studyInfo["study"] as Map<String, Any>)["password"] == null){
+                    binding.imgStudyLock.setImageResource(R.drawable.img_study_detail_unlock)
+                } else{
+                    binding.imgStudyLock.setImageResource(R.drawable.img_study_detail_lock)
+                }
+
+                binding.studyDetailCategory.text = "#캠스터디" + "#" + (studyInfo["study"] as Map<String, Any>)["category"].toString()
+
+                binding.studyDetailName.text = (studyInfo["study"] as Map<String, Any>)["name"].toString()
+                binding.studyDetailJoinnum.text = joinNum.roundToInt().toString()
+                binding.studyDetailLimitnum.text = limitNum.roundToInt().toString()
+                binding.studyDetailIntroduce.text = (studyInfo["study"] as Map<String, Any>)["introduce"].toString()
+                binding.studyDetailNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
+
+                val alarm = ((studyInfo["study"] as Map<String, Any>)["alarm"] as Map<String, Any>)
+                if(alarm["mon"] == true){
+                    binding.tvMon.setBackgroundResource(R.drawable.daily_click)
+                }
+                if(alarm["tue"] == true){
+                    binding.tvTue.setBackgroundResource(R.drawable.daily_click)
+                }
+                if(alarm["wed"] == true){
+                    binding.tvWed.setBackgroundResource(R.drawable.daily_click)
+                }
+                if(alarm["thu"] == true){
+                    binding.tvThu.setBackgroundResource(R.drawable.daily_click)
+                }
+                if(alarm["fri"] == true){
+                    binding.tvFri.setBackgroundResource(R.drawable.daily_click)
+                }
+                if(alarm["sat"] == true){
+                    binding.tvSat.setBackgroundResource(R.drawable.daily_click)
+                }
+                if(alarm["sun"] == true){
+                    binding.tvSun.setBackgroundResource(R.drawable.daily_click)
+                }
+                binding.tvTime.text = "매주" + alarm["time"].toString()
+
 
                 camStudyDetailViewModel.masterNickname((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt())
                 camStudyDetailViewModel.studyMasterNickName.observe(viewLifecycleOwner) {
                     nickname = it.nickname
+                    binding.studyDetailMaster.text = nickname
                 }
             }
         }
