@@ -1,25 +1,14 @@
 package com.d108.sduty.controller;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import javax.imageio.ImageIO;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,12 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.d108.sduty.dto.Follow;
-import com.d108.sduty.dto.Image;
 import com.d108.sduty.dto.Likes;
-import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
@@ -82,6 +68,18 @@ public class StoryController {
 	private final String FILE_PROFILE_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/profile/";
 	private final String FILE_THUMB_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/thumb/";
 //	private final String FILE_URL = "C:\\SSAFY\\Sduty\\Sduty_Server\\src\\main\\resources\\image\\";
+	
+	
+	@ApiOperation(value = "전체 스토리 조회(페이징) : UserSeq > Story", response = Timeline.class)
+	@GetMapping("/test")
+	public ResponseEntity<?> selectAllPagingStory(@RequestParam(value="userSeq") int userSeq, 
+            Pageable pageable) throws Exception {
+		System.out.println(userSeq);
+		Page<Timeline> timeLineList = timelineService.selectAllPagingTimelines(pageable, userSeq);
+		System.out.println(timeLineList);
+		return new ResponseEntity<List<Timeline>>(timeLineList.toList(), HttpStatus.OK);
+
+	}
 	
 	
 

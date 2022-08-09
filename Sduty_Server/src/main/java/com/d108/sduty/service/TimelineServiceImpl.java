@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.InterestHashtag;
@@ -222,5 +225,29 @@ public class TimelineServiceImpl implements TimelineService {
 	@Override
 	public InterestHashtag getInterestHashtag(String interestName) {
 		return interestHashtagRepo.findByName(interestName);
+	}
+
+	@Override
+	public Page<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq) {		
+		List<Story> storyList = storyRepo.findAllByOrderByRegtimeDesc();
+		List<Timeline> timelineList = new ArrayList<Timeline>();
+		for(Story s : storyList) {
+			Timeline t = new Timeline();
+			t.setProfile(getProfile(s.getWriterSeq()));
+			t.setStory(s);
+			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
+			setInterestList(t, s);
+			timelineList.add(t);
+		}
+		System.out.println(pageable);
+		System.out.println(pageable.getPageSize());
+		System.out.println(pageable.getPageNumber());
+		final int start = (int)pageable.getOffset();
+		final int end = Math.min((start + pageable.getPageSize()), timelineList.size());
+		final Page<Timeline> page = new PageImpl<>(timelineList.subList(start, end), pageable, timelineList.size());
+		return page;
 	}
 }
