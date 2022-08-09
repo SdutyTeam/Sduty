@@ -2,6 +2,9 @@ package com.d108.sduty.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.JobHashtag;
 import com.d108.sduty.dto.Profile;
@@ -22,4 +25,6 @@ public interface TimelineService {
 	public List<Reply> findAllReplyByStorySeqOrderByRegtimeDesc(int storySeq);
 	public JobHashtag getJobHashtag(String jobName);
 	public InterestHashtag getInterestHashtag(String interestName);
+	
+	Page<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq);
 }
