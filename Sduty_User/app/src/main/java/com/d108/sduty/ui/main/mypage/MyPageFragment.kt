@@ -32,8 +32,9 @@ class MyPageFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var contributionAdapter: ContributionAdapter
     private lateinit var storyAdapter: StoryAdapter
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+
+    override fun onResume() {
+        super.onResume()
         mainViewModel.displayBottomNav(true)
     }
     override fun onCreateView(
@@ -62,6 +63,7 @@ class MyPageFragment : Fragment() {
             }
             contributionList.observe(viewLifecycleOwner){
                 contributionAdapter.list = it
+                Log.d(TAG, "initViewModel: ${it}")
             }
             getContribution(mainViewModel.user.value!!.seq)
             getUserStoryListValue(mainViewModel.user.value!!.seq)
