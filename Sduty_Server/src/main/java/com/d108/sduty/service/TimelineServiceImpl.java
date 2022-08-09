@@ -247,7 +247,11 @@ public class TimelineServiceImpl implements TimelineService {
 		System.out.println(pageable.getPageNumber());
 		final int start = (int)pageable.getOffset();
 		final int end = Math.min((start + pageable.getPageSize()), timelineList.size());
-		final Page<Timeline> page = new PageImpl<>(timelineList.subList(start, end), pageable, timelineList.size()-1);
+		System.out.println("start: " + start);
+		System.out.println("end: " + end);
+		System.out.println("start + pageable.getPageSize(): " + start + pageable.getPageSize());
+		System.out.println("timelineList.size(): " + timelineList.size());
+		final Page<Timeline> page = new PageImpl<>(timelineList.subList(start, end), pageable, timelineList.size());
 		return page;
 	}
 }
