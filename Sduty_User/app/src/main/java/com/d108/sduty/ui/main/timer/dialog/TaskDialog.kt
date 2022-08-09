@@ -1,23 +1,20 @@
 package com.d108.sduty.ui.main.timer.dialog
 
 import android.app.TimePickerDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.core.os.bundleOf
+import android.view.*
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.d108.sduty.R
 import com.d108.sduty.databinding.DialogTaskBinding
 import com.d108.sduty.model.dto.Report
 import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.convertTimeDateToString
-import com.d108.sduty.utils.convertTimeHHMMDDToLong
 import com.d108.sduty.utils.convertTimeStringToDate
 import com.d108.sduty.utils.getDeviceSize
 import java.util.*
@@ -27,12 +24,15 @@ private const val TAG = "TaskDialog"
 class TaskDialog : DialogFragment() {
     private lateinit var binding: DialogTaskBinding
     private val timerViewModel: TimerViewModel by viewModels({ requireActivity() })
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogTaskBinding.inflate(inflater, container, false)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return binding.root
     }
 
@@ -45,10 +45,6 @@ class TaskDialog : DialogFragment() {
         val action = arguments?.getString("Action", "Add")
 
         when (action) {
-            // Task 신규 등록
-            "Add" -> {
-                addTask()
-            }
             // Task 사용자 설정 추가
             "CustomAdd" -> {
                 customAddTask()
@@ -57,127 +53,17 @@ class TaskDialog : DialogFragment() {
             "Info" -> {
                 infoTask()
             }
-            // Task 수정
-            "Modify" -> {
-                modifyTask()
-            }
         }
-    }
-
-    private fun addTask() {
-        binding.apply {
-            val time = timerViewModel.timer.value!!
-            val hour = time / 60 / 60
-            val min = time / 60
-            val sec = time % 60
-            tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
-
-            etStartTime.setText(timerViewModel.startTime)
-            etStartTime.isEnabled = false
-
-            etEndTime.setText(convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss"))
-            etEndTime.isEnabled = false
-
-            // 내용 2, 3 추가 버튼
-            ivAddContent.setOnClickListener {
-                if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
-                    etContent2.visibility = View.VISIBLE
-                    ivRemoveContent2.visibility = View.VISIBLE
-                } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
-                    ivAddContent.visibility = View.INVISIBLE
-                    ivRemoveContent2.visibility = View.INVISIBLE
-                    etContent3.visibility = View.VISIBLE
-                    ivRemoveContent3.visibility = View.VISIBLE
-                }
-            }
-
-            // 내용 2
-            etContent2.visibility = View.GONE
-            ivRemoveContent2.visibility = View.GONE
-            ivRemoveContent2.setOnClickListener {
-                etContent2.setText("")
-                etContent2.visibility = View.GONE
-                ivRemoveContent2.visibility = View.GONE
-            }
-
-            // 내용 3
-            etContent3.visibility = View.GONE
-            ivRemoveContent3.visibility = View.GONE
-            ivRemoveContent3.setOnClickListener {
-                ivAddContent.visibility = View.VISIBLE
-                ivRemoveContent2.visibility = View.VISIBLE
-                etContent3.setText("")
-                etContent3.visibility = View.GONE
-                ivRemoveContent3.visibility = View.GONE
-            }
-
-            btnSave.setOnClickListener {
-                // 등록 수행
-                val startTime = etStartTime.text.toString()
-                val endTime = etEndTime.text.toString()
-                val title = etTitle.text.toString()
-                val content1 = etContent1.text.toString()
-                val content2 = etContent2.text.toString()
-                val content3 = etContent3.text.toString()
-
-                val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
-
-                val newTask =
-                    Task(-1, -1, endTime, startTime, 0, title, content1, content2, content3)
-
-                // TODO: userSeq 변경 필요
-                val report = Report(-1, 47, today, "", listOf(newTask))
-
-                // title 은 필수로 입력해야한다.
-                if (title.isNotEmpty()) {
-                    timerViewModel.saveTask(report)
-                    timerViewModel.stopTimer()
-                    dismiss()
-                } else {
-                    ConfirmDialog().apply {
-                        // 경고창에 출력할 메시지를 담아 보낸다.
-                        arguments = Bundle().apply {
-                            putString("Action", "Error")
-                            putString("Message", "제목을 입력해주세요!!")
-                        }
-                        show(
-                            this@TaskDialog.requireActivity().supportFragmentManager,
-                            "ConfirmDialog"
-                        )
-                    }
-                }
-            }
-
-            btnModify.visibility = View.GONE
-
-            btnDelete.setOnClickListener {
-                ConfirmDialog().apply {
-                    // 삭제 경고
-                    arguments = Bundle().apply {
-                        putString("Action", "RemoveTimer")
-                    }
-                    show(this@TaskDialog.requireActivity().supportFragmentManager, "ConfirmDialog")
-                }
-            }
-        }
-
-        timerViewModel.resetDelayTimer()
-        timerViewModel.stopTimer()
     }
 
     private fun customAddTask() {
         binding.apply {
-            tvTimerInfo.text = "전체 시간"
-
-            etStartTime.inputType = InputType.TYPE_NULL
-            etStartTime.isFocusable = false
-            etStartTime.isCursorVisible = false
-
-            etStartTime.setOnClickListener {
+            tvStartTime.text = "시작 시간"
+            tvStartTime.setOnClickListener {
                 val startTimeListener =
                     TimePickerDialog.OnTimeSetListener { timePicker, hour, min ->
                         // 시작 시간이 종료시간보다 빨라야한다.
-                        if (etEndTime.text.toString().isNotEmpty()) {
+                        if (tvEndTime.text != "종료 시간" && tvEndTime.text.toString().isNotEmpty()) {
                             val startTime = convertTimeStringToDate(
                                 String.format("%02d:%02d:00", hour, min),
                                 "hh:mm:ss"
@@ -185,12 +71,12 @@ class TaskDialog : DialogFragment() {
 
                             val endTime =
                                 convertTimeStringToDate(
-                                    etEndTime.text.toString(),
+                                    tvEndTime.text.toString(),
                                     "hh:mm:ss"
                                 ).time
 
                             if (endTime > startTime) {
-                                etStartTime.setText(String.format("%02d:%02d:00", hour, min))
+                                tvStartTime.text = String.format("%02d:%02d:00", hour, min)
                             } else {
                                 ConfirmDialog().apply {
                                     // 경고창에 출력할 메시지를 담아 보낸다.
@@ -202,30 +88,27 @@ class TaskDialog : DialogFragment() {
                                         this@TaskDialog.requireActivity().supportFragmentManager,
                                         "ConfirmDialog"
                                     )
-                                    etStartTime.setText("")
-                                    etEndTime.setText("")
+                                    tvStartTime.text = ""
+                                    tvEndTime.text = ""
                                 }
                             }
                         } else {
-                            etStartTime.setText(String.format("%02d:%02d:00", hour, min))
+                            tvStartTime.text = String.format("%02d:%02d:00", hour, min)
                         }
 
                     }
                 TimePickerDialog(requireActivity(), startTimeListener, 0, 0, true).show()
             }
 
-            etEndTime.inputType = InputType.TYPE_NULL
-            etEndTime.isFocusable = false
-            etEndTime.isCursorVisible = false
-
-            etEndTime.setOnClickListener {
+            tvEndTime.text = "종료 시간"
+            tvEndTime.setOnClickListener {
                 val endTimeListener =
                     TimePickerDialog.OnTimeSetListener { timePicker, hour, min ->
                         // 시작 시간이 종료시간보다 빨라야한다.
-                        if (etStartTime.text.toString().isNotEmpty()) {
+                        if (tvStartTime.text != "시작 시간" && tvStartTime.text.toString().isNotEmpty()) {
                             val startTime =
                                 convertTimeStringToDate(
-                                    etStartTime.text.toString(),
+                                    tvStartTime.text.toString(),
                                     "hh:mm:ss"
                                 ).time
                             val endTime = convertTimeStringToDate(
@@ -234,7 +117,7 @@ class TaskDialog : DialogFragment() {
                             ).time
 
                             if (endTime > startTime) {
-                                etEndTime.setText(String.format("%02d:%02d:00", hour, min))
+                                tvEndTime.text = String.format("%02d:%02d:00", hour, min)
                             } else {
                                 ConfirmDialog().apply {
                                     // 경고창에 출력할 메시지를 담아 보낸다.
@@ -246,55 +129,56 @@ class TaskDialog : DialogFragment() {
                                         this@TaskDialog.requireActivity().supportFragmentManager,
                                         "ConfirmDialog"
                                     )
-                                    etStartTime.setText("")
-                                    etEndTime.setText("")
+                                    tvStartTime.text = ""
+                                    tvEndTime.text = ""
                                 }
                             }
                         } else {
-                            etStartTime.setText(String.format("%02d:%02d:00", hour, min))
+                            tvStartTime.text = String.format("%02d:%02d:00", hour, min)
                         }
 
                     }
                 TimePickerDialog(requireActivity(), endTimeListener, 0, 0, true).show()
             }
 
-            // 내용 2, 3 추가 버튼
-            ivAddContent.setOnClickListener {
-                if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
-                    etContent2.visibility = View.VISIBLE
-                    ivRemoveContent2.visibility = View.VISIBLE
-                } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
-                    ivAddContent.visibility = View.INVISIBLE
-                    ivRemoveContent2.visibility = View.INVISIBLE
-                    etContent3.visibility = View.VISIBLE
-                    ivRemoveContent3.visibility = View.VISIBLE
-                }
+            clContent1.visibility = View.GONE
+            ivRemoveContent1.setOnClickListener {
+                etContent1.setText("")
+                clContent1.visibility = View.GONE
             }
 
-            // 내용 2
-            etContent2.visibility = View.GONE
-            ivRemoveContent2.visibility = View.GONE
+            clContent2.visibility = View.GONE
             ivRemoveContent2.setOnClickListener {
                 etContent2.setText("")
-                etContent2.visibility = View.GONE
-                ivRemoveContent2.visibility = View.GONE
+                clContent2.visibility = View.GONE
             }
 
-            // 내용 3
-            etContent3.visibility = View.GONE
-            ivRemoveContent3.visibility = View.GONE
+            clContent3.visibility = View.GONE
             ivRemoveContent3.setOnClickListener {
-                ivAddContent.visibility = View.VISIBLE
-                ivRemoveContent2.visibility = View.VISIBLE
                 etContent3.setText("")
-                etContent3.visibility = View.GONE
-                ivRemoveContent3.visibility = View.GONE
+                clContent3.visibility = View.GONE
+                ibAddContent.visibility = View.VISIBLE
+            }
+
+            ibAddContent.setOnClickListener {
+                when {
+                    clContent1.visibility == View.GONE -> {
+                        clContent1.visibility = View.VISIBLE
+                    }
+                    clContent2.visibility == View.GONE -> {
+                        clContent2.visibility = View.VISIBLE
+                    }
+                    clContent3.visibility == View.GONE -> {
+                        clContent3.visibility = View.VISIBLE
+                        ibAddContent.visibility = View.GONE
+                    }
+                }
             }
 
             btnSave.setOnClickListener {
                 // 등록 수행
-                val startTime = etStartTime.text.toString()
-                val endTime = etEndTime.text.toString()
+                val startTime = tvStartTime.text.toString()
+                val endTime = tvEndTime.text.toString()
                 val title = etTitle.text.toString()
                 val content1 = etContent1.text.toString()
                 val content2 = etContent2.text.toString()
@@ -305,12 +189,12 @@ class TaskDialog : DialogFragment() {
                 val newTask =
                     Task(-1, -1, endTime, startTime, 0, title, content1, content2, content3)
 
-                // TODO: userSeq 변경 필요
-                val report = Report(-1, 47, today, "", listOf(newTask))
+                val report = Report(-1, mainViewModel.user.value!! .seq, today, "", listOf(newTask))
 
                 // title 은 필수로 입력해야한다.
                 if (title.isNotEmpty()) {
                     timerViewModel.saveTask(report)
+                    timerViewModel.getTodayReport(mainViewModel.user.value!!.seq)
                     timerViewModel.stopTimer()
                     dismiss()
                 } else {
@@ -328,6 +212,7 @@ class TaskDialog : DialogFragment() {
                 }
             }
 
+            btnDelete.text = "취소"
             btnDelete.setOnClickListener {
                 dismiss()
             }
@@ -339,42 +224,44 @@ class TaskDialog : DialogFragment() {
         val position = arguments?.getInt("Position", 0)
         val task = timerViewModel.report.value!!.tasks[position!!]
         binding.apply {
-            val hour = task.durationTime / 60 / 60
-            val min = (task.durationTime / 60) % 60
-            val sec = task.durationTime % 60
+//            val hour = task.durationTime / 60 / 60
+//            val min = (task.durationTime / 60) % 60
+//            val sec = task.durationTime % 60
+//
+//            tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
 
-            tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
+            tvStartTime.text = task.startTime
 
-            etStartTime.setText(task.startTime)
-            etStartTime.isEnabled = false
-
-            etEndTime.setText(task.endTime)
-            etEndTime.isEnabled = false
+            tvEndTime.text = task.endTime
 
             etTitle.setText(task.title)
             etTitle.isEnabled = false
 
-            etContent1.setText(task.content1)
-            etContent1.isEnabled = false
-            ivAddContent.visibility = View.INVISIBLE
+            if (task.content1.isNotEmpty()) {
+                clContent1.visibility = View.VISIBLE
+                etContent1.setText(task.content1)
+                ivRemoveContent1.visibility = View.GONE
+            } else {
+                clContent1.visibility = View.GONE
+            }
 
-            etContent2.setText(task.content2)
             if (task.content2.isNotEmpty()) {
-                etContent2.visibility = View.VISIBLE
+                clContent2.visibility = View.VISIBLE
+                etContent2.setText(task.content1)
+                ivRemoveContent2.visibility = View.GONE
             } else {
-                etContent2.visibility = View.GONE
+                clContent2.visibility = View.GONE
             }
-            etContent2.isEnabled = false
-            ivRemoveContent2.visibility = View.GONE
 
-            etContent3.setText(task.content3)
             if (task.content3.isNotEmpty()) {
-                etContent3.visibility = View.VISIBLE
+                clContent3.visibility = View.VISIBLE
+                etContent3.setText(task.content1)
+                ivRemoveContent3.visibility = View.GONE
             } else {
-                etContent3.visibility = View.GONE
+                clContent3.visibility = View.GONE
             }
-            etContent3.isEnabled = false
-            ivRemoveContent3.visibility = View.GONE
+
+            ibAddContent.visibility = View.GONE
 
             btnDelete.setOnClickListener {
                 ConfirmDialog().apply {
@@ -387,9 +274,8 @@ class TaskDialog : DialogFragment() {
                 dismiss()
             }
 
-            btnModify.visibility = View.VISIBLE
             btnModify.setOnClickListener {
-                modifyTask()
+               modifyTask()
             }
 
             btnSave.text = "확인"
@@ -401,50 +287,59 @@ class TaskDialog : DialogFragment() {
 
     private fun modifyTask() {
         val position = arguments?.getInt("Position", 0)
+        val task = timerViewModel.report.value!!.tasks[position!!]
         binding.apply {
-            if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
-                ivAddContent.visibility = View.VISIBLE
-            } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
-                ivAddContent.visibility = View.VISIBLE
-                ivRemoveContent2.visibility = View.VISIBLE
-            } else {
-                ivAddContent.visibility = View.INVISIBLE
-                ivRemoveContent2.visibility = View.INVISIBLE
-                ivRemoveContent3.visibility = View.VISIBLE
+//            val hour = task.durationTime / 60 / 60
+//            val min = (task.durationTime / 60) % 60
+//            val sec = task.durationTime % 60
+//
+//            tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
+
+            clContent1.visibility = View.GONE
+            ivRemoveContent1.setOnClickListener {
+                etContent1.setText("")
+                clContent1.visibility = View.GONE
+                ibAddContent.visibility = View.VISIBLE
             }
 
-            // 내용 2, 3 추가 버튼
-            ivAddContent.setOnClickListener {
-                if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
-                    etContent2.visibility = View.VISIBLE
-                    ivRemoveContent2.visibility = View.VISIBLE
-                } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
-                    ivAddContent.visibility = View.INVISIBLE
-                    ivRemoveContent2.visibility = View.INVISIBLE
-                    etContent3.visibility = View.VISIBLE
-                    ivRemoveContent3.visibility = View.VISIBLE
-                }
-            }
-
-            // 내용 2
+            clContent2.visibility = View.GONE
             ivRemoveContent2.setOnClickListener {
                 etContent2.setText("")
-                etContent2.visibility = View.GONE
-                ivRemoveContent2.visibility = View.GONE
+                clContent2.visibility = View.GONE
+                ibAddContent.visibility = View.VISIBLE
             }
 
-            // 내용 3
+            clContent3.visibility = View.GONE
             ivRemoveContent3.setOnClickListener {
-                ivAddContent.visibility = View.VISIBLE
-                ivRemoveContent2.visibility = View.VISIBLE
                 etContent3.setText("")
-                etContent3.visibility = View.GONE
-                ivRemoveContent3.visibility = View.GONE
+                clContent3.visibility = View.GONE
+                ibAddContent.visibility = View.VISIBLE
             }
 
-            etContent1.isEnabled = true
-            etContent2.isEnabled = true
-            etContent3.isEnabled = true
+            ibAddContent.visibility = View.VISIBLE
+
+            ibAddContent.setOnClickListener {
+                when {
+                    clContent1.visibility == View.GONE -> {
+                        clContent1.visibility = View.VISIBLE
+                        if(clContent1.visibility == View.VISIBLE && clContent2.visibility == View.VISIBLE && clContent3.visibility == View.VISIBLE){
+                            ibAddContent.visibility = View.GONE
+                        }
+                    }
+                    clContent2.visibility == View.GONE -> {
+                        clContent2.visibility = View.VISIBLE
+                        if(clContent1.visibility == View.VISIBLE && clContent2.visibility == View.VISIBLE && clContent3.visibility == View.VISIBLE){
+                            ibAddContent.visibility = View.GONE
+                        }
+                    }
+                    clContent3.visibility == View.GONE -> {
+                        clContent3.visibility = View.VISIBLE
+                        if(clContent1.visibility == View.VISIBLE && clContent2.visibility == View.VISIBLE && clContent3.visibility == View.VISIBLE){
+                            ibAddContent.visibility = View.GONE
+                        }
+                    }
+                }
+            }
 
             btnDelete.text = "취소"
             btnDelete.setOnClickListener {
@@ -461,10 +356,76 @@ class TaskDialog : DialogFragment() {
                 task.content2 = etContent2.text.toString()
                 task.content3 = etContent3.text.toString()
 
-                timerViewModel.modifyTask(task)
+                timerViewModel.modifyTask(mainViewModel.user.value!!.seq, task)
                 dismiss()
             }
         }
+
+//        val position = arguments?.getInt("Position", 0)
+//        binding.apply {
+//            if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
+//                ivAddContent.visibility = View.VISIBLE
+//            } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
+//                ivAddContent.visibility = View.VISIBLE
+//                ivRemoveContent2.visibility = View.VISIBLE
+//            } else {
+//                ivAddContent.visibility = View.INVISIBLE
+//                ivRemoveContent2.visibility = View.INVISIBLE
+//                ivRemoveContent3.visibility = View.VISIBLE
+//            }
+//
+//            // 내용 2, 3 추가 버튼
+//            ivAddContent.setOnClickListener {
+//                if (etContent2.visibility == View.GONE && etContent3.visibility == View.GONE) {
+//                    etContent2.visibility = View.VISIBLE
+//                    ivRemoveContent2.visibility = View.VISIBLE
+//                } else if (etContent2.visibility == View.VISIBLE && etContent3.visibility == View.GONE) {
+//                    ivAddContent.visibility = View.INVISIBLE
+//                    ivRemoveContent2.visibility = View.INVISIBLE
+//                    etContent3.visibility = View.VISIBLE
+//                    ivRemoveContent3.visibility = View.VISIBLE
+//                }
+//            }
+//
+//            // 내용 2
+//            ivRemoveContent2.setOnClickListener {
+//                etContent2.setText("")
+//                etContent2.visibility = View.GONE
+//                ivRemoveContent2.visibility = View.GONE
+//            }
+//
+//            // 내용 3
+//            ivRemoveContent3.setOnClickListener {
+//                ivAddContent.visibility = View.VISIBLE
+//                ivRemoveContent2.visibility = View.VISIBLE
+//                etContent3.setText("")
+//                etContent3.visibility = View.GONE
+//                ivRemoveContent3.visibility = View.GONE
+//            }
+//
+//            etContent1.isEnabled = true
+//            etContent2.isEnabled = true
+//            etContent3.isEnabled = true
+//
+//            btnDelete.text = "취소"
+//            btnDelete.setOnClickListener {
+//                dismiss()
+//            }
+//
+//            btnModify.visibility = View.GONE
+//
+//            btnSave.text = "저장"
+//            btnSave.setOnClickListener {
+//                var task = timerViewModel.report.value!!.tasks[position!!]
+//
+//                task.content1 = etContent1.text.toString()
+//                task.content2 = etContent2.text.toString()
+//                task.content3 = etContent3.text.toString()
+//
+//                timerViewModel.modifyTask(mainViewModel.user.value!!.seq, task)
+//                dismiss()
+//            }
+//        }
     }
 
     override fun onResume() {

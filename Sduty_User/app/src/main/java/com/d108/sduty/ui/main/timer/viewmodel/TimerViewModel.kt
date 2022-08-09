@@ -70,11 +70,15 @@ class TimerViewModel() : ViewModel() {
     val startTime: String
         get() = _startTime
 
+    // 시간 측정 시작 시간
+    private var _endTime: String = "00:00:00"
+    val endTime: String
+        get() = _endTime
+
     // 사용자가 날짜 선택
-    fun selectDate(strDate: String) {
+    fun selectDate(userSeq: Int, strDate: String) {
         val beforeDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
         val convertedDate = convertTimeDateToString(beforeDate, "yyyy-MM-dd")
-        val userSeq = ApplicationClass.userPref.getInt("seq", 47)
         getReport(userSeq, convertedDate)
         selectedDate = convertedDate
     }
@@ -129,6 +133,8 @@ class TimerViewModel() : ViewModel() {
 
     // 시간 측정을 종료한다.
     fun stopTimer() {
+        _endTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
+
         ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
         _isRunningTimer.postValue(false)
         timerTask?.cancel()
@@ -147,13 +153,13 @@ class TimerViewModel() : ViewModel() {
         insertTask(report)
     }
 
-    fun removeTask(position: Int) {
+    fun removeTask(userSeq: Int, position: Int) {
         val seq = report.value!!.tasks[position].seq
-        deleteTask(seq)
+        deleteTask(userSeq, seq)
     }
 
-    fun modifyTask(task: Task){
-        updateTask(task)
+    fun modifyTask(userSeq: Int, task: Task){
+        updateTask(userSeq, task)
     }
 
     fun getTodayReport(userSeq: Int){
@@ -194,7 +200,7 @@ class TimerViewModel() : ViewModel() {
                     Log.d(TAG, "getReport: error ${it.errorBody()}")
                     _report.postValue(Report(0, 0, selectedDate, "00:00:00", listOf()))
                 } else {
-                    _toastMessage.postValue("서버에서 불러오는데 실패했습니다..")
+                    _isErredConnection.postValue(true)
                 }
             }
         }
@@ -206,46 +212,43 @@ class TimerViewModel() : ViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.insertTask(report).let {
                 if (it.isSuccessful) {
-                    _toastMessage.postValue("측정 기록 등록을 완료하였습니다.")
-                    val userSeq = ApplicationClass.userPref.getInt("seq", 47)
-                    getReport(userSeq, selectedDate)
+                    _isInsertedTask.postValue(true)
+                    getTodayReport(report.ownerSeq)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
-                    _toastMessage.postValue("서버에 등록하는데 실패하였습니다.")
+                    _isErredConnection.postValue(true)
                 }
             }
         }
     }
 
     // 삭제
-    private fun deleteTask(seq: Int) {
+    private fun deleteTask(userSeq: Int, seq: Int) {
         Log.d(TAG, "deleteTask: ${seq}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.deleteTask(seq).let {
                 if (it.isSuccessful) {
-                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
-                    val userSeq = ApplicationClass.userPref.getInt("seq", 47)
-                    getReport(userSeq, selectedDate)
+                    _isDeletedTask.postValue(true)
+                    getTodayReport(userSeq)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
-                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
+                    _isErredConnection.postValue(true)
                 }
             }
         }
     }
 
     // 수정
-    private fun updateTask(task: Task){
+    private fun updateTask(userSeq: Int, task: Task){
         Log.d(TAG, "updateTask: ${task}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.updateTask(task.seq, task).let {
                 if (it.isSuccessful) {
-                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
-                    val userSeq = ApplicationClass.userPref.getInt("seq", 47)
-                    getReport(userSeq, selectedDate)
+                    _isUpdatedTask.postValue(true)
+                    getTodayReport(userSeq)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
-                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
+                    _isErredConnection.postValue(true)
                 }
             }
         }

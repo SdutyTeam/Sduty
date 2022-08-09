@@ -11,42 +11,26 @@
         tools:context=".ui.main.timer.dialog.TaskDialog">
 
         <TextView
-            android:id="@+id/tv_start_time"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="25dp"
-            android:gravity="center"
-            android:padding="5dp"
-            android:background="@drawable/box_task"
-            android:text="00:00:00"
-            android:textSize="30sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
+            android:id="@+id/tv_timer_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="40sp"
-            android:text="~"
-            app:layout_constraintTop_toTopOf="@id/tv_start_time"
-            app:layout_constraintBottom_toBottomOf="@id/tv_start_time"
-            app:layout_constraintStart_toEndOf="@id/tv_start_time"
-            app:layout_constraintEnd_toStartOf="@id/tv_end_time" />
+            android:text="측정 시간"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_timer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_end_time"
-            android:layout_width="130dp"
+            android:id="@+id/tv_timer"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="25dp"
-            android:gravity="center"
-            android:padding="5dp"
-            android:background="@drawable/box_task"
             android:text="00:00:00"
-            android:textSize="30sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textSize="40sp"
+            app:layout_constraintBottom_toTopOf="@id/cl_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_timer_info" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_title"
@@ -57,7 +41,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/box_task"
-            app:layout_constraintTop_toBottomOf="@id/tv_start_time"
+            app:layout_constraintTop_toBottomOf="@id/tv_timer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
             <EditText
@@ -211,18 +195,6 @@
             app:layout_constraintTop_toBottomOf="@id/ib_add_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_modify"/>
-
-        <Button
-            android:id="@+id/btn_modify"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:textColor="@color/app_blue"
-            android:text="수정"
-            app:layout_constraintTop_toTopOf="@id/btn_delete"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_delete"
             app:layout_constraintEnd_toStartOf="@id/btn_save"/>
 
         <Button
@@ -235,7 +207,7 @@
             app:layout_constraintTop_toTopOf="@id/btn_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_modify"/>
+            app:layout_constraintStart_toEndOf="@id/btn_delete"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

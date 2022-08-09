@@ -6,12 +6,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/dialog_shape"
         tools:context=".ui.main.timer.dialog.ReportDialog">
 
         <TextView
             android:id="@+id/tv_timer_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="측정 시간"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/tv_timer"
@@ -24,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00:00"
-            android:textSize="50sp"
+            android:textSize="36sp"
             app:layout_constraintBottom_toTopOf="@id/tv_countdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,11 +36,13 @@
             android:id="@+id/tv_countdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="24dp"
             android:gravity="center"
             android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_timer"
+            app:layout_constraintBottom_toTopOf="@id/btn_finish"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_timer"
             tools:text="측정을 이어서 하려면 \n[20]초 이내에 클릭하세요"
             />
 
@@ -46,19 +50,24 @@
             android:id="@+id/btn_finish"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="종료하기"
+            android:background="@drawable/button_shape_left"
+            android:textColor="@color/app_purple"
+            android:text="종료"
+            app:layout_constraintTop_toBottomOf="@id/tv_countdown"
             app:layout_constraintEnd_toStartOf="@id/btn_continue"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_countdown" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <Button
             android:id="@+id/btn_continue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="이어하기"
+            android:background="@drawable/button_shape_right"
+            android:textColor="@color/app_purple"
+            android:text="이어서"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_finish"
-            app:layout_constraintTop_toBottomOf="@id/tv_countdown" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
