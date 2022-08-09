@@ -1,6 +1,7 @@
 package com.d108.sduty.ui.main.home
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -89,6 +90,11 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
 
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainViewModel.displayBottomNav(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

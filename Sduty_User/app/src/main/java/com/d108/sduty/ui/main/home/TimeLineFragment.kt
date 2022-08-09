@@ -34,8 +34,8 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private var selectedPosition = 0
     private var timeLineList = mutableListOf<Timeline>()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onResume() {
+        super.onResume()
         mainViewModel.displayBottomNav(true)
     }
     override fun onCreateView(
@@ -51,7 +51,6 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         initView()
-
     }
 
     private fun initView(){
