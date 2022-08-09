@@ -6,6 +6,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+import java.sql.Time
 
 interface StoryApi {
     @GET("/story/all/{userSeq}")
@@ -13,7 +14,7 @@ interface StoryApi {
 
     @Multipart
     @POST("/story")
-    suspend fun insertStory(@Part imageFile: MultipartBody.Part, @Part("story") story: RequestBody): Response<List<Story>>
+    suspend fun insertStory(@Part imageFile: MultipartBody.Part, @Part("story") story: RequestBody): Response<Timeline>
 
     @PUT("/story")
     suspend fun updateStory(@Body story: Story): Response<Timeline>
@@ -27,14 +28,23 @@ interface StoryApi {
     @GET("/story/scrap/{user_seq}")
     suspend fun getScrapList(@Path("user_seq")userSeq: Int): Response<List<Story>>
 
-    @GET("/story/date/{user_seq}")
-    suspend fun getContributionList(@Path("user_seq")userSeq: Int): Response<List<Boolean>>
+    @GET("/profile/chart/{userSeq}")
+    suspend fun getContributionList(@Path("userSeq")userSeq: Int): Response<List<Boolean>>
 
-    @GET("/story/{user_seq}/{hashTag}")
-    suspend fun getFilteredStoryList(@Path("user_seq")userSeq: Int, @Path("hashTag")hashTag: String): Response<List<Story>>
+    @GET("/story/user/{userSeq}/{jobName}")
+    suspend fun getStoryJobAndFollowList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String): Response<MutableList<Timeline>>
+
+    @GET("/story/job/{userSeq}/{jobName}")
+    suspend fun getStoryJobAndAllList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String): Response<MutableList<Timeline>>
+
+    @GET("/story/interest/{userSeq}/{interestName}")
+    suspend fun getStoryInterestAndAllList(@Path("userSeq")userSeq: Int, @Path("interestName")interestName: String): Response<MutableList<Timeline>>
+
+    @GET("/story/recommand/{userSeq}")
+    suspend fun getStoryRecommended(@Path("userSeq") userSeq: Int): Response<Timeline>
 
     @DELETE("/story/{story_seq}")
-    suspend fun deleteStory(@Path("story_seq")storySeq: Int): Response<List<Story>>
+    suspend fun deleteStory(@Path("story_seq")storySeq: Int): Response<Void>
 
     @GET("/story/{story_seq}/reply")
     suspend fun getReplyList(@Path("story_seq")storySeq: Int): Response<List<Reply>>

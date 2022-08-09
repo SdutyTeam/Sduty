@@ -71,6 +71,7 @@ public class ReportServiceImpl implements ReportService {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("reportDate", report.getDate());
+		resultMap.put("date", report.getDate());
 		resultMap.put("totalTime", totalTime);
 		resultMap.put("tasks", report.getTask());
 

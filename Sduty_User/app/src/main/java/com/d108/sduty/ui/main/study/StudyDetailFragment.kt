@@ -50,14 +50,22 @@ class StudyDetailFragment : Fragment() {
         studyDetailViewModel.myStudyInfo.observe(viewLifecycleOwner){ map ->
             if(map != null){
                 val studyInfo = studyDetailViewModel.myStudyInfo.value as Map<String, Any>
-                var asd = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
-                binding.commonTopTitle.text = (studyInfo["study"] as Map<String, Any>)["name"].toString()
-                binding.commonTopJoin.text = asd.roundToInt().toString()
-                binding.tvMyStudyNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
+                Log.d(TAG, "onViewCreated: ${studyInfo}")
+                var joinNum = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
+                var limitNum = ((studyInfo["study"] as Map<String, Any>)["limitNumber"].toString()).toDouble()
+                
+                binding.studyDetailName.text = (studyInfo["study"] as Map<String, Any>)["name"].toString()
+                binding.studyDetailCategory.text = (studyInfo["study"] as Map<String, Any>)["category"].toString()
+                binding.studyDetailJoinnum.text = joinNum.roundToInt().toString()
+                binding.studyDetailLimitnum.text = limitNum.roundToInt().toString()
+                binding.studyDetailIntroduce.text = (studyInfo["study"] as Map<String, Any>)["introduce"].toString()
+                binding.studyDetailNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
+                
 
                 studyDetailViewModel.masterNickname((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt())
                 studyDetailViewModel.studyMasterNickName.observe(viewLifecycleOwner) {
                     nickname = it.nickname
+                    binding.studyDetailMaster.text = nickname
                 }
             }
         }

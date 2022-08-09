@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Follow;
+import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.Profile;
+import com.d108.sduty.dto.UserInterest;
 import com.d108.sduty.repo.FollowRepo;
+import com.d108.sduty.repo.InterestHashtagRepo;
 import com.d108.sduty.repo.ProfileRepo;
+import com.d108.sduty.repo.UserInterestRepo;
 
 @Service
 public class FollowServiceImpl implements FollowService {
@@ -18,7 +22,14 @@ public class FollowServiceImpl implements FollowService {
 	@Autowired
 	private FollowRepo followRepo;
 	
-	@Autowired ProfileRepo profileRepo;
+	@Autowired 
+	private ProfileRepo profileRepo;
+
+	@Autowired
+	private UserInterestRepo userInterestRepo;
+	
+	@Autowired
+	private InterestHashtagRepo interestHashtag;
 	
 	@Override
 	public List<Follow> selectFollower(int seq) {
@@ -26,11 +37,23 @@ public class FollowServiceImpl implements FollowService {
 		List<Follow> followerList = new ArrayList<>();
 		for(Optional<Follow> f : followers) {
 			if(f.isPresent()) {
-				followerList.add(f.get());
-				Profile profile = profileRepo.findById(f.get().getFolloweeSeq()).get(); 
-				followerList.get(followerList.size() - 1).setProfile(profile);
-			}
-			
+				Follow follower = f.get(); 
+				Profile profile = profileRepo.findById(follower.getFolloweeSeq()).get();
+				
+				List<UserInterest> listUI = userInterestRepo.findAllByUserSeq(profile.getUserSeq());
+				List<Integer> listInterest = new ArrayList<Integer>();
+				for(UserInterest ui : listUI) {
+					listInterest.add(ui.getInterestSeq());
+				}
+				List<InterestHashtag> listIH = new ArrayList<InterestHashtag>();
+				for(Integer i : listInterest) {
+					if(interestHashtag.findById(i).isPresent())
+						listIH.add(interestHashtag.findById(i).get());
+				}
+				profile.setInterestHashtags(listIH);
+				follower.setProfile(profile);
+				followerList.add(follower);
+			}			
 		}
 		return followerList;
 	}
@@ -41,9 +64,21 @@ public class FollowServiceImpl implements FollowService {
 		List<Follow> followeeList = new ArrayList<>();
 		for(Optional<Follow> f : followees) {
 			if(f.isPresent()) {
-				followeeList.add(f.get());
-				Profile profile = profileRepo.findById(f.get().getFollowerSeq()).get(); 
-				followeeList.get(followeeList.size() - 1).setProfile(profile);
+				Follow followee = f.get();
+				Profile profile = profileRepo.findById(followee.getFollowerSeq()).get(); 
+				List<UserInterest> listUI = userInterestRepo.findAllByUserSeq(profile.getUserSeq());
+				List<Integer> listInterest = new ArrayList<Integer>();
+				for(UserInterest ui : listUI) {
+					listInterest.add(ui.getInterestSeq());
+				}
+				List<InterestHashtag> listIH = new ArrayList<InterestHashtag>();
+				for(Integer i : listInterest) {
+					if(interestHashtag.findById(i).isPresent())
+						listIH.add(interestHashtag.findById(i).get());
+				}
+				profile.setInterestHashtags(listIH);
+				followee.setProfile(profile);
+				followeeList.add(followee);
 			}
 		}
 		return followeeList;

@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.main.home
 
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -35,6 +36,11 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var replyAdapter: ReplyAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainViewModel.displayBottomNav(false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,7 +99,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 adapter = replyAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             }
-            ivLikes.setOnClickListener {
+            ivFavorite.setOnClickListener {
                 viewModel.likeStory(Likes(mainViewModel.user.value!!.seq, args.seq))
             }
             ivScrap.setOnClickListener {

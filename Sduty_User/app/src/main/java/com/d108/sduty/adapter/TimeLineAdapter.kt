@@ -16,6 +16,7 @@ class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdap
             field = value
             notifyDataSetChanged()
         }
+
     inner class ViewHolder(val binding: ItemTimelineBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(){
             binding.apply {
@@ -31,6 +32,9 @@ class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdap
                 }
                 ivProfile.setOnClickListener {
                     onClickTimelineItem.onProfileClicked(it, adapterPosition)
+                }
+                constComments.setOnClickListener {
+                    onClickTimelineItem.onReplyClicked(it, adapterPosition)
                 }
             }
         }

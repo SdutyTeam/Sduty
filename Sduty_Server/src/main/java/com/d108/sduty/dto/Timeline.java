@@ -18,6 +18,7 @@ public class Timeline {
 	private Story story ;
 	private int cntReply; 
 	private List<Reply> replies;
+	private int numLikes;
 	private boolean likes;
 	private boolean scrap;
 	private JobHashtag jobHashtag;

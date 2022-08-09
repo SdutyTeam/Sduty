@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
+import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
@@ -41,6 +42,7 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var storyAdapter: StoryAdapter
+    private lateinit var contributionAdapter: ContributionAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,6 +62,7 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     private fun initViewModel() {
         viewModel.getUserStoryListValue(args.userSeq)
+        viewModel.getContribution(args.userSeq)
         viewModel.userStoryList.observe(viewLifecycleOwner){
             storyAdapter.list = it
         }
@@ -81,9 +84,13 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
             viewModel.getProfileValue(args.userSeq)
         }
+        viewModel.contributionList.observe(viewLifecycleOwner){
+            contributionAdapter.list = it
+        }
     }
 
     private fun initView() {
+        contributionAdapter = ContributionAdapter()
         storyAdapter = StoryAdapter(requireActivity())
         storyAdapter.onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
             override fun onClick(story: Story, position: Int) {
@@ -119,6 +126,10 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             }
             tvCountFollower.setOnClickListener {
                 findNavController().safeNavigate(UserProfileFragmentDirections.actionUserProfileFragmentToFollowFragment(args.userSeq, FLAG_FOLLOWEE))
+            }
+            recylerContribution.apply {
+                layoutManager = GridLayoutManager(requireContext(), 26)
+                adapter = contributionAdapter
             }
         }
     }

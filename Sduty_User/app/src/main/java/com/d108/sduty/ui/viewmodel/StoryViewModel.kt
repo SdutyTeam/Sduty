@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.navOptions
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.*
 import com.google.gson.Gson
@@ -60,8 +61,7 @@ class StoryViewModel: ViewModel() {
                 val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
                 Log.d(TAG, "insertStory: ${response.code()}")
                 if(response.isSuccessful && response.body() != null){
-
-                    _storyList.postValue(response.body() as MutableList<Story>)
+                    getStoryListValue(story.writerSeq)
                 }
             }catch (e: Exception){
                 Log.d(TAG, "insertStory: ${e.message}")
@@ -116,16 +116,40 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _filteredStoryList = MutableLiveData<List<Story>>()
-    val filteredStoryList: LiveData<List<Story>>
-        get() = _filteredStoryList
-    fun getFilteredStoryList(userSeq: Int, hashTag: String){
+    private val _filteredTimelineList = MutableLiveData<MutableList<Timeline>>()
+    val filteredTimelineList: LiveData<MutableList<Timeline>>
+        get() = _filteredTimelineList
+    fun getTimelineJobFollowList(userSeq: Int, jobName: String){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getFilteredStoryList(userSeq, hashTag).let {
+            Retrofit.storyApi.getStoryJobAndFollowList(userSeq, jobName).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _filteredStoryList.postValue(it.body() as MutableList<Story>)
+                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
                 }else{
-                    Log.d(TAG, "getFilteredStoryList: ${it.code()}")
+                    Log.d(TAG, "getTimelineJobFollowList: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    fun getTimelineJobAllList(userSeq: Int, jobName: String){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getStoryJobAndAllList(userSeq, jobName).let {
+                if (it.isSuccessful && it.body() != null) {
+                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
+                }else{
+                    Log.d(TAG, "getTimelineJobAllList: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    fun getTimelineInterestList(userSeq: Int, jobName: String){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getStoryInterestAndAllList(userSeq, jobName).let {
+                if (it.isSuccessful && it.body() != null) {
+                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
+                }else{
+                    Log.d(TAG, "getTimelineInterestList: ${it.code()}")
                 }
             }
         }
@@ -213,7 +237,25 @@ class StoryViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.likeStory(likes).let {
                 if (it.code() == 200) {
+                    var timeline = _timeLine.value!!
+                    if(timeline.likes) timeline.numLikes--
+                    else timeline.numLikes++
+                    timeline.likes = !timeline.likes
+                    _timeLine.postValue(timeline)
+                }else if(it.code() == 401){
 
+                }
+                else{
+
+                }
+            }
+        }
+    }
+
+    fun likeStoryInTimeLine(likes: Likes){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.likeStory(likes).let {
+                if (it.code() == 200) {
                 }else if(it.code() == 401){
 
                 }
@@ -228,7 +270,9 @@ class StoryViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.scrapStory(scrap).let {
                 if (it.code() == 200) {
-
+                    var timeline = _timeLine.value!!
+                    timeline.scrap = !timeline.scrap
+                    _timeLine.postValue(timeline)
                 }else if(it.code() == 401){
 
                 }
@@ -273,13 +317,27 @@ class StoryViewModel: ViewModel() {
     val isFollowSucceed: LiveData<Boolean>
         get() = _isFollowSucceed
     fun doFollow(follow: Follow){
-        Log.d(TAG, "doFollow: $follow")
         viewModelScope.launch(Dispatchers.IO) {
             Retrofit.profileApi.doFollow(follow).let {
                 if (it.isSuccessful) {
                     _isFollowSucceed.postValue(!_isFollowSucceed.value!!)
                 } else {
                     Log.d(TAG, "doFollow: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    private val _contributionList = MutableLiveData<List<Boolean>>()
+    val contributionList: LiveData<List<Boolean>>
+        get() = _contributionList
+    fun getContribution(userSeq: Int){  
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.getContributionList(userSeq).let { 
+                if(it.isSuccessful && it.body() != null){
+                    _contributionList.postValue(it.body())
+                }else{
+                    Log.d(TAG, "getContribution: ${it.code()}")
                 }
             }
         }

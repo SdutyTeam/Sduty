@@ -15,13 +15,19 @@ public interface StoryRepo extends JpaRepository<Story, Integer>{
 	List<Optional<Story>> findBywriterSeqOrderByRegtimeDesc(int userSeq);//작성자로 조회
 	List<Story> findAllByOrderByRegtimeDesc();//전체 조회
 	List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs);//팔로우한 작성자들로 조회
-	List<Story> findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(List<Integer> writerSeqs, int jobSeq);//팔로우한 작성자들로 조회
+	List<Story> findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(List<Integer> writerSeqs, int jobSeq);//팔로우한 작성자들을 직업 태그로 조회
+	List<Story> findAllByjobHashtagOrderByRegtimeDesc(int jobSeq);
+	List<Story> findAllByjobHashtagInOrderByRegtimeDesc(List<Integer> seqs);
 	List<Story> findAllBySeqInOrderByRegtimeDesc(List<Integer> storySeqs);//게시글 목록들로 조회
 	Story findTopByWriterSeqOrderByRegtimeDesc(int writerSeq);
 	
 	@Query(value="SELECT distinct dayofyear(substr(story_regtime, 1,10)) as dayofyear FROM sduty.story where story_writer_seq = ?1", nativeQuery=true)
 	List<Integer> findAllRegtime(int userSeq);
 	
-//	@Query(value="select * from story as s where story_public = 2 and story_job_hashtag = ?1 and datediff(now(), story_regtime) < 7 order by rand() limit 1", nativeQuery=true)
-//	Story findRecommanded(int storyJobHashtag);
+	List<Story> findByWarningGreaterThan(int zero);
+	
+	@Query(value="select * from story as s where story_public = 2 and story_job_hashtag = ?1 and datediff(now(), story_regtime) < 7 order by rand() limit 1", nativeQuery=true)
+	Story findRecommanded(String storyJobHashtag);
+	
+
 }

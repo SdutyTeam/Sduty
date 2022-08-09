@@ -85,7 +85,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
 
         interestAdapter = TagAdapter(INTEREST_TAG)
         interestAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
-            override fun onClick(view: View, position: Int) {
+            override fun onClick(view: View, position: Int, tagName: String) {
                 selectedInterestList.add(interestList[position])
                 interestList.removeAt(position)
                 interestAdapter.interestList = interestList
@@ -96,7 +96,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
 
         jobAdapter = TagAdapter(JOB_TAG)
         jobAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
-            override fun onClick(view: View, position: Int) {
+            override fun onClick(view: View, position: Int, tagName: String) {
                 selectedJobList.add(jobList[position])
                 jobList.removeAt(position)
                 jobAdapter.jobList = jobList
@@ -107,7 +107,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
 
         selectedInterestAdapter = TagAdapter(INTEREST_TAG)
         selectedInterestAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
-            override fun onClick(view: View, position: Int) {
+            override fun onClick(view: View, position: Int, tagName: String) {
                 interestList.add(selectedInterestList[position])
                 selectedInterestList.removeAt(position)
                 interestAdapter.interestList = interestList
@@ -118,7 +118,7 @@ class TagSelectDialog(val mContext: Context) : DialogFragment() {
 
         selectedJobAdapter = TagAdapter(JOB_TAG)
         selectedJobAdapter.onClickTagItem = object : TagAdapter.OnClickTagListener{
-            override fun onClick(view: View, position: Int) {
+            override fun onClick(view: View, position: Int, tagName: String) {
                 jobList.add(selectedJobList[position])
                 selectedJobList.removeAt(position)
                 jobAdapter.jobList = jobList

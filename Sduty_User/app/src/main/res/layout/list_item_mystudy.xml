@@ -36,24 +36,11 @@
                     android:id="@+id/iv_type_cam"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:src="@drawable/img_type_camstduy"
+                    android:src="@{studyList.roomId != null ?  @drawable/img_type_camstduy : @drawable/img_type_study}"
                     android:layout_marginTop="40dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:visibility="@{studyList.roomId != null ?  View.VISIBLE : View.INVISIBLE}"
-                    />
-
-                <ImageView
-                    android:id="@+id/iv_type_normal"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:src="@drawable/img_type_study"
-                    android:layout_marginTop="40dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:visibility="@{studyList.roomId != null ? View.INVISIBLE : View.VISIBLE}"
                     />
 
                 <LinearLayout

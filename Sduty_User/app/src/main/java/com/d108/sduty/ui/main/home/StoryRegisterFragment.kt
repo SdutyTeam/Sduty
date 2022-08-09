@@ -1,6 +1,8 @@
 package com.d108.sduty.ui.main.home
 
 import android.app.Activity
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -22,6 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
+import com.d108.sduty.adapter.SelectedTagAdapter
 import com.d108.sduty.adapter.TagAdapter
 import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.NOT_PROFILE
@@ -56,8 +59,8 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var selectedTagList = mutableListOf<String>()
     private var jobHashtag: JobHashtag? = null
     private var interestHashtagList: MutableList<Int>? = null
-    private val tagAdapter = TagAdapter(ALL_TAG)
-
+    private val tagAdapter = SelectedTagAdapter(ALL_TAG)
+    private var storyImage: Bitmap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -89,15 +92,16 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainViewModel.displayBottomNav(false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         initView()
         initViewModel()
-        if(args.storyImage != null){
-            viewModel.setStoryImage(args.storyImage)
-        }
+
     }
 
     private fun initViewModel() {
@@ -119,11 +123,14 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     binding.apply {
                         //imgStory.setImageURI(fileUri)
                         imageUrl = UriPathUtil().getPath(requireContext(), fileUri)
-                        Log.d(TAG, "initView: ${imageUrl}")
-                        findNavController().safeNavigate(
-                            StoryRegisterFragmentDirections
-                                .actionStoryRegisterFragmentToStoryDecoFragment(fileUri.toString())
-                        )
+                        StoryDecoFragment(requireContext(), fileUri.toString()).let {
+                            it.onSaveBtnClickListener = object : StoryDecoFragment.OnSaveBtnClickListener{
+                                override fun onClick(bitmap: Bitmap) {
+                                    viewModel.setStoryImage(bitmap)
+                                }
+                            }
+                            it.show(parentFragmentManager, null)
+                        }
                     }
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
                     requireContext().showToast(ImagePicker.getError(data))
@@ -152,14 +159,6 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         startForProfileImageResult.launch(intent)
                     }
             }
-            imgStory.setOnClickListener {
-                ImagePicker.with(requireActivity())
-                    .crop(3f, 4f)	    //Crop image and let user choose aspect ratio.
-                    .compress(1024)
-                    .createIntent {
-                        startForProfileImageResult.launch(it)
-                    }
-            }
             ivBack.setOnClickListener {
                 navigateBack(requireActivity())
             }
@@ -173,7 +172,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }else{
                     storyViewModel.insertStory(Story(mainViewModel.user.value!!.seq, "", tagViewModel.jobTagMap.value!![mainViewModel.profile.value!!.job],  etWrite.text.toString(), disclosure, interestHashtagList), viewModel.bitmap.value!!)
                     requireContext().showToast("스토리가 등록 되었습니다")
-                    findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToTimeLineFragment())
+                    navigateBack(requireActivity())
                 }
             }
             selectedTagList.clear()

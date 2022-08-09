@@ -39,6 +39,14 @@ class SettingFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
+            btnLogout.setOnClickListener {
+                requireActivity().showAlertDialog("로그아웃","로그아웃 하시겠습니까?", object : DialogInterface.OnClickListener{
+                    override fun onClick(p0: DialogInterface?, p1: Int) {
+                        findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
+                    }
+                })
+
+            }
             btnLock.setOnClickListener {
                 findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToAccessibilityFragment())
             }

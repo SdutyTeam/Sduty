@@ -15,4 +15,10 @@
         <!-- Customize your theme here. -->
         <item name="android:timePickerStyle">@style/MyTimePickerStyle</item>
     </style>
+
+    <style name="RegisterDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up_enter</item>
+        <item name="android:windowExitAnimation">@anim/slide_down_exit</item>
+    </style>
+
 </resources>

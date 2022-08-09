@@ -21,7 +21,10 @@ import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentLoginBinding
 import com.d108.sduty.ui.main.home.TimeLineFragment
 import com.d108.sduty.ui.main.mypage.MyPageFragment
+import com.d108.sduty.ui.main.study.MyStudyFragmentDirections
+import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
 import com.d108.sduty.ui.sign.dialog.DialogFindInfo
+import com.d108.sduty.ui.sign.dialog.RegisterDialog
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -157,8 +160,12 @@ class LoginFragment : Fragment() {
                 naverLogin()
             }
             btnJoin.setOnClickListener {
-                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
-                    COMMON_JOIN))
+                // 원래 코드 : JoinFragment로 이동
+//                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
+//                    COMMON_JOIN))
+                // 수정 : RegisterDialog 띄우기
+                val dialog = RegisterDialog(requireContext())
+                dialog.showDialog()
             }
 
             var filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
