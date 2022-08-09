@@ -12,16 +12,35 @@ private const val TAG ="TimelinePagingSource"
 class TimelinePagingSource(private val storyApi: StoryApi, private val userSeq: Int): PagingSource<Int, Timeline>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Timeline> {
         return try{
-            val page = params.key ?: STARTING_PAGE_INDEX
-            Log.d(TAG, "load: $page")
-            val response = storyApi.getAllPagingTimeline(userSeq, page)
-            val post = response?.body()
-            Log.d(TAG, "load: ${post}")
+//            val page = params.key ?: STARTING_PAGE_INDEX
+//            Log.d(TAG, "load: $page")
+//            val response = storyApi.getAllPagingTimeline(userSeq, page)
+//            val post = response?.body()
+//            Log.d(TAG, "load: ${post}")
+//
+//            LoadResult.Page(
+//                data = response.body()!!,
+//                prevKey = null,
+//                nextKey = page + 1)
 
-            LoadResult.Page(
-                data = response.body()!!,
-                prevKey = null,
-                nextKey = page + 1)
+
+                        val pageId = params.key?: 1
+            val response = storyApi.getAllPagingTimeline(userSeq, pageId)
+            val myModelList = response.body()?: listOf()
+
+            if(response.isSuccessful && myModelList.isNotEmpty()) {
+                LoadResult.Page(
+                    data = myModelList,
+                    prevKey = null,
+                    nextKey = pageId + 1
+                )
+            } else {
+                LoadResult.Page(
+                    data = myModelList,
+                    prevKey = null,
+                    nextKey = null
+                )
+            }
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
