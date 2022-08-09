@@ -77,7 +77,9 @@ public class StoryController {
 
 		System.out.println(userSeq);
 		Page<Timeline> timeLineList = timelineService.selectAllPagingTimelines(pageable, userSeq);
-		System.out.println(timeLineList);
+		if(timeLineList == null) {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
 		return new ResponseEntity<List<Timeline>>(timeLineList.toList(), HttpStatus.OK);
 
 	}
