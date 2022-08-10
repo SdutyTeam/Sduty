@@ -65,8 +65,12 @@ class MyPageFragment : Fragment() {
                 contributionAdapter.list = it
                 Log.d(TAG, "initViewModel: ${it}")
             }
-            getContribution(mainViewModel.user.value!!.seq)
-            getUserStoryListValue(mainViewModel.user.value!!.seq)
+            if(viewModel.contributionList.value == null) {
+                getContribution(mainViewModel.user.value!!.seq)
+            }
+            if(viewModel.userStoryList.value == null) {
+                getUserStoryListValue(mainViewModel.user.value!!.seq)
+            }
             getProfileValue(mainViewModel.user.value!!.seq)
 
         }
@@ -75,9 +79,12 @@ class MyPageFragment : Fragment() {
     private fun initView(){
         contributionAdapter = ContributionAdapter()
         storyAdapter = StoryAdapter(requireActivity())
-        storyAdapter.onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
-            override fun onClick(story: Story, position: Int) {
-                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToStoryDetailFragment(story.seq))
+        storyAdapter.apply {
+            setHasStableIds(true)
+            onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
+                override fun onClick(story: Story, position: Int) {
+                    findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToStoryDetailFragment(story.seq))
+                }
             }
         }
         binding.apply {

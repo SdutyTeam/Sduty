@@ -18,10 +18,12 @@
             <ImageView
                 android:id="@+id/common_top_back"
                 android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:padding="12dp"
+                android:layout_height="50dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/icon_back"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/img_back"
+                android:padding="13dp"
                 />
 
             <TextView

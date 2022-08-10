@@ -8,8 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
 import com.d108.sduty.common.ALL_TAG
@@ -56,6 +60,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private fun initView(){
         timeLineAdapter = TimeLineAdapter(requireActivity())
         timeLineAdapter.apply {
+            setHasStableIds(true)
             onClickTimelineItem = object : TimeLineAdapter.TimeLineClickListener{
                 override fun onFavoriteClicked(view: View, position: Int) {
                     storyViewModel.likeStoryInTimeLine(Likes(mainViewModel.user.value!!.seq, timeLineAdapter.list[position].story.seq))
@@ -108,6 +113,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                         .actionTimeLineFragmentToStoryRegisterFragment(null)
                 )
             }
+
             recyclerTimeline.apply {
                 adapter = timeLineAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -134,6 +140,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         storyViewModel.timelineList.observe(viewLifecycleOwner){
             timeLineList = it
             timeLineAdapter.list = it
+            Log.d(TAG, "initViewModel: ${it}")
         }
 
         storyViewModel.filteredTimelineList.observe(viewLifecycleOwner){
@@ -141,7 +148,9 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             timeLineAdapter.list = it
         }
 
-        storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
+        if(storyViewModel.timelineList.value == null) {
+            storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
+        }
         mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
     }
 

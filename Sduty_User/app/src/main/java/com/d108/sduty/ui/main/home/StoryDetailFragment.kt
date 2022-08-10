@@ -20,9 +20,12 @@ import com.d108.sduty.adapter.ReplyAdapter
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.ui.main.study.StudyDetailFragmentDirections
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.navigateBack
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
 import com.google.android.material.navigation.NavigationView
@@ -48,6 +51,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStoryDetailBinding.inflate(inflater, container, false)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         val displaymetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
         val deviceWidth = displaymetrics.widthPixels
@@ -70,7 +74,6 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     private fun initViewModel() {
         viewModel.apply {
             getTimelineValue(args.seq, mainViewModel.user.value!!.seq)
-            Log.d(TAG, "initViewModel: ${args.seq}, ${mainViewModel.user.value!!.seq}")
             timeLine.observe(viewLifecycleOwner){
                 replyAdapter.list = timeLine.value!!.replies
                 binding.vm = viewModel
@@ -81,7 +84,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             }
         }
         mainViewModel.apply {
-            mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+            getProfileValue(mainViewModel.user.value!!.seq)
         }
 
     }
@@ -119,6 +122,16 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                     setOnMenuItemClickListener(this@StoryDetailFragment)
                     inflate(menuId)
                     show()
+                }
+            }
+            commonTopBack.setOnClickListener {
+                navigateBack(requireActivity())
+            }
+            constProfileTop.setOnClickListener {
+                if(mainViewModel.user.value!!.seq == viewModel.timeLine.value!!.story.writerSeq)
+                    findNavController().safeNavigate(StoryDetailFragmentDirections.actionStoryDetailFragmentToMyPageFragment())
+                else{
+                    findNavController().safeNavigate(StoryDetailFragmentDirections.actionStoryDetailFragmentToUserProfileFragment(viewModel.timeLine.value!!.story.writerSeq))
                 }
             }
         }
