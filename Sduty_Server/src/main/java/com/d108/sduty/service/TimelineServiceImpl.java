@@ -184,6 +184,8 @@ public class TimelineServiceImpl implements TimelineService {
 			}
 			t.setReplies(listReply);
 			t.setStory(s);
+			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
+			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			return t;
 		}
