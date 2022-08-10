@@ -1,27 +1,22 @@
 package com.d108.sduty.ui.main.study
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.SearchView
-import androidx.annotation.RequiresApi
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.d108.sduty.R
 import com.d108.sduty.adapter.StudyListAdapter
 import com.d108.sduty.databinding.FragmentStudySearchBinding
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyDetailDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudySearchViewModel
-import com.d108.sduty.ui.viewmodel.MainViewModel
 
 // 스터디 검색 - 스터디 명, 카테고리 별 검색
 private const val TAG = "StudySearchFragment"
@@ -83,14 +78,20 @@ class StudySearchFragment : Fragment() {
         studySearchAdapter = StudyListAdapter(studyList)
         studySearchAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
-                // 전체 스터디 조회 - 스터디 클릭 시 상세정보 다이얼로그
-                val dialog = StudyDetailDialog(mainActivity, studyList[position])
-                dialog.showDialog()
-                dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
-                    override fun onClicked() {
-                    }
+                studySearchViewModel.studyDetail(studyList[position].seq)
+                studySearchViewModel.studyDetail.observe(viewLifecycleOwner){
+                    // 전체 스터디 조회 - 스터디 클릭 시 상세정보 다이얼로그
+                    val dialog = StudyDetailDialog(mainActivity, studyList[position], it.masterNickname, it.masterJob)
+                    dialog.showDialog()
+                    dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
+                        override fun onClicked() {
+                           // 스터디 리스트 프레그먼트 참고
 
-                })
+                        }
+
+                    })
+                }
+
             }
         }
         binding.studySearchList.apply {
