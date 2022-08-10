@@ -19,8 +19,8 @@ interface StoryApi {
     @PUT("/story")
     suspend fun updateStory(@Body story: Story): Response<Timeline>
 
-    @GET("/story/{story_seq}")
-    suspend fun getTimelineDetail(@Path("story_seq") storySeq: Int): Response<Timeline>
+    @GET("/story/{storySeq}/{userSeq}")
+    suspend fun getTimelineDetail(@Path("storySeq") storySeq: Int, @Path("userSeq")userSeq: Int): Response<Timeline>
 
     @GET("/story/writer/{user_seq}")
     suspend fun getUserStoryList(@Path("user_seq")userSeq: Int): Response<List<Story>>

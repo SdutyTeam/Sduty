@@ -34,7 +34,7 @@
                 android:id="@+id/iv_logo"
                 android:layout_width="109dp"
                 android:layout_height="29dp"
-                android:src="@drawable/img_mypage"
+                android:src="@drawable/menu_logo_text_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/common_top_back"

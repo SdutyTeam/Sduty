@@ -73,9 +73,9 @@ class StoryViewModel: ViewModel() {
     val timeLine: LiveData<Timeline>
         get() = _timeLine
 
-    fun getTimelineValue(storySeq: Int){
+    fun getTimelineValue(storySeq: Int, userSeq: Int){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getTimelineDetail(storySeq).let {
+            Retrofit.storyApi.getTimelineDetail(storySeq, userSeq).let {
                 if (it.isSuccessful && it.body() != null) {
                     _timeLine.postValue(it.body() as Timeline)
                     Log.d(TAG, "getTimelineValue: ${it.body()}")
@@ -233,15 +233,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun likeStory(likes: Likes){
+    fun likeStory(likes: Likes, userSeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.likeStory(likes).let {
                 if (it.code() == 200) {
-                    var timeline = _timeLine.value!!
-                    if(timeline.likes) timeline.numLikes--
-                    else timeline.numLikes++
-                    timeline.likes = !timeline.likes
-                    _timeLine.postValue(timeline)
+                    getTimelineValue(likes.storySeq, userSeq)
                 }else if(it.code() == 401){
 
                 }

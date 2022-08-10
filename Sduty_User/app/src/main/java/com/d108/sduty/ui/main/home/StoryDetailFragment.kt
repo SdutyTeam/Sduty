@@ -69,10 +69,12 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
     private fun initViewModel() {
         viewModel.apply {
-            getTimelineValue(args.seq)
+            getTimelineValue(args.seq, mainViewModel.user.value!!.seq)
+            Log.d(TAG, "initViewModel: ${args.seq}, ${mainViewModel.user.value!!.seq}")
             timeLine.observe(viewLifecycleOwner){
                 replyAdapter.list = timeLine.value!!.replies
                 binding.vm = viewModel
+                Log.d(TAG, "initViewModel: $it")
             }
             replyList.observe(viewLifecycleOwner){
                 replyAdapter.list = it
@@ -81,6 +83,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         mainViewModel.apply {
             mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
         }
+
     }
 
     private fun initView(){
@@ -100,7 +103,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             }
             ivFavorite.setOnClickListener {
-                viewModel.likeStory(Likes(mainViewModel.user.value!!.seq, args.seq))
+                viewModel.likeStory(Likes(mainViewModel.user.value!!.seq, args.seq), mainViewModel.user.value!!.seq)
             }
             ivScrap.setOnClickListener {
                 viewModel.scrapStory(Scrap(mainViewModel.user.value!!.seq, args.seq))
