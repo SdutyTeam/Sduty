@@ -112,8 +112,8 @@
                             android:layout_height="28dp"
                             android:layout_marginHorizontal="24dp"
                             android:layout_marginVertical="10dp"
-                            tools:src="@drawable/empty_profile_image"
-                            android:src="@drawable/empty_profile_image"
+                            android:src="@drawable/ic_trophy"
+                            app:tint="@color/yellow_200"
                             app:layout_constraintStart_toEndOf="@id/iv_profile"
                             app:layout_constraintTop_toTopOf="@id/iv_profile" />
 
@@ -138,6 +138,7 @@
                             profileHashTagText="@{vm.profile}"
                             android:textSize="16sp"
                             tools:text="직업 / 관심 분야"
+                            android:textColor="@color/app_purple_light"
                             app:layout_constraintEnd_toStartOf="@id/tv_count_follow"
                             app:layout_constraintStart_toStartOf="@id/iv_achieve"
                             app:layout_constraintTop_toBottomOf="@id/iv_achieve" />
