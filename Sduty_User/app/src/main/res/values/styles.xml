@@ -8,6 +8,16 @@
     <style name="MyTimePickerStyle" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:timePickerMode">spinner</item>
     </style>
-
+    <style name="MyDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <!-- 상단 색 변경 -->
+        <item name="colorAccent">@color/sduty_mix_violet</item>
+        <!-- dialog의 배경 변경 -->
+        <item name="background">@drawable/dialog_shape</item>
+        <!-- 선택한 날짜를 표시할 색상 -->
+        <item name="colorControlActivated">@color/sduty_mix_violet</item>
+        <item name="colorControlHighlight">@color/sduty_mix_violet</item>
+        <!-- 취소/확인버튼 색상 -->
+        <item name="android:textColor">@color/sduty_mix_violet</item>
+    </style>
 
 </resources>

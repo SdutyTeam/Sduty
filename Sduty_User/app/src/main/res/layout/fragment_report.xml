@@ -152,13 +152,18 @@
 
         <Button
             android:id="@+id/btn_return_today"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="오늘 날짜로 돌아가기"
-            android:visibility="invisible"
+            android:background="@drawable/dialog_shape"
+            android:backgroundTint="@color/sduty_mix_violet"
+            android:textColor="@color/white"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/fab_timer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="@id/fab_timer"
+            app:layout_constraintStart_toStartOf="@id/tl_planner"
+            app:layout_constraintEnd_toEndOf="@id/tl_planner"
+            tools:visibility="visible"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_timer"
