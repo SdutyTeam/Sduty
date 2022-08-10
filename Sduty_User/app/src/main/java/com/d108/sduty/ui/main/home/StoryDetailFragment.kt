@@ -9,6 +9,7 @@ import android.view.*
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -82,6 +83,9 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             replyList.observe(viewLifecycleOwner){
                 replyAdapter.list = it
             }
+            isFollowSucceed.observe(viewLifecycleOwner){
+                mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+            }
         }
         mainViewModel.apply {
             getProfileValue(mainViewModel.user.value!!.seq)
@@ -118,9 +122,15 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 }else{
                     menuId = R.menu.menu_story_visiters
                 }
+
                 PopupMenu(requireContext(), it).apply {
                     setOnMenuItemClickListener(this@StoryDetailFragment)
                     inflate(menuId)
+                    if (menuId == R.menu.menu_story_visiters && mainViewModel.checkFollowUser(viewModel.timeLine.value!!.story.writerSeq)) {
+                        menu[0].title = "언팔로우"
+                    }else{
+                        menu[0].title = "팔로우"
+                    }
                     show()
                 }
             }
@@ -172,13 +182,8 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 }
             }
             R.id.follow -> {
-                viewModel.doFollow(
-                    Follow(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story.writerSeq))
-                if (mainViewModel.checkFollowUser(viewModel.timeLine.value!!.story.writerSeq)) {
-                    item.title = "언팔로우"
-                }else{
-                    item.title = "팔로우"
-                }
+                viewModel.doFollow(Follow(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story.writerSeq))
+
             }
         }
 

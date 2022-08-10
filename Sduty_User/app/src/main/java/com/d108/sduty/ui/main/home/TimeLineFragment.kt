@@ -40,7 +40,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private var timeLineList = mutableListOf<Timeline>()
 
     private lateinit var pageAdapter: TimeLinePagingAdapter
-
+    private lateinit var menuSelectedTimeline: Timeline
     override fun onResume() {
         super.onResume()
         mainViewModel.displayBottomNav(true)
@@ -56,53 +56,34 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        initViewModel()
-//        initView()
-        pageAdapter = TimeLinePagingAdapter(requireActivity())
-        binding.recyclerTimeline.adapter = pageAdapter
-        binding.recyclerTimeline.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        storyViewModel.getTimelineListValue(mainViewModel.user.value!!.seq)
-        storyViewModel.pagingTimelineList.observe(viewLifecycleOwner){
-            Log.d(TAG, "onViewCreated: $it")
-            pageAdapter.submitData(this.lifecycle, it)
 
-
-        }
-
+        initViewModel()
+        initView()
 
     }
 
     private fun initView(){
-        timeLineAdapter = TimeLineAdapter(requireActivity())
-        timeLineAdapter.apply {
-            setHasStableIds(true)
-            onClickTimelineItem = object : TimeLineAdapter.TimeLineClickListener{
-                override fun onFavoriteClicked(view: View, position: Int) {
-                    storyViewModel.likeStoryInTimeLine(Likes(mainViewModel.user.value!!.seq, timeLineAdapter.list[position].story.seq))
-                    if(timeLineList[position].likes)timeLineList[position].numLikes--
-                    else timeLineList[position].numLikes++
-                    timeLineList[position].likes = !timeLineList[position].likes
-                    timeLineAdapter.list = timeLineList
+        pageAdapter = TimeLinePagingAdapter(requireActivity())
+        pageAdapter.apply {
+            onClickTimelineItem = object : TimeLinePagingAdapter.TimeLineClickListener{
+                override fun onFavoriteClicked(timeline: Timeline, position: Int) {
+                    storyViewModel.likeStoryInTimeLine(Likes(mainViewModel.user.value!!.seq, timeline.story.seq))
+                    changeLikes(position)
                 }
-                override fun onScrapClicked(view: View, position: Int) {
-                    storyViewModel.scrapStory(Scrap(mainViewModel.user.value!!.seq, timeLineAdapter.list[position].story.seq))
-                    timeLineList[position].scrap = !timeLineList[position].scrap
-                    timeLineAdapter.list = timeLineList
+
+                override fun onScrapClicked(timeline: Timeline, position: Int) {
+                    storyViewModel.scrapStory(Scrap(mainViewModel.user.value!!.seq, timeline.story.seq))
+                    changeScrap(position)
                 }
-                override fun onReplyClicked(view: View, position: Int) {
-                    findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToStoryDetailFragment(timeLineList[position].story.seq))
-//                    if(timeLineAdapter.list[position].profile.userSeq != mainViewModel.user.value!!.seq)
-//                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToUserProfileFragment(timeLineAdapter.list[position].profile.userSeq))
-//                    else{
-//                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToMyPageFragment())
-//                    }
+                override fun onReplyClicked(timeline: Timeline) {
+                    findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToStoryDetailFragment(timeline.story.seq))
                 }
-                override fun onMenuClicked(view: View, position: Int) {
-                    selectedPosition = position
+                override fun onMenuClicked(view: View, timeline: Timeline) {
+                    menuSelectedTimeline = timeline
                     PopupMenu(requireContext(), view).apply {
                         setOnMenuItemClickListener(this@TimeLineFragment)
                         inflate(R.menu.menu_story_visiters)
-                        if (mainViewModel.checkFollowUser(timeLineAdapter.list[position].story.writerSeq)) {
+                        if (mainViewModel.checkFollowUser(timeline.story.writerSeq)) {
                             menu[0].title = "언팔로우"
                         }else{
                             menu[0].title = "팔로우"
@@ -110,9 +91,9 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                         show()
                     }
                 }
-                override fun onProfileClicked(view: View, position: Int) {
-                    if(timeLineAdapter.list[position].profile.userSeq != mainViewModel.user.value!!.seq)
-                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToUserProfileFragment(timeLineAdapter.list[position].profile.userSeq))
+                override fun onProfileClicked(timeline: Timeline) {
+                    if(timeline.profile.userSeq != mainViewModel.user.value!!.seq)
+                        findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToUserProfileFragment(timeline.profile.userSeq))
                     else{
                         findNavController().safeNavigate(TimeLineFragmentDirections.actionTimeLineFragmentToMyPageFragment())
                     }
@@ -130,7 +111,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             }
 
             recyclerTimeline.apply {
-                adapter = timeLineAdapter
+                adapter = pageAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
             ivFilter.setOnClickListener {
@@ -152,29 +133,27 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     }
 
     private fun initViewModel(){
-        storyViewModel.timelineList.observe(viewLifecycleOwner){
-            timeLineList = it
-            timeLineAdapter.list = it
-            Log.d(TAG, "initViewModel: ${it}")
+        storyViewModel.getTimelineListValue(mainViewModel.user.value!!.seq)
+        storyViewModel.pagingTimelineList.observe(viewLifecycleOwner){
+            Log.d(TAG, "onViewCreated: $it")
+            pageAdapter.submitData(this.lifecycle, it)
         }
 
         storyViewModel.filteredTimelineList.observe(viewLifecycleOwner){
             timeLineList = it
             timeLineAdapter.list = it
         }
-
-//        if(storyViewModel.timelineList.value == null) {
-            storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
-//        }
         mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+        storyViewModel.isFollowSucceed.observe(viewLifecycleOwner){
+            mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.follow -> {
-                storyViewModel.doFollow(Follow(mainViewModel.user.value!!.seq, timeLineAdapter.list[selectedPosition].story.writerSeq))
-                mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
-                if (mainViewModel.checkFollowUser(timeLineAdapter.list[selectedPosition].story.writerSeq)) {
+                storyViewModel.doFollow(Follow(mainViewModel.user.value!!.seq, menuSelectedTimeline.story.writerSeq))
+                if (mainViewModel.checkFollowUser(menuSelectedTimeline.story.writerSeq)) {
                     item.title = "언팔로우"
                 }else{
                     item.title = "팔로우"

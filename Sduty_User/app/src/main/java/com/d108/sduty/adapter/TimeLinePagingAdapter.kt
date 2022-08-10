@@ -19,22 +19,37 @@ class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline,
             binding.apply {
                 data = timeline
                 ivFavorite.setOnClickListener {
-                    onClickTimelineItem.onFavoriteClicked(it, absoluteAdapterPosition)
+                    onClickTimelineItem.onFavoriteClicked(timeline, bindingAdapterPosition)
                 }
                 ivMenu.setOnClickListener {
-                    onClickTimelineItem.onMenuClicked(it, absoluteAdapterPosition)
+                    onClickTimelineItem.onMenuClicked(it, timeline)
                 }
                 ivScrap.setOnClickListener {
-                    onClickTimelineItem.onScrapClicked(it, absoluteAdapterPosition)
+                    onClickTimelineItem.onScrapClicked(timeline, bindingAdapterPosition)
                 }
                 ivProfile.setOnClickListener {
-                    onClickTimelineItem.onProfileClicked(it, absoluteAdapterPosition)
+                    onClickTimelineItem.onProfileClicked(timeline)
                 }
                 constComments.setOnClickListener {
-                    onClickTimelineItem.onReplyClicked(it, absoluteAdapterPosition)
+                    onClickTimelineItem.onReplyClicked(timeline)
                 }
             }
         }
+    }
+
+    fun changeLikes(position: Int){
+        if(getItem(position)!!.likes){
+            getItem(position)!!.numLikes = getItem(position)!!.numLikes - 1
+        }else{
+            getItem(position)!!.numLikes = getItem(position)!!.numLikes + 1
+        }
+        getItem(position)!!.likes = !getItem(position)!!.likes
+        notifyItemChanged(position)
+    }
+
+    fun changeScrap(position: Int){
+        getItem(position)!!.scrap = !getItem(position)!!.scrap
+        notifyItemChanged(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -57,11 +72,11 @@ class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline,
     }
 
     interface TimeLineClickListener{
-        fun onFavoriteClicked(view: View, position: Int)
-        fun onScrapClicked(view: View, position: Int)
-        fun onReplyClicked(view: View, position: Int)
-        fun onMenuClicked(view: View, position: Int)
-        fun onProfileClicked(view: View, position: Int)
+        fun onFavoriteClicked(timeline: Timeline, position: Int)
+        fun onScrapClicked(timeline: Timeline, position: Int)
+        fun onReplyClicked(timeline: Timeline)
+        fun onMenuClicked(view: View, timeline: Timeline)
+        fun onProfileClicked(timeline: Timeline)
     }
     lateinit var onClickTimelineItem: TimeLineClickListener
 
