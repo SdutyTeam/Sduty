@@ -26,6 +26,7 @@ import com.d108.sduty.R
 import com.sendbird.calls.AudioDevice
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 fun Activity.hideKeyboard() {
     val inputMethodManager =
@@ -108,8 +109,9 @@ fun convertTimeDateToString(date: Date, format: String): String {
     return simpleDateFormat.format(date)
 }
 
-fun convertTimeHHMMDDToLong(str: String){
-    val time = str.split(":")
+fun convertDpToPx(context: Context, dp: Float): Int{
+    val density = context.resources.displayMetrics.density
+    return (dp * density).roundToInt()
 }
 
 // device size
