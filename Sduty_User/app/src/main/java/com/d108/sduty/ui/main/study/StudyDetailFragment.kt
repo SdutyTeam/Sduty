@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentStudyDetailBinding
+import com.d108.sduty.model.dto.Alarm
 import com.d108.sduty.model.dto.Member
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.main.study.viewmodel.StudyDetailViewModel
@@ -53,13 +54,22 @@ class StudyDetailFragment : Fragment() {
                 Log.d(TAG, "onViewCreated: ${studyInfo}")
                 var joinNum = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
                 var limitNum = ((studyInfo["study"] as Map<String, Any>)["limitNumber"].toString()).toDouble()
-                
+
+                if((studyInfo["study"] as Map<String, Any>)["password"] == null){
+                    binding.imgStudyLock.setImageResource(R.drawable.img_study_detail_unlock)
+                } else{
+                    binding.imgStudyLock.setImageResource(R.drawable.img_study_detail_lock)
+                }
+
+                binding.studyDetailCategory.text = "#일반스터디" + "#" + (studyInfo["study"] as Map<String, Any>)["category"].toString()
+
                 binding.studyDetailName.text = (studyInfo["study"] as Map<String, Any>)["name"].toString()
-                binding.studyDetailCategory.text = (studyInfo["study"] as Map<String, Any>)["category"].toString()
                 binding.studyDetailJoinnum.text = joinNum.roundToInt().toString()
                 binding.studyDetailLimitnum.text = limitNum.roundToInt().toString()
                 binding.studyDetailIntroduce.text = (studyInfo["study"] as Map<String, Any>)["introduce"].toString()
                 binding.studyDetailNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
+
+
                 
 
                 studyDetailViewModel.masterNickname((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt())

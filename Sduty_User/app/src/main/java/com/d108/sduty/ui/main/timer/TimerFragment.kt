@@ -64,14 +64,23 @@ class TimerFragment : Fragment() {
 
         timerViewModel.apply {
             // 토스트 메시지 출력 요청
-            toastMessage.observe(viewLifecycleOwner) { message ->
-                requireContext().showToast(message)
+            isInsertedTask.observe(viewLifecycleOwner) { succeeded ->
+                if (succeeded) {
+                    requireContext().showToast("등록이 완료되었습니다.")
+                    resetLiveData("isInsertedTask")
+                }
+            }
+
+            isErredConnection.observe(viewLifecycleOwner) { erred ->
+                if (erred) {
+                    requireContext().showToast("서버와 연결하는데 실패했습니다.")
+                    resetLiveData("isErredConnection")
+                }
             }
 
             // 하루 공부한 시간
             timerViewModel.report.observe(viewLifecycleOwner) { report ->
                 binding.tvTotalTime.text = report.totalTime
-                // TODO: 차트 변경
             }
 
             // 타이머
@@ -90,10 +99,10 @@ class TimerFragment : Fragment() {
         today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy년 M월 d일")
 
         binding.apply {
-            // 날짜 선택
-            commonSelectedDate.setOnClickListener {
-                showDatePicker()
-            }
+//            // 날짜 선택
+//            commonSelectedDate.setOnClickListener {
+//                showDatePicker()
+//            }
 
             // 공부 시작, 종료
             ivTimer.setOnClickListener {
@@ -112,13 +121,14 @@ class TimerFragment : Fragment() {
                 }
             }
 
-            // 오늘 날짜로 돌아가기
-            btnReturnToday.setOnClickListener {
-                commonSelectedDate.text = today
-                ivTimer.visibility = View.VISIBLE
-                btnReturnToday.visibility = View.INVISIBLE
-                timerViewModel.selectDate(today)
-            }
+//            // 오늘 날짜로 돌아가기
+//            btnReturnToday.setOnClickListener {
+//                commonSelectedDate.text = today
+//                tvTimer.visibility = View.VISIBLE
+//                ivTimer.visibility = View.VISIBLE
+//                btnReturnToday.visibility = View.INVISIBLE
+//                timerViewModel.selectDate(today)
+//            }
 
             // 리포트로 이동
             fabReport.setOnClickListener {
@@ -126,39 +136,39 @@ class TimerFragment : Fragment() {
             }
 
             // 첫 화면은 오늘 날짜로 설정
-            commonSelectedDate.text = today
-            timerViewModel.selectDate(today)
+            tvToday.text = today
+            timerViewModel.selectDate(mainViewModel.user.value!!.seq, today)
             timerViewModel.restoreTime()
         }
     }
 
-    private fun showDatePicker(){
-        val cal = Calendar.getInstance()
-        // 날짜 선택 후 동작할 리스너
-        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, day ->
-            val selectedDate = "${year}년 ${month + 1}월 ${day}일"
-            binding.commonSelectedDate.text = selectedDate
-            timerViewModel.selectDate(selectedDate)
-
-            when(selectedDate == today){
-                true -> { // 오늘
-                    binding.apply {
-                        tvTimer.visibility = View.VISIBLE
-                        ivTimer.visibility = View.VISIBLE
-                        btnReturnToday.visibility = View.GONE
-                    }
-                }
-                false -> { // 다른 날
-                    binding.apply {
-                        tvTimer.visibility = View.GONE
-                        ivTimer.visibility = View.INVISIBLE
-                        btnReturnToday.text = "오늘($today) 로 돌아가기"
-                        btnReturnToday.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
-        // 캘린더 다이얼로그 출력
-        DatePickerDialog(requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
-    }
+//    private fun showDatePicker(){
+//        val cal = Calendar.getInstance()
+//        // 날짜 선택 후 동작할 리스너
+//        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, day ->
+//            val selectedDate = "${year}년 ${month + 1}월 ${day}일"
+//            binding.commonSelectedDate.text = selectedDate
+//            timerViewModel.selectDate(selectedDate)
+//
+//            when(selectedDate == today){
+//                true -> { // 오늘
+//                    binding.apply {
+//                        tvTimer.visibility = View.VISIBLE
+//                        ivTimer.visibility = View.VISIBLE
+//                        btnReturnToday.visibility = View.GONE
+//                    }
+//                }
+//                false -> { // 다른 날
+//                    binding.apply {
+//                        tvTimer.visibility = View.GONE
+//                        ivTimer.visibility = View.INVISIBLE
+//                        btnReturnToday.text = "오늘($today) 로 돌아가기"
+//                        btnReturnToday.visibility = View.VISIBLE
+//                    }
+//                }
+//            }
+//        }
+//        // 캘린더 다이얼로그 출력
+//        DatePickerDialog(requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
+//    }
 }

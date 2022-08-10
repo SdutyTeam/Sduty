@@ -21,10 +21,22 @@ import kotlin.concurrent.timer
 private const val TAG = "TimerViewModel"
 
 class TimerViewModel() : ViewModel() {
-    // 토스트 메시지
-    private val _toastMessage = MutableLiveData<String>()
-    val toastMessage: LiveData<String>
-        get() = _toastMessage
+    // 토스트 메시지 출력용
+    private val _isInsertedTask = MutableLiveData<Boolean>()
+    val isInsertedTask: LiveData<Boolean>
+        get() = _isInsertedTask
+
+    private val _isDeletedTask = MutableLiveData<Boolean>()
+    val isDeletedTask: LiveData<Boolean>
+        get() = _isDeletedTask
+
+    private val _isUpdatedTask = MutableLiveData<Boolean>()
+    val isUpdatedTask: LiveData<Boolean>
+        get() = _isUpdatedTask
+
+    private val _isErredConnection = MutableLiveData<Boolean>()
+    val isErredConnection: LiveData<Boolean>
+        get() = _isErredConnection
 
     // 선택된 날짜의 리포트
     private val _report = MutableLiveData<Report>()
@@ -50,17 +62,25 @@ class TimerViewModel() : ViewModel() {
     // 현재 유예 중인지 검사
     private var isDelayingTimer = false
 
+    // 선택된 날짜
+    private var selectedDate = "1970-01-01"
+
     // 시간 측정 시작 시간
     private var _startTime: String = "00:00:00"
     val startTime: String
         get() = _startTime
 
+    // 시간 측정 시작 시간
+    private var _endTime: String = "00:00:00"
+    val endTime: String
+        get() = _endTime
+
     // 사용자가 날짜 선택
-    fun selectDate(strDate: String) {
-        val selectedDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
-        val convertedDate = convertTimeDateToString(selectedDate, "yyyy-MM-dd")
-        val userSeq = ApplicationClass.userPref.getInt("seq", 47)
+    fun selectDate(userSeq: Int, strDate: String) {
+        val beforeDate = convertTimeStringToDate(strDate, "yyyy년 M월 d일")
+        val convertedDate = convertTimeDateToString(beforeDate, "yyyy-MM-dd")
         getReport(userSeq, convertedDate)
+        selectedDate = convertedDate
     }
 
     // 앱이 종료 되었을 경우 측정 시간을 복구한다.
@@ -84,8 +104,6 @@ class TimerViewModel() : ViewModel() {
 
     // 시간 측정을 시작한다.
     fun startTimer() {
-        // TODO: 스터디에 시작 정보 알림
-
         _isRunningTimer.value = true
 
         timerTask = timer(period = 1000) {
@@ -93,6 +111,7 @@ class TimerViewModel() : ViewModel() {
             if (isDelayingTimer) {
                 _delayTime.postValue(delayTime.value!! + 1)
             }
+
         }
     }
 
@@ -112,16 +131,9 @@ class TimerViewModel() : ViewModel() {
         isDelayingTimer = true
     }
 
-    // 측정을 계속 한다.
-    fun resetDelayTimer() {
-        isDelayingTimer = false
-        _delayTime.value = 0
-    }
-
     // 시간 측정을 종료한다.
     fun stopTimer() {
-
-        // TODO: 스터디에 종료 정보 알림
+        _endTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
 
         ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
         _isRunningTimer.postValue(false)
@@ -130,23 +142,46 @@ class TimerViewModel() : ViewModel() {
         resetDelayTimer()
     }
 
+    // 측정을 계속 한다.
+    fun resetDelayTimer() {
+        isDelayingTimer = false
+        _delayTime.value = 0
+    }
+
     fun saveTask(report: Report) {
         // Task 저장
         insertTask(report)
     }
 
-    fun removeTask(position: Int) {
+    fun removeTask(userSeq: Int, position: Int) {
         val seq = report.value!!.tasks[position].seq
-        deleteTask(seq)
+        deleteTask(userSeq, seq)
     }
 
-    fun modifyTask(task: Task){
-        updateTask(task)
+    fun modifyTask(userSeq: Int, task: Task){
+        updateTask(userSeq, task)
     }
 
     fun getTodayReport(userSeq: Int){
         val today = convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd")
         getReport(userSeq, today)
+    }
+
+    fun resetLiveData(varName: String){
+        when(varName){
+            "isInsertedTask" -> {
+                _isInsertedTask.postValue(false)
+            }
+            "isUpdateTask" -> {
+                _isUpdatedTask.postValue(false)
+            }
+            "isDeletedTask" -> {
+                _isDeletedTask.postValue(false)
+            }
+            "isErredConnection" -> {
+                _isErredConnection.postValue(false)
+            }
+        }
     }
 
     /* API */
@@ -165,7 +200,7 @@ class TimerViewModel() : ViewModel() {
                     Log.d(TAG, "getReport: error ${it.errorBody()}")
                     _report.postValue(Report(0, 0, selectedDate, "00:00:00", listOf()))
                 } else {
-                    _toastMessage.postValue("서버에서 불러오는데 실패했습니다..")
+                    _isErredConnection.postValue(true)
                 }
             }
         }
@@ -177,40 +212,43 @@ class TimerViewModel() : ViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.insertTask(report).let {
                 if (it.isSuccessful) {
-                    _toastMessage.postValue("측정 기록 등록을 완료하였습니다.")
+                    _isInsertedTask.postValue(true)
+                    getTodayReport(report.ownerSeq)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
-                    _toastMessage.postValue("서버에 등록하는데 실패하였습니다.")
+                    _isErredConnection.postValue(true)
                 }
             }
         }
     }
 
     // 삭제
-    private fun deleteTask(seq: Int) {
+    private fun deleteTask(userSeq: Int, seq: Int) {
         Log.d(TAG, "deleteTask: ${seq}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.deleteTask(seq).let {
                 if (it.isSuccessful) {
-                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                    _isDeletedTask.postValue(true)
+                    getTodayReport(userSeq)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
-                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
+                    _isErredConnection.postValue(true)
                 }
             }
         }
     }
 
     // 수정
-    private fun updateTask(task: Task){
+    private fun updateTask(userSeq: Int, task: Task){
         Log.d(TAG, "updateTask: ${task}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.updateTask(task.seq, task).let {
                 if (it.isSuccessful) {
-                    _toastMessage.postValue("측정 기록 삭제를 완료하였습니다.")
+                    _isUpdatedTask.postValue(true)
+                    getTodayReport(userSeq)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
-                    _toastMessage.postValue("서버에 요청하는데 실패하였습니다.")
+                    _isErredConnection.postValue(true)
                 }
             }
         }

@@ -1,27 +1,31 @@
 package com.d108.sduty.ui.main.timer.dialog
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.d108.sduty.R
 import com.d108.sduty.databinding.DialogConfirmBinding
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.getDeviceSize
 
-class ConfirmDialog() : DialogFragment() {
+class ConfirmDialog : DialogFragment() {
     private lateinit var binding: DialogConfirmBinding
     private val timerViewModel : TimerViewModel by viewModels({requireActivity()})
+    private val mainViewModel : MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogConfirmBinding.inflate(inflater, container, false)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return binding.root
     }
 
@@ -31,36 +35,29 @@ class ConfirmDialog() : DialogFragment() {
         // 여백 터치 시 다이얼로그 종료 방지
         isCancelable = false
 
-        initView()
-
         val action = arguments?.getString("Action", "RemoveTimer")
 
         when(action){
+            // 시간 측정 기록 삭제
             "RemoveTimer" -> {
                 removeTimer()
             }
+            // 서버에 Task 삭제 요청
             "RemoveTask" -> {
                 removeTask()
             }
+            // 경고
             "Error" -> {
                 errorMessage()
             }
         }
     }
 
-    private fun initView() {
-        binding.apply {
-            btnCancel.setOnClickListener {
-                dismiss()
-            }
-        }
-    }
-
     private fun removeTimer() {
         binding.apply {
-            btnConfirm.setOnClickListener {
+            btnRemove.setOnClickListener {
                 // DelayDialog 종료
-                val fragment = requireActivity().supportFragmentManager.findFragmentByTag("TaskDialog")
+                val fragment = requireActivity().supportFragmentManager.findFragmentByTag("TaskRegistDialog")
                 requireActivity().supportFragmentManager.beginTransaction().remove(fragment!!).commit()
 
                 // Timer 측정 종료
@@ -69,22 +66,34 @@ class ConfirmDialog() : DialogFragment() {
                 // ConfirmDialog 종료
                 dismiss()
             }
+            btnCancel.setOnClickListener {
+                dismiss()
+            }
         }
     }
 
     private fun removeTask() {
         val position = arguments?.getInt("Position", 0)
-        timerViewModel.removeTask(position!!)
 
-        dismiss()
+        binding.apply {
+            btnRemove.setOnClickListener {
+                timerViewModel.removeTask(mainViewModel.user.value!!.seq, position!!)
+                dismiss()
+            }
+            btnCancel.setOnClickListener {
+                dismiss()
+            }
+        }
     }
 
     private fun errorMessage() {
         val message = arguments?.getString("Message", "")
         binding.apply {
             tvWarningMessage.text = message
+            btnRemove.visibility = View.GONE
             btnCancel.visibility = View.GONE
-            btnConfirm.setOnClickListener {
+            btnDone.visibility = View.VISIBLE
+            btnDone.setOnClickListener {
                 dismiss()
             }
         }
