@@ -60,6 +60,11 @@ class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdap
 
     override fun getItemCount(): Int = list.size
 
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+        list[position].story.seq
+    }
+
     interface TimeLineClickListener{
         fun onFavoriteClicked(view: View, position: Int)
         fun onScrapClicked(view: View, position: Int)

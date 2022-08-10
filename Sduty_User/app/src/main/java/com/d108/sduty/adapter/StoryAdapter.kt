@@ -48,6 +48,11 @@ class StoryAdapter(val activity: Activity): RecyclerView.Adapter<StoryAdapter.Vi
 
     override fun getItemCount(): Int = list.size
 
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+        list[position].seq
+    }
+
     lateinit var onClickStoryListener: OnClickStoryListener
     interface OnClickStoryListener{
         fun onClick(story: Story, position: Int)
