@@ -78,6 +78,14 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	public Profile selectBaseProfile(int seq) {
+		Optional<Profile> p = profileRepo.findById(seq);
+		if(p.isPresent())
+			return p.get();
+		return null;
+	}
+	
+	@Override
 	public Profile updateProfile(Profile profile) throws Exception {
 		int userSeq = profile.getUserSeq();
 		for(Integer ui : profile.getInterestHashtagSeqs()) {
@@ -134,6 +142,8 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		return null;
 	}
+
+
 
 
 }
