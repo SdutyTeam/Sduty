@@ -111,6 +111,7 @@
                         android:layout_height="50dp"
                         android:layout_marginVertical="20dp"
                         android:hint="ID"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:backgroundTint="@color/white"
                         android:singleLine="true" />
@@ -122,6 +123,7 @@
                         android:layout_marginVertical="20dp"
                         android:hint="Password"
                         android:inputType="textPassword"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:backgroundTint="@color/white"
                         android:singleLine="true"/>
@@ -197,7 +199,7 @@
                         android:id="@+id/btn_kakao_login"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:background="@drawable/btn_kakao_container_400"
+                        android:background="@drawable/btn_kakao_container_400px"
                         android:text="      카카오 로그인"
                         android:textSize="16sp"
                         android:textColor="@color/black"
@@ -209,7 +211,7 @@
                         android:id="@+id/btn_naver_login"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:background="@drawable/btn_naver_container_400"
+                        android:background="@drawable/btn_naver_container_400px"
                         android:text="      네이버 로그인"
                         android:textSize="16sp"
                         android:textColor="@color/white"

@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.sign
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,8 +37,11 @@ class TermsFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
+            commonTopBack.setOnClickListener {
+                // 뒤로 가기
+            }
             btnAccept.setOnClickListener {
-                if(radioSelectPrivacy.isChecked && radioSelectTemrs.isChecked){
+                if(radioSelectPrivacy.isChecked && radioSelectTerms.isChecked){
                     when(args.route){
                         COMMON_JOIN -> findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route))
                         KAKAO_JOIN -> findNavController().navigate(TermsFragmentDirections.actionTermsFragmentToJoinRegistFragment(args.route, args.token))
@@ -46,15 +50,14 @@ class TermsFragment : Fragment() {
                 }else{
                     requireContext().showToast("모든 항목에 동의해 주세요")
                 }
-
             }
             radioSelectAll.setOnClickListener {
                 if(!radioSelectAll.isChecked){
                     radioSelectPrivacy.isChecked = false
-                    radioSelectTemrs.isChecked = false
+                    radioSelectTerms.isChecked = false
                 }else {
                     radioSelectPrivacy.isChecked = true
-                    radioSelectTemrs.isChecked = true
+                    radioSelectTerms.isChecked = true
                 }
             }
             radioSelectPrivacy.setOnClickListener {
@@ -63,11 +66,17 @@ class TermsFragment : Fragment() {
                     openDialog("privacy")
                 }
             }
-            radioSelectTemrs.setOnClickListener {
-                if(radioSelectTemrs.isChecked) {
-                    radioSelectTemrs.isChecked = false
+            radioSelectTerms.setOnClickListener {
+                if(radioSelectTerms.isChecked) {
+                    radioSelectTerms.isChecked = false
                     openDialog("terms")
                 }
+            }
+            ivSelectPrivacy.setOnClickListener {
+                openDialog("privacy")
+            }
+            ivSelectTerms.setOnClickListener {
+                openDialog("terms")
             }
         }
     }
@@ -78,7 +87,7 @@ class TermsFragment : Fragment() {
             it.onClickConfirm = object :TemrsDialog.OnClickConfirm{
                 override fun onClicked(confirm: Boolean, flag: String) {
                     when(flag){
-                        "terms" -> binding.radioSelectTemrs.isChecked = confirm
+                        "terms" -> binding.radioSelectTerms.isChecked = confirm
                         "privacy" -> binding.radioSelectPrivacy.isChecked = confirm
                     }
                 }
