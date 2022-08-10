@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.main.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -56,6 +57,7 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
@@ -65,12 +67,17 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
                 val layoutParams = imgPreview.layoutParams as FrameLayout.LayoutParams
                 layoutParams.setMargins(0, 0, 0, 0)
                 imgPreview.layoutParams = layoutParams
-
+                tvTimeGradient.visibility = View.INVISIBLE
                 tvTime.visibility = View.INVISIBLE
             }
             // 기본 템플릿 적용
             btnDecoBasic.setOnClickListener {
                 tvTime.visibility = View.VISIBLE
+                tvTimeGradient.visibility = View.INVISIBLE
+            }
+            btnDecoSduty.setOnClickListener {
+                tvTime.visibility = View.INVISIBLE
+                tvTimeGradient.visibility = View.VISIBLE
             }
             var startX = 0f
             var startY = 0f
@@ -89,6 +96,22 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
                 }
                 true
             }
+            tvTimeGradient.setOnTouchListener { v, event ->
+                when(event.action){
+                    MotionEvent.ACTION_DOWN ->{
+                        startX = event.x
+                        startY = event.y
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val movedX: Float = event.x - startX
+                        val movedY: Float = event.y - startY
+                        v.x = v.x + movedX
+                        v.y = v.y + movedY
+                    }
+                }
+                true
+            }
+
             // 이미지를 Reg로
             ivDoneDeco.setOnClickListener {
                 // Bitmap : to hold the pixels where the canvas will be drawn.
@@ -105,7 +128,7 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
 
     private fun initViewModel(){
         timerViewModel.apply {
-            getTodayReport(47)
+            getTodayReport(mainViewModel.user.value!!.seq)
             report.observe(viewLifecycleOwner){
                 taskList = it.tasks
                 spinnerAdapter = TaskSpinnerAdapter(requireContext(), android.R.layout.simple_list_item_1, it.tasks)
@@ -115,6 +138,7 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
                         override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                             Log.d(TAG, "onItemSelected: ${timerViewModel.report.value}")
                             binding.tvTime.text = "${timerViewModel.report.value?.date} ${taskList[p2].startTime.substring(0, 5)} ~ ${taskList[p2].endTime.substring(0, 5)}"
+                            binding.tvTimeGradient.text = "${timerViewModel.report.value?.date} ${taskList[p2].startTime.substring(0, 5)} ~ ${taskList[p2].endTime.substring(0, 5)}"
                         }
                         override fun onNothingSelected(p0: AdapterView<*>?) {
                         }
