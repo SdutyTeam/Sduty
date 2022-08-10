@@ -184,9 +184,9 @@ public class StoryController {
 	}
 	
 	@ApiOperation(value = "스토리 상세 내용 조회 : Story > Story", response = Story.class)
-	@GetMapping("/{storySeq}")
-	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq) throws Exception {
-		Timeline selectedTimeline = timelineService.selectDetailTimeline(storySeq);
+	@GetMapping("/{storySeq}/{userSeq}")
+	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq, @PathVariable int userSeq) throws Exception {
+		Timeline selectedTimeline = timelineService.selectDetailTimeline(storySeq, userSeq);
 		if(selectedTimeline != null)
 			return new ResponseEntity<Timeline>(selectedTimeline, HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);

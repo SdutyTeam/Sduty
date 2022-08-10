@@ -45,7 +45,7 @@
                 android:src="@drawable/menu_logo_text_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toEndOf="@+id/iv_back"/>
 
             <!-- 공개 범위 설정 버튼 : 게시물의 공개 범위를 설정할 수 있다. -->
