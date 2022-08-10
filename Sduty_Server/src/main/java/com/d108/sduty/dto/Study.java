@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -59,6 +60,11 @@ public class Study {
 	private LocalDateTime regtime;
 	@Column(name = "study_notice")
 	private String notice;
+	
+	@Transient
+	private String masterNickname;
+	@Transient
+	private String masterJob;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "participation", joinColumns = @JoinColumn(name = "participation_study_seq"), inverseJoinColumns = @JoinColumn(name = "participation_user_seq"))
