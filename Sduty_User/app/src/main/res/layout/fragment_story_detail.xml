@@ -29,6 +29,8 @@
                 android:layout_height="match_parent"
                 android:padding="12dp"
                 android:src="@drawable/icon_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 />
             <ImageView
                 android:id="@+id/iv_title_text"
