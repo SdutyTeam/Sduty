@@ -1,6 +1,7 @@
 package com.d108.sduty.model.api
 
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.model.paging.PagingResult
 import com.d108.sduty.utils.Resource
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -66,4 +67,7 @@ interface StoryApi {
 
     @PUT("story/report")
     suspend fun reportStory(@Body story: Story): Response<Void>
+
+    @GET("/story/test")
+    suspend fun getAllPagingTimeline(@Query("userSeq")userSeq: Int, @Query("page")page: Int): Response<PagingResult<Timeline>>
 }

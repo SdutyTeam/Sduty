@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
+import com.d108.sduty.adapter.TimeLinePagingAdapter
 import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.FLAG_TIMELINE
 import com.d108.sduty.common.INTEREST_TAG
@@ -38,6 +39,8 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private var selectedPosition = 0
     private var timeLineList = mutableListOf<Timeline>()
 
+    private lateinit var pageAdapter: TimeLinePagingAdapter
+
     override fun onResume() {
         super.onResume()
         mainViewModel.displayBottomNav(true)
@@ -53,8 +56,20 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
-        initView()
+//        initViewModel()
+//        initView()
+        pageAdapter = TimeLinePagingAdapter(requireActivity())
+        binding.recyclerTimeline.adapter = pageAdapter
+        binding.recyclerTimeline.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        storyViewModel.getTimelineListValue(mainViewModel.user.value!!.seq)
+        storyViewModel.pagingTimelineList.observe(viewLifecycleOwner){
+            Log.d(TAG, "onViewCreated: $it")
+            pageAdapter.submitData(this.lifecycle, it)
+
+
+        }
+
+
     }
 
     private fun initView(){
