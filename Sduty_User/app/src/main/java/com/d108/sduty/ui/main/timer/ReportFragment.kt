@@ -124,7 +124,6 @@ class ReportFragment : Fragment() {
             when (selectedDate != today) {
                 true -> { // 오늘
                     binding.apply {
-                        btnReturnToday.text = "오늘($today) 로 돌아가기"
                         btnReturnToday.visibility = View.VISIBLE
                     }
                 }
@@ -137,7 +136,7 @@ class ReportFragment : Fragment() {
         }
         // 캘린더 다이얼로그 출력
         DatePickerDialog(
-            requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(
+            requireActivity(), R.style.MyDatePickerStyle, dateSetListener, cal.get(Calendar.YEAR), cal.get(
                 Calendar.MONTH
             ), cal.get(Calendar.DAY_OF_MONTH)
         ).show()
@@ -269,7 +268,7 @@ class ReportFragment : Fragment() {
                 setMargins(marginsSize, marginsSize, marginsSize, 0)
             }
             tvTime.setBackgroundColor(Color.WHITE)
-            tvTime.text = i.toString()
+            tvTime.text = String.format("%02d",i)
             tvTime.gravity = Gravity.CENTER or Gravity.CENTER_VERTICAL
 
             tableRow.addView(tvTime)
