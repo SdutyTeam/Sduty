@@ -102,8 +102,18 @@ class MyPageFragment : Fragment() {
                     }
                 }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    when(tab!!.position){
+                        0 -> {
+                            viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
+                        }
+                        1 -> {
+                            viewModel.getScrapStoryListValue(mainViewModel.user.value!!.seq)
+                        }
+                    }
+                }
             })
+            tabMyPage.getTabAt(0)!!.select()
             recylerStory.apply {
                 adapter = storyAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)

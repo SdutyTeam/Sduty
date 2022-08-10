@@ -264,17 +264,17 @@ class StoryViewModel: ViewModel() {
 
     fun scrapStory(scrap: Scrap){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.scrapStory(scrap).let {
-                if (it.code() == 200) {
-                    var timeline = _timeLine.value!!
-                    timeline.scrap = !timeline.scrap
-                    _timeLine.postValue(timeline)
-                }else if(it.code() == 401){
-
+            try {
+                Retrofit.storyApi.scrapStory(scrap).let {
+                    if (it.code() == 200 && it.body() != null) {
+                        _timeLine.postValue(it.body() as Timeline)
+                    }else if(it.code() == 401){
+                    }
+                    else{
+                    }
                 }
-                else{
-
-                }
+            }catch (e: Exception){
+                Log.d(TAG, "scrapStory: ${e.message}")
             }
         }
     }

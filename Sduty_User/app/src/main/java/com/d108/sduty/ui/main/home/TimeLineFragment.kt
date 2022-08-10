@@ -148,9 +148,9 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             timeLineAdapter.list = it
         }
 
-        if(storyViewModel.timelineList.value == null) {
+//        if(storyViewModel.timelineList.value == null) {
             storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
-        }
+//        }
         mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
     }
 

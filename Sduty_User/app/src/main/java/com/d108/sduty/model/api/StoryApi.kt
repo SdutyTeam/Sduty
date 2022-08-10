@@ -62,7 +62,7 @@ interface StoryApi {
     suspend fun likeStory(@Body likes: Likes): Response<Void>
 
     @POST("/story/scrap")
-    suspend fun scrapStory(@Body scrap: Scrap): Response<Void>
+    suspend fun scrapStory(@Body scrap: Scrap): Response<Timeline>
 
     @PUT("story/report")
     suspend fun reportStory(@Body story: Story): Response<Void>
