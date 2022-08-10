@@ -65,9 +65,11 @@ class FollowFragment : Fragment() {
                 followAdapter.tabFlag = FLAG_FOLLOWER
                 followAdapter.list = followerList.value!!
                 setMyFollowPage(false)
+                binding.tabFollow.getTabAt(0)!!.text = "팔로워 ${it.size}명"
                 Log.d(TAG, "initViewModel: ${it}")
             }
             followeeList.observe(viewLifecycleOwner){
+                binding.tabFollow.getTabAt(1)!!.text = "팔로잉 ${it.size}명"
                 if(args.userSeq == mainViewModel.user.value!!.seq){
                     setMyFollowPage(true)
                 }else{
