@@ -65,8 +65,12 @@ class MyPageFragment : Fragment() {
                 contributionAdapter.list = it
                 Log.d(TAG, "initViewModel: ${it}")
             }
-            getContribution(mainViewModel.user.value!!.seq)
-            getUserStoryListValue(mainViewModel.user.value!!.seq)
+            if(viewModel.contributionList.value == null) {
+                getContribution(mainViewModel.user.value!!.seq)
+            }
+            if(viewModel.userStoryList.value == null) {
+                getUserStoryListValue(mainViewModel.user.value!!.seq)
+            }
             getProfileValue(mainViewModel.user.value!!.seq)
 
         }

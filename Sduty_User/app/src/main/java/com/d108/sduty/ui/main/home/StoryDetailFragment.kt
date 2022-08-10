@@ -48,6 +48,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStoryDetailBinding.inflate(inflater, container, false)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         val displaymetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
         val deviceWidth = displaymetrics.widthPixels

@@ -51,11 +51,6 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         return binding.root
     }
 
-    override fun onStop() {
-        super.onStop()
-        ViewModelProvider(requireActivity())[StoryViewModel::class.java]
-    }
-    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
