@@ -31,15 +31,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 />
 
-            <TextView
-                android:id="@+id/common_top_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="My Page"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:id="@+id/iv_title_text"
+                android:layout_width="109dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/img_mypage"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
 
             <LinearLayout
                 android:id="@+id/divider_1"
@@ -195,7 +196,6 @@
                             android:gravity="center"
                             android:background="@drawable/button_app_blue"
                             android:textColor="@color/white"
-                            app:layout_constraintEnd_toStartOf="@id/iv_chart"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/iv_profile"
