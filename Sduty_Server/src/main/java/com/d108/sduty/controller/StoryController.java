@@ -277,18 +277,22 @@ public class StoryController {
 		int userSeq = scrap.getUserSeq();
 		int storySeq = scrap.getStorySeq();
 		boolean alreadyScrapped = scrapService.checkAlreadyScrap(userSeq, storySeq);
-		
+		Timeline timeline;
 		if(alreadyScrapped) {
 			try {
 				scrapService.deleteScrap(userSeq, storySeq);
+				timeline = timelineService.selectDetailTimeline(scrap.getStorySeq(), scrap.getUserSeq());
+							
+					
 			} catch (Exception e) {
 				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 			}
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			return new ResponseEntity<Timeline>(timeline, HttpStatus.OK);
 		} else {
 			Scrap result = scrapService.insertScrap(scrap);
-			if(result != null) {			
-				return new ResponseEntity<Void>(HttpStatus.OK);
+			timeline = timelineService.selectDetailTimeline(scrap.getStorySeq(), scrap.getUserSeq());
+			if(result != null && timeline != null) {			
+				return new ResponseEntity<Timeline>(timeline, HttpStatus.OK);
 			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
