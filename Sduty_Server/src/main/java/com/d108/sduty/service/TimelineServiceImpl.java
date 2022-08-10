@@ -168,13 +168,12 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 	
 	@Override
-	public Timeline selectDetailTimeline(int storySeq) {
+	public Timeline selectDetailTimeline(int storySeq, int userSeq) {
 		Optional<Story> selectedOStory = storyRepo.findById(storySeq);
 		if(selectedOStory.isPresent()) {
 			Timeline t =  new Timeline();
-			Story s = selectedOStory.get();
-			int userSeq = s.getWriterSeq();
-			t.setProfile(getProfile(userSeq));
+			Story s = selectedOStory.get();				
+			t.setProfile(getProfile(s.getwriterSeq));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
@@ -183,9 +182,7 @@ public class TimelineServiceImpl implements TimelineService {
 				r.setProfile(profileRepo.findById((r.getUserSeq())).get());
 			}
 			t.setReplies(listReply);
-			t.setStory(s);
-			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
-			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
+			t.setStory(s);			
 			setInterestList(t, s);
 			return t;
 		}
