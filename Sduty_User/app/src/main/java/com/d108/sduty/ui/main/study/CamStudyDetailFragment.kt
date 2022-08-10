@@ -69,6 +69,9 @@ class CamStudyDetailFragment : Fragment() {
                 binding.studyDetailIntroduce.text = (studyInfo["study"] as Map<String, Any>)["introduce"].toString()
                 binding.studyDetailNotice.text = (studyInfo["study"] as Map<String, Any>)["notice"].toString()
 
+                studyRoomId = (studyInfo["study"] as Map<String, Any>)["roomId"].toString()
+                studyName = (studyInfo["study"] as Map<String, Any>)["name"].toString()
+
                 val alarm = ((studyInfo["study"] as Map<String, Any>)["alarm"] as Map<String, Any>)
                 if(alarm["mon"] == true){
                     binding.tvMon.setBackgroundResource(R.drawable.daily_click)

@@ -150,7 +150,12 @@ class StudyListFragment : Fragment(){
                 dialog.showDialog()
                 dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
                     override fun onClicked() {
-                        studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                        if(studyList[position].password != null){
+                            //비밀번호 다이얼로그 띄우고 들어가기
+                        } else{
+                            studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                        }
+
                     }
                 })
             }

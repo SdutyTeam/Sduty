@@ -40,7 +40,6 @@ class StudyListViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = Retrofit.studyApi.studyFilter(category, empty, cam, public)
-                Log.d(TAG, "getStudyFilter: ${response}")
                 if(response.isSuccessful && response.body() != null){
                     _studyList.postValue(response.body() as List<Study>)
                 }
