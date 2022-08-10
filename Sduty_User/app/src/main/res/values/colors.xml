@@ -91,6 +91,7 @@
     <color name="sduty_light_purple">#d8abeb</color>
     <color name="sduty_main_purple">#b56bd3</color>
     <color name="sduty_mix_violet">#9585eb</color>
+    <color name="sduty_action_red">#EB8585</color>
 
 </resources>
 

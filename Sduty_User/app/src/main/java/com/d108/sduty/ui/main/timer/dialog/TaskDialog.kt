@@ -39,9 +39,6 @@ class TaskDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 여백 터치 시 다이얼로그 종료 방지
-        isCancelable = false
-
         val action = arguments?.getString("Action", "Add")
 
         when (action) {
@@ -88,8 +85,8 @@ class TaskDialog : DialogFragment() {
                                         this@TaskDialog.requireActivity().supportFragmentManager,
                                         "ConfirmDialog"
                                     )
-                                    tvStartTime.text = ""
-                                    tvEndTime.text = ""
+                                    tvStartTime.text = "시작 시간"
+                                    tvEndTime.text = "종료 시간"
                                 }
                             }
                         } else {
@@ -129,8 +126,8 @@ class TaskDialog : DialogFragment() {
                                         this@TaskDialog.requireActivity().supportFragmentManager,
                                         "ConfirmDialog"
                                     )
-                                    tvStartTime.text = ""
-                                    tvEndTime.text = ""
+                                    tvStartTime.text = "시작 시간"
+                                    tvEndTime.text = "종료 시간"
                                 }
                             }
                         } else {
