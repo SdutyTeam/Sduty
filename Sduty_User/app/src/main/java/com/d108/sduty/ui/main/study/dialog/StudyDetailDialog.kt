@@ -6,24 +6,22 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
-import android.view.Gravity
 import android.view.ViewGroup
-import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.EditText
 import android.widget.TextView
 import com.d108.sduty.R
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.utils.currentWindowMetricsPointCompat
-import com.d108.sduty.utils.getDeviceSize
-import org.w3c.dom.Text
 
-class StudyDetailDialog(context: Context, studyInfo: Study) {
+class StudyDetailDialog(context: Context, studyInfo: Study, masterNickname: String, masterJob: String) {
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
     private val studyInfo = studyInfo
     private val context = context
+    private val nickname = masterNickname
+    private val job = masterJob
 
     fun setOnClickListener(listener: OnDialogClickListener)
     {
@@ -51,14 +49,20 @@ class StudyDetailDialog(context: Context, studyInfo: Study) {
         val cancelButton = dialog.findViewById<Button>(R.id.btn_cancel)
 
         val studyName = dialog.findViewById<TextView>(R.id.study_name)
-        val studyCategory = dialog.findViewById<TextView>(R.id.tv_study_category)
+        val studyCategory = dialog.findViewById<TextView>(R.id.study_category)
         val studyMaster = dialog.findViewById<TextView>(R.id.tv_study_master)
         val studyJoinPeople = dialog.findViewById<TextView>(R.id.tv_study_join_people)
         val studyLimitPeople = dialog.findViewById<TextView>(R.id.tv_study_limit_people)
         val studyIntroduce = dialog.findViewById<TextView>(R.id.tv_study_introduce)
 
-        studyName.text = studyInfo.name
+        if(studyInfo.roomId == null){
+            studyCategory.text = "#일반스터디" + "#" + job + "#" + studyInfo.category
+        } else{
+            studyCategory.text = "#캠스터디" + "#" + job + "#" + studyInfo.category
+        }
 
+        studyMaster.text = nickname
+        studyName.text = studyInfo.name
         studyJoinPeople.text = studyInfo.joinNumber.toString()
         studyLimitPeople.text = studyInfo.limitNumber.toString()
         studyIntroduce.text = studyInfo.introduce
@@ -76,7 +80,7 @@ class StudyDetailDialog(context: Context, studyInfo: Study) {
 
     }
 
-    fun getDeviceSize(activity: Activity): Point {
+    private fun getDeviceSize(activity: Activity): Point {
         val windowManager = activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         return windowManager.currentWindowMetricsPointCompat()
     }

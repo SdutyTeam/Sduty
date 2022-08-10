@@ -31,4 +31,21 @@ class StudySearchViewModel: ViewModel() {
             }
         }
     }
+
+    private val _studyDetail = MutableLiveData<Study>()
+    val studyDetail: LiveData<Study>
+        get() = _studyDetail
+    // 스터디 상세 조회
+    fun studyDetail(studySeq: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.studyApi.studyDetail(studySeq)
+                if(response.isSuccessful && response.body() != null){
+                    _studyDetail.postValue(response.body() as Study)
+                }
+            } catch (e: Exception){
+                Log.d(TAG, "studyDetail: ${e.message}")
+            }
+        }
+    }
 }

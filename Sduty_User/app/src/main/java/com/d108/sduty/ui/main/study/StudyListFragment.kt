@@ -3,13 +3,11 @@ package com.d108.sduty.ui.main.study
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,8 +18,8 @@ import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentStudyListBinding
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity
-import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
 import com.d108.sduty.ui.main.study.dialog.StudyDetailDialog
+import com.d108.sduty.ui.main.study.dialog.StudyPasswordDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudyListViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -144,20 +142,38 @@ class StudyListFragment : Fragment(){
         studyListAdapter = StudyListAdapter(studyList)
         studyListAdapter.onStudyItemClick = object : StudyListAdapter.OnStudyItemClick{
             override fun onClick(view: View, position: Int) {
-                Log.d(TAG, "onClick: ${studyList}")
-                // 전체 스터디 조회 - 스터디 클릭 시 상세정보 다이얼로그
-                val dialog = StudyDetailDialog(mainActivity, studyList[position])
-                dialog.showDialog()
-                dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
-                    override fun onClicked() {
-                        if(studyList[position].password != null){
-                            //비밀번호 다이얼로그 띄우고 들어가기
-                        } else{
-                            studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
-                        }
+                var num = 0
+                studyListViewModel.studyDetail(studyList[position].seq)
+                studyListViewModel.studyDetail.observe(viewLifecycleOwner){
+                    if(num == 0){
+                        // 전체 스터디 조회 - 스터디 클릭 시 상세정보 다이얼로그
+                        val dialog = StudyDetailDialog(mainActivity, studyList[position], it.masterNickname, it.masterJob)
+                        dialog.showDialog()
+                        dialog.setOnClickListener(object : StudyDetailDialog.OnDialogClickListener{
+                            override fun onClicked() {
+                                if(studyList[position].password != null){
+                                    val dialogPass = StudyPasswordDialog(mainActivity)
+                                    dialogPass.showDialog()
+                                    dialogPass.setOnClickListener(object : StudyPasswordDialog.OnDialogClickListener{
+                                        override fun onClicked(etPassword: EditText) {
+                                            if(etPassword.text.toString() == studyList[position].password){
+                                                studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                            } else{
+                                                context?.showToast("비밀번호가 틀렸습니다.")
+                                            }
+                                        }
+                                    })
+                                } else{
+                                    studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                }
 
+                            }
+                        })
+                        num += 1
                     }
-                })
+
+                }
+
             }
         }
         binding.studyList.apply {

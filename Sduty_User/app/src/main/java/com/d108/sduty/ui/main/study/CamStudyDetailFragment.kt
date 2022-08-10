@@ -1,6 +1,7 @@
 package com.d108.sduty.ui.main.study
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -75,24 +76,31 @@ class CamStudyDetailFragment : Fragment() {
                 val alarm = ((studyInfo["study"] as Map<String, Any>)["alarm"] as Map<String, Any>)
                 if(alarm["mon"] == true){
                     binding.tvMon.setBackgroundResource(R.drawable.daily_click)
+                    binding.tvMon.setTextColor(Color.parseColor("#9585EB"))
                 }
                 if(alarm["tue"] == true){
                     binding.tvTue.setBackgroundResource(R.drawable.daily_click)
+                    binding.tvTue.setTextColor(Color.parseColor("#9585EB"))
                 }
                 if(alarm["wed"] == true){
                     binding.tvWed.setBackgroundResource(R.drawable.daily_click)
+                    binding.tvWed.setTextColor(Color.parseColor("#9585EB"))
                 }
                 if(alarm["thu"] == true){
                     binding.tvThu.setBackgroundResource(R.drawable.daily_click)
+                    binding.tvThu.setTextColor(Color.parseColor("#9585EB"))
                 }
                 if(alarm["fri"] == true){
                     binding.tvFri.setBackgroundResource(R.drawable.daily_click)
+                    binding.tvFri.setTextColor(Color.parseColor("#9585EB"))
                 }
                 if(alarm["sat"] == true){
                     binding.tvSat.setBackgroundResource(R.drawable.daily_click)
+                    binding.tvSat.setTextColor(Color.parseColor("#9585EB"))
                 }
                 if(alarm["sun"] == true){
                     binding.tvSun.setBackgroundResource(R.drawable.daily_click)
+                    binding.tvSun.setTextColor(Color.parseColor("#9585EB"))
                 }
                 binding.tvTime.text = "매주" + alarm["time"].toString()
 

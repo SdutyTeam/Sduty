@@ -188,38 +188,6 @@ class StudyRegistFragment : Fragment() {
             }
 
 
-//            checkBoxDaily.setOnCheckedChangeListener { buttonView, isChecked ->
-//                if(isChecked){
-//                    btnMon.setBackgroundResource(R.drawable.daily_click)
-//                    btnTue.setBackgroundResource(R.drawable.daily_click)
-//                    btnWed.setBackgroundResource(R.drawable.daily_click)
-//                    btnThur.setBackgroundResource(R.drawable.daily_click)
-//                    btnFri.setBackgroundResource(R.drawable.daily_click)
-//                    btnSat.setBackgroundResource(R.drawable.daily_click)
-//                    btnSun.setBackgroundResource(R.drawable.daily_click)
-//                }else{
-//                    btnMon.setBackgroundResource(R.drawable.daily_background)
-//                    btnTue.setBackgroundResource(R.drawable.daily_background)
-//                    btnWed.setBackgroundResource(R.drawable.daily_background)
-//                    btnThur.setBackgroundResource(R.drawable.daily_background)
-//                    btnFri.setBackgroundResource(R.drawable.daily_background)
-//                    btnSat.setBackgroundResource(R.drawable.daily_background)
-//                    btnSun.setBackgroundResource(R.drawable.daily_background)
-//                }
-//            }
-
-//            cbDailyRegist.setOnCheckedChangeListener { buttonView, isChecked ->
-//                if(isChecked){
-//                    timePicker.visibility = View.VISIBLE
-//                    dailyWeek.visibility = View.VISIBLE
-//                    dailyCheck.visibility = View.VISIBLE
-//                } else{
-//                    timePicker.visibility = View.GONE
-//                    dailyWeek.visibility = View.GONE
-//                    dailyCheck.visibility = View.GONE
-//                }
-//            }
-
             lifecycleOwner = this@StudyRegistFragment
             studyRegisteVM = studyRegisteViewModel
 
@@ -251,6 +219,8 @@ class StudyRegistFragment : Fragment() {
                 if(pass == ""){
                     pass = null
                 }
+                Log.d(TAG, "rooms: ${mainViewModel.profile.value!!.nickname}")
+                Log.d(TAG, "rooms: ${mainViewModel.profile.value!!.job}")
                 if(!args.type) {
                     studyRegisteViewModel.studyCreate(
                         Study(
@@ -261,7 +231,7 @@ class StudyRegistFragment : Fragment() {
                 } else{
                     studyRegisteViewModel.createRoom()
                     studyRegisteViewModel.createRoomId.observe(requireActivity()){ resources ->
-                        Log.d(TAG, "room: ${resources}")
+
                         when (resources.status){
                             Status.LOADING -> {
                                 // TODO : show loading view
