@@ -39,7 +39,7 @@
                 android:src="@drawable/menu_logo_text_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toEndOf="@+id/iv_back"/>
 
             <!-- 이미지 꾸미기 완료 버튼 : 게시물 등록 화면으로 돌아감 -->
