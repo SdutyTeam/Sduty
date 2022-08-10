@@ -1,31 +1,29 @@
 package com.d108.sduty.ui.main.timer.adapter
 
 import android.content.Context
+import android.graphics.Color
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.toColor
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.engine.Resource
 import com.d108.sduty.R
 import com.d108.sduty.databinding.ListItemTaskBinding
 import com.d108.sduty.model.dto.Task
+import kotlin.math.absoluteValue
 
-class TaskListAdapter(val fragmentActivity: FragmentActivity, var list: List<Task>) :
+class TaskListAdapter(val fragmentActivity: FragmentActivity, var list: List<Task>, val colorPalette: List<Int>) :
     RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
-    private var colorPalette = listOf(
-        R.color.sduty_light_blue,
-        R.color.sduty_main_blue,
-        R.color.sduty_light_purple,
-        R.color.sduty_main_purple
-    )
 
     inner class ViewHolder(private val binding: ListItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Task, position: Int) {
             binding.task = item
-            binding.taskColor = colorPalette[position % 4]
-            Log.d("TEST", "bind: ${position % 4}")
+            binding.taskColor = fragmentActivity.resources.getColor(colorPalette[position % 4])
         }
 
         fun bindClickListener(listener: OnClickTaskItem) {
