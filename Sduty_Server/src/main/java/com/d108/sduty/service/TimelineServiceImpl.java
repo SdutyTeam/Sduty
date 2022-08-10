@@ -173,7 +173,7 @@ public class TimelineServiceImpl implements TimelineService {
 		if(selectedOStory.isPresent()) {
 			Timeline t =  new Timeline();
 			Story s = selectedOStory.get();				
-			t.setProfile(getProfile(s.getwriterSeq));
+			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());

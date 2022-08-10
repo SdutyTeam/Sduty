@@ -17,7 +17,7 @@ public interface TimelineService {
 	public List<Timeline> selectAllByUserSeqsWithTag(int userSeq, List<Integer> writerSeq, String jobName);
 	public List<Timeline> selectAllByJobName(int userSeq, String jobName);
 	public List<Timeline> selectAllByInterestName(int userSeq, String interestName);
-	public Timeline selectDetailTimeline(int storySeq);
+	public Timeline selectDetailTimeline(int storySeq, int userSeq);
 	List<Timeline> selectAllTimelines(int userSeq);
 	public Timeline selectRecommandTimeline(int userSeq);
 	public Profile getProfile(int userSeq);
