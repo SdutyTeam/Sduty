@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.JobHashtag;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
@@ -26,5 +27,5 @@ public interface TimelineService {
 	public JobHashtag getJobHashtag(String jobName);
 	public InterestHashtag getInterestHashtag(String interestName);
 	
-	Page<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq);
+	PagingResult<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq);
 }

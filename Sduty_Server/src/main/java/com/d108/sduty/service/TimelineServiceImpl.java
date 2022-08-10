@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.JobHashtag;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
@@ -227,10 +228,10 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 
 	@Override
-	public Page<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq) {		
-		List<Story> storyList = storyRepo.findAllByOrderByRegtimeDesc();
+	public PagingResult<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq) {
+		Page<Story> storyPage = storyRepo.findAllByOrderByRegtimeDesc(pageable);
 		List<Timeline> timelineList = new ArrayList<Timeline>();
-		for(Story s : storyList) {
+		for(Story s : storyPage) {
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
@@ -241,23 +242,7 @@ public class TimelineServiceImpl implements TimelineService {
 			setInterestList(t, s);
 			timelineList.add(t);
 		}
-		System.out.println(pageable);
-		System.out.println(pageable.getPageSize());
-		System.out.println(pageable.getPageNumber());
-		final int start = (int)pageable.getOffset();
-		final int end = Math.min((start + pageable.getPageSize()), timelineList.size());
-		System.out.println("start: " + start);
-		System.out.println("end: " + end);
-		System.out.println("start + pageable.getPageSize(): " + start + pageable.getPageSize());
-		System.out.println("timelineList.size(): " + timelineList.size());
-		Page<Timeline> page = null;
-		try {
-			page = new PageImpl<>(timelineList.subList(start, end), pageable, timelineList.size());
-		}catch(Exception e) {
-			System.out.println(e.getMessage());
-			return null;
-		}
-		
-		return page;
+		PagingResult result = new PagingResult<Timeline>(pageable.getPageNumber(), storyPage.getTotalPages() -1, timelineList);
+		return result;
 	}
 }

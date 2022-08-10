@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.d108.sduty.dto.Follow;
 import com.d108.sduty.dto.Likes;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
@@ -76,11 +77,13 @@ public class StoryController {
             @PageableDefault Pageable pageable) throws Exception {
 
 		System.out.println(userSeq);
-		Page<Timeline> timeLineList = timelineService.selectAllPagingTimelines(pageable, userSeq);
-		if(timeLineList == null) {
+		PagingResult result = timelineService.selectAllPagingTimelines(pageable, userSeq);
+		if(result == null) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Timeline>>(timeLineList.toList(), HttpStatus.OK);
+		
+		
+		return new ResponseEntity<PagingResult<Timeline>>(result, HttpStatus.OK);
 
 	}
 	
