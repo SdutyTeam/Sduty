@@ -23,6 +23,9 @@ class ApplicationClass : Application() {
         lateinit var autoLoginState: SharedPreferences
         lateinit var darkModeState: SharedPreferences
         lateinit var timerPref: SharedPreferences
+        lateinit var firstRunCheck: SharedPreferences
+        lateinit var firstLoginCheck: SharedPreferences
+        lateinit var fcmTokenPrefs: SharedPreferences
     }
 
     override fun onCreate() {
@@ -49,5 +52,8 @@ class ApplicationClass : Application() {
         pushStatePersonal = getSharedPreferences("PushStatePersonal", MODE_PRIVATE)
         darkModeState = getSharedPreferences("DarkMode", MODE_PRIVATE)
         timerPref = getSharedPreferences("Timer", MODE_PRIVATE)
+        firstRunCheck = getSharedPreferences("FirstRun", MODE_PRIVATE)
+        firstLoginCheck = getSharedPreferences("FirstLogin", MODE_PRIVATE)
+        fcmTokenPrefs = getSharedPreferences("FcmToken", MODE_PRIVATE)
     }
 }

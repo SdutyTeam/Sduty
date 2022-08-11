@@ -6,17 +6,11 @@ import com.google.gson.Gson
 class SettingsPreference {
     companion object
 
-    fun setPushStateAll(accept: Boolean){
-        ApplicationClass.pushStateAll.edit().putBoolean("State", accept).apply()
+    fun setPushState(accept: Int){
+        ApplicationClass.pushStateAll.edit().putInt("State", accept).apply()
     }
-    fun setPushStatePersonal(accept: Boolean){
-        ApplicationClass.pushStatePersonal.edit().putBoolean("State", accept).apply()
-    }
-    fun getPushStateAll(): Boolean{
-        return ApplicationClass.pushStateAll.getBoolean("State", true)
-    }
-    fun getPushStatePersonal(): Boolean{
-        return ApplicationClass.pushStatePersonal.getBoolean("State", true)
+    fun getPushState(): Int{
+        return ApplicationClass.pushStateAll.getInt("State", 2)
     }
 
     fun setAutoLoginState(accept: Boolean){
@@ -30,5 +24,21 @@ class SettingsPreference {
     }
     fun setDarkModeState(accept: Boolean){
         ApplicationClass.darkModeState.edit().putBoolean("State", accept).apply()
+    }
+
+    fun getFirstRunCheck(): Boolean{
+        return ApplicationClass.firstRunCheck.getBoolean("State", true)
+    }
+
+    fun setFirstRunCheck(accept: Boolean){
+        ApplicationClass.firstRunCheck.edit().putBoolean("State", accept).apply()
+    }
+
+    fun getFirstLoginCheck(): Boolean{
+        return ApplicationClass.firstLoginCheck.getBoolean("State", true)
+    }
+
+    fun setFirstLoginCheck(accept: Boolean){
+        ApplicationClass.firstLoginCheck.edit().putBoolean("State", accept).apply()
     }
 }

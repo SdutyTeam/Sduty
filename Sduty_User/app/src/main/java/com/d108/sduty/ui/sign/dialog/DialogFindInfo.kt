@@ -72,7 +72,7 @@ class DialogFindInfo(val mContext: Context) : DialogFragment() {
             vm = viewModel
             joinVM = joinViewModel
 
-            btnConfirm.setOnClickListener {                
+            btnConfirm.setOnClickListener {
                 when(flag){
                     FIND_ID ->{
                         if(etPhone.text.isEmpty() || etPhone.text.length != 11){
