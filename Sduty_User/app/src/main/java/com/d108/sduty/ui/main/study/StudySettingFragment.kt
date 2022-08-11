@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.common.FLAG_STUDY
+import com.d108.sduty.common.FLAG_STUDY_REGIST
 import com.d108.sduty.databinding.FragmentStudySettingBinding
 import com.d108.sduty.model.dto.Member
 import com.d108.sduty.model.dto.Study
@@ -202,7 +203,7 @@ class StudySettingFragment : Fragment() {
             }
 
             studyUpdateCategory.setOnClickListener {
-                TagSelectOneFragment(requireContext(), FLAG_STUDY).let{
+                TagSelectOneFragment(requireContext(), FLAG_STUDY_REGIST).let{
                     it.show(parentFragmentManager, null)
                     it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
                         override fun onDismiss(tagName: String, flag: Int) {

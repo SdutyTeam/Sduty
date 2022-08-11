@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.sign.dialog.TagSelectOneFragment"
         android:layout_margin="15dp"
-        android:background="@drawable/gradient_border"
+        android:background="@drawable/btn_study_regist"
         >
 
         <TextView
@@ -29,7 +29,7 @@
             android:id="@+id/tv_select_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient_border"
+            android:background="@drawable/btn_study_regist"
             android:text="전체 선택"
             android:textSize="20sp"
             android:padding="8dp"

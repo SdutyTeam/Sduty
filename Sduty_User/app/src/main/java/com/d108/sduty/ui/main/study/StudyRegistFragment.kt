@@ -25,6 +25,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
 import com.d108.sduty.common.FLAG_STUDY
+import com.d108.sduty.common.FLAG_STUDY_REGIST
 import com.d108.sduty.common.SENDBIRD_APP_ID
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
 import com.d108.sduty.model.dto.Alarm
@@ -91,7 +92,7 @@ class StudyRegistFragment : Fragment() {
 
 
             studyRegistCategory.setOnClickListener {
-                TagSelectOneFragment(requireContext(), FLAG_STUDY).let{
+                TagSelectOneFragment(requireContext(), FLAG_STUDY_REGIST).let{
                     it.show(parentFragmentManager, null)
                     it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
                         @SuppressLint("ResourceAsColor")
