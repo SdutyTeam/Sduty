@@ -13,7 +13,8 @@ import javax.persistence.Id;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.d108.sduty.utils.StudyScheduler;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 public class Alarm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@Column(name="alarm_seq")
 	private int seq;
 	@Column(name="alarm_time")
@@ -39,6 +41,7 @@ public class Alarm {
 	private boolean fri;
 	private boolean sat;
 	private boolean sun;
+	@JsonIgnore
 	@Column(name="alarm_cron")
 	private String cron;
 	
