@@ -23,6 +23,10 @@ class StudyDetailViewModel: ViewModel() {
     val studyMasterNickName: LiveData<Profile>
         get() = _studyMasterNickname
 
+    private val _isQuitStudy = MutableLiveData<Boolean>()
+    val isQuitStudy: LiveData<Boolean>
+        get() = _isQuitStudy
+
     fun getMyStudyInfo(userSeq: Int, studySeq: Int){
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -47,6 +51,24 @@ class StudyDetailViewModel: ViewModel() {
                 }
             } catch (e: Exception){
                 Log.d(TAG, "masterNickname: ${e.message}")
+            }
+        }
+    }
+
+    // 스터디 탈퇴 및 강퇴
+    fun studyQuit(studySeq: Int, userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.studyApi.studyQuit(studySeq, userSeq)
+                if(response.isSuccessful){
+                    _isQuitStudy.postValue(true)
+                }
+                else if(response.code() == 500){
+                    _isQuitStudy.postValue(false)
+                }
+
+            }catch (e: Exception){
+                Log.d(TAG, "getList: ${e.message}")
             }
         }
     }
