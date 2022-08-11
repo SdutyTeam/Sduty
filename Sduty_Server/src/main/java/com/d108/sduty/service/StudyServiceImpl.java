@@ -27,6 +27,7 @@ import com.d108.sduty.dto.Job;
 import com.d108.sduty.dto.Study;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.repo.AlarmRepo;
+import com.d108.sduty.repo.InterestHashtagRepo;
 import com.d108.sduty.repo.StudyRepo;
 import com.d108.sduty.repo.UserRepo;
 
@@ -41,7 +42,10 @@ public class StudyServiceImpl implements StudyService {
 	private UserRepo userRepo;
 	@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;
-
+	@Autowired
+	private InterestHashtagRepo interestHashtagRepo;
+	
+	
 	@Override
 	public List<Study> getAllStudy() {
 		return studyRepo.findAll();
@@ -106,7 +110,7 @@ public class StudyServiceImpl implements StudyService {
 				if(originStudy.getParticipants().size()>newStudy.getLimitNumber()) { return null;}
 				originStudy.setLimitNumber(newStudy.getLimitNumber());
 			}
-			if(newStudy.getRoomId()!=null && newStudy.getAlarm()!=null) {
+			if(originStudy.getRoomId()!=null && newStudy.getAlarm()!=null) {
 				//캠스터디
 				deleteJob(originStudy);
 				newStudy.getAlarm().setCron(createCron(newStudy.getAlarm()));
@@ -169,7 +173,9 @@ public class StudyServiceImpl implements StudyService {
 		return studyRepo.findAll(spec);
 	}
 	
+	//TODO : category 필터링 수정 필요
 	public Specification<Study> findCategory(String category){
+		System.out.print(studyRepo.existsByCategories(interestHashtagRepo.findByName(category)));
 		return (root, query, criteriaBuilder)->criteriaBuilder.equal(root.get("category"), category);
 	}
 	
