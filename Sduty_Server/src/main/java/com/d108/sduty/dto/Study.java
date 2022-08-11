@@ -19,7 +19,9 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -34,6 +36,7 @@ import lombok.NoArgsConstructor;
 public class Study {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@Column(name = "study_seq")
 	private Integer seq;
 	@Column(name = "study_master_seq")
@@ -49,6 +52,7 @@ public class Study {
 	private String category;
 	@Column(name = "study_limit_Number")
 	private int limitNumber;
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@Column(name = "study_join_Number")
 	private int joinNumber;
 	@Column(name = "study_password")
@@ -62,13 +66,16 @@ public class Study {
 	private String notice;
 	
 	@Transient
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	private String masterNickname;
 	@Transient
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	private String masterJob;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "participation", joinColumns = @JoinColumn(name = "participation_study_seq"), inverseJoinColumns = @JoinColumn(name = "participation_user_seq"))
 	@JsonBackReference(value="participants")
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	private Set<User> participants = new HashSet<User>();
 	
 	@ManyToMany(fetch = FetchType.EAGER)

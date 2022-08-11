@@ -30,7 +30,7 @@ public class Job extends QuartzJobBean{
         System.out.println(studyService.getStudyDetail(studySeq).getParticipants());
         //토큰이 없는 사람 = 로그아웃 중
         for(User user : studyService.getStudyDetail(studySeq).getParticipants()) {
-        	if(user.getFcmToken()!=null) {
+        	if(user.getFcmToken()!=null && user.getUserPublic()!=0) {
         		fcmUtil.send_FCM(user.getFcmToken(), "스터디", "스터디 일정 알림");
         	}
         }
