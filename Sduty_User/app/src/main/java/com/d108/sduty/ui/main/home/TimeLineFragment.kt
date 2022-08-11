@@ -92,6 +92,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     }
                 }
             }
+            SettingsPreference().setFirstLoginCheck(false)
         }
         getFirebaseToken()
 
@@ -211,7 +212,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             settingViewModel.updateFCMToken(mainViewModel.user.value!!)
 
         })
-        createNotiChannel("d108_id", "d108")
+        createNotiChannel("sduty_id", "sduty")
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotiChannel(channelId: String, channelName: String) {
