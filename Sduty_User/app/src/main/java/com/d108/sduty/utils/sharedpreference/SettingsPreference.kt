@@ -31,4 +31,12 @@ class SettingsPreference {
     fun setDarkModeState(accept: Boolean){
         ApplicationClass.darkModeState.edit().putBoolean("State", accept).apply()
     }
+
+    fun getFirstRunCheck(): Boolean{
+        return ApplicationClass.firstRunCheck.getBoolean("State", true)
+    }
+
+    fun setFirstRunCheck(accept: Boolean){
+        ApplicationClass.firstRunCheck.edit().putBoolean("State", accept).apply()
+    }
 }
