@@ -49,16 +49,20 @@ class PushInfoDialog : DialogFragment() {
                 }else if(btnPushPersonal.isChecked){
                     state = 1
                 }else{
-                    state = 1
+                    state = 0
                 }
-                SettingsPreference().setPushState(state)
-                requireContext().showToast("Push 설정이 저장되었습니다")
+                onClickConfirm.onClick(state)
                 dismiss()
             }
             btnCancel.setOnClickListener {
                 dismiss()
             }
         }
+    }
+
+    lateinit var onClickConfirm: OnClickConfirm
+    interface OnClickConfirm{
+        fun onClick(state: Int)
     }
 
     override fun onResume() {

@@ -35,20 +35,19 @@ class SettingViewModel: ViewModel() {
     fun updateFCMToken(user: User){
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val token = FCMPreference().getFcmToken()
-                val state = SettingsPreference().getPushState()
-                user.fcmToken = token
-                user.userPublic = state
+                user.fcmToken = FCMPreference().getFcmToken()
+                user.userPublic = SettingsPreference().getPushState()
+                user.regtime = null
                 Retrofit.userApi.updateUser(user).let {
                     if(it.isSuccessful){
-                        
+                        Log.d(TAG, "updateFCMToken: ${it.code()}")
                     }else{
                         Log.d(TAG, "updateFCMToken: ${it.code()}")
                     }
                 }
 
             }catch (e: Exception){
-                Log.d(TAG, "insertFCMToken: ${e.message}")
+                Log.d(TAG, "updateFCMToken: ${e.message}")
             }
         }
     }

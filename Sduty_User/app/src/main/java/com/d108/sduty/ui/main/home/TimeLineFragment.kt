@@ -1,13 +1,21 @@
 package com.d108.sduty.ui.main.home
 
+import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
@@ -24,12 +32,16 @@ import com.d108.sduty.common.JOB_TAG
 import com.d108.sduty.databinding.FragmentTimeLineBinding
 import com.d108.sduty.model.dto.*
 import com.d108.sduty.ui.main.home.dialog.PushInfoDialog
+import com.d108.sduty.ui.main.mypage.setting.viewmodel.SettingViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.sharedpreference.FCMPreference
 import com.d108.sduty.utils.showToast
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 // 타임라인 - 게시글(스크롤 뷰), 게시글 쓰기, 닉네임(게시글 상세페이지 이동) 더보기(신고, 스크랩, 팔로잉) ,좋아요, 댓글, 필터, 데일리 질문, 추천 팔로우
 private const val TAG ="TimeLineFragment"
@@ -37,6 +49,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private lateinit var binding: FragmentTimeLineBinding
     private val mainViewModel: MainViewModel by activityViewModels()
     private val storyViewModel: StoryViewModel by activityViewModels()
+    private val settingViewModel: SettingViewModel by viewModels()
     private lateinit var timeLineAdapter: TimeLineAdapter
     private var selectedPosition = 0
     private var timeLineList = mutableListOf<Timeline>()
@@ -56,6 +69,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -65,12 +79,21 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initView(){
         if(SettingsPreference().getFirstLoginCheck()){
             PushInfoDialog().let{
                 it.show(parentFragmentManager, null)
+                it.onClickConfirm = object :PushInfoDialog.OnClickConfirm{
+                    override fun onClick(state: Int) {
+                        SettingsPreference().setPushState(state)
+                        getFirebaseToken()
+                        requireContext().showToast("Push 설정이 저장되었습니다")
+                    }
+                }
             }
         }
+        getFirebaseToken()
 
         pageAdapter = TimeLinePagingAdapter(requireActivity())
         pageAdapter.apply {
@@ -174,4 +197,30 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         }
         return true
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getFirebaseToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
+            if (!it.isSuccessful) {
+                Log.d(TAG, "onCreate: FCM 토큰 얻기 실패", it.exception)
+                return@OnCompleteListener
+            }else{
+                Log.d(TAG, "getFirebaseToken: ${it.result}")
+                FCMPreference().setFcmToken(it.result)
+            }
+            settingViewModel.updateFCMToken(mainViewModel.user.value!!)
+
+        })
+        createNotiChannel("d108_id", "d108")
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotiChannel(channelId: String, channelName: String) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, channelName, importance)
+
+        val notificationManager =
+            requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
 }
