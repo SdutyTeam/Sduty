@@ -22,7 +22,6 @@ class StoryPagingAdapter(val activity: Activity): PagingDataAdapter<Story, Story
         fun bind(story: Story){
             binding.apply {
                 data = story
-                Log.d(TAG, "bind: ${data}")
                 ivStory.setOnClickListener {
                     onClickStoryListener.onClick(story)
                 }
@@ -32,7 +31,6 @@ class StoryPagingAdapter(val activity: Activity): PagingDataAdapter<Story, Story
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemStoryBinding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        Log.d(TAG, "onCreateViewHolder: ")
         return ViewHolder(itemStoryBinding)
     }
 

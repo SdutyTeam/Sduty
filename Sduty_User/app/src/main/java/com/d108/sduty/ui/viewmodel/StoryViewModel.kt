@@ -94,9 +94,8 @@ class StoryViewModel: ViewModel() {
                 val json = Gson().toJson(story)
                 val storyBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
                 val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
-                Log.d(TAG, "insertStory: ${response.code()}")
                 if(response.isSuccessful && response.body() != null){
-                    getStoryListValue(story.writerSeq)
+                    getTimelineListValue(story.writerSeq)
                 }
             }catch (e: Exception){
                 Log.d(TAG, "insertStory: ${e.message}")
