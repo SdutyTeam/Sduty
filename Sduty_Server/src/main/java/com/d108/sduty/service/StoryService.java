@@ -3,19 +3,22 @@ package com.d108.sduty.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 
 public interface StoryService {
 	Story insertStory(Story story);
 	Story updateStory(Story story);
-	List<Story> findBywriterSeq(int userSeq);
+	PagingResult<Story> findBywriterSeq(int userSeq, Pageable pageable);
 	Story findById(int storySeq);
 	List<Story> findAll();
-	List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs);
-	List<Story> selectStoryInSeq(List<Integer> storySeqs);
+	Page<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, Pageable pageable);
+	PagingResult<Story> selectStoryInSeq(List<Integer> storySeqs, Pageable pageable);
 	void deleteStory(int storySeq);
 	
 	List<Reply> selectReplyByStorySeq(int storySeq);
