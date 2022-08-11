@@ -2,6 +2,7 @@ package com.d108.sduty.adapter.paging
 
 import android.app.Activity
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +14,17 @@ import com.d108.sduty.databinding.ItemTimelineBinding
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.model.dto.Timeline
 
-class StoryPagingAdapter(val activity: Activity): PagingDataAdapter<Timeline, StoryPagingAdapter.ViewHolder>(
+private const val TAG ="StoryPagingAdapter"
+class StoryPagingAdapter(val activity: Activity): PagingDataAdapter<Story, StoryPagingAdapter.ViewHolder>(
     IMAGE_COMPARATOR
 ) {
     inner class ViewHolder(val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(timeline: Timeline){
+        fun bind(story: Story){
             binding.apply {
-                data = timeline.story
+                data = story
+                Log.d(TAG, "bind: ${data}")
                 ivStory.setOnClickListener {
-                    onClickStoryListener.onClick(timeline.story)
+                    onClickStoryListener.onClick(story)
                 }
             }
         }
@@ -29,6 +32,7 @@ class StoryPagingAdapter(val activity: Activity): PagingDataAdapter<Timeline, St
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemStoryBinding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        Log.d(TAG, "onCreateViewHolder: ")
         return ViewHolder(itemStoryBinding)
     }
 
@@ -52,11 +56,11 @@ class StoryPagingAdapter(val activity: Activity): PagingDataAdapter<Timeline, St
     }
 
     companion object {
-        private val IMAGE_COMPARATOR = object : DiffUtil.ItemCallback<Timeline>() {
-            override fun areItemsTheSame(oldItem: Timeline, newItem: Timeline) =
-                oldItem.story.seq == newItem.story.seq
+        private val IMAGE_COMPARATOR = object : DiffUtil.ItemCallback<Story>() {
+            override fun areItemsTheSame(oldItem: Story, newItem: Story) =
+                oldItem.seq == newItem.seq
 
-            override fun areContentsTheSame(oldItem: Timeline, newItem: Timeline) =
+            override fun areContentsTheSame(oldItem: Story, newItem: Story) =
                 oldItem == newItem
         }
     }

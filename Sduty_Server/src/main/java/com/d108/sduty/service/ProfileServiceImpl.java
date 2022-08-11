@@ -72,6 +72,7 @@ public class ProfileServiceImpl implements ProfileService {
 			p.setFollowers(followRepo.countByFollowerSeq(userSeq).intValue());
 			p.setFollowees(followRepo.countByFolloweeSeq(userSeq).intValue());
 			p.setInterestHashtags(listIH);
+			p.setCntStory(storyRepo.countAllByWriterSeq(userSeq));
 			return p;
 		}
 		return null;

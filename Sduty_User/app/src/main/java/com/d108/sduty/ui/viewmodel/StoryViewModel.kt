@@ -41,7 +41,7 @@ class StoryViewModel: ViewModel() {
 
 
     private fun getStoryPost(userSeq: Int) = Pager(
-        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
         pagingSourceFactory = {StoryDataSource(Retrofit.storyApi, userSeq)}
     ).liveData
 

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.flatMap
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
@@ -63,6 +64,7 @@ class MyPageFragment : Fragment() {
 
             getUserStoryList(mainViewModel.user.value!!.seq)
             pagingStoryList.observe(viewLifecycleOwner){
+                Log.d(TAG, "initViewModel: ##############################################################${it}")
                 storyAdapter.submitData(this@MyPageFragment.lifecycle, it)
             }
             scrapStoryList.observe(viewLifecycleOwner){
@@ -94,6 +96,8 @@ class MyPageFragment : Fragment() {
             }
         }
         binding.apply {
+            lifecycleOwner = this@MyPageFragment
+            vm = viewModel
             tabMyPage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when(tab!!.position){

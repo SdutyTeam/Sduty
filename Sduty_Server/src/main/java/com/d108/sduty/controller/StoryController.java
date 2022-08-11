@@ -92,7 +92,7 @@ public class StoryController {
 	@ApiOperation(value = "전체 스토리 조회 : UserSeq > Story", response = Timeline.class)
 	@GetMapping("/all/{userSeq}")
 	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq, 
-			@PageableDefault Pageable pageable) throws Exception {
+			@PageableDefault Pageable pageable) throws Exception {		
 		PagingResult<Timeline> selectedTimeline = timelineService.selectAllTimelines(userSeq, pageable);
 		return new ResponseEntity<PagingResult<Timeline>>(selectedTimeline, HttpStatus.OK);
 
@@ -236,8 +236,10 @@ public class StoryController {
 	@ApiOperation(value = "작성자로 글 조회 : UserSeq > List<Story> 리턴", response = Story.class)
 	@GetMapping("/writer/{userSeq}")
 	public ResponseEntity<?> selectByWriterSeq(@PathVariable int userSeq, 
-			@PageableDefault  Pageable pageable) throws Exception {
+			@PageableDefault Pageable pageable) throws Exception {
+		System.out.println(pageable.getPageSize());
 		PagingResult<Story> listStory = storyService.findBywriterSeq(userSeq, pageable);
+		
 		if(listStory != null) {
 			return new ResponseEntity<PagingResult<Story>>(listStory, HttpStatus.OK);
 		}
