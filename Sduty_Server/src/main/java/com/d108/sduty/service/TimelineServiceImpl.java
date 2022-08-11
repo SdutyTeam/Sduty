@@ -242,10 +242,7 @@ public class TimelineServiceImpl implements TimelineService {
 	public PagingResult<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq) {
 		Page<Story> storyPage = storyRepo.findAllByOrderByRegtimeDesc(pageable);
 		List<Timeline> timelineList = new ArrayList<Timeline>();
-		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
 		for(Story s : storyPage) {
-			if(dislikes.contains(s.getSeq()))
-				continue;
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
