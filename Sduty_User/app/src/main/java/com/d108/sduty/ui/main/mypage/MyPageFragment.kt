@@ -16,6 +16,7 @@ import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
+import com.d108.sduty.common.MODIFY
 import com.d108.sduty.databinding.FragmentMyPageBinding
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
@@ -133,6 +134,9 @@ class MyPageFragment : Fragment() {
             }
             tvCountFollower.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWEE))
+            }
+            btnEditProfile.setOnClickListener {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToProfileRegistFragment(MODIFY))
             }
         }
     }

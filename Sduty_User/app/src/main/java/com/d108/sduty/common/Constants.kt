@@ -43,3 +43,6 @@ const val FLAG_FOLLOWEE = 1
 const val FLAG_TIMELINE = 0
 const val FLAG_STUDY = 1
 const val FLAG_STUDY_REGIST = 2
+
+const val REGISTER = 0
+const val MODIFY = 1

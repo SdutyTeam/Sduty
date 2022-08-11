@@ -103,9 +103,9 @@ public class ProfileController {
 	}
 	
 	@Transactional
-	@ApiOperation(value = "프로필 수정 > UserSeq > Profile 리턴", response = Profile.class)
+	@ApiOperation(value = "프로필 수정(사진) > UserSeq > Profile 리턴", response = Profile.class)
 	@PutMapping("/image")
-	public ResponseEntity<?> updateProfileImage(@RequestParam MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
+	public ResponseEntity<?> updateProfileImage(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
 		Gson gson = new Gson();
 		Profile profile = gson.fromJson(json, Profile.class);
 		imageService.deleteFile(profile.getImage());

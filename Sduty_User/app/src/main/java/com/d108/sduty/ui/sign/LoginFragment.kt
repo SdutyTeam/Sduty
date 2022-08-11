@@ -78,7 +78,7 @@ class LoginFragment : Fragment() {
                         requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
                     }
                     false -> {
-                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
+                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment(REGISTER))
                         requireContext().showToast("프로필 등록 후 이용해 주세요")
                     }
                 }
