@@ -88,7 +88,7 @@ class ProfileViewModel: ViewModel() {
             try {
                 val file = File(imageUrl)
                 Log.d(TAG, "updateProfileImage: ${imageUrl}")
-                var fileName = profile.image
+                var fileName = "profile/" + System.currentTimeMillis().toString()+".png"
                 var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,requestBody)
                 val json = Gson().toJson(profile)
