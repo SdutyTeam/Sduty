@@ -12,8 +12,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
+import com.d108.sduty.adapter.StudyMemeberAdapter
 import com.d108.sduty.databinding.FragmentCamstudyDetailBinding
+import com.d108.sduty.model.dto.Member
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyCheckDialog
 import com.d108.sduty.ui.main.study.dialog.StudyDialog
@@ -37,6 +40,10 @@ class CamStudyDetailFragment : Fragment() {
     lateinit var studyRoomId: String
     lateinit var studyName: String
 
+    private lateinit var studyMemberAdapter: StudyMemeberAdapter
+    private lateinit var studyMember: List<Map<String, Any>>
+    private lateinit var memberList: ArrayList<Member>
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,7 +65,22 @@ class CamStudyDetailFragment : Fragment() {
         camStudyDetailViewModel.camStudyInfo.observe(viewLifecycleOwner){map ->
             if(map != null){
                 val studyInfo = camStudyDetailViewModel.camStudyInfo.value as Map<String, Any>
-                Log.d(TAG, "onViewCreated: ${studyInfo}")
+
+                studyMember = studyInfo["members"] as List<Map<String, Any>>
+
+                memberList = ArrayList<Member>()
+                for(member in studyMember){
+                    memberList.add(Member(
+                        member["is_studying"].toString().toDouble().roundToInt(),
+                        member["nickname"] as String,
+                        member["total_time"] as String,
+                        member["userSeq"].toString().toDouble().roundToInt()))
+                }
+                Log.d(TAG, "onViewCreated11: ${memberList}")
+
+                initAdapter()
+
+
                 var joinNum = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
                 var limitNum = ((studyInfo["study"] as Map<String, Any>)["limitNumber"].toString()).toDouble()
 
@@ -181,4 +203,11 @@ class CamStudyDetailFragment : Fragment() {
         mainViewModel.displayBottomNav(true)
     }
 
+    private fun initAdapter(){
+        studyMemberAdapter = memberList?.let { StudyMemeberAdapter(it) }!!
+        binding.studyMember.apply {
+            layoutManager = GridLayoutManager(context, 4)
+            adapter = studyMemberAdapter
+        }
+    }
 }
