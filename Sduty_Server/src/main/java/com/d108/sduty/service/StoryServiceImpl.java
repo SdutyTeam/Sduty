@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.d108.sduty.dto.Dislike;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.StoryInterest;
+import com.d108.sduty.repo.DislikeRepo;
 import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.repo.ReplyRepo;
 import com.d108.sduty.repo.StoryInterestHashtagRepo;
@@ -31,6 +33,9 @@ public class StoryServiceImpl implements StoryService {
 	
 	@Autowired
 	private ProfileRepo profileRepo;
+	
+	@Autowired
+	private DislikeRepo dislikeRepo;
 	
 	@Override
 	public Story insertStory(Story story) {
@@ -130,5 +135,10 @@ public class StoryServiceImpl implements StoryService {
 			item.setProfile(profileRepo.findById(item.getUserSeq()).get());
 		}
 		return list;
+	}
+
+	@Override
+	public void doDislike(int userSeq, int storySeq) {
+		dislikeRepo.save(new Dislike(userSeq, storySeq));
 	}
 }
