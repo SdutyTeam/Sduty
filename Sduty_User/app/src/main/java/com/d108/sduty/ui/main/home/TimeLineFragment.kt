@@ -23,9 +23,11 @@ import com.d108.sduty.common.INTEREST_TAG
 import com.d108.sduty.common.JOB_TAG
 import com.d108.sduty.databinding.FragmentTimeLineBinding
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.ui.main.home.dialog.PushInfoDialog
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
 
@@ -57,12 +59,19 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
         initView()
+        initViewModel()
+
 
     }
 
     private fun initView(){
+        if(SettingsPreference().getFirstLoginCheck()){
+            PushInfoDialog().let{
+                it.show(parentFragmentManager, null)
+            }
+        }
+
         pageAdapter = TimeLinePagingAdapter(requireActivity())
         pageAdapter.apply {
             onClickTimelineItem = object : TimeLinePagingAdapter.TimeLineClickListener{
