@@ -93,8 +93,19 @@ public class ProfileController {
 	
 	@Transactional
 	@ApiOperation(value = "프로필 수정 > UserSeq > Profile 리턴", response = Profile.class)
-	@PutMapping()
-	public ResponseEntity<?> updateProfile(@RequestParam MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
+	@PutMapping("")
+	public ResponseEntity<?> updateProfile(@RequestBody Profile profile) throws Exception {
+		Profile result = profileService.updateProfile(profile);
+		if(result != null) {
+			return new ResponseEntity<Profile>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@Transactional
+	@ApiOperation(value = "프로필 수정 > UserSeq > Profile 리턴", response = Profile.class)
+	@PutMapping("/image")
+	public ResponseEntity<?> updateProfileImage(@RequestParam MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
 		Gson gson = new Gson();
 		Profile profile = gson.fromJson(json, Profile.class);
 		imageService.deleteFile(profile.getImage());

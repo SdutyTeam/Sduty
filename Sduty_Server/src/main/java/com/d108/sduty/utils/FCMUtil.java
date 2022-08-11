@@ -27,7 +27,7 @@ public class FCMUtil {
 	//특정 사용자한테 보내기
 	public void send_FCM(String tokenId, String title, String content) {
 		try {
-			FileInputStream refreshToken = new FileInputStream("/Sduty_Server/src/main/resources/service-account-key.json");
+			FileInputStream refreshToken = new FileInputStream("/var/lib/jenkins/workspace/gumid108/Sduty_Server/src/main/resources/service-account-key.json");
 			FirebaseOptions options = new FirebaseOptions.Builder()
 					.setCredentials(GoogleCredentials.fromStream(refreshToken)).setDatabaseUrl("firebase-adminsdk-jv8ed@sduty-5125f.iam.gserviceaccount.com")
 					.build();
