@@ -269,6 +269,7 @@ public class TimelineServiceImpl implements TimelineService {
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
 			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+			t.setCntStory(storyRepo.countAllByWriterSeq(userSeq));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());

@@ -61,11 +61,11 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     }
 
     private fun initViewModel() {
-        viewModel.getUserStoryListValue(args.userSeq)
+//        viewModel.getUserStoryListValue(args.userSeq)
         viewModel.getContribution(args.userSeq)
-        viewModel.userStoryList.observe(viewLifecycleOwner){
-            storyAdapter.list = it
-        }
+//        viewModel.userStoryList.observe(viewLifecycleOwner){
+//            storyAdapter.list = it
+//        }
         mainViewModel.profile.observe(viewLifecycleOwner){
             binding.apply {
                 vm = viewModel

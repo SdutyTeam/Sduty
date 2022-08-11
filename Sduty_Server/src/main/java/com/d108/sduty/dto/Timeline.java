@@ -16,7 +16,8 @@ import lombok.ToString;
 public class Timeline {
 	private Profile profile ;
 	private Story story ;
-	private int cntReply; 
+	private int cntReply;
+	private int cntStory;
 	private List<Reply> replies;
 	private int numLikes;
 	private boolean likes;

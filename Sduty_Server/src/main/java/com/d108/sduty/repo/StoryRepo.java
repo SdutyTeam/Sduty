@@ -20,7 +20,7 @@ public interface StoryRepo extends JpaRepository<Story, Integer>{
 	List<Story> findAllByjobHashtagInOrderByRegtimeDesc(List<Integer> seqs);
 	Page<Story> findAllBySeqInOrderByRegtimeDesc(List<Integer> storySeqs, Pageable pageable);//게시글 목록들로 조회
 	Story findTopByWriterSeqOrderByRegtimeDesc(int writerSeq);
-	
+	int countAllByWriterSeq(int writerSeq);
 	@Query(value="SELECT distinct dayofyear(substr(story_regtime, 1,10)) as dayofyear FROM sduty.story where story_writer_seq = ?1", nativeQuery=true)
 	List<Integer> findAllRegtime(int userSeq);
 	
