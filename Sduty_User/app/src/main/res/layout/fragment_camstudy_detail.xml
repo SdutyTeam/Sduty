@@ -42,6 +42,7 @@
 
             <ImageView
                 android:id="@+id/btn_study_setting"
+                android:visibility="gone"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/img_study_setting"
@@ -49,6 +50,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginRight="15dp"/>
+
+            <ImageView
+                android:id="@+id/btn_study_exit"
+                android:visibility="gone"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_join"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="15dp"/>
+
 
             <LinearLayout
                 android:id="@+id/divider_a"
@@ -263,6 +276,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="매주 15 : 00"
+                    android:textSize="14dp"
                     android:textColor="#9585EB"
                     android:layout_marginLeft="10dp" />
 

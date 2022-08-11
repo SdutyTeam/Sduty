@@ -59,6 +59,7 @@ class StudyListFragment : Fragment(){
         studyListViewModel.isJoinStudySuccess.observe(viewLifecycleOwner){
             if(it){
                 context?.showToast("가입이 완료되었습니다.")
+                findNavController().popBackStack()
             }else{
                 context?.showToast("이미 가입된 그룹입니다.")
             }
@@ -156,10 +157,14 @@ class StudyListFragment : Fragment(){
                                     dialogPass.showDialog()
                                     dialogPass.setOnClickListener(object : StudyPasswordDialog.OnDialogClickListener{
                                         override fun onClicked(etPassword: EditText) {
-                                            if(etPassword.text.toString() == studyList[position].password){
-                                                studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                            if(studyList[position].joinNumber < studyList[position].limitNumber){
+                                                if(etPassword.text.toString() == studyList[position].password){
+                                                    studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                                } else{
+                                                    context?.showToast("비밀번호가 틀렸습니다.")
+                                                }
                                             } else{
-                                                context?.showToast("비밀번호가 틀렸습니다.")
+                                                context?.showToast("스터디 인원 수가 많아 참가할 수 없습니다.")
                                             }
                                         }
                                     })

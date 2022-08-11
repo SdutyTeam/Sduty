@@ -72,6 +72,7 @@ class StudyRegistFragment : Fragment() {
             false -> {
                 binding.dailyTime.visibility = View.GONE
                 binding.dailyWeek.visibility = View.GONE
+                binding.tvDaily.visibility = View.GONE
             }
         }
 
@@ -219,8 +220,6 @@ class StudyRegistFragment : Fragment() {
                 if(pass == ""){
                     pass = null
                 }
-                Log.d(TAG, "rooms: ${mainViewModel.profile.value!!.nickname}")
-                Log.d(TAG, "rooms: ${mainViewModel.profile.value!!.job}")
                 if(!args.type) {
                     studyRegisteViewModel.studyCreate(
                         Study(
