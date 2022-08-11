@@ -1,6 +1,5 @@
 package com.d108.sduty.ui.main.home
 
-import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -8,23 +7,17 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
-import com.d108.sduty.adapter.TimeLinePagingAdapter
+import com.d108.sduty.adapter.paging.TimeLinePagingAdapter
 import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.FLAG_TIMELINE
 import com.d108.sduty.common.INTEREST_TAG
@@ -92,6 +85,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     }
                 }
             }
+            SettingsPreference().setFirstLoginCheck(false)
         }
         getFirebaseToken()
 
@@ -211,7 +205,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             settingViewModel.updateFCMToken(mainViewModel.user.value!!)
 
         })
-        createNotiChannel("d108_id", "d108")
+        createNotiChannel("sduty_id", "sduty")
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotiChannel(channelId: String, channelName: String) {

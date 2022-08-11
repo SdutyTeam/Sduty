@@ -79,6 +79,9 @@
         android:id="@+id/profileRegistFragment"
         android:name="com.d108.sduty.ui.sign.ProfileRegistFragment"
         android:label="ProfileRegistFragment" >
+        <argument
+            android:name="flag"
+            app:argType="integer" />
         <action
             android:id="@+id/action_profileRegistFragment_to_timeLineFragment"
             app:popUpTo="@id/main_nav_graph"
@@ -125,6 +128,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_reportFragment"
             app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_profileRegistFragment"
+            app:destination="@id/profileRegistFragment" />
     </fragment>
     <fragment
         android:id="@+id/storyRegisterFragment"

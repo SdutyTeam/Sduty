@@ -6,13 +6,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Dislike;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.StoryInterest;
+import com.d108.sduty.dto.Timeline;
 import com.d108.sduty.repo.DislikeRepo;
 import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.repo.ReplyRepo;
@@ -65,8 +69,10 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public List<Story> findBywriterSeq(int userSeq) {
-		return optConverter(storyRepo.findBywriterSeqOrderByRegtimeDesc(userSeq));
+	public PagingResult<Story> findBywriterSeq(int userSeq, Pageable pageable) {
+		Page<Story> storyPage = storyRepo.findBywriterSeqOrderByRegtimeDesc(userSeq, pageable);
+		PagingResult result = new PagingResult<Story>(pageable.getPageNumber(), storyPage.getTotalPages() -1, storyPage.toList());
+		return result;
 	}
 
 	@Override
@@ -90,8 +96,8 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public List<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs) {
-		return storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs);
+	public Page<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, Pageable pageable) {
+		return storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeqs, pageable);
 	}
 
 	@Override
@@ -109,8 +115,12 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public List<Story> selectStoryInSeq(List<Integer> storySeqs) {
-		return storyRepo.findAllBySeqInOrderByRegtimeDesc(storySeqs);
+	public PagingResult<Story> selectStoryInSeq(List<Integer> storySeqs, Pageable pageable) {
+		Page<Story> storyPage = storyRepo.findAllBySeqInOrderByRegtimeDesc(storySeqs, pageable);
+		
+
+		PagingResult result = new PagingResult<Story>(pageable.getPageNumber(), storyPage.getTotalPages(), storyPage.toList());
+		return result;
 	}
 
 	@Override

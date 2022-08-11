@@ -31,7 +31,7 @@ class FirebaseCloudMessagingService: FirebaseMessagingService() {
             }
             val mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0)
             val builder = NotificationCompat.Builder(this, "sduty_id")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher_sduty_gradient_round)
                 .setContentTitle(messageTitle)
                 .setContentText(messageContent)
                 .setAutoCancel(true)

@@ -1,8 +1,7 @@
-package com.d108.sduty.adapter
+package com.d108.sduty.adapter.paging
 
 import android.app.Activity
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,9 @@ import com.d108.sduty.databinding.ItemTimelineBinding
 import com.d108.sduty.model.dto.Timeline
 
 private const val TAG ="TimeLinePagingAdapter"
-class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline, TimeLinePagingAdapter.ViewHolder>(IMAGE_COMPARATOR) {
+class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline, TimeLinePagingAdapter.ViewHolder>(
+    IMAGE_COMPARATOR
+) {
     inner class ViewHolder(val binding: ItemTimelineBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(timeline: Timeline){
             binding.apply {
