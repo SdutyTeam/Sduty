@@ -22,6 +22,7 @@ import com.d108.sduty.databinding.FragmentStoryDecoBinding
 import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.showToast
 
 //게시물 사진 꾸미기 - 타임스탬프, 텍스트 컬러, 템플릿 선택, 공유, 저장
@@ -114,13 +115,13 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
 
             // 이미지를 Reg로
             ivDoneDeco.setOnClickListener {
-                // Bitmap : to hold the pixels where the canvas will be drawn.
-                val bitmap = Bitmap.createBitmap(layoutPreview.width, layoutPreview.height, Bitmap.Config.ARGB_8888)
-                // Construct a canvas with the specified bitmap to draw into.
-                val canvas = Canvas(bitmap)
-                // Drawing commands — to indicate to the canvas what to draw.
-                layoutPreview.draw(canvas)
-                saveImageBitmap(bitmap)
+                imageToBitmap()
+            }
+            btnRegister.setOnClickListener {
+                imageToBitmap()
+            }
+            ivBack.setOnClickListener {
+                navigateBack(requireActivity())
             }
         }
         initViewModel()
@@ -145,6 +146,19 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
                     }
                 }
             }
+        }
+    }
+
+    private fun imageToBitmap(){
+        binding.apply {
+            // Bitmap : to hold the pixels where the canvas will be drawn.
+            val bitmap = Bitmap.createBitmap(layoutPreview.width, layoutPreview.height, Bitmap.Config.ARGB_8888)
+            // Construct a canvas with the specified bitmap to draw into.
+            val canvas = Canvas(bitmap)
+            // Drawing commands — to indicate to the canvas what to draw.
+            layoutPreview.draw(canvas)
+            saveImageBitmap(bitmap)
+
         }
     }
 
@@ -177,5 +191,6 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
         params?.height = (deviceHeight * 1).toInt()
         dialog?.window?.attributes = params as WindowManager.LayoutParams
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
     }
 }

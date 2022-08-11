@@ -34,6 +34,10 @@ class StudySettingViewModel: ViewModel() {
     val myStudyInfo: LiveData<Map<String, Any>>
         get() = _myStudyInfo
 
+    private val _isStudyId = MutableLiveData<Boolean>()
+    val isStudyId: LiveData<Boolean>
+        get() = _isStudyId
+
     fun getMyStudyInfo(userSeq: Int, studySeq: Int){
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -116,7 +120,22 @@ class StudySettingViewModel: ViewModel() {
         }
     }
 
-
+    fun getStudyId(id: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.studyApi.getStudyName(id)
+                Log.d(TAG, "getStudyId@@@: {$response}")
+                if(response.code() == 200){
+                    _isStudyId.postValue(false)
+                }
+                else if(response.code() == 401){
+                    _isStudyId.postValue(true)
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "getStudyId: ${e.message}")
+            }
+        }
+    }
 
 
 

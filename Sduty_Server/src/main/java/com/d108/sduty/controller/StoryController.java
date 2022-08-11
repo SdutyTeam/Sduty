@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.d108.sduty.dto.Follow;
 import com.d108.sduty.dto.Likes;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
@@ -76,11 +77,13 @@ public class StoryController {
             @PageableDefault Pageable pageable) throws Exception {
 
 		System.out.println(userSeq);
-		Page<Timeline> timeLineList = timelineService.selectAllPagingTimelines(pageable, userSeq);
-		if(timeLineList == null) {
+		PagingResult result = timelineService.selectAllPagingTimelines(pageable, userSeq);
+		if(result == null) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Timeline>>(timeLineList.toList(), HttpStatus.OK);
+		
+		
+		return new ResponseEntity<PagingResult<Timeline>>(result, HttpStatus.OK);
 
 	}
 	
@@ -237,13 +240,14 @@ public class StoryController {
 	
 	@Transactional
 	@ApiOperation(value= "게시글 신고 : StorySeq > HttpStatus", response = HttpStatus.class)
-	@PutMapping("/report/{storySeq}")
-	public ResponseEntity<?> reportStory(@PathVariable int storySeq) {
+	@PutMapping("/report/{userSeq}/{storySeq}")
+	public ResponseEntity<?> reportStory(@PathVariable int userSeq, @PathVariable int storySeq) {
 		Story updatingStory = storyService.findById(storySeq);
 		if(updatingStory !=null ) {
 			updatingStory.setWarning(updatingStory.getWarning() + 1);
 			Story story = storyService.insertStory(updatingStory);
 			if(story != null) {
+				storyService.doDislike(userSeq, storySeq);
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
 		}
@@ -277,18 +281,22 @@ public class StoryController {
 		int userSeq = scrap.getUserSeq();
 		int storySeq = scrap.getStorySeq();
 		boolean alreadyScrapped = scrapService.checkAlreadyScrap(userSeq, storySeq);
-		
+		Timeline timeline;
 		if(alreadyScrapped) {
 			try {
 				scrapService.deleteScrap(userSeq, storySeq);
+				timeline = timelineService.selectDetailTimeline(scrap.getStorySeq(), scrap.getUserSeq());
+							
+					
 			} catch (Exception e) {
 				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 			}
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			return new ResponseEntity<Timeline>(timeline, HttpStatus.OK);
 		} else {
 			Scrap result = scrapService.insertScrap(scrap);
-			if(result != null) {			
-				return new ResponseEntity<Void>(HttpStatus.OK);
+			timeline = timelineService.selectDetailTimeline(scrap.getStorySeq(), scrap.getUserSeq());
+			if(result != null && timeline != null) {			
+				return new ResponseEntity<Timeline>(timeline, HttpStatus.OK);
 			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);

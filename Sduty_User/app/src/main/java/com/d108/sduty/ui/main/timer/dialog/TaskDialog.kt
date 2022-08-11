@@ -435,5 +435,6 @@ class TaskDialog : DialogFragment() {
         // 다이얼로그 크기를 디바이스 가로의 90%로 설정한다.
         params?.width = (deviceWidth * 0.9).toInt()
         dialog?.window?.attributes = params as WindowManager.LayoutParams
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 }

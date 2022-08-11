@@ -48,4 +48,7 @@ interface UserApi {
     @GET("/user/{user_seq}")
     suspend fun getUserValue(@Path("user_seq")userSeq: Int): Response<User>
 
+    @PUT("/user")
+    suspend fun updateUser(@Body user: User): Response<Void>
+
 }

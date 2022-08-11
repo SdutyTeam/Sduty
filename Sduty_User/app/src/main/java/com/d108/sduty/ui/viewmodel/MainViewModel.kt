@@ -61,6 +61,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun checkFollowUser(userSeq: Int): Boolean{
+        Log.d(TAG, "checkFollowUser: ${userSeq}  profile:  ${_profile.value!!.follows}")
         return _profile.value!!.follows?.get("${userSeq}")!= null
     }
 

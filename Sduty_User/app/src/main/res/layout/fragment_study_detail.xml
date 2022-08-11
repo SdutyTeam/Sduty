@@ -20,13 +20,13 @@
 
             <ImageView
                 android:id="@+id/common_top_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:src="@drawable/img_back"
-                android:layout_marginLeft="15dp"
+                android:padding="13dp"
                 />
 
             <ImageView
@@ -42,9 +42,21 @@
 
             <ImageView
                 android:id="@+id/btn_study_setting"
+                android:visibility="gone"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/img_study_setting"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="15dp"/>
+
+            <ImageView
+                android:id="@+id/btn_study_exit"
+                android:visibility="gone"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_join"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -67,122 +79,130 @@
         android:layout_margin="12dp"
         app:layout_constraintTop_toBottomOf="@id/common_top">
 
-        <ImageView
-            android:id="@+id/img_study_lock"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:layout_constraintStart_toStartOf="parent"
+        <LinearLayout
+            android:id="@+id/layout_study"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/study_detail_category"
-            app:layout_constraintEnd_toStartOf="@id/study_detail_name"
-            android:layout_marginLeft="15dp"
-            />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/study_detail_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="스터디 그룹 이름"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/img_study_lock"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/study_detail_category"
-            android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:id="@+id/img_study_lock"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="15dp"
+                />
 
-        <TextView
-            android:id="@+id/study_detail_category"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/study_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="스터디 그룹 이름"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_study_detail_category"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="카테고리"
-            android:textSize="14dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_study_lock"
-            app:layout_constraintBottom_toTopOf="@id/tv_study_detail_master"
-            android:layout_marginLeft="15dp"/>
+            app:layout_constraintTop_toBottomOf="@id/layout_study"
+            app:layout_constraintBottom_toTopOf="@id/layout_study_detail_master">
 
-        <TextView
-            android:id="@+id/tv_study_detail_master"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/study_detail_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="#카테고리"
+                android:textSize="14dp"
+                android:textColor="#9585EB"
+                android:layout_marginLeft="15dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_study_detail_master"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="그룹 장"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/study_detail_category"
-            app:layout_constraintBottom_toTopOf="@id/tv_study_detail_people"
-            app:layout_constraintEnd_toStartOf="@id/study_detail_master"
-            android:layout_marginLeft="15dp"
-            />
+            app:layout_constraintTop_toBottomOf="@id/layout_study_detail_category"
+            app:layout_constraintBottom_toTopOf="@id/study_detail_people">
 
-        <TextView
-            android:id="@+id/study_detail_master"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="그룹 장"
-            app:layout_constraintStart_toEndOf="@id/tv_study_detail_master"
-            app:layout_constraintTop_toBottomOf="@id/study_detail_category"
-            app:layout_constraintBottom_toTopOf="@id/tv_study_detail_people"
-            android:layout_marginLeft="20dp"
-            />
+            <TextView
+                android:id="@+id/tv_study_detail_master"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="그룹 장"
+                android:layout_marginLeft="15dp"
+                />
 
-        <TextView
-            android:id="@+id/tv_study_detail_people"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/study_detail_master"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="그룹 장"
+                android:layout_marginLeft="20dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/study_detail_people"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:text="인원"
-            app:layout_constraintBottom_toTopOf="@id/study_detail"
-            app:layout_constraintEnd_toStartOf="@id/study_detail_joinnum"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_study_detail_master" />
+            app:layout_constraintTop_toBottomOf="@id/layout_study_detail_master"
+            app:layout_constraintBottom_toTopOf="@id/study_detail">
 
-        <TextView
-            android:id="@+id/study_detail_joinnum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="37dp"
-            tools:text="15"
-            app:layout_constraintBottom_toTopOf="@id/study_detail"
-            app:layout_constraintStart_toEndOf="@id/tv_study_detail_people"
-            app:layout_constraintTop_toBottomOf="@id/tv_study_detail_master"
-            app:layout_constraintVertical_bias="0.3" />
+            <TextView
+                android:id="@+id/tv_study_detail_people"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="인원" />
 
-        <TextView
-            android:id="@+id/slash"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" / "
-            app:layout_constraintBottom_toTopOf="@id/study_detail"
-            app:layout_constraintStart_toEndOf="@id/study_detail_joinnum"
-            app:layout_constraintTop_toBottomOf="@id/tv_study_detail_master"
-            app:layout_constraintVertical_bias="0.3" />
+            <TextView
+                android:id="@+id/study_detail_joinnum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                tools:text="15" />
 
-        <TextView
-            android:id="@+id/study_detail_limitnum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="20"
-            app:layout_constraintBottom_toTopOf="@id/study_detail"
-            app:layout_constraintStart_toEndOf="@id/slash"
-            app:layout_constraintTop_toBottomOf="@id/tv_study_detail_master"
-            app:layout_constraintVertical_bias="0.3" />
+            <TextView
+                android:id="@+id/slash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" / " />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="명"
-            app:layout_constraintBottom_toTopOf="@id/study_detail"
-            app:layout_constraintStart_toEndOf="@id/study_detail_limitnum"
-            app:layout_constraintTop_toBottomOf="@id/tv_study_detail_master"
-            app:layout_constraintVertical_bias="0.3" />
+            <TextView
+                android:id="@+id/study_detail_limitnum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="명"/>
+
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/study_detail"
             android:background="@drawable/border_study_block_solid"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_margin="12dp"
+            android:layout_margin="10dp"
             android:layout_gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/tv_study_detail_people"
+            app:layout_constraintTop_toBottomOf="@id/study_detail_people"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView

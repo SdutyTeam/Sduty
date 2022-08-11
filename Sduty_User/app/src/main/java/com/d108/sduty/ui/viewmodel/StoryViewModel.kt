@@ -2,13 +2,15 @@ package com.d108.sduty.ui.viewmodel
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.navigation.navOptions
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.liveData
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.model.paging.TimeLineDataSource
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +23,22 @@ import okio.BufferedSink
 
 private const val TAG ="StoryViewModel"
 class StoryViewModel: ViewModel() {
+
+    fun getTimelinePost(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {TimeLineDataSource(Retrofit.storyApi, userSeq)}
+    ).liveData
+
+    private val timeLinePosts = MutableLiveData<Int>()
+    val pagingTimelineList = timeLinePosts.switchMap {
+        getTimelinePost(it).cachedIn(viewModelScope)
+    }
+
+    fun getTimelineListValue(userSeq: Int){
+        timeLinePosts.postValue(userSeq)
+    }
+
+
     private val _storyList = MutableLiveData<MutableList<Story>>()
     val storyList: LiveData<MutableList<Story>>
         get() = _storyList
@@ -264,17 +282,17 @@ class StoryViewModel: ViewModel() {
 
     fun scrapStory(scrap: Scrap){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.scrapStory(scrap).let {
-                if (it.code() == 200) {
-                    var timeline = _timeLine.value!!
-                    timeline.scrap = !timeline.scrap
-                    _timeLine.postValue(timeline)
-                }else if(it.code() == 401){
-
+            try {
+                Retrofit.storyApi.scrapStory(scrap).let {
+                    if (it.code() == 200 && it.body() != null) {
+                        _timeLine.postValue(it.body() as Timeline)
+                    }else if(it.code() == 401){
+                    }
+                    else{
+                    }
                 }
-                else{
-
-                }
+            }catch (e: Exception){
+                Log.d(TAG, "scrapStory: ${e.message}")
             }
         }
     }

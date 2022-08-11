@@ -9,6 +9,7 @@ import android.view.*
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -20,9 +21,12 @@ import com.d108.sduty.adapter.ReplyAdapter
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.ui.main.study.StudyDetailFragmentDirections
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
+import com.d108.sduty.utils.navigateBack
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
 import com.google.android.material.navigation.NavigationView
@@ -48,6 +52,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStoryDetailBinding.inflate(inflater, container, false)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         val displaymetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
         val deviceWidth = displaymetrics.widthPixels
@@ -70,7 +75,6 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     private fun initViewModel() {
         viewModel.apply {
             getTimelineValue(args.seq, mainViewModel.user.value!!.seq)
-            Log.d(TAG, "initViewModel: ${args.seq}, ${mainViewModel.user.value!!.seq}")
             timeLine.observe(viewLifecycleOwner){
                 replyAdapter.list = timeLine.value!!.replies
                 binding.vm = viewModel
@@ -79,9 +83,12 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             replyList.observe(viewLifecycleOwner){
                 replyAdapter.list = it
             }
+            isFollowSucceed.observe(viewLifecycleOwner){
+                mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+            }
         }
         mainViewModel.apply {
-            mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+            getProfileValue(mainViewModel.user.value!!.seq)
         }
 
     }
@@ -115,10 +122,26 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 }else{
                     menuId = R.menu.menu_story_visiters
                 }
+
                 PopupMenu(requireContext(), it).apply {
                     setOnMenuItemClickListener(this@StoryDetailFragment)
                     inflate(menuId)
+                    if (menuId == R.menu.menu_story_visiters && mainViewModel.checkFollowUser(viewModel.timeLine.value!!.story.writerSeq)) {
+                        menu[0].title = "언팔로우"
+                    }else{
+                        menu[0].title = "팔로우"
+                    }
                     show()
+                }
+            }
+            commonTopBack.setOnClickListener {
+                navigateBack(requireActivity())
+            }
+            constProfileTop.setOnClickListener {
+                if(mainViewModel.user.value!!.seq == viewModel.timeLine.value!!.story.writerSeq)
+                    findNavController().safeNavigate(StoryDetailFragmentDirections.actionStoryDetailFragmentToMyPageFragment())
+                else{
+                    findNavController().safeNavigate(StoryDetailFragmentDirections.actionStoryDetailFragmentToUserProfileFragment(viewModel.timeLine.value!!.story.writerSeq))
                 }
             }
         }
@@ -159,13 +182,8 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 }
             }
             R.id.follow -> {
-                viewModel.doFollow(
-                    Follow(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story.writerSeq))
-                if (mainViewModel.checkFollowUser(viewModel.timeLine.value!!.story.writerSeq)) {
-                    item.title = "언팔로우"
-                }else{
-                    item.title = "팔로우"
-                }
+                viewModel.doFollow(Follow(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story.writerSeq))
+
             }
         }
 

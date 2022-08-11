@@ -151,21 +151,22 @@ public class UserController {
 	
 	@Transactional
 	@ApiOperation(value = "회원정보 수정 > User/401 리턴", response = HttpStatus.class)
-	@PutMapping("/{seq}")
-	public ResponseEntity<?> updateUserInfo(@PathVariable int seq, @RequestBody User user) throws Exception {
-		user.setSeq(seq);
-		User selectUser = userService.selectUser(seq).get();
+	@PutMapping("")
+	public ResponseEntity<?> updateUserInfo(@RequestBody User user) throws Exception {		
+//		user.setSeq(seq);
+		User selectUser = userService.selectUser(user.getSeq()).get();
 		if(user.getPass() != null) {
 			//이게 null이면 user.setPass(selectUser.getPass());인거 같습니다!
 			//암호화
 			//selectUser.setPass(security.passwordEncoder().encode(user.getPass()));
 			System.out.println("암호화된 비번도 변경");
-			user.setPass2(security.passwordEncoder().encode(user.getPass()));
-			selectUser.setPass(user.getPass());
+//			user.setPass2(security.passwordEncoder().encode(user.getPass()));
+//			selectUser.setPass(user.getPass());
 		}
-		user.setTel(selectUser.getTel());
-		user.setEmail(selectUser.getEmail());
-		user.setFcmToken(selectUser.getFcmToken());
+//		user.setTel(selectUser.getTel());
+//		user.setEmail(selectUser.getEmail());
+//		user.setFcmToken(selectUser.getFcmToken());
+		user.setRegtime(selectUser.getRegtime());
 		if(userService.updateUser(user) != null)
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		else

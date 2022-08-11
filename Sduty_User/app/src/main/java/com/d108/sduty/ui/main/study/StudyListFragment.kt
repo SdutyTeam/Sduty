@@ -59,6 +59,7 @@ class StudyListFragment : Fragment(){
         studyListViewModel.isJoinStudySuccess.observe(viewLifecycleOwner){
             if(it){
                 context?.showToast("가입이 완료되었습니다.")
+                findNavController().popBackStack()
             }else{
                 context?.showToast("이미 가입된 그룹입니다.")
             }
@@ -81,7 +82,7 @@ class StudyListFragment : Fragment(){
                             binding.tbCategory.text = tagName
                             category = tagName
                             studyListViewModel.getStudyFilter(tagName, tbPeople.isChecked, tbCamstudy.isChecked, tbPublic.isChecked)
-                            tbCategory.setBackgroundResource(R.drawable.gradient_border)
+                            tbCategory.setBackgroundResource(R.drawable.btn_study_regist)
                             tbCategory.setTextColor(Color.BLACK)
                         }
                     }
@@ -91,7 +92,7 @@ class StudyListFragment : Fragment(){
             tbCamstudy.setOnCheckedChangeListener { buttonView, isChecked ->
                 studyListViewModel.getStudyFilter(category, tbPeople.isChecked, isChecked, tbPublic.isChecked)
                 if(isChecked){
-                    tbCamstudy.setBackgroundResource(R.drawable.gradient_border)
+                    tbCamstudy.setBackgroundResource(R.drawable.btn_study_regist)
                     tbCamstudy.setTextColor(Color.BLACK)
                 } else{
                     tbCamstudy.setBackgroundResource(R.drawable.btn_study_filter)
@@ -102,7 +103,7 @@ class StudyListFragment : Fragment(){
             tbPeople.setOnCheckedChangeListener { buttonView, isChecked ->
                 studyListViewModel.getStudyFilter(category, isChecked, tbCamstudy.isChecked, tbPublic.isChecked)
                 if(isChecked){
-                    tbPeople.setBackgroundResource(R.drawable.gradient_border)
+                    tbPeople.setBackgroundResource(R.drawable.btn_study_regist)
                     tbPeople.setTextColor(Color.BLACK)
                 } else{
                     tbPeople.setBackgroundResource(R.drawable.btn_study_filter)
@@ -113,16 +114,13 @@ class StudyListFragment : Fragment(){
             tbPublic.setOnCheckedChangeListener { buttonView, isChecked ->
                 studyListViewModel.getStudyFilter(category, tbPeople.isChecked, tbCamstudy.isChecked, isChecked)
                 if(isChecked){
-                    tbPublic.setBackgroundResource(R.drawable.gradient_border)
+                    tbPublic.setBackgroundResource(R.drawable.btn_study_regist)
                     tbPublic.setTextColor(Color.BLACK)
                 } else{
                     tbPublic.setBackgroundResource(R.drawable.btn_study_filter)
                     tbPublic.setTextColor(Color.parseColor("#616161"))
                 }
             }
-
-
-
 
             btnSearch.setOnClickListener {
                 findNavController().safeNavigate(StudyListFragmentDirections.actionStudyListFragmentToStudySearchFragment())
@@ -156,10 +154,14 @@ class StudyListFragment : Fragment(){
                                     dialogPass.showDialog()
                                     dialogPass.setOnClickListener(object : StudyPasswordDialog.OnDialogClickListener{
                                         override fun onClicked(etPassword: EditText) {
-                                            if(etPassword.text.toString() == studyList[position].password){
-                                                studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                            if(studyList[position].joinNumber < studyList[position].limitNumber){
+                                                if(etPassword.text.toString() == studyList[position].password){
+                                                    studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                                } else{
+                                                    context?.showToast("비밀번호가 틀렸습니다.")
+                                                }
                                             } else{
-                                                context?.showToast("비밀번호가 틀렸습니다.")
+                                                context?.showToast("스터디 인원 수가 많아 참가할 수 없습니다.")
                                             }
                                         }
                                     })

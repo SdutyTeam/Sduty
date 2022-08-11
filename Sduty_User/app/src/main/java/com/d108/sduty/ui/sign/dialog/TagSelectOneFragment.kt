@@ -14,10 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.TagAdapter
-import com.d108.sduty.common.ALL_TAG
-import com.d108.sduty.common.FLAG_STUDY
-import com.d108.sduty.common.INTEREST_TAG
-import com.d108.sduty.common.JOB_TAG
+import com.d108.sduty.common.*
 import com.d108.sduty.databinding.DialogTagSelectOneBinding
 import com.d108.sduty.ui.main.timer.adapter.TaskListAdapter
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
@@ -41,7 +38,7 @@ class TagSelectOneFragment(var mContext: Context, var flag: Int) : DialogFragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(flag == FLAG_STUDY){
+        if(flag == FLAG_STUDY || flag == FLAG_STUDY_REGIST){
             binding.recyclerJob.visibility = View.GONE
         }
         initView()
@@ -65,6 +62,9 @@ class TagSelectOneFragment(var mContext: Context, var flag: Int) : DialogFragmen
         }
 
         binding.apply {
+            if(flag == FLAG_STUDY_REGIST){
+                tvSelectAll.visibility = View.GONE
+            }
             recyclerJob.apply {
                 adapter = jobAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)
@@ -74,7 +74,7 @@ class TagSelectOneFragment(var mContext: Context, var flag: Int) : DialogFragmen
                 layoutManager = GridLayoutManager(requireContext(), 3)
             }
             tvSelectAll.setOnClickListener {
-                onDismissDialogListener.onDismiss("전체선택", ALL_TAG)
+                onDismissDialogListener.onDismiss("전체", ALL_TAG)
                 dismiss()
             }
         }
@@ -109,8 +109,8 @@ class TagSelectOneFragment(var mContext: Context, var flag: Int) : DialogFragmen
         val deviceWidth = size.x
         val deviceHeight = size.y
         params?.width = (deviceWidth * 0.9).toInt()
-        if(flag == FLAG_STUDY)
-            params?.height = (deviceHeight * 0.70).toInt()
+        if(flag == FLAG_STUDY || flag == FLAG_STUDY_REGIST)
+            params?.height = (deviceHeight * 0.60).toInt()
         else
             params?.height = (deviceHeight * 0.80).toInt()
         dialog?.window?.attributes = params as WindowManager.LayoutParams
