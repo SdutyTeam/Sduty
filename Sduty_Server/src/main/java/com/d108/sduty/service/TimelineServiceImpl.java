@@ -19,6 +19,7 @@ import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.StoryInterest;
 import com.d108.sduty.dto.Timeline;
+import com.d108.sduty.repo.DislikeRepo;
 import com.d108.sduty.repo.InterestHashtagRepo;
 import com.d108.sduty.repo.JobHashtagRepo;
 import com.d108.sduty.repo.LikesRepo;
@@ -55,10 +56,14 @@ public class TimelineServiceImpl implements TimelineService {
 	@Autowired
 	private StoryInterestHashtagRepo storyInterestRepo;
 	
+	@Autowired
+	private DislikeRepo dislikeRepo;
+	
 	@Override
 	public List<Timeline> selectAllTimelines(int userSeq){
 		List<Story> storyList = storyRepo.findAllByOrderByRegtimeDesc();
 		List<Timeline> timelineList = new ArrayList<Timeline>();
+		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
 		for(Story s : storyList) {
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
@@ -77,7 +82,10 @@ public class TimelineServiceImpl implements TimelineService {
 	public List<Timeline> selectAllByUserSeqsOrderByRegtime(int userSeq, List<Integer> writerSeq) {
 		List<Story> selectedOStory =  storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeq);
 		List<Timeline> tList = new ArrayList<>();
+		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
 		for(Story s : selectedOStory) {
+			if(dislikes.contains(s.getSeq()))
+				continue;
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
@@ -95,7 +103,10 @@ public class TimelineServiceImpl implements TimelineService {
 	public List<Timeline> selectAllByUserSeqsWithTag(int userSeq, List<Integer> writerSeq, String jobName) {
 		List<Story> selectedOStory =  storyRepo.findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(writerSeq, getJobHashtag(jobName).getSeq());
 		List<Timeline> tList = new ArrayList<>();
+		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
 		for(Story s : selectedOStory) {
+			if(dislikes.contains(s.getSeq()))
+				continue;
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);

@@ -22,4 +22,6 @@ public interface StoryService {
 	Reply insertReply(Reply reply);
 	Reply updateReply(Reply reply);
 	void deleteReply(int replySeq);
+	
+	void doDislike(int userSeq, int storySeq);
 }
