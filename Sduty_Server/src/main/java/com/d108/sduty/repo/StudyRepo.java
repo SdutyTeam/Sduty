@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.Study;
 
 public interface StudyRepo extends JpaRepository<Study, Integer>, JpaSpecificationExecutor<Study> {
@@ -16,4 +17,5 @@ public interface StudyRepo extends JpaRepository<Study, Integer>, JpaSpecificati
 	public Optional<Study> findBySeq(int studySeq);
 	@Transactional
 	public int deleteBySeq(int studySeq);
+	public List<Study> existsByCategories(InterestHashtag category);
 }
