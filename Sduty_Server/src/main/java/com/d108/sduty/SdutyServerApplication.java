@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @EnableAspectJAutoProxy
-//@EnableScheduling
+@EnableScheduling
 @SpringBootApplication//(exclude = { SecurityAutoConfiguration.class })
 @MapperScan(basePackages = "com.d108.sduty.repo")
 public class SdutyServerApplication {
