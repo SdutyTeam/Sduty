@@ -27,8 +27,4 @@ public class InterestHashtag {
 	private int seq;
 	@Column(name="interest_hashtag_name")
 	private String name;
-
-	@ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
-	@JsonIgnore
-	private Set<Study> studies = new HashSet<Study>();
 }

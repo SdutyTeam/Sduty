@@ -77,11 +77,11 @@ public class Study {
 	@JsonBackReference(value="participants")
 	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	private Set<User> participants = new HashSet<User>();
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "category", joinColumns = @JoinColumn(name = "category_study_seq"), inverseJoinColumns = @JoinColumn(name = "category_interest_hashtag_seq"))
-	//@JsonBackReference(value="categories")
-	private Set<InterestHashtag> categories = new HashSet<>();
+//	
+//	@ManyToMany(fetch = FetchType.EAGER)
+//	@JoinTable(name = "category", joinColumns = @JoinColumn(name = "category_study_seq"), inverseJoinColumns = @JoinColumn(name = "category_interest_hashtag_seq"))
+//	//@JsonBackReference(value="categories")
+//	private Set<InterestHashtag> categories = new HashSet<>();
 
 	@Override
 	public boolean equals(Object obj) {
