@@ -398,10 +398,4 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-
-
-
-
-
-
 }

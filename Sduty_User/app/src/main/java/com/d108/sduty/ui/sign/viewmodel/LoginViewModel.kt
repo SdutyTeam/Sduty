@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -85,5 +87,26 @@ class LoginViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+
+    fun getJobListValue(){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.tagApi.getJobList().let {
+                if(it.isSuccessful && it.body() != null){
+                    setTagMap(it.body() as MutableList<JobHashtag>)
+                }else{
+                    Log.d(TAG, "getJobListValue: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    private fun setTagMap(list: MutableList<JobHashtag>){
+        val map = hashMapOf<Int, String>()
+        for(item in list) {
+            map[item.seq] = item.name
+        }
+        ApplicationClass.jobTagMap = map
     }
 }
