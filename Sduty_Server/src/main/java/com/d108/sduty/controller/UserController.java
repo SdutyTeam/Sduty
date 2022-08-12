@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,15 +39,20 @@ public class UserController {
 	private KakaoLoginService kService;
 	@Autowired
 	private NaverLoginService nService;
-	
+	@Autowired
 	private WebSecurityConfig security = new WebSecurityConfig();
+	@Autowired
+	private PasswordEncoder pwEncoder;
 	
 	@ApiOperation(value = "로그인 > id, pass 확인 > User 리턴", response = User.class)
 	@PostMapping("")
 	public ResponseEntity<?> selectUser(@RequestBody User user) throws Exception {
 		Optional<User> maybeUser = userService.selectUserById(user.getId());
+		System.out.println(maybeUser.get());
+		System.out.println(user);
 		if(maybeUser.isPresent()) {
 			User selectedUser = maybeUser.get();
+			System.out.println(selectedUser);
 			//암호화 - 복호화
 			if(security.passwordEncoder().matches(user.getPass(), selectedUser.getPass())) {
 				System.out.println("암호화 로그인 완료!");
@@ -161,14 +167,11 @@ public class UserController {
 		User selectUser = userService.selectUser(user.getSeq()).get();
 
 		// 비밀번호 변경 안했을 때 (FCM 토큰 update)
-		if(user.getPass().equals("")) {
-
-			user.setPass(security.passwordEncoder().encode(selectUser.getPass()));			
-			//user.setPass2(security.passwordEncoder().encode(selectUser.getPass()));
-		// 비밀번호 변경 시
-		}else {
+		if(!user.getPass().equals("")) {
 			user.setPass(security.passwordEncoder().encode(user.getPass()));			
-			//user.setPass2(security.passwordEncoder().encode(user.getPass()));
+			user.setPass2(security.passwordEncoder().encode(user.getPass()));
+		}else {
+			user.setPass(selectUser.getPass());
 		}
 		
 		if(userService.updateUser(user) != null)
@@ -252,19 +255,35 @@ public class UserController {
 		System.out.println("들어옴");
 		System.out.println(selectedCode);
 		System.out.println(new Date(System.currentTimeMillis()));
-		if(selectedCode != null) {
-			if(selectedCode.getCode().equals(authInfo.getCode())) { // 인증코드 비교
-				if(TimeCompare.compare(selectedCode.getExpire())) { // 인증 만료시간 확인
-					userService.deleteAuthInfo(authInfo);					
+		if (selectedCode != null) {
+			if (selectedCode.getCode().equals(authInfo.getCode())) { // 인증코드 비교
+				if (TimeCompare.compare(selectedCode.getExpire())) { // 인증 만료시간 확인
+					userService.deleteAuthInfo(authInfo);
 					return new ResponseEntity<Void>(HttpStatus.OK); // 인증완료
-				}
-				else {
+				} else {
 					return new ResponseEntity<Void>(HttpStatus.GONE); // 인증시간 만료
 				}
 			}
-		}		
+		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
+	
+	@GetMapping("/test/{id}/{pw}")
+	public ResponseEntity<?> test(@PathVariable String id, @PathVariable String pw) throws Exception {
+		//인증이 안되면 수정이 안되므로 거의 not null 확실		
+		User selected_user = userService.selectUserById(id).get();
+		//암호화
+//		String securePw = security.passwordEncoder().encode(user.getPass());
+//		selected_user.setPass(securePw);
+		System.out.println("비번 변경 => 암호화");
+		selected_user.setPass(security.passwordEncoder().encode(pw));		
+		User result = userService.updatePassword(selected_user);
+		if(result != null) {
+			return new ResponseEntity<User>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); 
+	}
+	
 }
 
 
