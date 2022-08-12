@@ -159,7 +159,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:textColor="@color/app_blue"
                 android:textSize="14sp"
-                android:text="@{`#`+data.profile.job}"
+                jobSeqToJobName="@{data.story.jobHashtag}"
                 tools:text="태그 영역"
                 android:layout_marginVertical="10dp"/>
 

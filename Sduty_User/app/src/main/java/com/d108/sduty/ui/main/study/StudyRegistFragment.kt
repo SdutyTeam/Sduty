@@ -36,6 +36,7 @@ import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.Status
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
+import com.sendbird.calls.Room
 import com.sendbird.calls.SendBirdCall
 import com.sendbird.calls.SendBirdError
 
@@ -203,7 +204,7 @@ class StudyRegistFragment : Fragment() {
             var pass = etStduyPass.text?.toString()?.trim()
             val introduce = etStudyIntroduce.text.toString().trim()
             val people = spinnerPeople.selectedItem.toString()
-            val hour = binding.timePicker.hour.toString()
+            val hour = binding.timePicker.hour
             val minute = binding.timePicker.minute
 
             if(name.isEmpty() || introduce.isEmpty()){
@@ -245,6 +246,8 @@ class StudyRegistFragment : Fragment() {
                                             ), Alarm(0, "${hour}:${minute}:00", btnMon.isChecked, btnTue.isChecked,
                                                 btnWed.isChecked, btnThur.isChecked, btnFri.isChecked, btnSat.isChecked, btnSun.isChecked)
                                         )
+                                    val room: Room? = SendBirdCall.getCachedRoomById(it)
+                                    room?.exit()
                                 }
                             }
                             Status.ERROR -> {

@@ -5,6 +5,7 @@ import java.util.*
 data class Study(
     var seq: Int,
     var masterSeq: Int,
+    var alarm: Alarm?,
     var name: String,
     var introduce: String,
     var category: String,
@@ -18,9 +19,9 @@ data class Study(
     var masterJob: String
 ) {
     constructor(
-        masterSeq: Int, name: String, introduce: String, category: String, limitNumber: Int,
+        masterSeq: Int,name: String, introduce: String, category: String, limitNumber: Int,
         password: String?, roomId: String?):
-            this(0, masterSeq, name, introduce, category,
+            this(0, masterSeq, null ,name, introduce, category,
             limitNumber, 0, password, null, "공지사항", roomId, "", "")
 
     //constructor(): this(51,"e","e","대학생",6,"e",null)

@@ -29,6 +29,17 @@ class TagViewModel: ViewModel() {
         }
     }
 
+    private val _jobTagMap = MutableLiveData<HashMap<String, Int>>()
+    val jobTagMap: LiveData<HashMap<String, Int>>
+        get() = _jobTagMap
+    private fun setTagMap(list: MutableList<JobHashtag>){
+        val map = hashMapOf<String, Int>()
+        for(item in list) {
+            map[item.name] = item.seq
+        }
+        _jobTagMap.postValue(map)
+    }
+
     private val _interestList = MutableLiveData<MutableList<InterestHashtag>>()
     val interestList: LiveData<MutableList<InterestHashtag>>
         get() = _interestList
@@ -62,16 +73,7 @@ class TagViewModel: ViewModel() {
         }
     }
 
-    private val _jobTagMap = MutableLiveData<HashMap<String, Int>>()
-    val jobTagMap: LiveData<HashMap<String, Int>>
-        get() = _jobTagMap
-    private fun setTagMap(list: MutableList<JobHashtag>){
-        val map = hashMapOf<String, Int>()
-        for(item in list) {
-            map[item.name] = item.seq
-        }
-        _jobTagMap.postValue(map)
-    }
+
 
 
 }

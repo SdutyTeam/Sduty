@@ -48,7 +48,7 @@ class ProfileRegistFragment : Fragment() {
     private lateinit var imageUrl: String
     private var jobHashtag: JobHashtag? = null
     private var interestHashtagList = mutableListOf<InterestHashtag>()
-
+    private var flagNicknameCheck = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,6 +77,10 @@ class ProfileRegistFragment : Fragment() {
         binding.apply {
             lifecycleOwner = this@ProfileRegistFragment
             vm = viewModel
+            if(args.flag == MODIFY){
+                mainVM = mainViewModel
+                flagNicknameCheck = false
+            }
             btnSave.setOnClickListener {
                 saveProfile()
             }
@@ -84,7 +88,11 @@ class ProfileRegistFragment : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
-                    viewModel.checkNickname(binding.etNickname.text.toString())
+                    if(flagNicknameCheck) {
+                        viewModel.checkNickname(binding.etNickname.text.toString())
+                    }
+                    flagNicknameCheck = true
+
                 }
             })
             ivProfile.setOnClickListener {
@@ -190,7 +198,7 @@ class ProfileRegistFragment : Fragment() {
             else if(jobHashtag == null){
                 msg = "직업을 입력해 주세요"
             }
-            else if(imageUrl.isEmpty()){
+            else if(imageUrl.isEmpty() && args.flag == REGISTER){
                 msg = "이미지를 선택해 주세요"
             }
             else if(birth == null) {
@@ -209,6 +217,7 @@ class ProfileRegistFragment : Fragment() {
                     var profile = mainViewModel.profile.value!!
                     profile.nickname = nickname
                     profile.birthday = birth!!
+                    Log.d(TAG, "saveProfile111: ${birth}")
                     profile.shortIntroduce = introduce
                     profile.job = jobHashtag!!.name
                     profile.mainAchievmentSeq = mainAchievement

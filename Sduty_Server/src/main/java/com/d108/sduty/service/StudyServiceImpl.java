@@ -1,7 +1,6 @@
 package com.d108.sduty.service;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,9 +14,6 @@ import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +38,6 @@ public class StudyServiceImpl implements StudyService {
 	private UserRepo userRepo;
 	@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;
-	@Autowired
-	private InterestHashtagRepo interestHashtagRepo;
-	
 	
 	@Override
 	public List<Study> getAllStudy() {
@@ -59,7 +52,6 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	@Transactional
 	public void registStudy(Study study, Alarm alarm) {
-		System.out.println("here!!");
 		//1. 방장 참여
 		study.getParticipants().add(userRepo.findBySeq(study.getMasterSeq()).get());
 		if(alarm!=null) {
@@ -115,12 +107,12 @@ public class StudyServiceImpl implements StudyService {
 				deleteJob(originStudy);
 				newStudy.getAlarm().setCron(createCron(newStudy.getAlarm()));
 				originStudy.setAlarm(newStudy.getAlarm());
+				alarmRepo.save(newStudy.getAlarm());
 				addJob(originStudy);
 			}
 			if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
 			if(newStudy.getMasterSeq()!=0) originStudy.setMasterSeq(newStudy.getMasterSeq());
 			if(newStudy.getCategory()!=null) originStudy.setCategory(newStudy.getCategory());
-			if(newStudy.getCategories()!=null) originStudy.setCategories(newStudy.getCategories());;
 			originStudy.setPassword(newStudy.getPassword());
 			originStudy.setIntroduce(newStudy.getIntroduce());
 			
@@ -142,6 +134,7 @@ public class StudyServiceImpl implements StudyService {
 		//2. 삭제
 		if(study.getRoomId()!=null) {
 			deleteJob(study);
+			alarmRepo.delete(study.getAlarm());
 		}
 		if(studyRepo.deleteBySeq(studySeq)==0) {
 			return false;
@@ -175,7 +168,6 @@ public class StudyServiceImpl implements StudyService {
 	
 	//TODO : category 필터링 수정 필요
 	public Specification<Study> findCategory(String category){
-		System.out.print(studyRepo.existsByCategories(interestHashtagRepo.findByName(category)));
 		return (root, query, criteriaBuilder)->criteriaBuilder.equal(root.get("category"), category);
 	}
 	

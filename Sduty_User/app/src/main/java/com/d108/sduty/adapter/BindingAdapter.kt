@@ -12,10 +12,13 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.d108.sduty.R
+import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.common.SERVER_URL
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.Profile
+import com.d108.sduty.utils.convertTimeDateToString
 import org.w3c.dom.Text
+import java.util.*
 
 private const val TAG ="BindingAdapter"
 
@@ -64,4 +67,19 @@ fun followButtonText(view: TextView, userProfile: Profile?, myProfile: Profile){
         view.text = "팔로우"
         view.setBackgroundResource(R.drawable.button_app_blue)
     }
+}
+
+@BindingAdapter("jobSeqToJobName")
+fun jobSeqToJobName(view: TextView, jobSeq: Int){
+    view.text = ApplicationClass.jobTagMap[jobSeq]
+}
+
+@BindingAdapter("dateToYYYMMDD")
+fun dateToYYYMMDD(view: TextView, date: Date?){
+    if (date == null){
+        view.text = ""
+    }else{
+        view.text = convertTimeDateToString(date!!, "yyyyMMdd")
+    }
+
 }

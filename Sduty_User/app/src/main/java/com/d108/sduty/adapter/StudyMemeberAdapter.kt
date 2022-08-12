@@ -1,6 +1,7 @@
 package com.d108.sduty.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ListItemStudyMemberBinding

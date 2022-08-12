@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
+import com.d108.sduty.adapter.paging.StoryPagingAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
 import com.d108.sduty.common.NOT_PROFILE
@@ -41,7 +42,7 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private val viewModel: StoryViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
     private val args: UserProfileFragmentArgs by navArgs()
-    private lateinit var storyAdapter: StoryAdapter
+    private lateinit var storyAdapter: StoryPagingAdapter
     private lateinit var contributionAdapter: ContributionAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,39 +62,43 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     }
 
     private fun initViewModel() {
-//        viewModel.getUserStoryListValue(args.userSeq)
-        viewModel.getContribution(args.userSeq)
-//        viewModel.userStoryList.observe(viewLifecycleOwner){
-//            storyAdapter.list = it
-//        }
+
+        viewModel.apply {
+            getContribution(args.userSeq)
+            getUserStoryList(args.userSeq)
+
+            pagingStoryList.observe(viewLifecycleOwner){
+                storyAdapter.submitData(this@UserProfileFragment.lifecycle, it)
+            }
+
+            isFollowSucceed.observe(viewLifecycleOwner) {
+                mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
+                viewModel.getProfileValue(args.userSeq)
+            }
+            contributionList.observe(viewLifecycleOwner){
+                contributionAdapter.list = it
+            }
+            profile.observe(viewLifecycleOwner){
+                binding.apply {
+                    vm = viewModel
+                    mainVM = mainViewModel
+                    Log.d(TAG, "initViewModel: main: ${it}")
+                }
+            }
+        }
+
         mainViewModel.profile.observe(viewLifecycleOwner){
             binding.apply {
-                vm = viewModel
-                mainVM = mainViewModel
                 Log.d(TAG, "initViewModel: story: ${it}")
             }
-        }
-        viewModel.profile.observe(viewLifecycleOwner){
-            binding.apply {
-                vm = viewModel
-                mainVM = mainViewModel
-                Log.d(TAG, "initViewModel: main: ${it}")
-            }
-        }
-        viewModel.isFollowSucceed.observe(viewLifecycleOwner){
-            mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
-            viewModel.getProfileValue(args.userSeq)
-        }
-        viewModel.contributionList.observe(viewLifecycleOwner){
-            contributionAdapter.list = it
         }
     }
 
     private fun initView() {
         contributionAdapter = ContributionAdapter()
-        storyAdapter = StoryAdapter(requireActivity())
-        storyAdapter.onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
-            override fun onClick(story: Story, position: Int) {
+        storyAdapter = StoryPagingAdapter(requireActivity())
+        storyAdapter.onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{
+            override fun onClick(story: Story) {
                 findNavController().safeNavigate(UserProfileFragmentDirections.actionUserProfileFragmentToStoryDetailFragment(story.seq))
             }
         }

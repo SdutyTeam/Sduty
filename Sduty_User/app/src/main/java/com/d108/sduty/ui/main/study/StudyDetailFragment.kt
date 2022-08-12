@@ -1,41 +1,36 @@
 package com.d108.sduty.ui.main.study
 
 import android.content.Context
-import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.GridLayout
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
-import com.d108.sduty.adapter.CamstudyMemberAdapter
+import com.d108.sduty.adapter.MyStudyAdapter
 import com.d108.sduty.adapter.StudyMemeberAdapter
 import com.d108.sduty.databinding.FragmentStudyDetailBinding
-import com.d108.sduty.model.dto.Alarm
 import com.d108.sduty.model.dto.Member
-import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyCheckDialog
 import com.d108.sduty.ui.main.study.dialog.StudyDialog
-import com.d108.sduty.ui.main.study.dialog.StudyPasswordDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudyDetailViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
-import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
-import com.fasterxml.jackson.annotation.JsonFormat
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonSerializer
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
+import java.util.*
+import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 // 스터디 상세 -
@@ -50,7 +45,11 @@ class StudyDetailFragment : Fragment() {
     lateinit var masterJob: String
 
     private lateinit var studyMemberAdapter: StudyMemeberAdapter
-    private lateinit var studyMember: String
+    private lateinit var studyMember: List<Map<String, Any>>
+
+    private lateinit var memberList: ArrayList<Member>
+
+
 
 
     override fun onAttach(context: Context) {
@@ -68,27 +67,27 @@ class StudyDetailFragment : Fragment() {
         return binding.root
     }
 
-    inline fun <reified T> parseArray(json: String, typeToken: Type): T{
-        val gson = GsonBuilder().setDateFormat("HH:mm:ss").create()
-        return gson.fromJson<T>(json, typeToken)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        
         studyDetailViewModel.myStudyInfo.observe(viewLifecycleOwner){ map ->
             if(map != null){
                 val studyInfo = studyDetailViewModel.myStudyInfo.value as Map<String, Any>
 
-//                studyMember = studyInfo["members"].toString()
-//                Log.d(TAG, "onViewCreated: ${studyMember}")
-//                val type = object : TypeToken<List<Member>>() {}.type
-//                val result: List<Member> = parseArray<List<Member>>(json = studyMember, typeToken = type)
-//                Log.d(TAG, "onViewCreated: ${result}")
+                studyMember = studyInfo["members"] as List<Map<String, Any>>
+                //memberList = studyMember as ArrayList<Member>
+                memberList = ArrayList<Member>()
+                for(member in studyMember){
+                    memberList.add(Member(
+                        member["is_studying"].toString().toDouble().roundToInt(),
+                        member["nickname"] as String,
+                        member["total_time"] as String,
+                        member["userSeq"].toString().toDouble().roundToInt()))
+                }
+                Log.d(TAG, "onViewCreated11: ${memberList}")
 
-
-
-                //initAdapter()
+                initAdapter()
 
                 var joinNum = ((studyInfo["study"] as Map<String, Any>)["joinNumber"].toString()).toDouble()
                 var limitNum = ((studyInfo["study"] as Map<String, Any>)["limitNumber"].toString()).toDouble()
@@ -101,7 +100,9 @@ class StudyDetailFragment : Fragment() {
 
                 if((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt() == mainViewModel.profile.value!!.userSeq){
                     binding.btnStudySetting.visibility = View.VISIBLE
+                    binding.btnStudyExit.visibility = View.GONE
                 } else{
+                    binding.btnStudySetting.visibility = View.GONE
                     binding.btnStudyExit.visibility = View.VISIBLE
                 }
 
@@ -166,7 +167,7 @@ class StudyDetailFragment : Fragment() {
     }
 
     private fun initAdapter(){
-        //studyMemberAdapter = StudyMemeberAdapter(studyMember)
+        studyMemberAdapter = memberList?.let { StudyMemeberAdapter(it) }!!
         binding.studyMember.apply {
             layoutManager = GridLayoutManager(context, 4)
             adapter = studyMemberAdapter
@@ -177,5 +178,6 @@ class StudyDetailFragment : Fragment() {
         super.onDestroy()
         mainViewModel.displayBottomNav(true)
     }
+
 
 }
