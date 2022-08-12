@@ -39,8 +39,8 @@ public class BirthdayScheduler {
 			if(u.getFcmToken() != null && u.getUserPublic() != 0 && !u.getFcmToken().equals("") && u.getSeq() == 2) {
 				Profile p = profileRepo.findById(u.getSeq()).get();
 				String birthday = df.format(p.getBirthday());
-			    String title = "생일 축하합니다.";
-			    String content =  "축하합니다";
+			    String title = p.getNickname() + "님 생일 축하합니다!!";
+			    String content =  "오늘은 " + p.getNickname()+ "님의 생일입니다!!\n회원님의 생일을 진심으로 축하합니다!!";
 			    if(birthday.equals(today.format(DateTimeFormatter.ofPattern("MM-dd")))){
 			    	fcmUtil.send_FCM(u.getFcmToken(), title, content);
 			    }
