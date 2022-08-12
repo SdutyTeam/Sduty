@@ -61,10 +61,10 @@ public class UserController {
 
 			}
 			//TODO : 암호화 끝나면 삭제할 코드
-			if(selectedUser.getPass().equals(user.getPass())) {
-				selectedUser.setPass("");
-				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
-			}
+//			if(selectedUser.getPass().equals(user.getPass())) {
+//				selectedUser.setPass("");
+//				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
+//			}
 			//
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -86,6 +86,7 @@ public class UserController {
 	public ResponseEntity<?> insertUser(@RequestBody User user) throws Exception {
 		user.setPass(security.passwordEncoder().encode(user.getPass()));
 		User result = userService.insertUser(user);
+		user.setPass("");
 		if(result != null) {			
 			return new ResponseEntity<User>(result, HttpStatus.OK);
 		}
@@ -169,7 +170,7 @@ public class UserController {
 		// 비밀번호 변경 안했을 때 (FCM 토큰 update)
 		if(!user.getPass().equals("")) {
 			user.setPass(security.passwordEncoder().encode(user.getPass()));			
-			user.setPass2(security.passwordEncoder().encode(user.getPass()));
+			//user.setPass2(security.passwordEncoder().encode(user.getPass()));
 		}else {
 			user.setPass(selectUser.getPass());
 		}
@@ -227,7 +228,7 @@ public class UserController {
 //		selected_user.setPass(securePw);
 //		System.out.println("비번 변경 => 암호화");
 //		selected_user.setPass2(security.passwordEncoder().encode(user.getPass()));
-		selected_user.setPass(user.getPass());
+		selected_user.setPass(security.passwordEncoder().encode(user.getPass()));
 		User result = userService.updatePassword(selected_user);
 		if(result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);
