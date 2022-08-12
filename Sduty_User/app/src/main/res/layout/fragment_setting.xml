@@ -187,54 +187,54 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/tv_title_dark_mode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cardview_lock"
-                    android:text="다크모드"
-                    android:textSize="16sp"
-                    android:layout_marginVertical="20dp"
-                    android:layout_marginHorizontal="20dp"
-                    />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_title_dark_mode"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/cardview_lock"-->
+<!--                    android:text="다크모드"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:layout_marginVertical="20dp"-->
+<!--                    android:layout_marginHorizontal="20dp"-->
+<!--                    />-->
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardview_dark_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginHorizontal="30dp"
-                    android:elevation="7dp"
-                    app:cardCornerRadius="10dp"
-                    android:layout_marginVertical="5dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_title_dark_mode">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:id="@+id/cardview_dark_mode"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_marginHorizontal="30dp"-->
+<!--                    android:elevation="7dp"-->
+<!--                    app:cardCornerRadius="10dp"-->
+<!--                    android:layout_marginVertical="5dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/tv_title_dark_mode">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="10dp"
-                        >
-                        <TextView
-                            android:id="@+id/tv_title_shake_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="다크모드 설정"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
-                            />
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_marginHorizontal="10dp"-->
+<!--                        >-->
+<!--                        <TextView-->
+<!--                            android:id="@+id/tv_title_shake_content"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="다크모드 설정"-->
+<!--                            android:layout_gravity="center_vertical"-->
+<!--                            android:layout_weight="1"-->
+<!--                            />-->
 
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/btn_shake"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:checked="true"
-                            android:layout_weight="1"
-                            />
-                    </LinearLayout>
+<!--                        <androidx.appcompat.widget.SwitchCompat-->
+<!--                            android:id="@+id/btn_shake"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center_vertical"-->
+<!--                            android:checked="true"-->
+<!--                            android:layout_weight="1"-->
+<!--                            />-->
+<!--                    </LinearLayout>-->
 
-                </androidx.cardview.widget.CardView>
+<!--                </androidx.cardview.widget.CardView>-->
 
                 <TextView
                     android:id="@+id/tv_title_autologin"
@@ -290,7 +290,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cardview_dark_mode"
+                    app:layout_constraintTop_toBottomOf="@id/cardview_lock"
                     android:text="앱 이용"
                     android:textSize="16sp"
                     android:layout_marginVertical="20dp"
