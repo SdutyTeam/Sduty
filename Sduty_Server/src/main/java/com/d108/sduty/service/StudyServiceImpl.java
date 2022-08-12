@@ -142,6 +142,7 @@ public class StudyServiceImpl implements StudyService {
 		//2. 삭제
 		if(study.getRoomId()!=null) {
 			deleteJob(study);
+			alarmRepo.delete(study.getAlarm());
 		}
 		if(studyRepo.deleteBySeq(studySeq)==0) {
 			return false;
