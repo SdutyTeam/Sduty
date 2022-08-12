@@ -49,3 +49,8 @@ const val MODIFY = 1
 
 const val ALL_STORY = 0
 const val SCRAP_STORY = 1
+
+const val ALL_TIMELINE = 0
+const val JOB_TIMELINE = 1
+const val INTEREST_TIMELINE = 2
+const val FOLLOW_TIMELINE = 3

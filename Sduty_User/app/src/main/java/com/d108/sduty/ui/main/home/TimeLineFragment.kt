@@ -146,9 +146,9 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
                         override fun onDismiss(tagName: String, flag: Int) {
                             when(flag){
-                                JOB_TAG -> storyViewModel.getTimelineJobAllList(mainViewModel.user.value!!.seq, tagName)
-                                INTEREST_TAG -> storyViewModel.getTimelineInterestList(mainViewModel.user.value!!.seq, tagName)
-                                ALL_TAG -> storyViewModel.getStoryListValue(mainViewModel.user.value!!.seq)
+                                JOB_TAG -> storyViewModel.getTimelineJobAndAllList(mainViewModel.user.value!!.seq, tagName)
+                                INTEREST_TAG -> storyViewModel.getTimelineInterestAndAllList(mainViewModel.user.value!!.seq, tagName)
+                                ALL_TAG -> storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
                             }
                         }
                     }
@@ -159,16 +159,22 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     }
 
     private fun initViewModel(){
-        storyViewModel.getTimelineListValue(mainViewModel.user.value!!.seq)
-        storyViewModel.pagingTimelineList.observe(viewLifecycleOwner){
+        storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
+        storyViewModel.pagingAllTimelineList.observe(viewLifecycleOwner){
             Log.d(TAG, "onViewCreated: $it")
             pageAdapter.submitData(this.lifecycle, it)
         }
-
-        storyViewModel.filteredTimelineList.observe(viewLifecycleOwner){
-            timeLineList = it
-            timeLineAdapter.list = it
+        storyViewModel.pagingTimelineJobAndAllList.observe(viewLifecycleOwner){
+            pageAdapter.submitData(this.lifecycle, it)
         }
+        storyViewModel.pagingTimelineInterestAndAllList.observe(viewLifecycleOwner){
+            pageAdapter.submitData(this.lifecycle, it)
+        }
+        storyViewModel.pagingTimelineFollowList.observe(viewLifecycleOwner){
+            pageAdapter.submitData(this.lifecycle, it)
+        }
+
+
         mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
         storyViewModel.isFollowSucceed.observe(viewLifecycleOwner){
             mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)

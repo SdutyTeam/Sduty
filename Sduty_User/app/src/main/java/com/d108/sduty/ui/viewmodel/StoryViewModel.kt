@@ -3,13 +3,11 @@ package com.d108.sduty.ui.viewmodel
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.navigation.navOptions
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.liveData
-import com.d108.sduty.common.ALL_STORY
-import com.d108.sduty.common.SCRAP_STORY
+import com.d108.sduty.common.*
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.*
 import com.d108.sduty.model.paging.StoryDataSource
@@ -27,35 +25,73 @@ import okio.BufferedSink
 private const val TAG ="StoryViewModel"
 class StoryViewModel: ViewModel() {
 
-    private fun getTimelinePost(userSeq: Int) = Pager(
+    // 모든 타임라인 전체 조회
+    private fun getAllTimelinePage(userSeq: Int) = Pager(
         config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
-        pagingSourceFactory = {TimeLineDataSource(Retrofit.storyApi, userSeq)}
+        pagingSourceFactory = {TimeLineDataSource(ALL_TIMELINE, "","",Retrofit.storyApi, userSeq)}
     ).liveData
 
-    private val timeLinePosts = MutableLiveData<Int>()
-    val pagingTimelineList = timeLinePosts.switchMap {
-        getTimelinePost(it).cachedIn(viewModelScope)
+    private val allTimeLinePage = MutableLiveData<Int>()
+    val pagingAllTimelineList = allTimeLinePage.switchMap {
+        getAllTimelinePage(it).cachedIn(viewModelScope)
     }
 
-    fun getTimelineListValue(userSeq: Int){
-        timeLinePosts.postValue(userSeq)
+    fun getAllTimelineListValue(userSeq: Int){
+        allTimeLinePage.postValue(userSeq)
     }
 
-
-    private fun getStoryPost(userSeq: Int) = Pager(
-        config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
-        pagingSourceFactory = {StoryDataSource(ALL_STORY, Retrofit.storyApi, userSeq)}
+    // 직업 태그로 타임라인 전체 조회
+    private var jobName = ""
+    private fun getTimelineJobAndAllPage(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {TimeLineDataSource(JOB_TIMELINE, jobName,"",Retrofit.storyApi, userSeq)}
     ).liveData
 
-    private val userStoryPosts = MutableLiveData<Int>()
-    val pagingStoryList = userStoryPosts.switchMap {
-        getStoryPost(it).cachedIn(viewModelScope)
+    private val allTimeLineJobAndAllPage = MutableLiveData<Int>()
+    val pagingTimelineJobAndAllList = allTimeLineJobAndAllPage.switchMap {
+        getTimelineJobAndAllPage(it).cachedIn(viewModelScope)
     }
 
-    fun getUserStoryList(userSeq: Int){
-        userStoryPosts.postValue(userSeq)
+    fun getTimelineJobAndAllList(userSeq: Int, jobName: String){
+        this.jobName = jobName
+        allTimeLineJobAndAllPage.postValue(userSeq)
     }
 
+    // 공부 분야 태그로 타임라인 전체 조회
+    private var interestName = ""
+    private fun getTimelineInterestAndAllPage(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {TimeLineDataSource(INTEREST_TIMELINE, "", interestName, Retrofit.storyApi, userSeq)}
+    ).liveData
+
+    private val allTimeLineInterestAndAllPage = MutableLiveData<Int>()
+    val pagingTimelineInterestAndAllList = allTimeLineInterestAndAllPage.switchMap {
+        getTimelineInterestAndAllPage(it).cachedIn(viewModelScope)
+    }
+
+    fun getTimelineInterestAndAllList(userSeq: Int, interestName: String){
+        this.interestName = interestName
+        allTimeLineInterestAndAllPage.postValue(userSeq)
+    }
+
+    // 팔로우 유저 타임라인 전체 조회
+    private fun getTimelineFollowPage(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {TimeLineDataSource(FOLLOW_TIMELINE, "","",Retrofit.storyApi, userSeq)}
+    ).liveData
+
+    private val timeLineFollowPage = MutableLiveData<Int>()
+    val pagingTimelineFollowList = timeLineFollowPage.switchMap {
+        getTimelineFollowPage(it).cachedIn(viewModelScope)
+    }
+
+    fun getTimelineFollowList(userSeq: Int){
+        allTimeLinePage.postValue(userSeq)
+    }
+
+
+
+    // 스크랩 스토리 전체 조회
     private fun getScrapList(userSeq: Int) = Pager(
         config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
         pagingSourceFactory = {StoryDataSource(SCRAP_STORY, Retrofit.storyApi, userSeq)}
@@ -70,32 +106,47 @@ class StoryViewModel: ViewModel() {
         userScrapPage.postValue(userSeq)
     }
 
+    // 모든 스토리 전체 조회
+    private fun getStoryPost(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
+        pagingSourceFactory = {StoryDataSource(ALL_STORY, Retrofit.storyApi, userSeq)}
+    ).liveData
+    private val userStoryPosts = MutableLiveData<Int>()
 
-
-
-
-    private val _storyList = MutableLiveData<MutableList<Story>>()
-    val storyList: LiveData<MutableList<Story>>
-        get() = _storyList
-
-    private val _timelineList = MutableLiveData<MutableList<Timeline>>()
-    val timelineList: LiveData<MutableList<Timeline>>
-        get() = _timelineList
-    fun getStoryListValue(userSeq: Int){
-        viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStoryList(userSeq).let {
-                if(it.isSuccessful && it.body() != null){
-                    _timelineList.postValue(it.body() as MutableList<Timeline>)
-                }else{
-                    Log.d(TAG, "getStoryListValue: ${it.code()}")
-                }
-            }
-        }
+    val pagingStoryList = userStoryPosts.switchMap {
+        getStoryPost(it).cachedIn(viewModelScope)
     }
 
-    private val _toastMessage = MutableLiveData<String>()
-    val toastMessage: LiveData<String>
-        get() = _toastMessage
+    fun getUserStoryList(userSeq: Int){
+        userStoryPosts.postValue(userSeq)
+    }
+
+
+
+
+
+//    private val _storyList = MutableLiveData<MutableList<Story>>()
+//    val storyList: LiveData<MutableList<Story>>
+//        get() = _storyList
+//
+//    private val _timelineList = MutableLiveData<MutableList<Timeline>>()
+//    val timelineList: LiveData<MutableList<Timeline>>
+//        get() = _timelineList
+//    fun getStoryListValue(userSeq: Int){
+//        viewModelScope.launch(Dispatchers.IO){
+//            Retrofit.storyApi.getStoryList(userSeq).let {
+//                if(it.isSuccessful && it.body() != null){
+//                    _timelineList.postValue(it.body() as MutableList<Timeline>)
+//                }else{
+//                    Log.d(TAG, "getStoryListValue: ${it.code()}")
+//                }
+//            }
+//        }
+//    }
+
+//    private val _toastMessage = MutableLiveData<String>()
+//    val toastMessage: LiveData<String>
+//        get() = _toastMessage
 
     fun insertStory(story: Story, bitmap: Bitmap){
         viewModelScope.launch(Dispatchers.IO){
@@ -113,7 +164,7 @@ class StoryViewModel: ViewModel() {
                 val storyBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
                 val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
                 if(response.isSuccessful && response.body() != null){
-                    getTimelineListValue(story.writerSeq)
+                    getAllTimelineListValue(story.writerSeq)
                 }
             }catch (e: Exception){
                 Log.d(TAG, "insertStory: ${e.message}")
@@ -168,44 +219,44 @@ class StoryViewModel: ViewModel() {
 //        }
 //    }
 
-    private val _filteredTimelineList = MutableLiveData<MutableList<Timeline>>()
-    val filteredTimelineList: LiveData<MutableList<Timeline>>
-        get() = _filteredTimelineList
-    fun getTimelineJobFollowList(userSeq: Int, jobName: String){
-        viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStoryJobAndFollowList(userSeq, jobName).let {
-                if (it.isSuccessful && it.body() != null) {
-                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
-                }else{
-                    Log.d(TAG, "getTimelineJobFollowList: ${it.code()}")
-                }
-            }
-        }
-    }
+//    private val _filteredTimelineList = MutableLiveData<MutableList<Timeline>>()
+//    val filteredTimelineList: LiveData<MutableList<Timeline>>
+//        get() = _filteredTimelineList
+//    fun getTimelineJobFollowList(userSeq: Int, jobName: String){
+//        viewModelScope.launch(Dispatchers.IO){
+//            Retrofit.storyApi.getStoryJobAndFollowList(userSeq, jobName).let {
+//                if (it.isSuccessful && it.body() != null) {
+//                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
+//                }else{
+//                    Log.d(TAG, "getTimelineJobFollowList: ${it.code()}")
+//                }
+//            }
+//        }
+//    }
 
-    fun getTimelineJobAllList(userSeq: Int, jobName: String){
-        viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStoryJobAndAllList(userSeq, jobName).let {
-                if (it.isSuccessful && it.body() != null) {
-                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
-                }else{
-                    Log.d(TAG, "getTimelineJobAllList: ${it.code()}")
-                }
-            }
-        }
-    }
-
-    fun getTimelineInterestList(userSeq: Int, jobName: String){
-        viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getStoryInterestAndAllList(userSeq, jobName).let {
-                if (it.isSuccessful && it.body() != null) {
-                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
-                }else{
-                    Log.d(TAG, "getTimelineInterestList: ${it.code()}")
-                }
-            }
-        }
-    }
+//    fun getTimelineJobAllList(userSeq: Int, jobName: String){
+//        viewModelScope.launch(Dispatchers.IO){
+//            Retrofit.storyApi.getStoryJobAndAllList(userSeq, jobName).let {
+//                if (it.isSuccessful && it.body() != null) {
+//                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
+//                }else{
+//                    Log.d(TAG, "getTimelineJobAllList: ${it.code()}")
+//                }
+//            }
+//        }
+//    }
+//
+//    fun getTimelineInterestList(userSeq: Int, jobName: String){
+//        viewModelScope.launch(Dispatchers.IO){
+//            Retrofit.storyApi.getStoryInterestAndAllList(userSeq, jobName).let {
+//                if (it.isSuccessful && it.body() != null) {
+//                    _filteredTimelineList.postValue(it.body() as MutableList<Timeline>)
+//                }else{
+//                    Log.d(TAG, "getTimelineInterestList: ${it.code()}")
+//                }
+//            }
+//        }
+//    }
 
     fun updateStory(story: Story){
         viewModelScope.launch(Dispatchers.IO){

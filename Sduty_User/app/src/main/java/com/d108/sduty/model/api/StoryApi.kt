@@ -11,7 +11,7 @@ import java.sql.Time
 
 interface StoryApi {
     @GET("/story/all/{userSeq}")
-    suspend fun getStoryList(@Path("userSeq")userSeq: Int): Response<List<Timeline>>
+    suspend fun getAllTimelineFollowList(@Path("userSeq")userSeq: Int, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @Multipart
     @POST("/story")
@@ -33,13 +33,13 @@ interface StoryApi {
     suspend fun getContributionList(@Path("userSeq")userSeq: Int): Response<List<Boolean>>
 
     @GET("/story/user/{userSeq}/{jobName}")
-    suspend fun getStoryJobAndFollowList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String): Response<MutableList<Timeline>>
+    suspend fun getStoryJobAndFollowList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @GET("/story/job/{userSeq}/{jobName}")
-    suspend fun getStoryJobAndAllList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String): Response<MutableList<Timeline>>
+    suspend fun getStoryJobAndAllList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @GET("/story/interest/{userSeq}/{interestName}")
-    suspend fun getStoryInterestAndAllList(@Path("userSeq")userSeq: Int, @Path("interestName")interestName: String): Response<MutableList<Timeline>>
+    suspend fun getStoryInterestAndAllList(@Path("userSeq")userSeq: Int, @Path("interestName")interestName: String, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @GET("/story/recommand/{userSeq}")
     suspend fun getStoryRecommended(@Path("userSeq") userSeq: Int): Response<Timeline>
