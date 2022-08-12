@@ -11,11 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.flatMap
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.StoryAdapter
+import com.d108.sduty.adapter.paging.StoryPagingAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
+import com.d108.sduty.common.MODIFY
 import com.d108.sduty.databinding.FragmentMyPageBinding
 import com.d108.sduty.model.dto.Story
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
@@ -28,10 +31,10 @@ import com.google.android.material.tabs.TabLayout
 private const val TAG ="MyPageFragment"
 class MyPageFragment : Fragment() {
     private lateinit var binding: FragmentMyPageBinding
-    private val viewModel: StoryViewModel by viewModels()
+    private val viewModel: StoryViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var contributionAdapter: ContributionAdapter
-    private lateinit var storyAdapter: StoryAdapter
+    private lateinit var storyAdapter: StoryPagingAdapter
 
     override fun onResume() {
         super.onResume()
@@ -49,24 +52,34 @@ class MyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
         initView()
+        initViewModel()
     }
 
     private fun initViewModel() {
         viewModel.apply {
-            userStoryList.observe(viewLifecycleOwner){
-                storyAdapter.list = it
+//            userSto.observe(viewLifecycleOwner){
+//                storyAdapter.list = it
+//            }
+
+            getUserStoryList(mainViewModel.user.value!!.seq)
+            pagingStoryList.observe(viewLifecycleOwner){
+                Log.d(TAG, "initViewModel: ##############################################################${it}")
+                storyAdapter.submitData(this@MyPageFragment.lifecycle, it)
             }
             scrapStoryList.observe(viewLifecycleOwner){
-                storyAdapter.list = it
+//                storyAdapter.list = it
             }
             contributionList.observe(viewLifecycleOwner){
                 contributionAdapter.list = it
                 Log.d(TAG, "initViewModel: ${it}")
             }
-            getContribution(mainViewModel.user.value!!.seq)
-            getUserStoryListValue(mainViewModel.user.value!!.seq)
+            if(viewModel.contributionList.value == null) {
+                getContribution(mainViewModel.user.value!!.seq)
+            }
+//            if(viewModel.userStoryList.value == null) {
+//                getUserStoryListValue(mainViewModel.user.value!!.seq)
+//            }
             getProfileValue(mainViewModel.user.value!!.seq)
 
         }
@@ -74,20 +87,22 @@ class MyPageFragment : Fragment() {
 
     private fun initView(){
         contributionAdapter = ContributionAdapter()
-        storyAdapter = StoryAdapter(requireActivity())
-        storyAdapter.onClickStoryListener = object : StoryAdapter.OnClickStoryListener{
-            override fun onClick(story: Story, position: Int) {
-                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToStoryDetailFragment(story.seq))
+        storyAdapter = StoryPagingAdapter(requireActivity())
+        storyAdapter.apply {
+            onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{
+                override fun onClick(story: Story) {
+                    findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToStoryDetailFragment(story.seq))
+                }
             }
         }
         binding.apply {
-
+            lifecycleOwner = this@MyPageFragment
             vm = viewModel
             tabMyPage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when(tab!!.position){
                         0 -> {
-                            viewModel.getUserStoryListValue(mainViewModel.user.value!!.seq)
+                            viewModel.getUserStoryList(mainViewModel.user.value!!.seq)
                         }
                         1 -> {
                             viewModel.getScrapStoryListValue(mainViewModel.user.value!!.seq)
@@ -95,8 +110,18 @@ class MyPageFragment : Fragment() {
                     }
                 }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    when(tab!!.position){
+                        0 -> {
+                            viewModel.getUserStoryList(mainViewModel.user.value!!.seq)
+                        }
+                        1 -> {
+                            viewModel.getScrapStoryListValue(mainViewModel.user.value!!.seq)
+                        }
+                    }
+                }
             })
+            tabMyPage.getTabAt(0)!!.select()
             recylerStory.apply {
                 adapter = storyAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)
@@ -116,6 +141,9 @@ class MyPageFragment : Fragment() {
             }
             tvCountFollower.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToFollowFragment(mainViewModel.user.value!!.seq, FLAG_FOLLOWEE))
+            }
+            btnEditProfile.setOnClickListener {
+                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToProfileRegistFragment(MODIFY))
             }
         }
     }

@@ -1,27 +1,42 @@
 package com.d108.sduty.ui.main.study
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.d108.sduty.R
+import com.d108.sduty.common.FLAG_STUDY
+import com.d108.sduty.common.FLAG_STUDY_REGIST
 import com.d108.sduty.databinding.FragmentStudySettingBinding
 import com.d108.sduty.model.dto.Member
 import com.d108.sduty.model.dto.Study
+import com.d108.sduty.ui.MainActivity
+import com.d108.sduty.ui.main.study.dialog.StudyDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudySettingViewModel
+import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showEditDialog
 import com.d108.sduty.utils.showToast
 import com.sendbird.calls.shadow.com.google.gson.Gson
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -29,18 +44,21 @@ import kotlin.math.roundToInt
 private const val TAG = "StudySettingFragment"
 class StudySettingFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
-
+    private lateinit var mainActivity: MainActivity
     private lateinit var binding: FragmentStudySettingBinding
     private val studySettingViewModel: StudySettingViewModel by viewModels()
     private val args: StudySettingFragmentArgs by navArgs()
     private lateinit var studyDetail: Study
     private lateinit var myStudyMember: List<Map<String, Any>>
+    private lateinit var myStudyInfo: Map<String, Any>
     private lateinit var nicknameList: ArrayList<String>
+    private lateinit var seqList: ArrayList<Int>
     private lateinit var nickname: String
+    private var category: String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainViewModel.displayBottomNav(true)
+        mainActivity = context as MainActivity
     }
 
     override fun onCreateView(
@@ -51,8 +69,13 @@ class StudySettingFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val peopleData:Array<String> = resources.getStringArray(R.array.array_people)
+        val peopleAdapter = ArrayAdapter(requireContext(), com.airbnb.lottie.R.layout.support_simple_spinner_dropdown_item, peopleData)
+        binding.spinnerPeople.adapter = peopleAdapter
 
         nickname = args.masterNickname
         studySettingViewModel.getMyStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
@@ -60,37 +83,115 @@ class StudySettingFragment : Fragment() {
         
         studySettingViewModel.myStudyInfo.observe(viewLifecycleOwner){
             val studyInfo = studySettingViewModel.myStudyInfo.value as Map<String, Any>
+
             myStudyMember = studyInfo["members"] as List<Map<String, Any>>
+            myStudyInfo = studyInfo["study"] as Map<String, Any>
+
             nicknameList = ArrayList<String>()
+            seqList = ArrayList<Int>()
             for(member in myStudyMember){
                 nicknameList.add(member["nickname"] as String)
+                seqList.add(member["userSeq"].toString().toDouble().roundToInt())
             }
-        }
 
-        studySettingViewModel.studyDetail.observe(viewLifecycleOwner){ study ->
-            if(study != null){
-                studyDetail = study
-                binding.tvStudyName.text = studyDetail.name
-                binding.tvStudyCategory.text = studyDetail.category
-                binding.tvStudyPeople.text = studyDetail.joinNumber.toString()
-                binding.tvStudyMaster.text = nickname
+            category = myStudyInfo["category"].toString()
+            binding.tvStudyCategory.text = myStudyInfo["category"].toString()
+            binding.etStudyUpdateName.setText(myStudyInfo["name"].toString())
+            binding.etStduyPass.setText(myStudyInfo["password"].toString())
 
-                if(studyDetail.password == null || studyDetail.password == ""){
-                    binding.tvStudyPublic.text = "공개"
-                } else{
-                    binding.tvStudyPublic.text = "비공개"
+            if(myStudyInfo["password"] == null){
+                binding.switchPass.isChecked = false
+                binding.etStduyPass.text = null
+                binding.switchPass.setOnCheckedChangeListener { buttonView, isChecked ->
+                    binding.etStduyPass.isEnabled = isChecked
+                    if(isChecked){
+                        binding.etStduyPass.setBackgroundResource(0)
+                    } else{
+                        binding.etStduyPass.setBackgroundResource(R.drawable.study_gray)
+                        binding.etStduyPass.text = null
+                    }
+                }
+            } else{
+                binding.switchPass.isChecked = true
+                binding.switchPass.setOnCheckedChangeListener { buttonView, isChecked ->
+                    binding.etStduyPass.isEnabled = isChecked
+                    if(isChecked){
+                        binding.etStduyPass.setBackgroundResource(0)
+                    } else{
+                        binding.etStduyPass.setBackgroundResource(R.drawable.study_gray)
+                        binding.etStduyPass.text = null
+                    }
+                }
+            }
+
+            binding.spinnerPeople.setSelection((myStudyInfo["limitNumber"].toString().toDouble().roundToInt()) - 2)
+
+            binding.etStudyIntroduce.setText(myStudyInfo["introduce"].toString())
+
+            binding.etStudyNotice.setText(myStudyInfo["notice"].toString())
+
+            if(myStudyInfo["roomId"] == null){
+                binding.studyDaily.visibility = View.GONE
+                binding.tvDaily.visibility = View.GONE
+            } else{
+                val alarm = (myStudyInfo["alarm"] as Map<String, Any>)
+                if(alarm["mon"] == true){
+                    binding.btnMon.isChecked = true
+                    binding.btnMon.setBackgroundResource(R.drawable.daily_click)
+                    binding.btnMon.setTextColor(Color.parseColor("#9585EB"))
+                }
+                if(alarm["tue"] == true){
+                    binding.btnTue.isChecked = true
+                    binding.btnTue.setBackgroundResource(R.drawable.daily_click)
+                    binding.btnTue.setTextColor(Color.parseColor("#9585EB"))
+                }
+                if(alarm["wed"] == true){
+                    binding.btnWed.isChecked = true
+                    binding.btnWed.setBackgroundResource(R.drawable.daily_click)
+                    binding.btnWed.setTextColor(Color.parseColor("#9585EB"))
+                }
+                if(alarm["thu"] == true){
+                    binding.btnThur.isChecked = true
+                    binding.btnThur.setBackgroundResource(R.drawable.daily_click)
+                    binding.btnThur.setTextColor(Color.parseColor("#9585EB"))
+                }
+                if(alarm["fri"] == true){
+                    binding.btnFri.isChecked = true
+                    binding.btnFri.setBackgroundResource(R.drawable.daily_click)
+                    binding.btnFri.setTextColor(Color.parseColor("#9585EB"))
+                }
+                if(alarm["sat"] == true){
+                    binding.btnSat.isChecked = true
+                    binding.btnSat.setBackgroundResource(R.drawable.daily_click)
+                    binding.btnSat.setTextColor(Color.parseColor("#9585EB"))
+                }
+                if(alarm["sun"] == true){
+                    binding.btnSun.isChecked = true
+                    binding.btnSun.setBackgroundResource(R.drawable.daily_click)
+                    binding.btnSun.setTextColor(Color.parseColor("#9585EB"))
                 }
 
 
+                binding.timePicker.hour = alarm["time"].toString().substring(0 until 2).toInt()
+                binding.timePicker.minute = alarm["time"].toString().substring(3 until 5).toInt()
             }
+
+
+
+
+        }
+
+        studySettingViewModel.studyDetail.observe(viewLifecycleOwner) {
+            studyDetail = it
         }
 
         studySettingViewModel.isStudyUpdate.observe(viewLifecycleOwner) {
             if(it){
                 studySettingViewModel.studyDetail(args.studySeq)
                 context?.showToast("수정한 내용이 적용되었습니다.")
+                findNavController().popBackStack()
             } else{
-                context?.showToast("수정 권한이 없습니다.")
+                context?.showToast("중복된 그룹 명입니다.")
             }
         }
 
@@ -98,65 +199,142 @@ class StudySettingFragment : Fragment() {
             if(it){
                 context?.showToast("스터디 그룹이 삭제되었습니다.")
                 findNavController().navigate(StudySettingFragmentDirections.actionStudySettingFragmentToMyStudyFragment())
-            } else{
-                context?.showToast("삭제 권한이 없습니다.")
             }
         }
 
-        studySettingViewModel.isQuitStudy.observe(viewLifecycleOwner){
+        studySettingViewModel.isQuitStudy.observe(viewLifecycleOwner) {
             if(it){
-                context?.showToast("스터디 탈퇴가 완료되었습니다.")
-                findNavController().navigate(StudySettingFragmentDirections.actionStudySettingFragmentToMyStudyFragment())
+                context?.showToast("그룹원이 추방되었습니다.")
             }
         }
 
         binding.apply {
+            etStudyUpdateName.addTextChangedListener(textChangeListener)
+            btnUpdateStudy.setOnClickListener {
+                // 변경 버튼 클릭
+                if(spinnerPeople.selectedItem.toString().toInt() < studyDetail.joinNumber){
+                    context?.showToast("설정한 인원 수가 현재 스터디 그룹 인원 수보다 적습니다.")
+                } else{
+                    val hour = binding.timePicker.hour
+                    val minute = binding.timePicker.minute
 
-            ivStudyIntroduce.setOnClickListener {
-                requireActivity().showAlertDialog("그룹 소개", studyDetail.introduce
-                ) { dialog, which ->
-                    when (which) { }
+                    studyDetail.category = category
+                    studyDetail.name = etStudyUpdateName.text.toString()
+                    if(etStduyPass.text.toString() == ""){
+                        studyDetail.password = null
+                    } else{
+                        studyDetail.password = etStduyPass.text.toString()
+                    }
+                    studyDetail.limitNumber = spinnerPeople.selectedItem.toString().toInt()
+                    studyDetail.introduce = etStudyIntroduce.text.toString()
+                    studyDetail.notice = etStudyNotice.text.toString()
+                    studyDetail.alarm?.mon = btnMon.isChecked
+                    studyDetail.alarm?.tue = btnTue.isChecked
+                    studyDetail.alarm?.wed = btnWed.isChecked
+                    studyDetail.alarm?.thu = btnThur.isChecked
+                    studyDetail.alarm?.fri = btnFri.isChecked
+                    studyDetail.alarm?.sat = btnSat.isChecked
+                    studyDetail.alarm?.sun = btnSun.isChecked
+                    studyDetail.alarm?.time = "${hour}:${minute}:00"
+                    Log.d(TAG, "onViewCreated: ${studyDetail}")
+
+                    studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
                 }
+
             }
 
-            ivStudyNoticeUpdate.setOnClickListener {
-                val et = EditText(context)
-                et.gravity = Gravity.CENTER
-                et.setText(studyDetail.notice)
-                requireActivity().showEditDialog("공지사항 변경", et
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            studyDetail.notice = et.text.toString()
-                            studySettingViewModel.studyUpdate(
-                                mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                            )
+            studyUpdateCategory.setOnClickListener {
+                TagSelectOneFragment(requireContext(), FLAG_STUDY_REGIST).let{
+                    it.show(parentFragmentManager, null)
+                    it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
+                        override fun onDismiss(tagName: String, flag: Int) {
+                            tvStudyCategory.text = tagName
+                            category = tagName
                         }
                     }
                 }
             }
 
-            ivStudyNameUpdate.setOnClickListener {
-                val et = EditText(context)
-                et.gravity = Gravity.CENTER
-                et.setText(studyDetail.name)
-                requireActivity().showEditDialog("그룹 명 변경", et
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            studyDetail.name = et.text.toString()
-                            studySettingViewModel.studyUpdate(
-                                mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                            )
-                        }
-                    }
+            btnMon.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnMon.setBackgroundResource(R.drawable.daily_click)
+                    btnMon.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnMon.setBackgroundResource(R.drawable.border_study_solid)
+                    btnMon.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnTue.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnTue.setBackgroundResource(R.drawable.daily_click)
+                    btnTue.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnTue.setBackgroundResource(R.drawable.border_study_solid)
+                    btnTue.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnWed.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnWed.setBackgroundResource(R.drawable.daily_click)
+                    btnWed.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnWed.setBackgroundResource(R.drawable.border_study_solid)
+                    btnWed.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnThur.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnThur.setBackgroundResource(R.drawable.daily_click)
+                    btnThur.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnThur.setBackgroundResource(R.drawable.border_study_solid)
+                    btnThur.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnFri.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnFri.setBackgroundResource(R.drawable.daily_click)
+                    btnFri.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnFri.setBackgroundResource(R.drawable.border_study_solid)
+                    btnFri.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnSat.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnSat.setBackgroundResource(R.drawable.daily_click)
+                    btnSat.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnSat.setBackgroundResource(R.drawable.border_study_solid)
+                    btnSat.setTextColor(Color.parseColor("#979797"))
+                }
+            }
+
+            btnSun.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    btnSun.setBackgroundResource(R.drawable.daily_click)
+                    btnSun.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    btnSun.setBackgroundResource(R.drawable.border_study_solid)
+                    btnSun.setTextColor(Color.parseColor("#979797"))
                 }
             }
 
             ivStudyMasterUpdate.setOnClickListener {
-                val items = Array<String>(nicknameList.size) { "" }
+                val items = Array<String>(nicknameList.size - 1) { "" }
+                val itemseq = Array<Int>(seqList.size - 1){ 0 }
+                var j = 0
                 for(i in 0 until nicknameList.size){
-                    items[i] = nicknameList[i]
+                    if(args.masterNickname != nicknameList[i]){
+                        items[j] = nicknameList[i]
+                        itemseq[j] = seqList[i]
+                        j++
+                    }
                 }
                 var selectedItem: String? = null
                 AlertDialog.Builder(context)
@@ -164,129 +342,76 @@ class StudySettingFragment : Fragment() {
                     .setSingleChoiceItems(items, -1) { dialog, which ->
                         selectedItem = items[which]        }
                     .setPositiveButton("변경") { dialog, which ->
-                        for(member in myStudyMember){
-                            if(member["nickname"] as String == selectedItem.toString()){
-                                studyDetail.masterSeq = member["userSeq"].toString().toDouble().roundToInt()
-                                nickname = selectedItem.toString()
-                                studySettingViewModel.studyUpdate(
-                                    mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                                )
+                        for(i in items.indices){
+                            if(items[i] == selectedItem.toString()){
+                                studyDetail.masterSeq = itemseq[i]
+                                studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
+                                break
                             }
                         }
-
                     }
                     .setNegativeButton("취소", null)
                     .show()
-
             }
 
-            ivStudyCategoryUpdate.setOnClickListener {
-                val et = EditText(context)
-                et.gravity = Gravity.CENTER
-                et.setText(studyDetail.category)
-                requireActivity().showEditDialog("카테고리 변경", et
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            studyDetail.category = et.text.toString()
-                            studySettingViewModel.studyUpdate(
-                                mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                            )
-                        }
+            ivStudyPeopleBan.setOnClickListener {
+                // 그룹원 강퇴
+                val items = Array<String>(nicknameList.size - 1) { "" }
+                val itemseq = Array<Int>(seqList.size - 1){ 0 }
+                var j = 0
+                for(i in 0 until nicknameList.size){
+                    if(args.masterNickname != nicknameList[i]){
+                        items[j] = nicknameList[i]
+                        itemseq[j] = seqList[i]
+                        j++
                     }
                 }
-            }
 
-            ivStudyPeopleUpdate.setOnClickListener {
-                val et = EditText(context)
-                et.gravity = Gravity.CENTER
-                et.setText(studyDetail.limitNumber.toString())
-                requireActivity().showEditDialog("모집인원 변경", et
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            studyDetail.limitNumber = et.text.toString().toInt()
-                            studySettingViewModel.studyUpdate(
-                                mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                            )
-                        }
-                    }
-                }
-            }
-
-            ivStudyPasswordUpdate.setOnClickListener {
-                val et = EditText(context)
-                et.gravity = Gravity.CENTER
-                et.setText(studyDetail.password)
-                requireActivity().showEditDialog("비밀번호 변경", et
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            if(et.text.toString() == ""){
-                                studyDetail.password = null
-                            } else{
-                                studyDetail.password = et.text.toString()
+                var selectedItem: String? = null
+                AlertDialog.Builder(context)
+                    .setTitle("그룹원 강퇴")
+                    .setSingleChoiceItems(items, -1) { dialog, which ->
+                        selectedItem = items[which]        }
+                    .setPositiveButton("강퇴") { dialog, which ->
+                        for(i in items.indices){
+                            if(items[i] == selectedItem.toString()){
+                                studySettingViewModel.studyQuit(args.studySeq, itemseq[i])
+                                break
                             }
-                            studySettingViewModel.studyUpdate(
-                                mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                            )
                         }
                     }
-                }
-            }
-
-            ivStudyIntroduceUpdate.setOnClickListener {
-                val et = EditText(context)
-                et.gravity = Gravity.CENTER
-                et.setText(studyDetail.introduce)
-                requireActivity().showEditDialog("그룹 소개 변경", et
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            studyDetail.introduce = et.text.toString()
-                            studySettingViewModel.studyUpdate(
-                                mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                            )
-                        }
-                    }
-                }
-            }
-
-
-
-
-
-
-
-
-
-
-            btnStudyQuit.setOnClickListener {
-                requireActivity().showAlertDialog("그룹 탈퇴", "정말로 그룹을 탈퇴하시겠습니까?"
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            studySettingViewModel.studyQuit(args.studySeq, mainViewModel.profile.value!!.userSeq)
-                        }
-                    }
-                }
+                    .setNegativeButton("취소", null)
+                    .show()
             }
 
             btnStudyDelete.setOnClickListener {
-                requireActivity().showAlertDialog("그룹 삭제", "정말로 그룹을 삭제하시겠습니까?"
-                ) { dialog, which ->
-                    when (which) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            studySettingViewModel.studyDelete(mainViewModel.profile.value!!.userSeq, args.studySeq)
-                        }
+                val dialog = StudyDialog(mainActivity, "삭제하시겠습니까?", "가입하신 스터디를 삭제합니다.", "삭제", "취소")
+                dialog.showDialog()
+                dialog.setOnClickListener(object : StudyDialog.OnDialogClickListener{
+                    override fun onClicked() {
+                        studySettingViewModel.studyDelete(mainViewModel.profile.value!!.userSeq, args.studySeq)
                     }
-                }
+                })
             }
 
             commonTopBack.setOnClickListener {
                 findNavController().popBackStack()
             }
         }
+    }
+
+    private val textChangeListener = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            studySettingViewModel.getStudyId(binding.etStudyUpdateName.text.toString())
+        }
+
     }
 
 

@@ -71,6 +71,40 @@ class ProfileViewModel: ViewModel() {
         }
     }
 
+    fun updateProfile(profile: Profile){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.profileApi.updateProfile(profile).let {
+                if(it.isSuccessful && it.body() != null){
+                    _profile.postValue(it.body() as Profile)
+                }else{
+                    Log.d(TAG, "updateProfile: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    fun updateProfileImage(profile: Profile, imageUrl: String){
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val file = File(imageUrl)
+                Log.d(TAG, "updateProfileImage: ${imageUrl}")
+                var fileName = "profile/" + System.currentTimeMillis().toString()+".png"
+                var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,requestBody)
+                val json = Gson().toJson(profile)
+                val profileBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
+                val response = Retrofit.profileApi.updateProfileImage(imageBody, profileBody)
+                if(response.isSuccessful && response.body() != null) {
+                    _profile.postValue(response.body() as Profile)
+                }else{
+                    Log.d(TAG, "updateProfileImage: ${response.code()}")
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "updateProfileImage: ${e.message}")
+            }
+        }
+    }
+
     private val _flagJob = MutableLiveData<Int>(2)
     val flagJob: LiveData<Int>
         get() = _flagJob

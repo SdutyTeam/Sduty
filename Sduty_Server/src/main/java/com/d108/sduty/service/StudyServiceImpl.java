@@ -27,9 +27,9 @@ import com.d108.sduty.dto.Job;
 import com.d108.sduty.dto.Study;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.repo.AlarmRepo;
+import com.d108.sduty.repo.InterestHashtagRepo;
 import com.d108.sduty.repo.StudyRepo;
 import com.d108.sduty.repo.UserRepo;
-import com.d108.sduty.utils.StudyScheduler;
 
 @Service
 public class StudyServiceImpl implements StudyService {
@@ -42,7 +42,10 @@ public class StudyServiceImpl implements StudyService {
 	private UserRepo userRepo;
 	@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;
-
+	@Autowired
+	private InterestHashtagRepo interestHashtagRepo;
+	
+	
 	@Override
 	public List<Study> getAllStudy() {
 		return studyRepo.findAll();
@@ -102,26 +105,25 @@ public class StudyServiceImpl implements StudyService {
 					addJob(originStudy);
 				}
 			}
-			else if(originStudy.getLimitNumber()!=newStudy.getLimitNumber()) {
+			if(originStudy.getLimitNumber()!=newStudy.getLimitNumber()) {
 				//현재 참여 인원보다 적게 신청했을 경우
 				if(originStudy.getParticipants().size()>newStudy.getLimitNumber()) { return null;}
 				originStudy.setLimitNumber(newStudy.getLimitNumber());
 			}
-			else if(newStudy.getRoomId()!=null && newStudy.getAlarm()!=null) {
+			if(originStudy.getRoomId()!=null && newStudy.getAlarm()!=null) {
 				//캠스터디
 				deleteJob(originStudy);
 				newStudy.getAlarm().setCron(createCron(newStudy.getAlarm()));
 				originStudy.setAlarm(newStudy.getAlarm());
 				addJob(originStudy);
 			}
-			else {
-				if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
-				if(newStudy.getMasterSeq()!=0) originStudy.setMasterSeq(newStudy.getMasterSeq());
-				if(newStudy.getCategory()!=null) originStudy.setCategory(newStudy.getCategory());
-				if(newStudy.getCategories()!=null) originStudy.setCategories(newStudy.getCategories());;
-				originStudy.setPassword(newStudy.getPassword());
-				originStudy.setIntroduce(newStudy.getIntroduce());
-			}
+			if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
+			if(newStudy.getMasterSeq()!=0) originStudy.setMasterSeq(newStudy.getMasterSeq());
+			if(newStudy.getCategory()!=null) originStudy.setCategory(newStudy.getCategory());
+			if(newStudy.getCategories()!=null) originStudy.setCategories(newStudy.getCategories());;
+			originStudy.setPassword(newStudy.getPassword());
+			originStudy.setIntroduce(newStudy.getIntroduce());
+			
 			Study result = studyRepo.save(originStudy);
 			//System.out.println(result.getCategories());
 			return result;
@@ -140,6 +142,7 @@ public class StudyServiceImpl implements StudyService {
 		//2. 삭제
 		if(study.getRoomId()!=null) {
 			deleteJob(study);
+			alarmRepo.delete(study.getAlarm());
 		}
 		if(studyRepo.deleteBySeq(studySeq)==0) {
 			return false;
@@ -171,7 +174,9 @@ public class StudyServiceImpl implements StudyService {
 		return studyRepo.findAll(spec);
 	}
 	
+	//TODO : category 필터링 수정 필요
 	public Specification<Study> findCategory(String category){
+		System.out.print(studyRepo.existsByCategories(interestHashtagRepo.findByName(category)));
 		return (root, query, criteriaBuilder)->criteriaBuilder.equal(root.get("category"), category);
 	}
 	

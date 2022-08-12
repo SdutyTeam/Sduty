@@ -25,6 +25,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
 import com.d108.sduty.common.FLAG_STUDY
+import com.d108.sduty.common.FLAG_STUDY_REGIST
 import com.d108.sduty.common.SENDBIRD_APP_ID
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
 import com.d108.sduty.model.dto.Alarm
@@ -35,6 +36,7 @@ import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.Status
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
+import com.sendbird.calls.Room
 import com.sendbird.calls.SendBirdCall
 import com.sendbird.calls.SendBirdError
 
@@ -72,6 +74,7 @@ class StudyRegistFragment : Fragment() {
             false -> {
                 binding.dailyTime.visibility = View.GONE
                 binding.dailyWeek.visibility = View.GONE
+                binding.tvDaily.visibility = View.GONE
             }
         }
 
@@ -90,7 +93,7 @@ class StudyRegistFragment : Fragment() {
 
 
             studyRegistCategory.setOnClickListener {
-                TagSelectOneFragment(requireContext(), FLAG_STUDY).let{
+                TagSelectOneFragment(requireContext(), FLAG_STUDY_REGIST).let{
                     it.show(parentFragmentManager, null)
                     it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
                         @SuppressLint("ResourceAsColor")
@@ -188,38 +191,6 @@ class StudyRegistFragment : Fragment() {
             }
 
 
-//            checkBoxDaily.setOnCheckedChangeListener { buttonView, isChecked ->
-//                if(isChecked){
-//                    btnMon.setBackgroundResource(R.drawable.daily_click)
-//                    btnTue.setBackgroundResource(R.drawable.daily_click)
-//                    btnWed.setBackgroundResource(R.drawable.daily_click)
-//                    btnThur.setBackgroundResource(R.drawable.daily_click)
-//                    btnFri.setBackgroundResource(R.drawable.daily_click)
-//                    btnSat.setBackgroundResource(R.drawable.daily_click)
-//                    btnSun.setBackgroundResource(R.drawable.daily_click)
-//                }else{
-//                    btnMon.setBackgroundResource(R.drawable.daily_background)
-//                    btnTue.setBackgroundResource(R.drawable.daily_background)
-//                    btnWed.setBackgroundResource(R.drawable.daily_background)
-//                    btnThur.setBackgroundResource(R.drawable.daily_background)
-//                    btnFri.setBackgroundResource(R.drawable.daily_background)
-//                    btnSat.setBackgroundResource(R.drawable.daily_background)
-//                    btnSun.setBackgroundResource(R.drawable.daily_background)
-//                }
-//            }
-
-//            cbDailyRegist.setOnCheckedChangeListener { buttonView, isChecked ->
-//                if(isChecked){
-//                    timePicker.visibility = View.VISIBLE
-//                    dailyWeek.visibility = View.VISIBLE
-//                    dailyCheck.visibility = View.VISIBLE
-//                } else{
-//                    timePicker.visibility = View.GONE
-//                    dailyWeek.visibility = View.GONE
-//                    dailyCheck.visibility = View.GONE
-//                }
-//            }
-
             lifecycleOwner = this@StudyRegistFragment
             studyRegisteVM = studyRegisteViewModel
 
@@ -233,7 +204,7 @@ class StudyRegistFragment : Fragment() {
             var pass = etStduyPass.text?.toString()?.trim()
             val introduce = etStudyIntroduce.text.toString().trim()
             val people = spinnerPeople.selectedItem.toString()
-            val hour = binding.timePicker.hour.toString()
+            val hour = binding.timePicker.hour
             val minute = binding.timePicker.minute
 
             if(name.isEmpty() || introduce.isEmpty()){
@@ -261,7 +232,7 @@ class StudyRegistFragment : Fragment() {
                 } else{
                     studyRegisteViewModel.createRoom()
                     studyRegisteViewModel.createRoomId.observe(requireActivity()){ resources ->
-                        Log.d(TAG, "room: ${resources}")
+
                         when (resources.status){
                             Status.LOADING -> {
                                 // TODO : show loading view
@@ -275,6 +246,8 @@ class StudyRegistFragment : Fragment() {
                                             ), Alarm(0, "${hour}:${minute}:00", btnMon.isChecked, btnTue.isChecked,
                                                 btnWed.isChecked, btnThur.isChecked, btnFri.isChecked, btnSat.isChecked, btnSun.isChecked)
                                         )
+                                    val room: Room? = SendBirdCall.getCachedRoomById(it)
+                                    room?.exit()
                                 }
                             }
                             Status.ERROR -> {

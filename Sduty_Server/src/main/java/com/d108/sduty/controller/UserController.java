@@ -48,8 +48,11 @@ public class UserController {
 		if(maybeUser.isPresent()) {
 			User selectedUser = maybeUser.get();
 			//암호화 - 복호화
-			if(security.passwordEncoder().matches(user.getPass(), selectedUser.getPass2())) {
+			if(security.passwordEncoder().matches(user.getPass(), selectedUser.getPass())) {
 				System.out.println("암호화 로그인 완료2!");
+				selectedUser.setPass("");
+				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
+
 			}
 			if(selectedUser.getPass().equals(user.getPass())) {
 				selectedUser.setPass("");
@@ -151,21 +154,21 @@ public class UserController {
 	
 	@Transactional
 	@ApiOperation(value = "회원정보 수정 > User/401 리턴", response = HttpStatus.class)
-	@PutMapping("/{seq}")
-	public ResponseEntity<?> updateUserInfo(@PathVariable int seq, @RequestBody User user) throws Exception {
-		user.setSeq(seq);
-		User selectUser = userService.selectUser(seq).get();
-		if(user.getPass() != null) {
-			//이게 null이면 user.setPass(selectUser.getPass());인거 같습니다!
-			//암호화
-			//selectUser.setPass(security.passwordEncoder().encode(user.getPass()));
-			System.out.println("암호화된 비번도 변경");
+	@PutMapping("")
+	public ResponseEntity<?> updateUserInfo(@RequestBody User user) throws Exception {
+		User selectUser = userService.selectUser(user.getSeq()).get();
+
+		// 비밀번호 변경 안했을 때 (FCM 토큰 update)
+		if(user.getPass().equals("")) {
+
+			user.setPass(security.passwordEncoder().encode(selectUser.getPass()));			
+			user.setPass2(security.passwordEncoder().encode(selectUser.getPass()));
+		// 비밀번호 변경 시
+		}else {
+			user.setPass(security.passwordEncoder().encode(user.getPass()));			
 			user.setPass2(security.passwordEncoder().encode(user.getPass()));
-			selectUser.setPass(user.getPass());
 		}
-		user.setTel(selectUser.getTel());
-		user.setEmail(selectUser.getEmail());
-		user.setFcmToken(selectUser.getFcmToken());
+		
 		if(userService.updateUser(user) != null)
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		else

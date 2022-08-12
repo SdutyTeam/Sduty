@@ -49,6 +49,8 @@ fun interestHashTagText(view: TextView, list: MutableList<InterestHashtag>?){
             text = "${text} #${item.name} "
         }
         view.text = text
+    }else{
+        view.text = ""
     }
 }
 

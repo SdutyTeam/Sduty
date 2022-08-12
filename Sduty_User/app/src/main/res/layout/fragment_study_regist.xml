@@ -28,15 +28,14 @@
 
             <ImageView
                 android:id="@+id/common_top_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:src="@drawable/img_back"
-                android:layout_marginLeft="15dp"
+                android:padding="13dp"
                 />
-
             <ImageView
                 android:id="@+id/common_top_title"
                 android:layout_width="86dp"
@@ -146,7 +145,7 @@
                 android:visibility="@{StudyRegisteVM.isStudyId() ? View.VISIBLE : View.GONE}"
                 android:text="중복된 그룹 명입니다."
                 android:layout_weight="2"
-                android:textColor="@color/red_300"
+                android:textColor="@color/sduty_action_red"
                 />
 
 
@@ -235,6 +234,14 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="그룹 소개"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -245,13 +252,21 @@
             <EditText
                 android:id="@+id/et_study_introduce"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:background="@drawable/border_study"
                 android:gravity="center"
                 android:hint="그룹 소개" />
 
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_daily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일정"
+            android:layout_marginHorizontal="20dp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -194,7 +194,9 @@ class TimerViewModel() : ViewModel() {
                 // 사용자 리포트
                 if (it.isSuccessful && it.body() != null) {
                     Log.d(TAG, "getReport: body ${it.body()}")
-                    _report.postValue(it.body())
+                    val report = it.body() as Report
+                    report.tasks = report.tasks.sortedBy { it.startTime }
+                    _report.postValue(report)
                 } else if (it.code() == 401) {
                     // 못 받았을 때
                     Log.d(TAG, "getReport: error ${it.errorBody()}")

@@ -108,7 +108,11 @@ public class StudyController {
 	@ApiOperation(value="스터디 상세 조회")
 	@GetMapping("/detail/{study_seq}")
 	public ResponseEntity<?> getStudyDetail(@PathVariable int study_seq){
-		return new ResponseEntity<Study>(studyService.getStudyDetail(study_seq), HttpStatus.OK);
+		Study study = studyService.getStudyDetail(study_seq);
+		Profile masterProfile = profileService.selectBaseProfile(study.getMasterSeq());
+		study.setMasterNickname(masterProfile.getNickname());
+		study.setMasterJob(masterProfile.getJob());
+		return new ResponseEntity<Study>(study, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="스터디 참여")
@@ -142,9 +146,13 @@ public class StudyController {
 	@ApiOperation(value = "스터디 수정")
 	@PutMapping("/{user_seq}/{study_seq}")
 	public ResponseEntity<?> updateStudy(@PathVariable int user_seq, @PathVariable int study_seq, @RequestBody Study newStudy){
+		System.out.println(newStudy);
 		if(study_seq==newStudy.getSeq()) {
 			Study result = studyService.updateStudy(user_seq, newStudy);
 			if(result!=null) {
+				Profile masterProfile = profileService.selectBaseProfile(result.getMasterSeq());
+				result.setMasterNickname(masterProfile.getNickname());
+				result.setMasterJob(masterProfile.getJob());
 				return new ResponseEntity<Study>(result, HttpStatus.OK);
 			}	
 		}

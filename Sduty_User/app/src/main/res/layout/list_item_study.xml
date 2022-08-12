@@ -78,7 +78,7 @@
             android:id="@+id/iv_type_cam"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@{studyList.roomId != null ?  @drawable/img_type_camstduy : @drawable/img_type_study}"
+            android:src="@{studyList.roomId != null ?  @drawable/img_type_camstudy : @drawable/img_type_study}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

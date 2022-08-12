@@ -30,10 +30,13 @@ class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdap
                 ivScrap.setOnClickListener {
                     onClickTimelineItem.onScrapClicked(it, adapterPosition)
                 }
-                ivProfile.setOnClickListener {
+                constProfileTop.setOnClickListener {
                     onClickTimelineItem.onProfileClicked(it, adapterPosition)
                 }
                 constComments.setOnClickListener {
+                    onClickTimelineItem.onReplyClicked(it, adapterPosition)
+                }
+                tvContent.setOnClickListener {
                     onClickTimelineItem.onReplyClicked(it, adapterPosition)
                 }
             }
@@ -59,6 +62,10 @@ class TimeLineAdapter(val activity: Activity): RecyclerView.Adapter<TimeLineAdap
     }
 
     override fun getItemCount(): Int = list.size
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(list[position].story.seq)
+    }
 
     interface TimeLineClickListener{
         fun onFavoriteClicked(view: View, position: Int)

@@ -5,8 +5,11 @@
 
     <data>
         <variable
-            name="TaskList"
+            name="Task"
             type="com.d108.sduty.model.dto.Task" />
+        <variable
+            name="TaskColor"
+            type="int" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +20,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginEnd="12dp"
-            android:src="@color/app_blue"
+            android:src="@{TaskColor}"
             app:layout_constraintEnd_toStartOf="@id/tv_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +32,7 @@
             android:gravity="center_vertical"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:text="@{TaskList.title}"
+            android:text="@{Task.title}"
             app:layout_constraintTop_toTopOf="@id/v_report_color"
             app:layout_constraintBottom_toBottomOf="@id/v_report_color"
             app:layout_constraintStart_toEndOf="@id/v_report_color"
@@ -41,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:text="@{@string/durationTimeFormat(TaskList.durationTime/60/60,(TaskList.durationTime/60)%60,TaskList.durationTime%60)}"
+            android:text="@{@string/durationTimeFormat(Task.durationTime/60/60,(Task.durationTime/60)%60,Task.durationTime%60)}"
             app:layout_constraintTop_toTopOf="@id/v_report_color"
             app:layout_constraintBottom_toBottomOf="@id/v_report_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +56,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="#818181"
-            android:text="@{TaskList.content1}"
+            android:text="@{Task.content1}"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +67,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="#818181"
-            android:text="@{TaskList.content2}"
+            android:text="@{Task.content2}"
             app:layout_constraintTop_toBottomOf="@id/tv_content_1"
             app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +78,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="#818181"
-            android:text="@{TaskList.content3}"
+            android:text="@{Task.content3}"
             app:layout_constraintTop_toBottomOf="@id/tv_content_2"
             app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"

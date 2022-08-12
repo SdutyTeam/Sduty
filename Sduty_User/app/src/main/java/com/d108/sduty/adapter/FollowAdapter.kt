@@ -27,13 +27,16 @@ class FollowAdapter(val mySeq: Int, var myProfile: Profile): RecyclerView.Adapte
                 if(mySeq != follow.profile!!.userSeq){
                     if(tabFlag == FLAG_FOLLOWER) {
                         if(mySeq == follow.followerSeq)
-                            btnFollow.text = "취소"
-                        else
-                            btnFollow.text = "팔로우"
-                        btnFollow.visibility = View.VISIBLE
+//                            btnFollow.text = "취소"
+                        else{
+
+
+//                            btnFollow.text = "팔로우"
+//                        btnFollow.visibility = View.VISIBLE
+                        }
                     }
                     else{
-                        btnFollow.visibility = View.GONE
+//                        btnFollow.visibility = View.GONE
                     }
 
                 }else{

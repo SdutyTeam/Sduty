@@ -2,9 +2,10 @@ package com.d108.sduty.ui.main.timer
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,27 +13,20 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
-import com.d108.sduty.adapter.StudyListAdapter
 import com.d108.sduty.databinding.FragmentReportBinding
 import com.d108.sduty.model.dto.Report
 import com.d108.sduty.model.dto.Task
-import com.d108.sduty.ui.main.study.MyStudyFragmentDirections
 import com.d108.sduty.ui.main.timer.adapter.TaskListAdapter
 import com.d108.sduty.ui.main.timer.dialog.TaskDialog
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
-import com.d108.sduty.utils.convertTimeDateToString
-import com.d108.sduty.utils.safeNavigate
-import com.d108.sduty.utils.showToast
-import com.google.firebase.database.collection.LLRBNode
+import com.d108.sduty.utils.*
 import java.util.*
 
 private const val TAG = "ReportFragment"
@@ -45,8 +39,14 @@ class ReportFragment : Fragment() {
 
     private lateinit var today: String
 
-    private lateinit var taskList: List<Task>
     private lateinit var taskListAdapter: TaskListAdapter
+
+    private var colorPalette = listOf<Int>(
+        R.color.sduty_light_blue,
+        R.color.sduty_main_blue,
+        R.color.sduty_light_purple,
+        R.color.sduty_main_purple
+    )
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -124,7 +124,6 @@ class ReportFragment : Fragment() {
             when (selectedDate != today) {
                 true -> { // 오늘
                     binding.apply {
-                        btnReturnToday.text = "오늘($today) 로 돌아가기"
                         btnReturnToday.visibility = View.VISIBLE
                     }
                 }
@@ -137,7 +136,7 @@ class ReportFragment : Fragment() {
         }
         // 캘린더 다이얼로그 출력
         DatePickerDialog(
-            requireActivity(), dateSetListener, cal.get(Calendar.YEAR), cal.get(
+            requireActivity(), R.style.MyDatePickerStyle, dateSetListener, cal.get(Calendar.YEAR), cal.get(
                 Calendar.MONTH
             ), cal.get(Calendar.DAY_OF_MONTH)
         ).show()
@@ -200,28 +199,100 @@ class ReportFragment : Fragment() {
     }
 
     private fun updatePlanner(report: Report) {
+
+        val tasks = report.tasks
+        val table = Array(24) { BooleanArray(6) { false } }
+        var num = -1
+        var numTable = Array(24) { IntArray(6) { 0 } }
+
+        for (task in tasks) {
+            num++
+            num %= 4
+            val startTime = task.startTime.split(':')
+            val startHour = startTime[0].toInt()
+            val startMin = startTime[1].toInt() / 10
+
+            val endTime = task.endTime.split(':')
+            val endHour = endTime[0].toInt()
+            val endMin = endTime[1].toInt() / 10
+
+            for (i in startHour..endHour) {
+                if (startHour == endHour) {
+                    for (j in startMin..endMin) {
+                        table[i][j] = true
+                        numTable[i][j] = num
+                    }
+                } else {
+                    when (i) {
+                        startHour -> {
+                            for (j in startMin..5) {
+                                table[i][j] = true
+                                numTable[i][j] = num
+                            }
+                        }
+                        endHour -> {
+                            if (endMin != 0) {
+                                for (j in 0..endMin) {
+                                    table[i][j] = true
+                                    numTable[i][j] = num
+                                }
+                            }
+                        }
+                        else -> {
+                            for (j in 0..5) {
+                                table[i][j] = true
+                                numTable[i][j] = num
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         binding.tlPlanner.removeAllViews()
 
-        for (i in 1..24) {
+        for (i in 0..23) {
+            // 행
             val tableRow = TableRow(requireContext())
             tableRow.layoutParams = TableLayout.LayoutParams(
                 TableLayout.LayoutParams.MATCH_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT
             )
 
-            val tv = TextView(requireContext())
-            tv.layoutParams = TableRow.LayoutParams(50, 50)
-            tv.text = i.toString()
-            Log.d(TAG, "updatePlanner: $i")
-            tableRow.addView(tv)
+            // 시간
+            val tvTime = TextView(requireContext())
+            val boxSize = convertDpToPx(requireContext(), 22f)
+            val marginsSize = convertDpToPx(requireContext(), 0.5f)
 
-            for (j in 1..6) {
+            tvTime.layoutParams = TableRow.LayoutParams(boxSize, boxSize).apply {
+                setMargins(marginsSize, marginsSize, marginsSize, 0)
+            }
+            tvTime.setBackgroundColor(Color.WHITE)
+            tvTime.text = String.format("%02d",i)
+            tvTime.gravity = Gravity.CENTER or Gravity.CENTER_VERTICAL
+
+            tableRow.addView(tvTime)
+
+            // 실제 공부한 시간
+            for (j in 0..5) {
                 val view = View(requireContext())
-                view.layoutParams = TableRow.LayoutParams(50, 50)
-
-                when (j % 2) {
-                    0 -> view.setBackgroundResource(R.color.app_purple)
-                    1 -> view.setBackgroundResource(R.color.app_blue)
+                view.layoutParams = TableRow.LayoutParams(boxSize, boxSize).apply {
+                    setMargins(marginsSize, marginsSize, marginsSize, marginsSize)
+                }
+                when (table[i][j]) {
+                    true -> {
+                        view.setBackgroundResource(colorPalette[numTable[i][j]])
+                        view.setOnClickListener {
+                            TaskDialog().apply {
+                                arguments = Bundle().apply {
+                                    putString("Action", "Info")
+                                    putInt("Position", numTable[i][j])
+                                }
+                                show(this@ReportFragment.requireActivity().supportFragmentManager, "TaskDialog")
+                            }
+                        }
+                    }
+                    false -> view.setBackgroundResource(R.color.white)
                 }
                 tableRow.addView(view)
             }

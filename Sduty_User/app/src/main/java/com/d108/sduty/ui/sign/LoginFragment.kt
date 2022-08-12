@@ -24,10 +24,12 @@ import com.d108.sduty.ui.main.mypage.MyPageFragment
 import com.d108.sduty.ui.main.study.MyStudyFragmentDirections
 import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
 import com.d108.sduty.ui.sign.dialog.DialogFindInfo
+import com.d108.sduty.ui.sign.dialog.PermissionDialog
 import com.d108.sduty.ui.sign.dialog.RegisterDialog
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
@@ -64,85 +66,67 @@ class LoginFragment : Fragment() {
 
         initViewModel()
         initView()
-        checkPermission()
-    }
-    fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
-        observe(lifecycleOwner, object : Observer<T> {
-            override fun onChanged(t: T?) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
-
-        /*
-        observeForever(object : Observer<T> {
-            override fun onChanged(t: T?) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
-         */
+//        checkPermission()
     }
 
 
     private fun initViewModel(){
-        mainViewModel.isRegisterProfile.observeOnce(this, object : Observer<Boolean>{
-            override fun onChanged(t: Boolean?) {
-                when(mainViewModel.isRegisterProfile.value){
-                    true -> {
-                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
-                        requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
-                    }
-                    false -> {
-                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment())
-                        requireContext().showToast("프로필 등록 후 이용해 주세요")
-                    }
+        mainViewModel.isRegisterProfile.observe(viewLifecycleOwner){
+            when(it){
+                true -> {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
+                    requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
+                }
+                false -> {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment(REGISTER))
+                    requireContext().showToast("프로필 등록 후 이용해 주세요")
                 }
             }
-        })
+        }
 
-        viewModel.user.observe(viewLifecycleOwner) {
-            mainViewModel.setUserValue(it)
-            mainViewModel.getProfileValue(it.seq)
-        }
-        viewModel.isLoginSucceed.observe(viewLifecycleOwner){
-            when(it){
-                false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
+        viewModel.apply {
+            user.observe(viewLifecycleOwner) {
+                mainViewModel.setUserValue(it)
+                mainViewModel.getProfileValue(it.seq)
             }
-        }
-        viewModel.isExistKakaoAccount.observe(viewLifecycleOwner){
-            when(it){
-                false -> {
-                    val listener = DialogInterface.OnClickListener { _, _ ->
-                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
-                            KAKAO_JOIN, viewModel.token.value.toString()))
+            isLoginSucceed.observe(viewLifecycleOwner){
+                when(it){
+                    false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
+                }
+            }
+            isExistKakaoAccount.observe(viewLifecycleOwner){
+                when(it){
+                    false -> {
+                        val listener = DialogInterface.OnClickListener { _, _ ->
+                            findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
+                                KAKAO_JOIN, viewModel.token.value.toString()))
+                        }
+                        requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
                     }
-                    requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
+                }
+            }
+            isExistNaverAccount.observe(viewLifecycleOwner){
+                when(it){
+                    false -> {
+                        val listener = DialogInterface.OnClickListener { _, _ ->
+                            findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
+                                NAVER_JOIN, viewModel.token.value.toString()))
+                        }
+                        requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
+                    }
                 }
             }
         }
-        viewModel.isExistNaverAccount.observe(viewLifecycleOwner){
-            when(it){
-                false -> {
-                    val listener = DialogInterface.OnClickListener { _, _ ->
-                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
-                            NAVER_JOIN, viewModel.token.value.toString()))
-                    }
-                    requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
-                }
-            }
-        }
-    }
-    private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
-        observeOnce(object : Observer<T> {
-            override fun onChanged(t: T?) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
     }
 
     private fun initView() {
+
+        if(SettingsPreference().getFirstRunCheck()){
+            SettingsPreference().setFirstRunCheck(false)
+            PermissionDialog(requireContext()).show(parentFragmentManager, null)
+        }
+
+
         binding.apply {
             btnLogin.setOnClickListener {
                 val id = binding.etId.text.toString()
@@ -164,8 +148,7 @@ class LoginFragment : Fragment() {
 //                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
 //                    COMMON_JOIN))
                 // 수정 : RegisterDialog 띄우기
-                val dialog = RegisterDialog(requireContext())
-                dialog.showDialog()
+                openRegisterDialog()
             }
 
             var filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
@@ -247,10 +230,23 @@ class LoginFragment : Fragment() {
         }
     }
 
+    // 회원가입으로 이동하는 dialog (기존 JoinFragment를 다이얼로그로)
+    private fun openRegisterDialog() {
+        RegisterDialog().let {
+            // 클릭 리스너 정의
+            it.setOnClickListener(object : RegisterDialog.OnDialogClickListener {
+                override fun onClicked(joinType: Int) {
+                    findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(joinType))
+                    it.dismiss()
+                }
+            })
+            it.show(parentFragmentManager, null)
+        }
+    }
+
     private fun checkPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 requireActivity().showToast("모든 권한을 허용해야 이용이 가능합니다.")
@@ -260,8 +256,9 @@ class LoginFragment : Fragment() {
         }
         TedPermission.create()
             .setPermissionListener(permissionListener)
+            .setRationaleMessage("asdfasdf")
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
             .check()
     }
 }

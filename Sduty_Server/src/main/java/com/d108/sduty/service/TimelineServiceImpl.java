@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.InterestHashtag;
 import com.d108.sduty.dto.JobHashtag;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Profile;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.StoryInterest;
 import com.d108.sduty.dto.Timeline;
+import com.d108.sduty.repo.DislikeRepo;
 import com.d108.sduty.repo.InterestHashtagRepo;
 import com.d108.sduty.repo.JobHashtagRepo;
 import com.d108.sduty.repo.LikesRepo;
@@ -54,11 +56,18 @@ public class TimelineServiceImpl implements TimelineService {
 	@Autowired
 	private StoryInterestHashtagRepo storyInterestRepo;
 	
+	@Autowired
+	private DislikeRepo dislikeRepo;
+	
 	@Override
-	public List<Timeline> selectAllTimelines(int userSeq){
-		List<Story> storyList = storyRepo.findAllByOrderByRegtimeDesc();
+	public PagingResult<Timeline> selectAllTimelines(int userSeq, Pageable pageable){
+		Page<Story> storyPage = storyRepo.findAllByOrderByRegtimeDesc(pageable);
 		List<Timeline> timelineList = new ArrayList<Timeline>();
-		for(Story s : storyList) {
+//		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
+		for(Story s : storyPage) {
+//			if(dislikes.contains(s.getSeq())) {
+//				continue;
+//			}
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
@@ -69,14 +78,19 @@ public class TimelineServiceImpl implements TimelineService {
 			setInterestList(t, s);
 			timelineList.add(t);
 		}
-		return timelineList;
+		PagingResult result = new PagingResult<Timeline>(pageable.getPageNumber(), storyPage.getTotalPages() -1, timelineList);
+		return result;
 	}
 
 	@Override
-	public List<Timeline> selectAllByUserSeqsOrderByRegtime(int userSeq, List<Integer> writerSeq) {
-		List<Story> selectedOStory =  storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeq);
+	public PagingResult<Timeline> selectAllByUserSeqsOrderByRegtime(int userSeq, List<Integer> writerSeq, Pageable pageable) {
+		Page<Story> storyPage =  storyRepo.findAllByWriterSeqInOrderByRegtimeDesc(writerSeq, pageable);
 		List<Timeline> tList = new ArrayList<>();
-		for(Story s : selectedOStory) {
+//		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
+		for(Story s : storyPage) {
+//			if(dislikes.contains(s.getSeq())) {
+//				continue;
+//			}
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
@@ -87,14 +101,19 @@ public class TimelineServiceImpl implements TimelineService {
 			setInterestList(t, s);
 			tList.add(t);
 		}
-		return tList;
+		PagingResult result = new PagingResult<Timeline>(pageable.getPageNumber(), storyPage.getTotalPages() -1, tList);
+		return result;
 	}
 	
 	@Override
-	public List<Timeline> selectAllByUserSeqsWithTag(int userSeq, List<Integer> writerSeq, String jobName) {
-		List<Story> selectedOStory =  storyRepo.findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(writerSeq, getJobHashtag(jobName).getSeq());
+	public PagingResult<Timeline> selectAllByUserSeqsWithTag(int userSeq, List<Integer> writerSeq, String jobName, Pageable pageable) {
+		Page<Story> storyPage =  storyRepo.findAllByWriterSeqInAndJobHashtagOrderByRegtimeDesc(writerSeq, getJobHashtag(jobName).getSeq(), pageable);
 		List<Timeline> tList = new ArrayList<>();
-		for(Story s : selectedOStory) {
+//		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
+		for(Story s : storyPage) {
+//			if(dislikes.contains(s.getSeq())) {
+//				continue;
+//			}
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
@@ -105,15 +124,20 @@ public class TimelineServiceImpl implements TimelineService {
 			setInterestList(t, s);
 			tList.add(t);
 		}
-		return tList;
+		PagingResult result = new PagingResult<Timeline>(pageable.getPageNumber(), storyPage.getTotalPages() -1, tList);
+		return result;
 	}
 	
 	@Override
-	public List<Timeline> selectAllByJobName(int userSeq, String jobName){
+	public PagingResult<Timeline> selectAllByJobName(int userSeq, String jobName, Pageable pageable){
 		JobHashtag JH = getJobHashtag(jobName);
-		List<Story> selectedStory = storyRepo.findAllByjobHashtagOrderByRegtimeDesc(JH.getSeq());
+		Page<Story> storyPage = storyRepo.findAllByjobHashtagOrderByRegtimeDesc(JH.getSeq(), pageable);
 		List<Timeline> tList = new ArrayList<>();
-		for(Story s : selectedStory) {
+//		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
+		for(Story s : storyPage) {
+//			if(dislikes.contains(s.getSeq())) {
+//				continue;
+//			}
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
@@ -124,20 +148,25 @@ public class TimelineServiceImpl implements TimelineService {
 			setInterestList(t, s);
 			tList.add(t);
 		}
-		return tList;
+		PagingResult result = new PagingResult<Timeline>(pageable.getPageNumber(), storyPage.getTotalPages() -1, tList);
+		return result;
 	}
 	
 	@Override
-	public List<Timeline> selectAllByInterestName(int userSeq, String interestName){
+	public PagingResult<Timeline> selectAllByInterestName(int userSeq, String interestName, Pageable pageable){
 		InterestHashtag IH = getInterestHashtag(interestName);
 		List<StoryInterest> SI = storyInterestRepo.findAllByinterestSeq(IH.getSeq());
 		List<Integer> siSeqs = new ArrayList<Integer>();
 		for(StoryInterest si : SI) {
 			siSeqs.add(si.getSeq());
 		}
-		List<Story> selectedStory = storyRepo.findAllBySeqInOrderByRegtimeDesc(siSeqs);
+		Page<Story> storyPage = storyRepo.findAllBySeqInOrderByRegtimeDesc(siSeqs, pageable);
 		List<Timeline> tList = new ArrayList<>();
-		for(Story s : selectedStory) {
+//		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
+		for(Story s : storyPage) {
+//			if(dislikes.contains(s.getSeq())) {
+//			continue;
+//		}
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
@@ -148,7 +177,8 @@ public class TimelineServiceImpl implements TimelineService {
 			setInterestList(t, s);
 			tList.add(t);
 		}
-		return tList;
+		PagingResult result = new PagingResult<Timeline>(pageable.getPageNumber(), storyPage.getTotalPages() -1, tList);
+		return result;
 	}
 	
 	
@@ -168,13 +198,12 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 	
 	@Override
-	public Timeline selectDetailTimeline(int storySeq) {
+	public Timeline selectDetailTimeline(int storySeq, int userSeq) {
 		Optional<Story> selectedOStory = storyRepo.findById(storySeq);
 		if(selectedOStory.isPresent()) {
 			Timeline t =  new Timeline();
-			Story s = selectedOStory.get();
-			int userSeq = s.getWriterSeq();
-			t.setProfile(getProfile(userSeq));
+			Story s = selectedOStory.get();				
+			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, storySeq));
 			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
@@ -183,7 +212,7 @@ public class TimelineServiceImpl implements TimelineService {
 				r.setProfile(profileRepo.findById((r.getUserSeq())).get());
 			}
 			t.setReplies(listReply);
-			t.setStory(s);
+			t.setStory(s);			
 			setInterestList(t, s);
 			return t;
 		}
@@ -228,37 +257,25 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 
 	@Override
-	public Page<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq) {		
-		List<Story> storyList = storyRepo.findAllByOrderByRegtimeDesc();
+	public PagingResult<Timeline> selectAllPagingTimelines(Pageable pageable, int userSeq) {
+		Page<Story> storyPage = storyRepo.findAllByOrderByRegtimeDesc(pageable);
 		List<Timeline> timelineList = new ArrayList<Timeline>();
-		for(Story s : storyList) {
+		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
+		for(Story s : storyPage) {
+			if(dislikes.contains(s.getSeq())) {
+				continue;
+			}
 			Timeline t = new Timeline();
 			t.setProfile(getProfile(s.getWriterSeq()));
 			t.setStory(s);
-			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));
+			t.setCntReply(replyRepo.countAllByStorySeq(s.getSeq()));			
 			t.setLikes(likesRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setScrap(scrapRepo.existsByUserSeqAndStorySeq(userSeq, s.getSeq()));
 			t.setNumLikes(likesRepo.countBystorySeq(s.getSeq()).intValue());
 			setInterestList(t, s);
 			timelineList.add(t);
 		}
-		System.out.println(pageable);
-		System.out.println(pageable.getPageSize());
-		System.out.println(pageable.getPageNumber());
-		final int start = (int)pageable.getOffset();
-		final int end = Math.min((start + pageable.getPageSize()), timelineList.size());
-		System.out.println("start: " + start);
-		System.out.println("end: " + end);
-		System.out.println("start + pageable.getPageSize(): " + start + pageable.getPageSize());
-		System.out.println("timelineList.size(): " + timelineList.size());
-		Page<Timeline> page = null;
-		try {
-			page = new PageImpl<>(timelineList.subList(start, end), pageable, timelineList.size());
-		}catch(Exception e) {
-			System.out.println(e.getMessage());
-			return null;
-		}
-		
-		return page;
+		PagingResult result = new PagingResult<Timeline>(pageable.getPageNumber(), storyPage.getTotalPages() -1, timelineList);
+		return result;
 	}
 }

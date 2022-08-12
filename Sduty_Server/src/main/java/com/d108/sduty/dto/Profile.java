@@ -75,6 +75,9 @@ public class Profile {
 	@Transient
 	private List<InterestHashtag> interestHashtags;
 	
+	@Transient
+	private int cntStory;
+	
 	@MapKey(name = "followeeSeq")	
 	
 	@OneToMany(mappedBy = "followerSeq", fetch = FetchType.EAGER)	

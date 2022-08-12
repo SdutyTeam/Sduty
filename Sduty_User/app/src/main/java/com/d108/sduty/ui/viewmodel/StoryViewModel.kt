@@ -2,13 +2,16 @@ package com.d108.sduty.ui.viewmodel
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.navigation.navOptions
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.liveData
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.model.paging.StoryDataSource
+import com.d108.sduty.model.paging.TimeLineDataSource
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +24,38 @@ import okio.BufferedSink
 
 private const val TAG ="StoryViewModel"
 class StoryViewModel: ViewModel() {
+
+    private fun getTimelinePost(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {TimeLineDataSource(Retrofit.storyApi, userSeq)}
+    ).liveData
+
+    private val timeLinePosts = MutableLiveData<Int>()
+    val pagingTimelineList = timeLinePosts.switchMap {
+        getTimelinePost(it).cachedIn(viewModelScope)
+    }
+
+    fun getTimelineListValue(userSeq: Int){
+        timeLinePosts.postValue(userSeq)
+    }
+
+
+    private fun getStoryPost(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
+        pagingSourceFactory = {StoryDataSource(Retrofit.storyApi, userSeq)}
+    ).liveData
+
+    private val userStoryPosts = MutableLiveData<Int>()
+    val pagingStoryList = userStoryPosts.switchMap {
+        getStoryPost(it).cachedIn(viewModelScope)
+    }
+
+    fun getUserStoryList(userSeq: Int){
+        userStoryPosts.postValue(userSeq)
+    }
+
+
+
     private val _storyList = MutableLiveData<MutableList<Story>>()
     val storyList: LiveData<MutableList<Story>>
         get() = _storyList
@@ -59,9 +94,8 @@ class StoryViewModel: ViewModel() {
                 val json = Gson().toJson(story)
                 val storyBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
                 val response = Retrofit.storyApi.insertStory(imageBody, storyBody)
-                Log.d(TAG, "insertStory: ${response.code()}")
                 if(response.isSuccessful && response.body() != null){
-                    getStoryListValue(story.writerSeq)
+                    getTimelineListValue(story.writerSeq)
                 }
             }catch (e: Exception){
                 Log.d(TAG, "insertStory: ${e.message}")
@@ -73,9 +107,9 @@ class StoryViewModel: ViewModel() {
     val timeLine: LiveData<Timeline>
         get() = _timeLine
 
-    fun getTimelineValue(storySeq: Int){
+    fun getTimelineValue(storySeq: Int, userSeq: Int){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getTimelineDetail(storySeq).let {
+            Retrofit.storyApi.getTimelineDetail(storySeq, userSeq).let {
                 if (it.isSuccessful && it.body() != null) {
                     _timeLine.postValue(it.body() as Timeline)
                     Log.d(TAG, "getTimelineValue: ${it.body()}")
@@ -86,20 +120,20 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    private val _userStoryList = MutableLiveData<List<Story>>()
-    val userStoryList: LiveData<List<Story>>
-        get() = _userStoryList
-    fun getUserStoryListValue(userSeq: Int){
-        viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getUserStoryList(userSeq).let {
-                if (it.isSuccessful && it.body() != null) {
-                    _userStoryList.postValue(it.body() as MutableList<Story>)
-                }else{
-                    Log.d(TAG, "getUserStoryListValue: ${it.code()}")
-                }
-            }
-        }
-    }
+//    private val _userStoryList = MutableLiveData<List<Story>>()
+//    val userStoryList: LiveData<List<Story>>
+//        get() = _userStoryList
+//    fun getUserStoryListValue(userSeq: Int){
+//        viewModelScope.launch(Dispatchers.IO){
+//            Retrofit.storyApi.getUserStoryList(userSeq).let {
+//                if (it.isSuccessful && it.body() != null) {
+//                    _userStoryList.postValue(it.body() as MutableList<Story>)
+//                }else{
+//                    Log.d(TAG, "getUserStoryListValue: ${it.code()}")
+//                }
+//            }
+//        }
+//    }
 
     private val _scrapStoryList = MutableLiveData<List<Story>>()
     val scrapStoryList: LiveData<List<Story>>
@@ -233,15 +267,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun likeStory(likes: Likes){
+    fun likeStory(likes: Likes, userSeq: Int){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.likeStory(likes).let {
                 if (it.code() == 200) {
-                    var timeline = _timeLine.value!!
-                    if(timeline.likes) timeline.numLikes--
-                    else timeline.numLikes++
-                    timeline.likes = !timeline.likes
-                    _timeLine.postValue(timeline)
+                    getTimelineValue(likes.storySeq, userSeq)
                 }else if(it.code() == 401){
 
                 }
@@ -268,17 +298,17 @@ class StoryViewModel: ViewModel() {
 
     fun scrapStory(scrap: Scrap){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.scrapStory(scrap).let {
-                if (it.code() == 200) {
-                    var timeline = _timeLine.value!!
-                    timeline.scrap = !timeline.scrap
-                    _timeLine.postValue(timeline)
-                }else if(it.code() == 401){
-
+            try {
+                Retrofit.storyApi.scrapStory(scrap).let {
+                    if (it.code() == 200 && it.body() != null) {
+                        _timeLine.postValue(it.body() as Timeline)
+                    }else if(it.code() == 401){
+                    }
+                    else{
+                    }
                 }
-                else{
-
-                }
+            }catch (e: Exception){
+                Log.d(TAG, "scrapStory: ${e.message}")
             }
         }
     }

@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.d108.sduty.dto.Follow;
 import com.d108.sduty.dto.Likes;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Reply;
 import com.d108.sduty.dto.Scrap;
 import com.d108.sduty.dto.Story;
@@ -76,11 +77,13 @@ public class StoryController {
             @PageableDefault Pageable pageable) throws Exception {
 
 		System.out.println(userSeq);
-		Page<Timeline> timeLineList = timelineService.selectAllPagingTimelines(pageable, userSeq);
-		if(timeLineList == null) {
+		PagingResult result = timelineService.selectAllPagingTimelines(pageable, userSeq);
+		if(result == null) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Timeline>>(timeLineList.toList(), HttpStatus.OK);
+		
+		
+		return new ResponseEntity<PagingResult<Timeline>>(result, HttpStatus.OK);
 
 	}
 	
@@ -88,39 +91,42 @@ public class StoryController {
 
 	@ApiOperation(value = "전체 스토리 조회 : UserSeq > Story", response = Timeline.class)
 	@GetMapping("/all/{userSeq}")
-	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq) throws Exception {
-		List<Timeline> selectedTimeline = timelineService.selectAllTimelines(userSeq);
-		return new ResponseEntity<List<Timeline>>(selectedTimeline, HttpStatus.OK);
+	public ResponseEntity<?> selectAllStory(@PathVariable int userSeq, 
+			@PageableDefault Pageable pageable) throws Exception {		
+		PagingResult<Timeline> selectedTimeline = timelineService.selectAllTimelines(userSeq, pageable);
+		return new ResponseEntity<PagingResult<Timeline>>(selectedTimeline, HttpStatus.OK);
 
 	}
 	
 	@ApiOperation(value = "유저별 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/user/{userSeq}")
-	public ResponseEntity<?> selectByUserSeq(@PathVariable int userSeq) throws Exception {
+	public ResponseEntity<?> selectByUserSeq(@PathVariable int userSeq, 
+			@PageableDefault Pageable pageable) throws Exception {
 		List<Follow> follows = followService.selectFollower(userSeq);
 		List<Integer> writerSeqs = new ArrayList<Integer>();
 		for(Follow f : follows) {
 			writerSeqs.add(f.getFolloweeSeq());
 		}
-		List<Timeline> listTimeline = timelineService.selectAllByUserSeqsOrderByRegtime(userSeq, writerSeqs);
+		PagingResult<Timeline> listTimeline = timelineService.selectAllByUserSeqsOrderByRegtime(userSeq, writerSeqs, pageable);
 		if(listTimeline != null) {
-			return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+			return new ResponseEntity<PagingResult<Timeline>>(listTimeline, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "직업 태그를 적용하여 팔로우한 유저들의 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/user/{userSeq}/{jobName}")
-	public ResponseEntity<?> selectByUserSeqAndJob(@PathVariable int userSeq, @PathVariable String jobName) throws Exception {
+	public ResponseEntity<?> selectByUserSeqAndJob(@PathVariable int userSeq, @PathVariable String jobName, 
+			@PageableDefault Pageable pageable) throws Exception {
 		try {
 			List<Follow> follows = followService.selectFollower(userSeq);
 			List<Integer> writerSeqs = new ArrayList<Integer>();
 			for(Follow f : follows) {
 				writerSeqs.add(f.getFolloweeSeq());
 			}
-			List<Timeline> listTimeline = timelineService.selectAllByUserSeqsWithTag(userSeq, writerSeqs, jobName);
+			PagingResult<Timeline> listTimeline = timelineService.selectAllByUserSeqsWithTag(userSeq, writerSeqs, jobName, pageable);
 			if(listTimeline != null) {
-				return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+				return new ResponseEntity<PagingResult<Timeline>>(listTimeline, HttpStatus.OK);
 			}
 		}catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -130,11 +136,12 @@ public class StoryController {
 	
 	@ApiOperation(value = "직업 태그를 적용하여 전체 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/job/{userSeq}/{jobName}")
-	public ResponseEntity<?> selectAllByJob(@PathVariable int userSeq, @PathVariable String jobName) throws Exception {
+	public ResponseEntity<?> selectAllByJob(@PathVariable int userSeq, @PathVariable String jobName, 
+			@PageableDefault Pageable pageable) throws Exception {
 		try {
-			List<Timeline> listTimeline = timelineService.selectAllByJobName(userSeq, jobName);
+			PagingResult<Timeline> listTimeline = timelineService.selectAllByJobName(userSeq, jobName, pageable);
 			if(listTimeline != null) {
-				return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+				return new ResponseEntity<PagingResult<Timeline>>(listTimeline, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -144,11 +151,12 @@ public class StoryController {
 	
 	@ApiOperation(value = "관심사 태그를 적용하여 전체 스토리 조회 : UserSeq > List<Timeline> 리턴", response = Timeline.class)
 	@GetMapping("/interest/{userSeq}/{interestName}")
-	public ResponseEntity<?> selectAllByInterest(@PathVariable int userSeq, @PathVariable String interestName) throws Exception {
+	public ResponseEntity<?> selectAllByInterest(@PathVariable int userSeq, @PathVariable String interestName, 
+			@PageableDefault Pageable pageable) throws Exception {
 		try {
-			List<Timeline> listTimeline = timelineService.selectAllByInterestName(userSeq, interestName);
+			PagingResult<Timeline> listTimeline = timelineService.selectAllByInterestName(userSeq, interestName, pageable);
 			if(listTimeline != null) {
-				return new ResponseEntity<List<Timeline>>(listTimeline, HttpStatus.OK);
+				return new ResponseEntity<PagingResult<Timeline>>(listTimeline, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -174,9 +182,9 @@ public class StoryController {
 		fileName = fileName.replace("/", "/thumbnail-");
 		story.setThumbnail(fileName);		
 		//imageService.fileUpload(mpfImage); - makeThumbnail()에서 저장.
-		
+		int userSeq = story.getWriterSeq();
 		Story result = storyService.insertStory(story);
-		Timeline t = timelineService.selectDetailTimeline(result.getSeq());
+		Timeline t = timelineService.selectDetailTimeline(result.getSeq(), userSeq);
 		if(t != null) {
 			return new ResponseEntity<Timeline>(t, HttpStatus.OK);
 		}
@@ -184,9 +192,9 @@ public class StoryController {
 	}
 	
 	@ApiOperation(value = "스토리 상세 내용 조회 : Story > Story", response = Story.class)
-	@GetMapping("/{storySeq}")
-	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq) throws Exception {
-		Timeline selectedTimeline = timelineService.selectDetailTimeline(storySeq);
+	@GetMapping("/{storySeq}/{userSeq}")
+	public ResponseEntity<?> selectStoryDetail(@PathVariable int storySeq, @PathVariable int userSeq) throws Exception {
+		Timeline selectedTimeline = timelineService.selectDetailTimeline(storySeq, userSeq);
 		if(selectedTimeline != null)
 			return new ResponseEntity<Timeline>(selectedTimeline, HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -202,8 +210,9 @@ public class StoryController {
 			story.setThumbnail(savedStory.getThumbnail());
 			
 			Story result = storyService.updateStory(story);
+			int userSeq = result.getWriterSeq();
 			if(result != null) {
-				Timeline t = timelineService.selectDetailTimeline(result.getSeq());
+				Timeline t = timelineService.selectDetailTimeline(result.getSeq(), userSeq);
 				if(t != null) {
 					return new ResponseEntity<Timeline>(t, HttpStatus.OK);
 				}
@@ -226,10 +235,13 @@ public class StoryController {
 	
 	@ApiOperation(value = "작성자로 글 조회 : UserSeq > List<Story> 리턴", response = Story.class)
 	@GetMapping("/writer/{userSeq}")
-	public ResponseEntity<?> selectByWriterSeq(@PathVariable int userSeq) throws Exception {
-		List<Story> listStory = storyService.findBywriterSeq(userSeq);
+	public ResponseEntity<?> selectByWriterSeq(@PathVariable int userSeq, 
+			@PageableDefault Pageable pageable) throws Exception {
+		System.out.println(pageable.getPageSize());
+		PagingResult<Story> listStory = storyService.findBywriterSeq(userSeq, pageable);
+		
 		if(listStory != null) {
-			return new ResponseEntity<List<Story>>(listStory, HttpStatus.OK);
+			return new ResponseEntity<PagingResult<Story>>(listStory, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -245,6 +257,18 @@ public class StoryController {
 			if(story != null) {
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@Transactional
+	@ApiOperation(value= "게시글 차단 : StorySeq > HttpStatus", response = HttpStatus.class)
+	@PostMapping("/ban/{userSeq}/{storySeq}")
+	public ResponseEntity<?> ignoreStory(@PathVariable int userSeq, @PathVariable int storySeq) {
+		Story selectedtory = storyService.findById(storySeq);
+		if(selectedtory !=null ) {
+			storyService.doDislike(userSeq, selectedtory.getSeq());
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -276,18 +300,22 @@ public class StoryController {
 		int userSeq = scrap.getUserSeq();
 		int storySeq = scrap.getStorySeq();
 		boolean alreadyScrapped = scrapService.checkAlreadyScrap(userSeq, storySeq);
-		
+		Timeline timeline;
 		if(alreadyScrapped) {
 			try {
 				scrapService.deleteScrap(userSeq, storySeq);
+				timeline = timelineService.selectDetailTimeline(scrap.getStorySeq(), scrap.getUserSeq());
+							
+					
 			} catch (Exception e) {
 				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 			}
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			return new ResponseEntity<Timeline>(timeline, HttpStatus.OK);
 		} else {
 			Scrap result = scrapService.insertScrap(scrap);
-			if(result != null) {			
-				return new ResponseEntity<Void>(HttpStatus.OK);
+			timeline = timelineService.selectDetailTimeline(scrap.getStorySeq(), scrap.getUserSeq());
+			if(result != null && timeline != null) {			
+				return new ResponseEntity<Timeline>(timeline, HttpStatus.OK);
 			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
@@ -295,12 +323,13 @@ public class StoryController {
 	
 	@ApiOperation(value = "스크랩한 자료 조회 : UserSeq > List<Story> 리턴", response = Story.class)
 	@GetMapping("/scrap/{userSeq}")
-	public ResponseEntity<?> selectScrapByUserSeq(@PathVariable int userSeq) throws Exception {
+	public ResponseEntity<?> selectScrapByUserSeq(@PathVariable int userSeq, 
+			@PageableDefault Pageable pageable) throws Exception {
 		List<Integer> listStorySeqs = scrapService.selectScrapSeqs(userSeq);
-		List<Story> storyList = storyService.selectStoryInSeq(listStorySeqs);
+		PagingResult<Story> storyList = storyService.selectStoryInSeq(listStorySeqs, pageable);
 		System.out.println(listStorySeqs);
 		if(storyList != null) {
-			return new ResponseEntity<List<Story>>(storyList, HttpStatus.OK);
+			return new ResponseEntity<PagingResult<Story>>(storyList, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
