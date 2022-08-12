@@ -115,6 +115,7 @@ public class StudyServiceImpl implements StudyService {
 				deleteJob(originStudy);
 				newStudy.getAlarm().setCron(createCron(newStudy.getAlarm()));
 				originStudy.setAlarm(newStudy.getAlarm());
+				alarmRepo.save(newStudy.getAlarm());
 				addJob(originStudy);
 			}
 			if(newStudy.getNotice()!=null) originStudy.setNotice(newStudy.getNotice());
