@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.d108.sduty.dto.AuthInfo;
 import com.d108.sduty.dto.User;
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	AuthInfoRepo authInfoRepo;
 
+	@Transactional
 	@Override
 	public User insertUser(User user) throws Exception {
 		return userRepo.save(user);
@@ -34,6 +36,7 @@ public class UserServiceImpl implements UserService {
 		return userRepo.existsByid(id);
 	}
 	
+	@Transactional
 	@Override
 	public User updateUser(User user) throws Exception {
 		return userRepo.save(user);
@@ -50,11 +53,13 @@ public class UserServiceImpl implements UserService {
 		return userRepo.findByTel(tel);
 	}
 
+	@Transactional
 	@Override
 	public User updatePassword(User user) throws Exception {
 		return userRepo.save(user);
 	}
 	
+	@Transactional
 	@Override
 	public void deleteUser(int seq) throws Exception {
 		userRepo.deleteById(seq);
@@ -65,6 +70,7 @@ public class UserServiceImpl implements UserService {
 		return authInfoRepo.insertAuthInfo(authInfo);
 	}
 
+	@Transactional
 	@Override
 	public int updateAuthInfo(AuthInfo authInfo) throws Exception {
 		return authInfoRepo.updateAuthInfo(authInfo);
@@ -75,6 +81,7 @@ public class UserServiceImpl implements UserService {
 		return authInfoRepo.selectAuthInfo(tel);
 	}
 
+	@Transactional
 	@Override
 	public void deleteAuthInfo(AuthInfo authInfo) throws Exception {
 		authInfoRepo.deleteAuthInfo(authInfo);
