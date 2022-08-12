@@ -72,17 +72,17 @@ class LoginFragment : Fragment() {
 
     private fun initViewModel(){
         mainViewModel.isRegisterProfile.observe(viewLifecycleOwner){
-                when(it){
-                    true -> {
-                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
-                        requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
-                    }
-                    false -> {
-                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment(REGISTER))
-                        requireContext().showToast("프로필 등록 후 이용해 주세요")
-                    }
+            when(it){
+                true -> {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
+                    requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
+                }
+                false -> {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment(REGISTER))
+                    requireContext().showToast("프로필 등록 후 이용해 주세요")
                 }
             }
+        }
 
         viewModel.apply {
             user.observe(viewLifecycleOwner) {
@@ -148,8 +148,7 @@ class LoginFragment : Fragment() {
 //                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
 //                    COMMON_JOIN))
                 // 수정 : RegisterDialog 띄우기
-                val dialog = RegisterDialog(requireContext())
-                dialog.showDialog()
+                openRegisterDialog()
             }
 
             var filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
@@ -228,6 +227,20 @@ class LoginFragment : Fragment() {
             }
         } else {
             UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
+        }
+    }
+
+    // 회원가입으로 이동하는 dialog (기존 JoinFragment를 다이얼로그로)
+    private fun openRegisterDialog() {
+        RegisterDialog().let {
+            // 클릭 리스너 정의
+            it.setOnClickListener(object : RegisterDialog.OnDialogClickListener {
+                override fun onClicked(joinType: Int) {
+                    findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(joinType))
+                    it.dismiss()
+                }
+            })
+            it.show(parentFragmentManager, null)
         }
     }
 
