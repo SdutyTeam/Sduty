@@ -29,14 +29,14 @@ public class BirthdayScheduler {
 	private FCMUtil fcmUtil;
 	
 //	//8시 정각에 알림
-	@Scheduled(cron="0 * * * * *")
+	@Scheduled(cron="0 0 8 * * *")
 	public void sendMsg() {
 		List<User> listU = userRepo.findAll();
 		LocalDate today = LocalDate.now();
 		SimpleDateFormat df = new SimpleDateFormat("MM-dd");
 		System.out.println(today);
 		for(User u : listU) {
-			if(u.getFcmToken() != null && u.getUserPublic() != 0 && !u.getFcmToken().equals("") && u.getSeq() == 2) {
+			if(u.getFcmToken() != null && u.getUserPublic() != 0 && !u.getFcmToken().equals("")) {
 				Profile p = profileRepo.findById(u.getSeq()).get();
 				String birthday = df.format(p.getBirthday());
 			    String title = p.getNickname() + "님 생일 축하합니다!!";
