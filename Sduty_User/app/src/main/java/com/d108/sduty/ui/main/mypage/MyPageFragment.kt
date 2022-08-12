@@ -64,15 +64,14 @@ class MyPageFragment : Fragment() {
 
             getUserStoryList(mainViewModel.user.value!!.seq)
             pagingStoryList.observe(viewLifecycleOwner){
-                Log.d(TAG, "initViewModel: ##############################################################${it}")
                 storyAdapter.submitData(this@MyPageFragment.lifecycle, it)
             }
-            scrapStoryList.observe(viewLifecycleOwner){
-//                storyAdapter.list = it
+            pagingScrapList.observe(viewLifecycleOwner){
+                storyAdapter.submitData(this@MyPageFragment.lifecycle, it)
+                Log.d(TAG, "initViewModel: ${it}")
             }
             contributionList.observe(viewLifecycleOwner){
                 contributionAdapter.list = it
-                Log.d(TAG, "initViewModel: ${it}")
             }
             if(viewModel.contributionList.value == null) {
                 getContribution(mainViewModel.user.value!!.seq)
@@ -105,7 +104,7 @@ class MyPageFragment : Fragment() {
                             viewModel.getUserStoryList(mainViewModel.user.value!!.seq)
                         }
                         1 -> {
-                            viewModel.getScrapStoryListValue(mainViewModel.user.value!!.seq)
+                            viewModel.getScrapStoryList(mainViewModel.user.value!!.seq)
                         }
                     }
                 }
@@ -116,7 +115,7 @@ class MyPageFragment : Fragment() {
                             viewModel.getUserStoryList(mainViewModel.user.value!!.seq)
                         }
                         1 -> {
-                            viewModel.getScrapStoryListValue(mainViewModel.user.value!!.seq)
+                            viewModel.getScrapStoryList(mainViewModel.user.value!!.seq)
                         }
                     }
                 }

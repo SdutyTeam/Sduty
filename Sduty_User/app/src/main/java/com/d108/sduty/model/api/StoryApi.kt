@@ -27,7 +27,7 @@ interface StoryApi {
     suspend fun getUserStoryList(@Path("userSeq")userSeq: Int, @Query("page")page: Int, @Query("size")pageSize: Int): Response<PagingResult<Story>>
 
     @GET("/story/scrap/{user_seq}")
-    suspend fun getScrapList(@Path("user_seq")userSeq: Int): Response<List<Story>>
+    suspend fun getScrapList(@Path("user_seq")userSeq: Int, @Query("page")page: Int, @Query("size")pageSize: Int): Response<PagingResult<Story>>
 
     @GET("/profile/chart/{userSeq}")
     suspend fun getContributionList(@Path("userSeq")userSeq: Int): Response<List<Boolean>>
