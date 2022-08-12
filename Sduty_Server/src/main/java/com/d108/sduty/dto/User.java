@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -34,6 +36,7 @@ import lombok.Setter;
 public class User {
 	@Id
 	@ApiModelProperty(value = "아이디")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_seq")
 	private int seq;
 	@Column(name = "user_id")

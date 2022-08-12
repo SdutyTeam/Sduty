@@ -86,8 +86,8 @@ public class UserController {
 	public ResponseEntity<?> insertUser(@RequestBody User user) throws Exception {
 		user.setPass(security.passwordEncoder().encode(user.getPass()));
 		User result = userService.insertUser(user);
-		user.setPass("");
-		if(result != null) {			
+		if(result != null) {
+			result.setPass("");
 			return new ResponseEntity<User>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
