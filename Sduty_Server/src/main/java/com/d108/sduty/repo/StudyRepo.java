@@ -17,5 +17,4 @@ public interface StudyRepo extends JpaRepository<Study, Integer>, JpaSpecificati
 	public Optional<Study> findBySeq(int studySeq);
 	@Transactional
 	public int deleteBySeq(int studySeq);
-	public List<Study> existsByCategories(InterestHashtag category);
 }
