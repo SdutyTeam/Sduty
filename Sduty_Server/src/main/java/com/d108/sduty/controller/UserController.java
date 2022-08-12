@@ -151,7 +151,7 @@ public class UserController {
 	
 	@Transactional
 	@ApiOperation(value = "회원정보 수정 > User/401 리턴", response = HttpStatus.class)
-	@PutMapping("")
+	@PutMapping("/update")
 	public ResponseEntity<?> updateUserInfo(@RequestBody User user) throws Exception {		
 //		user.setSeq(seq);
 		User selectUser = userService.selectUser(user.getSeq()).get();

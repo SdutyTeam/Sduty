@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.d108.sduty.dto.UserAchieve;
+import com.d108.sduty.repo.ProfileRepo;
 import com.d108.sduty.dto.Achievement;
 import com.d108.sduty.dto.Follow;
 import com.d108.sduty.dto.Profile;
@@ -108,7 +109,7 @@ public class ProfileController {
 	public ResponseEntity<?> updateProfileImage(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
 		Gson gson = new Gson();
 		Profile profile = gson.fromJson(json, Profile.class);
-		imageService.deleteFile(profile.getImage());
+		imageService.deleteFile(profileService.selectProfile(profile.getUserSeq()).getImage());
 		profile.setImage(imageFile.getOriginalFilename());
 		imageService.fileUpload(imageFile);
 		Profile result = profileService.updateProfile(profile);
