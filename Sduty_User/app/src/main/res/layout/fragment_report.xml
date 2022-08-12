@@ -13,7 +13,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/common_top"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -21,31 +21,33 @@
             <ImageView
                 android:id="@+id/common_top_title"
                 android:layout_width="97dp"
-                android:layout_height="29dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
                 android:src="@drawable/img_logo_report"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginLeft="20dp"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-            <ImageView
-                android:id="@+id/common_chart"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
-                android:gravity="center_vertical|center"
-                android:src="@drawable/icon_chart_24"
-                app:layout_constraintEnd_toStartOf="@id/common_more"/>
+<!--            <ImageView-->
+<!--                android:id="@+id/common_chart"-->
+<!--                android:layout_width="48dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:gravity="center_vertical|center"-->
+<!--                android:src="@drawable/icon_chart_24"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintEnd_toStartOf="@id/common_more"/>-->
 
             <ImageView
                 android:id="@+id/common_more"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
                 android:gravity="center_vertical|center"
                 android:src="@drawable/icon_more_horiz_24"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <View
                 android:id="@+id/divider"
