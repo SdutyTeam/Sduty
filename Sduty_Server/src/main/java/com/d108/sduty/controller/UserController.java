@@ -80,7 +80,6 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@Transactional
 	@ApiOperation(value = "회원가입 > User 리턴", response = HttpStatus.class)
 	@PostMapping("/join")
 	public ResponseEntity<?> insertUser(@RequestBody User user) throws Exception {
