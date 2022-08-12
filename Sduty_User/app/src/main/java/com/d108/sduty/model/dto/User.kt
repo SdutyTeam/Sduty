@@ -17,11 +17,11 @@ data class User(
     var userPublic: Int
 ){
     constructor(): this(0,"","","","","","", null,1)
-    constructor(id: String, password: String):
-            this(id, password, "", "", "")
-    constructor(id: String, password: String, name: String, tel: String, email: String):
-            this(0, id, password, name, tel, email, "",null, 1)
-    constructor(id: String, password: String, name: String, tel: String, email: String, fcm_token: String):
-            this(0,id, password, name, tel, email, fcm_token,null, 1)
+    constructor(id: String, pass: String):
+            this(id, pass, "", "", "")
+    constructor(id: String, pass: String, name: String, tel: String, email: String):
+            this(0, id, pass, name, tel, email, "",null, 1)
+    constructor(id: String, pass: String, name: String, tel: String, email: String, fcm_token: String):
+            this(0,id, pass, name, tel, email, fcm_token,null, 1)
 
 }
