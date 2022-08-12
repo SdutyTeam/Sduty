@@ -19,12 +19,12 @@ class SettingsPreference {
     fun getAutoLoginState(): Boolean{
         return ApplicationClass.autoLoginState.getBoolean("State", true)
     }
-    fun getDarkModeState(): Boolean{
-        return ApplicationClass.darkModeState.getBoolean("State", true)
-    }
-    fun setDarkModeState(accept: Boolean){
-        ApplicationClass.darkModeState.edit().putBoolean("State", accept).apply()
-    }
+//    fun getDarkModeState(): Boolean{
+//        return ApplicationClass.darkModeState.getBoolean("State", true)
+//    }
+//    fun setDarkModeState(accept: Boolean){
+//        ApplicationClass.darkModeState.edit().putBoolean("State", accept).apply()
+//    }
 
     fun getFirstRunCheck(): Boolean{
         return ApplicationClass.firstRunCheck.getBoolean("State", true)

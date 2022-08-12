@@ -21,7 +21,8 @@ class ApplicationClass : Application() {
         lateinit var pushStateAll: SharedPreferences
         lateinit var pushStatePersonal: SharedPreferences
         lateinit var autoLoginState: SharedPreferences
-        lateinit var darkModeState: SharedPreferences
+        lateinit var appLockPref: SharedPreferences
+        //        lateinit var darkModeState: SharedPreferences
         lateinit var timerPref: SharedPreferences
         lateinit var firstRunCheck: SharedPreferences
         lateinit var firstLoginCheck: SharedPreferences
@@ -51,7 +52,8 @@ class ApplicationClass : Application() {
         userPref = getSharedPreferences("User", MODE_PRIVATE)
         pushStateAll = getSharedPreferences("PushStateAll", MODE_PRIVATE)
         pushStatePersonal = getSharedPreferences("PushStatePersonal", MODE_PRIVATE)
-        darkModeState = getSharedPreferences("DarkMode", MODE_PRIVATE)
+        appLockPref = getSharedPreferences("AppLock", MODE_PRIVATE)
+//        darkModeState = getSharedPreferences("DarkMode", MODE_PRIVATE)
         timerPref = getSharedPreferences("Timer", MODE_PRIVATE)
         firstRunCheck = getSharedPreferences("FirstRun", MODE_PRIVATE)
         firstLoginCheck = getSharedPreferences("FirstLogin", MODE_PRIVATE)

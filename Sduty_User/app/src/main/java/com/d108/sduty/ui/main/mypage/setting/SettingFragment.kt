@@ -48,7 +48,7 @@ class SettingFragment : Fragment() {
 
             }
             btnLock.setOnClickListener {
-                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToAccessibilityFragment())
+                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToAppLockFragment())
             }
             btnResign.setOnClickListener{
                 requireActivity().showAlertDialog("회원 탈퇴","정말로 탈퇴하시겠습니까?\n복구 할 수 없습니다.", object :DialogInterface.OnClickListener{

@@ -179,7 +179,7 @@ class ReportFragment : Fragment() {
 
     // 리사이클러뷰 갱신
     private fun updateAdapter(report: Report) {
-        taskListAdapter = TaskListAdapter(requireActivity(), report.tasks)
+        taskListAdapter = TaskListAdapter(requireActivity(), report.tasks, colorPalette)
         taskListAdapter.onClickTaskItem = object : TaskListAdapter.OnClickTaskItem {
             override fun onClick(view: View, fragmentActivity: FragmentActivity, position: Int) {
 

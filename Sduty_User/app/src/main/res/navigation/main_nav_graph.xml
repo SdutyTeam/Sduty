@@ -7,39 +7,38 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.d108.sduty.ui.sign.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="LoginFragment">
         <!--        <action-->
         <!--            android:id="@+id/action_loginFragment_to_joinFragment"-->
         <!--            app:destination="@id/joinFragment" />-->
         <action
             android:id="@+id/action_loginFragment_to_timeLineFragment"
+            app:destination="@id/timeLineFragment"
             app:popUpTo="@id/main_nav_graph"
-            app:popUpToInclusive="true"
-            app:destination="@id/timeLineFragment" />
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_termsFragment"
             app:destination="@id/termsFragment" />
         <action
             android:id="@+id/action_loginFragment_to_profileRegistFragment"
+            app:destination="@id/profileRegistFragment"
             app:popUpTo="@id/main_nav_graph"
-            app:popUpToInclusive="true"
-            app:destination="@id/profileRegistFragment" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/termsFragment"
         android:name="com.d108.sduty.ui.sign.TermsFragment"
-        android:label="TermsFragment" >
+        android:label="TermsFragment">
         <action
             android:id="@+id/action_termsFragment_to_joinRegistFragment"
             app:destination="@id/joinRegistFragment" />
         <argument
             android:name="route"
-            app:argType="integer"
-            />
+            app:argType="integer" />
         <argument
             android:name="token"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
     <!--    <fragment-->
     <!--        android:id="@+id/joinFragment"-->
@@ -55,44 +54,43 @@
     <fragment
         android:id="@+id/joinRegistFragment"
         android:name="com.d108.sduty.ui.sign.JoinRegistFragment"
-        android:label="JoinRegistFragment" >
+        android:label="JoinRegistFragment">
         <action
             android:id="@+id/action_joinRegistFragment_to_profileRegistFragment"
+            app:destination="@id/profileRegistFragment"
             app:popUpTo="@id/main_nav_graph"
-            app:popUpToInclusive="true"
-            app:destination="@id/profileRegistFragment" />
+            app:popUpToInclusive="true" />
         <argument
             android:name="route"
-            app:argType="integer"
-            />
+            app:argType="integer" />
         <argument
             android:name="token"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_joinRegistFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
             app:popUpTo="@id/main_nav_graph"
-            app:popUpToInclusive="true"
-            app:destination="@id/loginFragment" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/profileRegistFragment"
         android:name="com.d108.sduty.ui.sign.ProfileRegistFragment"
-        android:label="ProfileRegistFragment" >
+        android:label="ProfileRegistFragment">
         <argument
             android:name="flag"
             app:argType="integer" />
         <action
             android:id="@+id/action_profileRegistFragment_to_timeLineFragment"
+            app:destination="@id/timeLineFragment"
             app:popUpTo="@id/main_nav_graph"
-            app:popUpToInclusive="true"
-            app:destination="@id/timeLineFragment" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/timeLineFragment"
         android:name="com.d108.sduty.ui.main.home.TimeLineFragment"
         android:label="fragment_time_line"
-        tools:layout="@layout/fragment_time_line" >
+        tools:layout="@layout/fragment_time_line">
         <action
             android:id="@+id/action_timeLineFragment_to_myPageFragment"
             app:destination="@id/myPageFragment" />
@@ -109,7 +107,7 @@
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.d108.sduty.ui.main.mypage.MyPageFragment"
-        android:label="MyPageFragment" >
+        android:label="MyPageFragment">
         <action
             android:id="@+id/action_myPageFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
@@ -135,21 +133,21 @@
     <fragment
         android:id="@+id/storyRegisterFragment"
         android:name="com.d108.sduty.ui.main.home.StoryRegisterFragment"
-        android:label="StoryRegisterFragment" >
+        android:label="StoryRegisterFragment">
         <argument
             android:name="storyImage"
-            app:nullable="true"
             android:defaultValue="@null"
-            app:argType="android.graphics.Bitmap"/>
+            app:argType="android.graphics.Bitmap"
+            app:nullable="true" />
 
         <action
             android:id="@+id/action_storyRegisterFragment_to_storyDecoFragment"
             app:destination="@id/storyDecoFragment" />
         <action
             android:id="@+id/action_storyRegisterFragment_to_timeLineFragment"
-            app:popUpToInclusive="true"
+            app:destination="@id/timeLineFragment"
             app:popUpTo="@navigation/main_nav_graph"
-            app:destination="@id/timeLineFragment" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/storyDetailFragment"
@@ -157,7 +155,7 @@
         android:label="StoryDetailFragment">
         <argument
             android:name="seq"
-            app:argType="integer"/>
+            app:argType="integer" />
         <action
             android:id="@+id/action_storyDetailFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
@@ -168,7 +166,7 @@
     <fragment
         android:id="@+id/timerFragment"
         android:name="com.d108.sduty.ui.main.timer.TimerFragment"
-        android:label="TimerFragment" >
+        android:label="TimerFragment">
         <action
             android:id="@+id/action_timerFragment_to_reportFragment"
             app:destination="@id/reportFragment" />
@@ -177,7 +175,7 @@
     <fragment
         android:id="@+id/reportFragment"
         android:name="com.d108.sduty.ui.main.timer.ReportFragment"
-        android:label="ReportFragment" >
+        android:label="ReportFragment">
         <action
             android:id="@+id/action_reportFragment_to_timerFragment"
             app:destination="@id/timerFragment" />
@@ -185,35 +183,34 @@
     <fragment
         android:id="@+id/myStudyFragment"
         android:name="com.d108.sduty.ui.main.study.MyStudyFragment"
-        android:label="StudyFragment" >
+        android:label="StudyFragment">
         <action
             android:id="@+id/action_myStudyFragment_to_studyDetailFragment"
             app:destination="@id/studyDetailFragment" />
         <action
             android:id="@+id/action_myStudyFragment_to_camStudyDetailFragment"
-            app:destination="@+id/camStudyDetailFragment"/>
+            app:destination="@+id/camStudyDetailFragment" />
         <action
             android:id="@+id/action_myStudyFragment_to_studyRegistFragment"
             app:destination="@id/studyRegistFragment"
             app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_stop"/>
+            app:exitAnim="@anim/slide_stop" />
         <action
             android:id="@+id/action_myStudyFragment_to_studyListFragment"
-            app:destination="@+id/studyListFragment"/>
+            app:destination="@+id/studyListFragment" />
     </fragment>
     <fragment
         android:id="@+id/studyDetailFragment"
         android:name="com.d108.sduty.ui.main.study.StudyDetailFragment"
-        android:label="StudyDetailFragment" >
+        android:label="StudyDetailFragment">
 
         <action
             android:id="@+id/action_studyDetailFragment_to_studySettingFragment"
-            app:destination="@+id/studySettingFragment"/>
+            app:destination="@+id/studySettingFragment" />
 
         <argument
             android:name="studySeq"
-            app:argType="integer"/>
-
+            app:argType="integer" />
 
 
     </fragment>
@@ -224,24 +221,23 @@
 
         <action
             android:id="@+id/action_camStudyDetailFragment_to_previewFragment"
-            app:destination="@+id/previewFragment"/>
+            app:destination="@+id/previewFragment" />
         <action
             android:id="@+id/action_camStudyDetailFragment_to_studySettingFragment"
-            app:destination="@+id/studySettingFragment"/>
+            app:destination="@+id/studySettingFragment" />
 
         <argument
             android:name="studySeq"
-            app:argType="integer"/>
+            app:argType="integer" />
 
     </fragment>
     <fragment
         android:id="@+id/studyRegistFragment"
         android:name="com.d108.sduty.ui.main.study.StudyRegistFragment"
-        android:label="StudyRegistFragment" >
+        android:label="StudyRegistFragment">
         <argument
             android:name="type"
-            app:argType="boolean"
-            />
+            app:argType="boolean" />
         <action
             android:id="@+id/action_studyRegistFragment_to_myStudyFragment"
             app:destination="@id/myStudyFragment" />
@@ -252,7 +248,7 @@
         android:label="StudyListFragment">
         <action
             android:id="@+id/action_studyListFragment_to_studySearchFragment"
-            app:destination="@+id/studySearchFragment"/>
+            app:destination="@+id/studySearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/studySettingFragment"
@@ -264,11 +260,11 @@
 
         <argument
             android:name="studySeq"
-            app:argType="integer"/>
+            app:argType="integer" />
 
         <argument
             android:name="masterNickname"
-            app:argType="string"/>
+            app:argType="string" />
 
 
     </fragment>
@@ -279,48 +275,51 @@
 
         <argument
             android:name="roomId"
-            app:argType="string"/>
+            app:argType="string" />
 
         <argument
             android:name="studyName"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/studySearchFragment"
         android:name="com.d108.sduty.ui.main.study.StudySearchFragment"
-        android:label="StudySearchFragment">
-    </fragment>
+        android:label="StudySearchFragment"></fragment>
     <fragment
         android:id="@+id/storyDecoFragment"
         android:name="com.d108.sduty.ui.main.home.StoryDecoFragment"
         android:label="StoryDecoFragment">
         <argument
             android:name="fileUriStr"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_storyDecoFragment_to_storyRegisterFragment"
-            app:popUpToInclusive="true"
+            app:destination="@id/storyRegisterFragment"
             app:popUpTo="@id/main_nav_graph"
-            app:destination="@id/storyRegisterFragment" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.SettingFragment"
-        android:label="SettingFragment" >
+        android:label="SettingFragment">
         <action
-            android:id="@+id/action_settingFragment_to_accessibilityFragment"
-            app:destination="@id/accessibilityFragment" />
+            android:id="@+id/action_settingFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
         <action
             android:id="@+id/action_settingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
             app:popUpTo="@navigation/main_nav_graph"
-            app:popUpToInclusive="true"
-            app:destination="@id/loginFragment" />
+            app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/appLockFragment"
+        android:name="com.d108.sduty.ui.main.mypage.setting.AppLockFragment"
+        android:label="AppLockFragment"/>
     <fragment
         android:id="@+id/scrapFragment"
         android:name="com.d108.sduty.ui.main.mypage.ScrapFragment"
-        android:label="ScrapFragment" >
+        android:label="ScrapFragment">
         <action
             android:id="@+id/action_scrapFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
@@ -329,17 +328,14 @@
         android:id="@+id/achievementFragment"
         android:name="com.d108.sduty.ui.main.mypage.AchievementFragment"
         android:label="AchievementFragment" />
-    <fragment
-        android:id="@+id/accessibilityFragment"
-        android:name="com.d108.sduty.ui.main.mypage.setting.AccessibilityFragment"
-        android:label="AccessibilityFragment" />
+
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.d108.sduty.ui.main.home.UserProfileFragment"
         android:label="UserProfileFragment">
         <argument
             android:name="userSeq"
-            app:argType="integer"/>
+            app:argType="integer" />
         <action
             android:id="@+id/action_userProfileFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
@@ -353,10 +349,10 @@
         android:label="FollowFragment">
         <argument
             android:name="userSeq"
-            app:argType="integer"/>
+            app:argType="integer" />
         <argument
             android:name="flag"
-            app:argType="integer"/>
+            app:argType="integer" />
         <action
             android:id="@+id/action_followFragment_to_myPageFragment"
             app:destination="@id/myPageFragment" />
