@@ -26,6 +26,7 @@ class ApplicationClass : Application() {
         lateinit var firstRunCheck: SharedPreferences
         lateinit var firstLoginCheck: SharedPreferences
         lateinit var fcmTokenPrefs: SharedPreferences
+        lateinit var jobTagMap: HashMap<Int, String>
     }
 
     override fun onCreate() {
