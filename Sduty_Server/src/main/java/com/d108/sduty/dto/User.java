@@ -31,8 +31,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@DynamicInsert
-//@DynamicUpdate
+@DynamicInsert
+@DynamicUpdate
 public class User {
 	@Id
 	@ApiModelProperty(value = "아이디")
