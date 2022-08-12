@@ -8,6 +8,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.liveData
+import com.d108.sduty.common.ALL_STORY
+import com.d108.sduty.common.SCRAP_STORY
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.*
 import com.d108.sduty.model.paging.StoryDataSource
@@ -42,7 +44,7 @@ class StoryViewModel: ViewModel() {
 
     private fun getStoryPost(userSeq: Int) = Pager(
         config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
-        pagingSourceFactory = {StoryDataSource(Retrofit.storyApi, userSeq)}
+        pagingSourceFactory = {StoryDataSource(ALL_STORY, Retrofit.storyApi, userSeq)}
     ).liveData
 
     private val userStoryPosts = MutableLiveData<Int>()
@@ -53,6 +55,22 @@ class StoryViewModel: ViewModel() {
     fun getUserStoryList(userSeq: Int){
         userStoryPosts.postValue(userSeq)
     }
+
+    private fun getScrapList(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
+        pagingSourceFactory = {StoryDataSource(SCRAP_STORY, Retrofit.storyApi, userSeq)}
+    ).liveData
+
+    private val userScrapPage = MutableLiveData<Int>()
+    val pagingScrapList = userScrapPage.switchMap {
+        getScrapList(it).cachedIn(viewModelScope)
+    }
+
+    fun getScrapStoryList(userSeq: Int){
+        userScrapPage.postValue(userSeq)
+    }
+
+
 
 
 
@@ -135,20 +153,20 @@ class StoryViewModel: ViewModel() {
 //        }
 //    }
 
-    private val _scrapStoryList = MutableLiveData<List<Story>>()
-    val scrapStoryList: LiveData<List<Story>>
-        get() = _scrapStoryList
-    fun getScrapStoryListValue(userSeq: Int){
-        viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.getScrapList(userSeq).let {
-                if (it.isSuccessful && it.body() != null) {
-                    _scrapStoryList.postValue(it.body() as MutableList<Story>)
-                }else{
-                    Log.d(TAG, "getScrapStoryListValue: ${it.code()}")
-                }
-            }
-        }
-    }
+//    private val _scrapStoryList = MutableLiveData<List<Story>>()
+//    val scrapStoryList: LiveData<List<Story>>
+//        get() = _scrapStoryList
+//    fun getScrapStoryListValue(userSeq: Int){
+//        viewModelScope.launch(Dispatchers.IO){
+//            Retrofit.storyApi.getScrapList(userSeq).let {
+//                if (it.isSuccessful && it.body() != null) {
+//                    _scrapStoryList.postValue(it.body() as MutableList<Story>)
+//                }else{
+//                    Log.d(TAG, "getScrapStoryListValue: ${it.code()}")
+//                }
+//            }
+//        }
+//    }
 
     private val _filteredTimelineList = MutableLiveData<MutableList<Timeline>>()
     val filteredTimelineList: LiveData<MutableList<Timeline>>

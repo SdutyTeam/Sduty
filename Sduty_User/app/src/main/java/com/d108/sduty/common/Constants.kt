@@ -46,3 +46,6 @@ const val FLAG_STUDY_REGIST = 2
 
 const val REGISTER = 0
 const val MODIFY = 1
+
+const val ALL_STORY = 0
+const val SCRAP_STORY = 1
