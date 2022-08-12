@@ -49,15 +49,17 @@ public class UserController {
 			User selectedUser = maybeUser.get();
 			//암호화 - 복호화
 			if(security.passwordEncoder().matches(user.getPass(), selectedUser.getPass())) {
-				System.out.println("암호화 로그인 완료2!");
+				System.out.println("암호화 로그인 완료!");
 				selectedUser.setPass("");
 				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
 
 			}
+			//TODO : 암호화 끝나면 삭제할 코드
 			if(selectedUser.getPass().equals(user.getPass())) {
 				selectedUser.setPass("");
 				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
 			}
+			//
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -76,7 +78,7 @@ public class UserController {
 	@ApiOperation(value = "회원가입 > User 리턴", response = HttpStatus.class)
 	@PostMapping("/join")
 	public ResponseEntity<?> insertUser(@RequestBody User user) throws Exception {
-		user.setPass2(security.passwordEncoder().encode(user.getPass()));
+		user.setPass(security.passwordEncoder().encode(user.getPass()));
 		User result = userService.insertUser(user);
 		if(result != null) {			
 			return new ResponseEntity<User>(result, HttpStatus.OK);
@@ -162,11 +164,11 @@ public class UserController {
 		if(user.getPass().equals("")) {
 
 			user.setPass(security.passwordEncoder().encode(selectUser.getPass()));			
-			user.setPass2(security.passwordEncoder().encode(selectUser.getPass()));
+			//user.setPass2(security.passwordEncoder().encode(selectUser.getPass()));
 		// 비밀번호 변경 시
 		}else {
 			user.setPass(security.passwordEncoder().encode(user.getPass()));			
-			user.setPass2(security.passwordEncoder().encode(user.getPass()));
+			//user.setPass2(security.passwordEncoder().encode(user.getPass()));
 		}
 		
 		if(userService.updateUser(user) != null)
@@ -220,8 +222,8 @@ public class UserController {
 		//암호화
 //		String securePw = security.passwordEncoder().encode(user.getPass());
 //		selected_user.setPass(securePw);
-		System.out.println("비번 변경 => 암호화");
-		selected_user.setPass2(security.passwordEncoder().encode(user.getPass()));
+//		System.out.println("비번 변경 => 암호화");
+//		selected_user.setPass2(security.passwordEncoder().encode(user.getPass()));
 		selected_user.setPass(user.getPass());
 		User result = userService.updatePassword(selected_user);
 		if(result != null) {
