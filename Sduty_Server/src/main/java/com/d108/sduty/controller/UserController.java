@@ -169,8 +169,7 @@ public class UserController {
 
 		// 비밀번호 변경 안했을 때 (FCM 토큰 update)
 		if(!user.getPass().equals("")) {
-			user.setPass(security.passwordEncoder().encode(user.getPass()));			
-			//user.setPass2(security.passwordEncoder().encode(user.getPass()));
+			user.setPass(security.passwordEncoder().encode(user.getPass()));
 		}else {
 			user.setPass(selectUser.getPass());
 		}
