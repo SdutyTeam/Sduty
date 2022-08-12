@@ -8,9 +8,9 @@
         android:id="@+id/loginFragment"
         android:name="com.d108.sduty.ui.sign.LoginFragment"
         android:label="LoginFragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_joinFragment"
-            app:destination="@id/joinFragment" />
+        <!--        <action-->
+        <!--            android:id="@+id/action_loginFragment_to_joinFragment"-->
+        <!--            app:destination="@id/joinFragment" />-->
         <action
             android:id="@+id/action_loginFragment_to_timeLineFragment"
             app:popUpTo="@id/main_nav_graph"
@@ -41,17 +41,17 @@
             app:argType="string"
             android:defaultValue=""/>
     </fragment>
-    <fragment
-        android:id="@+id/joinFragment"
-        android:name="com.d108.sduty.ui.sign.JoinFragment"
-        android:label="JoinFragment" >
-        <action
-            android:id="@+id/action_joinFragment_to_termsFragment"
-            app:destination="@id/termsFragment" />
-        <argument
-            android:name="flag"
-            app:argType="integer"/>
-    </fragment>
+    <!--    <fragment-->
+    <!--        android:id="@+id/joinFragment"-->
+    <!--        android:name="com.d108.sduty.ui.sign.JoinFragment"-->
+    <!--        android:label="JoinFragment" >-->
+    <!--        <action-->
+    <!--            android:id="@+id/action_joinFragment_to_termsFragment"-->
+    <!--            app:destination="@id/termsFragment" />-->
+    <!--        <argument-->
+    <!--            android:name="flag"-->
+    <!--            app:argType="integer"/>-->
+    <!--    </fragment>-->
     <fragment
         android:id="@+id/joinRegistFragment"
         android:name="com.d108.sduty.ui.sign.JoinRegistFragment"
@@ -79,6 +79,9 @@
         android:id="@+id/profileRegistFragment"
         android:name="com.d108.sduty.ui.sign.ProfileRegistFragment"
         android:label="ProfileRegistFragment" >
+        <argument
+            android:name="flag"
+            app:argType="integer" />
         <action
             android:id="@+id/action_profileRegistFragment_to_timeLineFragment"
             app:popUpTo="@id/main_nav_graph"
@@ -125,6 +128,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_reportFragment"
             app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_profileRegistFragment"
+            app:destination="@id/profileRegistFragment" />
     </fragment>
     <fragment
         android:id="@+id/storyRegisterFragment"

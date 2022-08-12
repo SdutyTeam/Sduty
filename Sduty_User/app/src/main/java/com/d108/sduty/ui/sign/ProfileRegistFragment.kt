@@ -2,6 +2,7 @@ package com.d108.sduty.ui.sign
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,7 +18,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.d108.sduty.R
+import com.d108.sduty.common.MODIFY
 import com.d108.sduty.common.PROFILE
+import com.d108.sduty.common.REGISTER
+import com.d108.sduty.common.SERVER_URL
 import com.d108.sduty.databinding.FragmentProfileRegistBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
@@ -35,6 +43,7 @@ class ProfileRegistFragment : Fragment() {
     private lateinit var binding: FragmentProfileRegistBinding
     private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: ProfileViewModel by viewModels()
+    private val args: ProfileRegistFragmentArgs by navArgs()
 
     private lateinit var imageUrl: String
     private var jobHashtag: JobHashtag? = null
@@ -91,6 +100,13 @@ class ProfileRegistFragment : Fragment() {
             }
             tvJobInterest.setOnClickListener {
                 openTagSelectDialog()
+            }
+            if(args.flag == MODIFY){
+                Glide.with(requireContext())
+                    .load(Uri.parse("$SERVER_URL/image/${mainViewModel.profile.value!!.image}"))
+                    .error(R.drawable.empty_image)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(ivProfile)
             }
         }
     }
@@ -186,8 +202,26 @@ class ProfileRegistFragment : Fragment() {
                 return
 
             }else{
-                // 기존 tvJob String을 저장하던 것을 jobHashtag에서 직접 꺼내서 저장하는 걸로 바꿈
-                viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", jobHashtag!!.name, publicJob, publicInterest, mainAchievement, interestHashtagSeqs), imageUrl)
+                if(args.flag == REGISTER) {
+                    // 기존 tvJob String을 저장하던 것을 jobHashtag에서 직접 꺼내서 저장하는 걸로 바꿈
+                    viewModel.insertProfile(Profile(mainViewModel.user.value!!.seq, nickname, birth!!, publicBirth, introduce, "", jobHashtag!!.name, publicJob, publicInterest, mainAchievement, interestHashtagSeqs), imageUrl)
+                }else if(args.flag == MODIFY){
+                    var profile = mainViewModel.profile.value!!
+                    profile.nickname = nickname
+                    profile.birthday = birth!!
+                    profile.shortIntroduce = introduce
+                    profile.job = jobHashtag!!.name
+                    profile.mainAchievmentSeq = mainAchievement
+                    profile.interestHashtagSeqs = interestHashtagSeqs
+
+                    if(imageUrl == ""){
+                        viewModel.updateProfile(profile)
+                    }else{
+                        viewModel.updateProfileImage(profile, imageUrl)
+                    }
+                }
+
+
             }
 
         }

@@ -43,3 +43,14 @@ const val FLAG_FOLLOWEE = 1
 const val FLAG_TIMELINE = 0
 const val FLAG_STUDY = 1
 const val FLAG_STUDY_REGIST = 2
+
+const val REGISTER = 0
+const val MODIFY = 1
+
+const val ALL_STORY = 0
+const val SCRAP_STORY = 1
+
+const val ALL_TIMELINE = 0
+const val JOB_TIMELINE = 1
+const val INTEREST_TIMELINE = 2
+const val FOLLOW_TIMELINE = 3

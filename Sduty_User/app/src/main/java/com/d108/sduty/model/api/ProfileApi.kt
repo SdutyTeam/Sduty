@@ -13,7 +13,7 @@ interface ProfileApi {
 
     @Multipart
     @POST("/profile")
-    suspend fun insertProfile(@Part imageFile: MultipartBody.Part, @Part("profile") banner: RequestBody) : Response<Profile>
+    suspend fun insertProfile(@Part imageFile: MultipartBody.Part, @Part("profile") profile: RequestBody) : Response<Profile>
 
     @GET("/profile/{userSeq}")
     suspend fun getProfileValue(@Path("userSeq")userSeq: Int): Response<Profile>
@@ -29,4 +29,11 @@ interface ProfileApi {
 
     @GET("/profile/chart/{userSeq}")
     suspend fun getGrass(@Path("userSeq") userSeq: Int): Response<List<Boolean>>
+
+    @PUT("/profile")
+    suspend fun updateProfile(@Body profile: Profile): Response<Profile>
+
+    @Multipart
+    @PUT("/profile/image")
+    suspend fun updateProfileImage(@Part imageFile: MultipartBody.Part, @Part("profile") profile: RequestBody): Response<Profile>
 }

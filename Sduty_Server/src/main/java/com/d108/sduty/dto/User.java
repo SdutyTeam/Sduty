@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -15,6 +17,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -33,14 +36,13 @@ import lombok.Setter;
 public class User {
 	@Id
 	@ApiModelProperty(value = "아이디")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_seq")
 	private int seq;
 	@Column(name = "user_id")
 	private String id;
 	@Column(name = "user_password")
-	private String pass;
-	@Column(name = "user_password2")
-	private String pass2;
+	private String pass;	
 	@Column(name = "user_name")
 	private String name;
 	@Column(name = "user_tel")
@@ -94,12 +96,15 @@ public class User {
 		return true;
 	}
 
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@OneToMany(mappedBy = "masterSeq", fetch = FetchType.EAGER)
 	private Set<Study> masterStudies = new HashSet<Study>();
 	
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.EAGER)
 	private Set<Qna> qnas = new HashSet<Qna>();
 
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER)
 	private Set<Study> studies = new HashSet<Study>();
 }

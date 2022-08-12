@@ -11,7 +11,7 @@ import java.sql.Time
 
 interface StoryApi {
     @GET("/story/all/{userSeq}")
-    suspend fun getStoryList(@Path("userSeq")userSeq: Int): Response<List<Timeline>>
+    suspend fun getAllTimelineFollowList(@Path("userSeq")userSeq: Int, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @Multipart
     @POST("/story")
@@ -23,23 +23,23 @@ interface StoryApi {
     @GET("/story/{storySeq}/{userSeq}")
     suspend fun getTimelineDetail(@Path("storySeq") storySeq: Int, @Path("userSeq")userSeq: Int): Response<Timeline>
 
-    @GET("/story/writer/{user_seq}")
-    suspend fun getUserStoryList(@Path("user_seq")userSeq: Int): Response<List<Story>>
+    @GET("/story/writer/{userSeq}")
+    suspend fun getUserStoryList(@Path("userSeq")userSeq: Int, @Query("page")page: Int, @Query("size")pageSize: Int): Response<PagingResult<Story>>
 
     @GET("/story/scrap/{user_seq}")
-    suspend fun getScrapList(@Path("user_seq")userSeq: Int): Response<List<Story>>
+    suspend fun getScrapList(@Path("user_seq")userSeq: Int, @Query("page")page: Int, @Query("size")pageSize: Int): Response<PagingResult<Story>>
 
     @GET("/profile/chart/{userSeq}")
     suspend fun getContributionList(@Path("userSeq")userSeq: Int): Response<List<Boolean>>
 
     @GET("/story/user/{userSeq}/{jobName}")
-    suspend fun getStoryJobAndFollowList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String): Response<MutableList<Timeline>>
+    suspend fun getStoryJobAndFollowList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @GET("/story/job/{userSeq}/{jobName}")
-    suspend fun getStoryJobAndAllList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String): Response<MutableList<Timeline>>
+    suspend fun getStoryJobAndAllList(@Path("userSeq")userSeq: Int, @Path("jobName")jobName: String, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @GET("/story/interest/{userSeq}/{interestName}")
-    suspend fun getStoryInterestAndAllList(@Path("userSeq")userSeq: Int, @Path("interestName")interestName: String): Response<MutableList<Timeline>>
+    suspend fun getStoryInterestAndAllList(@Path("userSeq")userSeq: Int, @Path("interestName")interestName: String, @Query("page") page: Int): Response<PagingResult<Timeline>>
 
     @GET("/story/recommand/{userSeq}")
     suspend fun getStoryRecommended(@Path("userSeq") userSeq: Int): Response<Timeline>
@@ -65,7 +65,7 @@ interface StoryApi {
     @POST("/story/scrap")
     suspend fun scrapStory(@Body scrap: Scrap): Response<Timeline>
 
-    @PUT("story/report")
+    @PUT("/story/report")
     suspend fun reportStory(@Body story: Story): Response<Void>
 
     @GET("/story/test")

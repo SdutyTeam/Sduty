@@ -31,6 +31,7 @@ import com.d108.sduty.ui.main.study.dialog.StudyDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudySettingViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showEditDialog
 import com.d108.sduty.utils.showToast
@@ -51,6 +52,7 @@ class StudySettingFragment : Fragment() {
     private lateinit var myStudyMember: List<Map<String, Any>>
     private lateinit var myStudyInfo: Map<String, Any>
     private lateinit var nicknameList: ArrayList<String>
+    private lateinit var seqList: ArrayList<Int>
     private lateinit var nickname: String
     private var category: String = ""
 
@@ -86,10 +88,13 @@ class StudySettingFragment : Fragment() {
             myStudyInfo = studyInfo["study"] as Map<String, Any>
 
             nicknameList = ArrayList<String>()
+            seqList = ArrayList<Int>()
             for(member in myStudyMember){
                 nicknameList.add(member["nickname"] as String)
+                seqList.add(member["userSeq"].toString().toDouble().roundToInt())
             }
 
+            category = myStudyInfo["category"].toString()
             binding.tvStudyCategory.text = myStudyInfo["category"].toString()
             binding.etStudyUpdateName.setText(myStudyInfo["name"].toString())
             binding.etStduyPass.setText(myStudyInfo["password"].toString())
@@ -122,6 +127,8 @@ class StudySettingFragment : Fragment() {
             binding.spinnerPeople.setSelection((myStudyInfo["limitNumber"].toString().toDouble().roundToInt()) - 2)
 
             binding.etStudyIntroduce.setText(myStudyInfo["introduce"].toString())
+
+            binding.etStudyNotice.setText(myStudyInfo["notice"].toString())
 
             if(myStudyInfo["roomId"] == null){
                 binding.studyDaily.visibility = View.GONE
@@ -174,16 +181,17 @@ class StudySettingFragment : Fragment() {
 
         }
 
-        studySettingViewModel.studyDetail.observe(viewLifecycleOwner){
-
+        studySettingViewModel.studyDetail.observe(viewLifecycleOwner) {
+            studyDetail = it
         }
 
         studySettingViewModel.isStudyUpdate.observe(viewLifecycleOwner) {
             if(it){
                 studySettingViewModel.studyDetail(args.studySeq)
                 context?.showToast("수정한 내용이 적용되었습니다.")
+                findNavController().popBackStack()
             } else{
-                context?.showToast("수정 권한이 없습니다.")
+                context?.showToast("중복된 그룹 명입니다.")
             }
         }
 
@@ -191,8 +199,12 @@ class StudySettingFragment : Fragment() {
             if(it){
                 context?.showToast("스터디 그룹이 삭제되었습니다.")
                 findNavController().navigate(StudySettingFragmentDirections.actionStudySettingFragmentToMyStudyFragment())
-            } else{
-                context?.showToast("삭제 권한이 없습니다.")
+            }
+        }
+
+        studySettingViewModel.isQuitStudy.observe(viewLifecycleOwner) {
+            if(it){
+                context?.showToast("그룹원이 추방되었습니다.")
             }
         }
 
@@ -200,6 +212,35 @@ class StudySettingFragment : Fragment() {
             etStudyUpdateName.addTextChangedListener(textChangeListener)
             btnUpdateStudy.setOnClickListener {
                 // 변경 버튼 클릭
+                if(spinnerPeople.selectedItem.toString().toInt() < studyDetail.joinNumber){
+                    context?.showToast("설정한 인원 수가 현재 스터디 그룹 인원 수보다 적습니다.")
+                } else{
+                    val hour = binding.timePicker.hour
+                    val minute = binding.timePicker.minute
+
+                    studyDetail.category = category
+                    studyDetail.name = etStudyUpdateName.text.toString()
+                    if(etStduyPass.text.toString() == ""){
+                        studyDetail.password = null
+                    } else{
+                        studyDetail.password = etStduyPass.text.toString()
+                    }
+                    studyDetail.limitNumber = spinnerPeople.selectedItem.toString().toInt()
+                    studyDetail.introduce = etStudyIntroduce.text.toString()
+                    studyDetail.notice = etStudyNotice.text.toString()
+                    studyDetail.alarm?.mon = btnMon.isChecked
+                    studyDetail.alarm?.tue = btnTue.isChecked
+                    studyDetail.alarm?.wed = btnWed.isChecked
+                    studyDetail.alarm?.thu = btnThur.isChecked
+                    studyDetail.alarm?.fri = btnFri.isChecked
+                    studyDetail.alarm?.sat = btnSat.isChecked
+                    studyDetail.alarm?.sun = btnSun.isChecked
+                    studyDetail.alarm?.time = "${hour}:${minute}:00"
+                    Log.d(TAG, "onViewCreated: ${studyDetail}")
+
+                    studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
+                }
+
             }
 
             studyUpdateCategory.setOnClickListener {
@@ -285,9 +326,15 @@ class StudySettingFragment : Fragment() {
             }
 
             ivStudyMasterUpdate.setOnClickListener {
-                val items = Array<String>(nicknameList.size) { "" }
+                val items = Array<String>(nicknameList.size - 1) { "" }
+                val itemseq = Array<Int>(seqList.size - 1){ 0 }
+                var j = 0
                 for(i in 0 until nicknameList.size){
-                    items[i] = nicknameList[i]
+                    if(args.masterNickname != nicknameList[i]){
+                        items[j] = nicknameList[i]
+                        itemseq[j] = seqList[i]
+                        j++
+                    }
                 }
                 var selectedItem: String? = null
                 AlertDialog.Builder(context)
@@ -295,13 +342,11 @@ class StudySettingFragment : Fragment() {
                     .setSingleChoiceItems(items, -1) { dialog, which ->
                         selectedItem = items[which]        }
                     .setPositiveButton("변경") { dialog, which ->
-                        for(member in myStudyMember){
-                            if(member["nickname"] as String == selectedItem.toString()){
-                                studyDetail.masterSeq = member["userSeq"].toString().toDouble().roundToInt()
-                                nickname = selectedItem.toString()
-                                studySettingViewModel.studyUpdate(
-                                    mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail
-                                )
+                        for(i in items.indices){
+                            if(items[i] == selectedItem.toString()){
+                                studyDetail.masterSeq = itemseq[i]
+                                studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
+                                break
                             }
                         }
                     }
@@ -311,6 +356,32 @@ class StudySettingFragment : Fragment() {
 
             ivStudyPeopleBan.setOnClickListener {
                 // 그룹원 강퇴
+                val items = Array<String>(nicknameList.size - 1) { "" }
+                val itemseq = Array<Int>(seqList.size - 1){ 0 }
+                var j = 0
+                for(i in 0 until nicknameList.size){
+                    if(args.masterNickname != nicknameList[i]){
+                        items[j] = nicknameList[i]
+                        itemseq[j] = seqList[i]
+                        j++
+                    }
+                }
+
+                var selectedItem: String? = null
+                AlertDialog.Builder(context)
+                    .setTitle("그룹원 강퇴")
+                    .setSingleChoiceItems(items, -1) { dialog, which ->
+                        selectedItem = items[which]        }
+                    .setPositiveButton("강퇴") { dialog, which ->
+                        for(i in items.indices){
+                            if(items[i] == selectedItem.toString()){
+                                studySettingViewModel.studyQuit(args.studySeq, itemseq[i])
+                                break
+                            }
+                        }
+                    }
+                    .setNegativeButton("취소", null)
+                    .show()
             }
 
             btnStudyDelete.setOnClickListener {

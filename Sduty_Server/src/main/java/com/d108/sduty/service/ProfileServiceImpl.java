@@ -72,6 +72,7 @@ public class ProfileServiceImpl implements ProfileService {
 			p.setFollowers(followRepo.countByFollowerSeq(userSeq).intValue());
 			p.setFollowees(followRepo.countByFolloweeSeq(userSeq).intValue());
 			p.setInterestHashtags(listIH);
+			p.setCntStory(storyRepo.countAllByWriterSeq(userSeq));
 			return p;
 		}
 		return null;
@@ -88,14 +89,15 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public Profile updateProfile(Profile profile) throws Exception {
 		int userSeq = profile.getUserSeq();
-		for(Integer ui : profile.getInterestHashtagSeqs()) {
-			userInterestRepo.delete(new UserInterest(userSeq, ui));
+		List<UserInterest> listUserInterest = userInterestRepo.findAllByUserSeq(profile.getUserSeq());
+		for(UserInterest ui : listUserInterest) {
+			userInterestRepo.delete(ui);
 		}
 		Profile p = profileRepo.save(profile);
 		if(p != null) {
 			if(!profile.getInterestHashtagSeqs().isEmpty()) {
 				for(int i : profile.getInterestHashtagSeqs()) {
-					userInterestRepo.save(new UserInterest(profile.getUserSeq(), i));
+					userInterestRepo.save(new UserInterest(userSeq, i));
 				}
 			}
 		}
