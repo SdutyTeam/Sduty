@@ -60,7 +60,8 @@ public class ProfileController {
 	@ApiOperation(value = "프로필 저장 > Profile > Profile 리턴", response = Profile.class)
 	@PostMapping("")
 	public ResponseEntity<?> insertProfile(@RequestParam("uploaded_file") MultipartFile imageFile,  @RequestParam("profile") String json) throws Exception {
-		Gson gson = new Gson();		
+		Gson gson = new Gson();
+		System.out.println(gson);
 		Profile profile = gson.fromJson(json, Profile.class);
 		profile.setImage(imageFile.getOriginalFilename());
 		imageService.fileUpload(imageFile);

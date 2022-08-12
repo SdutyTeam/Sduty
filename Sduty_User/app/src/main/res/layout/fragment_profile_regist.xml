@@ -5,6 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
+            name="mainVM"
+            type="com.d108.sduty.ui.viewmodel.MainViewModel" />
+        <variable
             name="vm"
             type="com.d108.sduty.ui.sign.viewmodel.ProfileViewModel" />
         <import type="android.view.View"/>
@@ -167,6 +170,7 @@
                                 android:layout_height="48dp"
                                 android:layout_marginHorizontal="10dp"
                                 android:hint="별명"
+                                android:text="@{mainVM.profile.nickname == null ? `` : mainVM.profile.nickname}"
                                 app:layout_constraintTop_toBottomOf="@id/const_error"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:background="@null"
@@ -231,6 +235,7 @@
                                 android:layout_height="48dp"
                                 android:layout_marginHorizontal="10dp"
                                 android:hint="생년월일 (19990101)"
+                                dateToYYYMMDD="@{mainVM.profile.birthday}"
                                 android:background="@null"
                                 android:singleLine="true"
                                 app:layout_constraintStart_toStartOf="parent"/>
@@ -261,6 +266,7 @@
                                 android:layout_height="48dp"
                                 android:layout_marginHorizontal="10dp"
                                 android:hint="자기 소개"
+                                android:text="@{mainVM.profile.shortIntroduce == null ? `` : mainVM.profile.shortIntroduce}"
                                 android:background="@null"
                                 android:singleLine="true"
                                 app:layout_constraintBottom_toBottomOf="parent"
