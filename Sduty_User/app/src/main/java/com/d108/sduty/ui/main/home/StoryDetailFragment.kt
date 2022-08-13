@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.main.home
 
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -18,9 +19,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.ReplyAdapter
+import com.d108.sduty.common.FLAG_BLOCK
+import com.d108.sduty.common.FLAG_REPORT
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.ui.main.home.dialog.BlockDialog
 import com.d108.sduty.ui.main.study.StudyDetailFragmentDirections
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -41,8 +45,8 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
     private lateinit var replyAdapter: ReplyAdapter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onResume() {
+        super.onResume()
         mainViewModel.displayBottomNav(false)
     }
 
@@ -126,9 +130,10 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 PopupMenu(requireContext(), it).apply {
                     setOnMenuItemClickListener(this@StoryDetailFragment)
                     inflate(menuId)
+
                     if (menuId == R.menu.menu_story_visiters && mainViewModel.checkFollowUser(viewModel.timeLine.value!!.story.writerSeq)) {
                         menu[0].title = "언팔로우"
-                    }else{
+                    }else if(menuId == R.menu.menu_story_visiters){
                         menu[0].title = "팔로우"
                     }
                     show()
@@ -155,7 +160,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                     "스토리를 삭제하시겠습니까?",
                     object : DialogInterface.OnClickListener {
                         override fun onClick(dialog: DialogInterface?, which: Int) {
-                            viewModel.deleteStory(args.seq)
+                            viewModel.deleteStory(viewModel.timeLine.value!!.story)
                             requireContext().showToast("삭제 되었습니다.")
                             findNavController().popBackStack()
                         }
@@ -183,7 +188,28 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             }
             R.id.follow -> {
                 viewModel.doFollow(Follow(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story.writerSeq))
-
+            }
+            R.id.report ->{
+                BlockDialog(FLAG_REPORT).let {
+                    it.onClickConfirmListener = object : BlockDialog.OnClickConfirmListener{
+                        override fun onClick() {
+                            viewModel.reportStory(viewModel.timeLine.value!!.story)
+                            findNavController().popBackStack()
+                        }
+                    }
+                    it.show(parentFragmentManager, null)
+                }
+            }
+            R.id.block ->{
+                BlockDialog(FLAG_BLOCK).let {
+                    it.onClickConfirmListener = object : BlockDialog.OnClickConfirmListener{
+                        override fun onClick() {
+                            viewModel.blockStory(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story)
+                            findNavController().popBackStack()
+                        }
+                    }
+                    it.show(parentFragmentManager, null)
+                }
             }
         }
 

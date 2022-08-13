@@ -263,7 +263,7 @@ public class StoryController {
 	
 	@Transactional
 	@ApiOperation(value= "게시글 차단 : StorySeq > HttpStatus", response = HttpStatus.class)
-	@PostMapping("/ban/{userSeq}/{storySeq}")
+	@GetMapping("/ban/{userSeq}/{storySeq}")
 	public ResponseEntity<?> ignoreStory(@PathVariable int userSeq, @PathVariable int storySeq) {
 		Story selectedtory = storyService.findById(storySeq);
 		if(selectedtory !=null ) {

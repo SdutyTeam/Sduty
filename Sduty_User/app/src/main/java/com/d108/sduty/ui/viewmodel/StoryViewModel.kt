@@ -270,11 +270,11 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun deleteStory(storySeq: Int){
+    fun deleteStory(story: Story){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.deleteStory(storySeq).let {
+            Retrofit.storyApi.deleteStory(story.seq).let {
                 if (it.code() == 200) {
-
+                    getAllTimelineListValue(story.writerSeq)
                 }else if(it.code() == 401){
 
                 }
@@ -437,6 +437,19 @@ class StoryViewModel: ViewModel() {
                     _contributionList.postValue(it.body())
                 }else{
                     Log.d(TAG, "getContribution: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    fun blockStory(userSeq: Int, story: Story){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.storyApi.blockStory(userSeq, story.seq).let {
+                if(it.isSuccessful){
+                    getAllTimelineListValue(userSeq)
+                    getStoryPost(story.writerSeq)
+                }else{
+                    Log.d(TAG, "blockStory: ${it.code()}")
                 }
             }
         }

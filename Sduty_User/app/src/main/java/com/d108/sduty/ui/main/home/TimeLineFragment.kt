@@ -106,15 +106,28 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                 }
                 override fun onMenuClicked(view: View, timeline: Timeline) {
                     menuSelectedTimeline = timeline
-                    PopupMenu(requireContext(), view).apply {
-                        setOnMenuItemClickListener(this@TimeLineFragment)
-                        inflate(R.menu.menu_story_visiters)
-                        if (mainViewModel.checkFollowUser(timeline.story.writerSeq)) {
-                            menu[0].title = "언팔로우"
-                        }else{
-                            menu[0].title = "팔로우"
+                    if(timeline.profile.userSeq == mainViewModel.user.value!!.seq){
+                        PopupMenu(requireContext(), view).apply {
+                            setOnMenuItemClickListener(this@TimeLineFragment)
+                            inflate(R.menu.menu_story_own_writer)
+                            if (mainViewModel.checkFollowUser(timeline.story.writerSeq)) {
+                                menu[0].title = "언팔로우"
+                            } else {
+                                menu[0].title = "팔로우"
+                            }
+                            show()
                         }
-                        show()
+                    }else {
+                        PopupMenu(requireContext(), view).apply {
+                            setOnMenuItemClickListener(this@TimeLineFragment)
+                            inflate(R.menu.menu_story_visiters)
+                            if (mainViewModel.checkFollowUser(timeline.story.writerSeq)) {
+                                menu[0].title = "언팔로우"
+                            } else {
+                                menu[0].title = "팔로우"
+                            }
+                            show()
+                        }
                     }
                 }
                 override fun onProfileClicked(timeline: Timeline) {
@@ -191,8 +204,11 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     item.title = "팔로우"
                 }
             }
-            R.id.report ->{
-
+            R.id.story_delete ->{
+                storyViewModel.deleteStory(menuSelectedTimeline.story)
+            }
+            R.id.block -> {
+                storyViewModel.blockStory(mainViewModel.user.value!!.seq, menuSelectedTimeline.story)
             }
         }
         return true
