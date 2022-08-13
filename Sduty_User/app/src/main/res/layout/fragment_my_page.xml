@@ -208,6 +208,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/tv_count_follow"
                                 android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -219,7 +220,6 @@
                                     android:text="팔로우 "/>
 
                                 <TextView
-                                    android:id="@+id/tv_count_follow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     tools:text="1K"
@@ -230,6 +230,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/tv_count_follower"
                                 android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -241,7 +242,6 @@
                                     android:text="팔로워 "/>
 
                                 <TextView
-                                    android:id="@+id/tv_count_follower"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     tools:text="100K"

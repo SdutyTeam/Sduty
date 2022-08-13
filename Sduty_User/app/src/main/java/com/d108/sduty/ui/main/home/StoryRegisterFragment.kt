@@ -115,33 +115,6 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             viewModel.setStoryImage(ApplicationClass.storyBitmap)
             ApplicationClass.storyBitmap = null
         }
-//        val startForProfileImageResult =
-//            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result : ActivityResult ->
-//                val resultCode = result.resultCode
-//                val data = result.data
-//                if (resultCode == Activity.RESULT_OK) {
-//                    // Image Uri will not be null for RESULT_OK
-//                    val fileUri = data?.data!!
-//                    Log.d(TAG, "initView: ${fileUri}")
-//                    // mProfileUri = fileUri
-//                    binding.apply {
-//                        //imgStory.setImageURI(fileUri)
-//                        imageUrl = UriPathUtil().getPath(requireContext(), fileUri)
-//                        StoryDecoFragment(requireContext(), fileUri.toString()).let {
-//                            it.onSaveBtnClickListener = object : StoryDecoFragment.OnSaveBtnClickListener{
-//                                override fun onClick(bitmap: Bitmap) {
-//                                    viewModel.setStoryImage(bitmap)
-//                                }
-//                            }
-//                            it.show(parentFragmentManager, null)
-//                        }
-//                    }
-//                } else if (resultCode == ImagePicker.RESULT_ERROR) {
-//                    requireContext().showToast(ImagePicker.getError(data))
-//                } else {
-//                    requireContext().showToast("Task Cancelled")
-//                }
-//            }
 
         binding.apply {
             vm = viewModel
@@ -157,13 +130,6 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
             btnAddImg.setOnClickListener {
                 findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToStoryDecoFragment())
-                Log.d(TAG, "initView: addimg")
-//                ImagePicker.with(requireActivity())
-//                    .crop(3f, 4f)	    //Crop image and let user choose aspect ratio.
-//                    .compress(1024)
-//                    .createIntent { intent ->
-//                        startForProfileImageResult.launch(intent)
-//                    }
             }
             ivBack.setOnClickListener {
                 navigateBack(requireActivity())

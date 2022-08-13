@@ -8,58 +8,69 @@
         >
 
 
-        <ImageView
-            android:id="@+id/backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="4dp"
-            android:src="@drawable/ic_menu_arrow_back_black_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/saveBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="16dp"
-            android:text="저장"
-            app:layout_constraintBottom_toBottomOf="@id/backBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/backBtn" />
-
-        <ImageView
-            android:id="@+id/canhubLogo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/menu_logo_text_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/backBtn" />
-
-        <TextView
-            android:id="@+id/text"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/common_top"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="안녕하세요"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/canhubLogo"
-            app:layout_constraintTop_toTopOf="@id/canhubLogo"
-            app:layout_constraintBottom_toBottomOf="@id/canhubLogo"
-            />
-
-        <TextView
-            android:id="@+id/rotateText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/rotation_value"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_height="48dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/img_back"
+                android:padding="12dp"
+                />
+
+            <ImageView
+                android:id="@+id/common_top_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/menu_logo_text_24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_back"/>
+
+            <ImageView
+                android:id="@+id/iv_register_story"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+
+                android:padding="12dp"
+                android:src="@drawable/ic_save"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/iv_rotate"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_rotate"
+                app:layout_constraintEnd_toStartOf="@id/iv_register_story"
+                app:layout_constraintTop_toTopOf="@id/iv_register_story"
+                />
+
+            <View
+                android:id="@+id/divider_1"
+                style="@style/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <com.canhub.cropper.CropImageView
             xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -70,7 +81,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rotateText"
+            app:layout_constraintTop_toBottomOf="@id/common_top"
             custom:cropBorderLineColor="@color/app_blue"
             custom:cropInitialCropWindowPaddingRatio="0"
             />

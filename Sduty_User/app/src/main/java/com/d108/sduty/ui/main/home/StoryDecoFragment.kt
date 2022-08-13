@@ -173,7 +173,6 @@ class StoryDecoFragment: Fragment() {
 
 
     private fun saveImageBitmap(bitmap: Bitmap) {
-        //findNavController().safeNavigate(StoryDecoFragmentDirections.actionStoryDecoFragmentToStoryRegisterFragment(bitmap))
         ApplicationClass.storyBitmap = bitmap
         findNavController().popBackStack()
     }

@@ -16,7 +16,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +41,8 @@ public class Profile {
 	private int userSeq;
 	@Column(name="profile_nickname")
 	private String nickname;
+	@JsonProperty
+	@JsonFormat(pattern = "MMM dd, yyyy hh:mm:ss a",locale = "en_US")
 	@Column(name="profile_birthday")
 	private Date birthday;
 	@Column(name="profile_public_birthday")

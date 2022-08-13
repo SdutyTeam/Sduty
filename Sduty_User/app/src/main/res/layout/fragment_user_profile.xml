@@ -186,6 +186,7 @@
                             app:layout_constraintEnd_toEndOf="parent">
 
                             <LinearLayout
+                                android:id="@+id/tv_count_story"
                                 android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
@@ -196,16 +197,16 @@
                                     android:text="게시물 "/>
 
                                 <TextView
-                                    android:id="@+id/tv_count_story"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     tools:text="100"
-                                    android:text="@{vm.profile.cntStory}"
+                                    android:text="@{vm.profile.cntStory + ``}"
                                     android:textStyle="bold"
                                     android:textSize="14sp"/>
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/tv_count_follow"
                                 android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -217,10 +218,9 @@
                                     android:text="팔로우 "/>
 
                                 <TextView
-                                    android:id="@+id/tv_count_follow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{vm.profile.followees}"
+                                    android:text="@{vm.profile.followees + ``}"
                                     tools:text="1000"
                                     android:textSize="14sp"
                                     android:textStyle="bold"/>
@@ -228,6 +228,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/tv_count_follower"
                                 android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -239,10 +240,9 @@
                                     android:text="팔로워 "/>
 
                                 <TextView
-                                    android:id="@+id/tv_count_follower"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{vm.profile.followers}"
+                                    android:text="@{vm.profile.followers + ``}"
                                     tools:text="1000"
                                     android:textSize="14sp"
                                     android:textStyle="bold"/>

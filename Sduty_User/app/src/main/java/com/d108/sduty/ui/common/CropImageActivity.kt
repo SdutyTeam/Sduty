@@ -35,9 +35,9 @@ internal class CropImageActivity : CropActivity() {
         super.onCreate(savedInstanceState)
         updateRotationCounter(counter.toString())
 
-        binding.saveBtn.setOnClickListener { cropImage() } // CropImageActivity.cropImage()
-        binding.backBtn.setOnClickListener { onBackPressed() } // CropImageActivity.onBackPressed()
-        binding.rotateText.setOnClickListener { onRotateClick() }
+        binding.ivRegisterStory.setOnClickListener { cropImage() } // CropImageActivity.cropImage()
+        binding.ivBack.setOnClickListener { onBackPressed() } // CropImageActivity.onBackPressed()
+        binding.ivRotate.setOnClickListener { onRotateClick() }
 
         setCropImageView(binding.cropImageView)
 
@@ -54,7 +54,6 @@ internal class CropImageActivity : CropActivity() {
     }
 
     private fun updateRotationCounter(counter: String) {
-        binding.rotateText.text = getString(R.string.rotation_value, counter)
     }
 
     override fun onPickImageResult(resultUri: Uri?) {

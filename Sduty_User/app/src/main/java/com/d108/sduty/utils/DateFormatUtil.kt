@@ -10,7 +10,7 @@ class DateFormatUtil {
     companion object{
         fun converYYYYMMDD(date: String): Date? {
             try {
-                val formatter = SimpleDateFormat("yyyyMMdd")
+                val formatter = SimpleDateFormat("yyyyMMdd", Locale("ko","KR"))
                 formatter.timeZone = TimeZone.getTimeZone("Asia/Seoul")
                 return formatter.parse(date)
             } catch (e: Exception) {
