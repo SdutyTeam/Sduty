@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.common
 
+import android.Manifest
 import android.content.Intent
 import android.content.Intent.getIntent
 import android.graphics.drawable.Drawable
@@ -24,6 +25,9 @@ import com.d108.sduty.common.FLAG_CAMERA
 import com.d108.sduty.common.FLAG_GALLERY
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.utils.getUriForFile
+import com.d108.sduty.utils.showToast
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import java.io.File
 
@@ -50,7 +54,7 @@ open class CropActivity : AppCompatActivity(),
     private var latestTmpUri: Uri? = null
     private val pickImageGallery =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
-            onPickImageResult(uri.data!!.data)
+            onPickImageResult(uri.data?.data)
         }
     private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) {
         if (it) onPickImageResult(latestTmpUri) else onPickImageResult(null)
@@ -165,7 +169,7 @@ open class CropActivity : AppCompatActivity(),
             it.onClickListener = object : CropSelectDialog.OnClickListener{
                 override fun onClick(flag: Int) {
                     when(flag){
-                        FLAG_CAMERA -> openSource(Source.CAMERA)
+                        FLAG_CAMERA -> checkPermission()
                         FLAG_GALLERY -> openSource(Source.GALLERY)
                     }
                 }
@@ -405,5 +409,23 @@ open class CropActivity : AppCompatActivity(),
     private companion object {
 
         const val BUNDLE_KEY_TMP_URI = "bundle_key_tmp_uri"
+    }
+
+    private fun checkPermission(){
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                openSource(Source.CAMERA)
+            }
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                showToast("카메라 권한을 허용해야 이용이 가능합니다.")
+                finish()
+            }
+
+        }
+        TedPermission.create()
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.CAMERA)
+            .check()
     }
 }
