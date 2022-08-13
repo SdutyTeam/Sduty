@@ -2,6 +2,7 @@ package com.d108.sduty.common
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import com.d108.sduty.R
 import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
@@ -28,6 +29,7 @@ class ApplicationClass : Application() {
         lateinit var firstLoginCheck: SharedPreferences
         lateinit var fcmTokenPrefs: SharedPreferences
         lateinit var jobTagMap: HashMap<Int, String>
+        var storyBitmap: Bitmap? = null
     }
 
     override fun onCreate() {
@@ -48,7 +50,6 @@ class ApplicationClass : Application() {
             .build()
 
         messageService = NurigoApp.initialize(SOLAPI_API_KEY, SOLAPI_API_SECRET_KEY, SOLAPI_DOMAIN)
-
         userPref = getSharedPreferences("User", MODE_PRIVATE)
         pushStateAll = getSharedPreferences("PushStateAll", MODE_PRIVATE)
         pushStatePersonal = getSharedPreferences("PushStatePersonal", MODE_PRIVATE)

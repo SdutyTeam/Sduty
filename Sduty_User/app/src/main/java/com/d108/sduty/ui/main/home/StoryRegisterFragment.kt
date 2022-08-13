@@ -27,6 +27,7 @@ import com.d108.sduty.R
 import com.d108.sduty.adapter.SelectedTagAdapter
 import com.d108.sduty.adapter.TagAdapter
 import com.d108.sduty.common.ALL_TAG
+import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryRegisterBinding
 import com.d108.sduty.model.dto.InterestHashtag
@@ -53,7 +54,6 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val tagViewModel: TagViewModel by viewModels()
     // (공개 범위) 0 : 전체 공개, 1 : 팔로워만, 2 : 나만 보기
     private var disclosure = 0
-    private val args: StoryRegisterFragmentArgs by navArgs()
     private var imageUrl: String? = null
 
     private var selectedTagList = mutableListOf<String>()
@@ -111,33 +111,37 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initView(){
-        val startForProfileImageResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result : ActivityResult ->
-                val resultCode = result.resultCode
-                val data = result.data
-                if (resultCode == Activity.RESULT_OK) {
-                    // Image Uri will not be null for RESULT_OK
-                    val fileUri = data?.data!!
-                    Log.d(TAG, "initView: ${fileUri}")
-                    // mProfileUri = fileUri
-                    binding.apply {
-                        //imgStory.setImageURI(fileUri)
-                        imageUrl = UriPathUtil().getPath(requireContext(), fileUri)
-                        StoryDecoFragment(requireContext(), fileUri.toString()).let {
-                            it.onSaveBtnClickListener = object : StoryDecoFragment.OnSaveBtnClickListener{
-                                override fun onClick(bitmap: Bitmap) {
-                                    viewModel.setStoryImage(bitmap)
-                                }
-                            }
-                            it.show(parentFragmentManager, null)
-                        }
-                    }
-                } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                    requireContext().showToast(ImagePicker.getError(data))
-                } else {
-                    requireContext().showToast("Task Cancelled")
-                }
-            }
+        if(ApplicationClass.storyBitmap != null){
+            viewModel.setStoryImage(ApplicationClass.storyBitmap)
+            ApplicationClass.storyBitmap = null
+        }
+//        val startForProfileImageResult =
+//            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result : ActivityResult ->
+//                val resultCode = result.resultCode
+//                val data = result.data
+//                if (resultCode == Activity.RESULT_OK) {
+//                    // Image Uri will not be null for RESULT_OK
+//                    val fileUri = data?.data!!
+//                    Log.d(TAG, "initView: ${fileUri}")
+//                    // mProfileUri = fileUri
+//                    binding.apply {
+//                        //imgStory.setImageURI(fileUri)
+//                        imageUrl = UriPathUtil().getPath(requireContext(), fileUri)
+//                        StoryDecoFragment(requireContext(), fileUri.toString()).let {
+//                            it.onSaveBtnClickListener = object : StoryDecoFragment.OnSaveBtnClickListener{
+//                                override fun onClick(bitmap: Bitmap) {
+//                                    viewModel.setStoryImage(bitmap)
+//                                }
+//                            }
+//                            it.show(parentFragmentManager, null)
+//                        }
+//                    }
+//                } else if (resultCode == ImagePicker.RESULT_ERROR) {
+//                    requireContext().showToast(ImagePicker.getError(data))
+//                } else {
+//                    requireContext().showToast("Task Cancelled")
+//                }
+//            }
 
         binding.apply {
             vm = viewModel
@@ -152,12 +156,14 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }
             }
             btnAddImg.setOnClickListener {
-                ImagePicker.with(requireActivity())
-                    .crop(3f, 4f)	    //Crop image and let user choose aspect ratio.
-                    .compress(1024)
-                    .createIntent { intent ->
-                        startForProfileImageResult.launch(intent)
-                    }
+                findNavController().safeNavigate(StoryRegisterFragmentDirections.actionStoryRegisterFragmentToStoryDecoFragment())
+                Log.d(TAG, "initView: addimg")
+//                ImagePicker.with(requireActivity())
+//                    .crop(3f, 4f)	    //Crop image and let user choose aspect ratio.
+//                    .compress(1024)
+//                    .createIntent { intent ->
+//                        startForProfileImageResult.launch(intent)
+//                    }
             }
             ivBack.setOnClickListener {
                 navigateBack(requireActivity())

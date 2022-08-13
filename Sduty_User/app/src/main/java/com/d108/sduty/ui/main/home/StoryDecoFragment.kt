@@ -1,39 +1,42 @@
 package com.d108.sduty.ui.main.home
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.FrameLayout
-import androidx.fragment.app.DialogFragment
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.d108.sduty.R
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty.adapter.TaskSpinnerAdapter
+import com.d108.sduty.common.ApplicationClass
+import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryDecoBinding
 import com.d108.sduty.model.dto.Task
+import com.d108.sduty.ui.common.CropImageActivity
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.navigateBack
-import com.d108.sduty.utils.showToast
 
 //게시물 사진 꾸미기 - 타임스탬프, 텍스트 컬러, 템플릿 선택, 공유, 저장
 private const val TAG ="StoryDecoFragment"
-class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogFragment() {
+class StoryDecoFragment: Fragment() {
     private lateinit var binding: FragmentStoryDecoBinding
     private val timerViewModel: TimerViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var spinnerAdapter: TaskSpinnerAdapter
 
     private var taskList = listOf<Task>()
+    private var imageUrl = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,23 +49,18 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStoryDecoBinding.inflate(inflater, container, false)
-        val fileUriStr = fileUriStr
-        if (fileUriStr.isEmpty()) {
-            requireContext().showToast("값이 비어 있습니다!!")
-        }
-        else {
-            binding.apply {
-                imgPreview.setImageURI(Uri.parse(fileUriStr))
-            }
-        }
         return binding.root
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.apply {
 
+        val intent = Intent(requireContext(), CropImageActivity::class.java)
+        intent.putExtra("flag", NOT_PROFILE)
+        resultLauncher.launch(intent)
+
+        binding.apply {
             // 템플릿 미적용
             btnDecoNone.setOnClickListener {
                 val layoutParams = imgPreview.layoutParams as FrameLayout.LayoutParams
@@ -127,6 +125,17 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
         initViewModel()
     }
 
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if(it.resultCode == Activity.RESULT_OK){
+            val uri = it.data!!.getStringExtra("uri")
+            Log.d(TAG, "resultLauncher: ${uri}")
+            binding.imgPreview.setImageURI(Uri.parse(uri))
+            imageUrl = uri!!
+        }else{
+            findNavController().popBackStack()
+        }
+    }
+
     private fun initViewModel(){
         timerViewModel.apply {
             getTodayReport(mainViewModel.user.value!!.seq)
@@ -165,32 +174,7 @@ class StoryDecoFragment(var mContext: Context, var fileUriStr: String) : DialogF
 
     private fun saveImageBitmap(bitmap: Bitmap) {
         //findNavController().safeNavigate(StoryDecoFragmentDirections.actionStoryDecoFragmentToStoryRegisterFragment(bitmap))
-        onSaveBtnClickListener.onClick(bitmap)
-        dismiss()
-    }
-    lateinit var onSaveBtnClickListener: OnSaveBtnClickListener
-    interface OnSaveBtnClickListener{
-        fun onClick(bitmap: Bitmap)
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        resizeDialog()
-    }
-
-    private fun resizeDialog() {
-        val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
-        val deviceWidth = size.x
-        val deviceHeight = size.y
-        params?.width = (deviceWidth * 1).toInt()
-        params?.height = (deviceHeight * 1).toInt()
-        dialog?.window?.attributes = params as WindowManager.LayoutParams
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
+        ApplicationClass.storyBitmap = bitmap
+        findNavController().popBackStack()
     }
 }

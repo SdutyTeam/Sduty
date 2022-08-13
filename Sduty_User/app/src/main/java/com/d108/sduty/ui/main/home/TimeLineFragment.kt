@@ -132,7 +132,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             ivRegisterStory.setOnClickListener {
                 findNavController().safeNavigate(
                     TimeLineFragmentDirections
-                        .actionTimeLineFragmentToStoryRegisterFragment(null)
+                        .actionTimeLineFragmentToStoryRegisterFragment()
                 )
             }
 

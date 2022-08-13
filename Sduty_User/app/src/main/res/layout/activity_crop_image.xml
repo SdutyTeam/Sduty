@@ -72,6 +72,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rotateText"
             custom:cropBorderLineColor="@color/app_blue"
+            custom:cropInitialCropWindowPaddingRatio="0"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

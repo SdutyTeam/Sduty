@@ -54,6 +54,7 @@ class CropSelectDialog : DialogFragment() {
 
         dialog?.setCanceledOnTouchOutside(true)
         dialog?.setCancelable(true)
+        dialog?.setCancelable(false)
         dialog?.show()
 
     }

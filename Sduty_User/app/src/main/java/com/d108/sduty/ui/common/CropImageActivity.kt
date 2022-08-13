@@ -40,26 +40,7 @@ internal class CropImageActivity : CropActivity() {
         binding.rotateText.setOnClickListener { onRotateClick() }
 
         setCropImageView(binding.cropImageView)
-        val flag = intent.getIntExtra("flag", 0).toInt()
-        when(flag){
-            PROFILE -> {
-                binding.cropImageView.apply {
-                    resetCropRect()
-                    cropShape = CropImageView.CropShape.OVAL
-                    setAspectRatio(1,1)
-                    guidelines = CropImageView.Guidelines.ON
-                }
-            }
-            NOT_PROFILE -> {
-                binding.cropImageView.apply {
-                    resetCropRect()
-                    cropShape = CropImageView.CropShape.RECTANGLE
-                    setAspectRatio(3,4)
-                    guidelines = CropImageView.Guidelines.ON
-                }
-            }
 
-        }
     }
 
     override fun showImageSourceDialog() {
@@ -80,6 +61,29 @@ internal class CropImageActivity : CropActivity() {
         super.onPickImageResult(resultUri)
 
         if (resultUri != null) binding.cropImageView.setImageUriAsync(resultUri)
+        val flag = intent.getIntExtra("flag", 3).toInt()
+        when(flag){
+            PROFILE -> {
+                binding.cropImageView.apply {
+                    resetCropRect()
+                    cropShape = CropImageView.CropShape.OVAL
+                    setAspectRatio(1,1)
+                    guidelines = CropImageView.Guidelines.ON
+                }
+            }
+            NOT_PROFILE -> {
+                binding.cropImageView.apply {
+                    resetCropRect()
+                    cropShape = CropImageView.CropShape.RECTANGLE
+                    setAspectRatio(3,4)
+                    guidelines = CropImageView.Guidelines.ON
+                }
+            }
+            else ->{
+                finish()
+            }
+
+        }
     }
 
     // Override this to add more information into the intent

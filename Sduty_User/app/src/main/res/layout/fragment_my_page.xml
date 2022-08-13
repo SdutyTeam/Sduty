@@ -202,7 +202,7 @@
                                     android:layout_height="wrap_content"
                                     tools:text="100"
                                     android:textStyle="bold"
-                                    android:text="@{vm.profile.cntStory}"
+                                    android:text="@{vm.profile.cntStory + ``}"
                                     android:textSize="14sp"/>
 
                             </LinearLayout>
@@ -224,7 +224,7 @@
                                     android:layout_height="wrap_content"
                                     tools:text="1K"
                                     android:textStyle="bold"
-                                    android:text="@{vm.profile.followees}"
+                                    android:text="@{vm.profile.followees +``}"
                                     android:textSize="14sp"/>
 
                             </LinearLayout>
@@ -246,7 +246,7 @@
                                     android:layout_height="wrap_content"
                                     tools:text="100K"
                                     android:textStyle="bold"
-                                    android:text="@{vm.profile.followers}"
+                                    android:text="@{vm.profile.followers +``}"
                                     android:textSize="14sp"/>
 
                             </LinearLayout>
