@@ -54,3 +54,6 @@ const val ALL_TIMELINE = 0
 const val JOB_TIMELINE = 1
 const val INTEREST_TIMELINE = 2
 const val FOLLOW_TIMELINE = 3
+
+const val FLAG_GALLERY = 0
+const val FLAG_CAMERA = 1

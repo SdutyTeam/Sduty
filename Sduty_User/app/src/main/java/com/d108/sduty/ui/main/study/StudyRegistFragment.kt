@@ -76,6 +76,7 @@ class StudyRegistFragment : Fragment() {
                 binding.dailyWeek.visibility = View.GONE
                 binding.tvDaily.visibility = View.GONE
             }
+            else -> {}
         }
 
         val peopleData:Array<String> = resources.getStringArray(R.array.array_people)

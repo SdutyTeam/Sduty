@@ -159,7 +159,7 @@ class StoryViewModel: ViewModel() {
                 var fileName = "story/" + System.currentTimeMillis().toString()+".png"
                 story.imageSource = fileName
 //                var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-                var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,bitmapRequestBody)
+                var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName, bitmapRequestBody!!)
                 val json = Gson().toJson(story)
                 val storyBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json)
                 val response = Retrofit.storyApi.insertStory(imageBody, storyBody)

@@ -35,11 +35,13 @@ class PushInfoDialog : DialogFragment() {
             btnPushAll.setOnCheckedChangeListener { buttonView, isChecked ->
                 when(isChecked){
                     true -> btnPushPersonal.isChecked = true
+                    else -> {}
                 }
             }
             btnPushPersonal.setOnCheckedChangeListener { buttonView, isChecked ->
                 when(isChecked){
                     false -> btnPushAll.isChecked = false
+                    else -> {}
                 }
             }
             btnConfirm.setOnClickListener {

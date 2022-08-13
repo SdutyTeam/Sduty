@@ -7,20 +7,20 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.canhub.cropper.CropImage
 import com.d108.sduty.R
 import com.d108.sduty.common.MODIFY
 import com.d108.sduty.common.PROFILE
@@ -30,6 +30,8 @@ import com.d108.sduty.databinding.FragmentProfileRegistBinding
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Profile
+import com.d108.sduty.ui.common.CropImageActivity
+import com.d108.sduty.ui.common.CropSelectDialog
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.sign.viewmodel.ProfileViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -96,7 +98,11 @@ class ProfileRegistFragment : Fragment() {
                 }
             })
             ivProfile.setOnClickListener {
-                loadProfileImage()
+//                openCropSelectDialog()
+//                CropImageActivity.start(requireActivity())
+                val intent = Intent(requireContext(), CropImageActivity::class.java)
+                intent.putExtra("flag", PROFILE)
+                resultLauncher.launch(intent)
             }
             // 직업과 관심분야 선택을 하나의 버튼으로
             btnJobInterest.setOnClickListener {
@@ -150,20 +156,21 @@ class ProfileRegistFragment : Fragment() {
         }
     }
 
-    private fun loadProfileImage(){
-        var intent = Intent(Intent.ACTION_PICK)
-        intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        resultLauncher.launch(intent);
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if(it.resultCode == Activity.RESULT_OK){
+            val uri = it.data!!.getStringExtra("uri")
+            Log.d(TAG, "resultLauncher: ${uri}")
+            binding.ivProfile.setImageURI(Uri.parse(uri))
+            imageUrl = uri!!
+        }else{
+            Log.d(TAG, "resultLauncher: NODATA!!!!!!!!!!!!!!!!!!!!!!!!")
+        }
     }
 
-    val resultLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val imageUri = it.data!!.data!!
-                imageUrl = UriPathUtil().getPath(requireContext(), imageUri).toString()
-                binding.ivProfile.setImageURI(imageUri)
-            }
-        }
+    private fun loadProfileImage(){
+
+    }
+
 
     private fun saveProfile(){
         binding.apply{
@@ -233,6 +240,16 @@ class ProfileRegistFragment : Fragment() {
 
             }
 
+        }
+    }
+    private fun openCropSelectDialog() {
+        CropSelectDialog().let {
+            it.onClickListener = object : CropSelectDialog.OnClickListener {
+                override fun onClick(flag: Int) {
+                    ProfileRegistFragmentDirections.actionProfileRegistFragmentToCropFragment(flag)
+                }
+            }
+            it.show(parentFragmentManager, null)
         }
     }
 }

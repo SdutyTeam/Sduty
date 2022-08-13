@@ -74,4 +74,7 @@
     
     <!-- Fragment -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="durationTimeFormat">%02d:%02d:%02d</string>
+
+    <string name="rotation_value">화면 회전: %1$s</string>
 </resources>

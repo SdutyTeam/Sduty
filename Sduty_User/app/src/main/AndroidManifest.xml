@@ -26,6 +26,12 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".ui.common.CropImageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.common.CropActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.camstudy.room.RoomActivity"
             android:exported="false" />
         <activity
@@ -70,7 +76,6 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
-
         <service android:name=".model.FirebaseCloudMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

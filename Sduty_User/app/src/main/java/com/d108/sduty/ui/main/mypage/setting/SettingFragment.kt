@@ -71,6 +71,7 @@ class SettingFragment : Fragment() {
                 true -> {
                     requireActivity().showAlertDialog("회원 탈퇴", "탈퇴가 완료되었습니다.", null)
                 }
+                else -> {}
             }
         }
     }

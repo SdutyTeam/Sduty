@@ -198,7 +198,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun getFirebaseToken(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
             if (!it.isSuccessful) {
@@ -211,8 +211,11 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             settingViewModel.updateFCMToken(mainViewModel.user.value!!)
 
         })
-        createNotiChannel("sduty_id", "sduty")
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotiChannel("sduty_id", "sduty")
+        }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotiChannel(channelId: String, channelName: String) {
         val importance = NotificationManager.IMPORTANCE_DEFAULT

@@ -84,7 +84,11 @@
             android:id="@+id/action_profileRegistFragment_to_timeLineFragment"
             app:destination="@id/timeLineFragment"
             app:popUpTo="@id/main_nav_graph"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:destination="@id/timeLineFragment" />
+        <action
+            android:id="@+id/action_profileRegistFragment_to_cropFragment"
+            app:destination="@id/cropFragment" />
     </fragment>
     <fragment
         android:id="@+id/timeLineFragment"
@@ -147,7 +151,10 @@
             android:id="@+id/action_storyRegisterFragment_to_timeLineFragment"
             app:destination="@id/timeLineFragment"
             app:popUpTo="@navigation/main_nav_graph"
-            app:popUpToInclusive="true" />
+            app:destination="@id/timeLineFragment" />
+        <action
+            android:id="@+id/action_storyRegisterFragment_to_cropFragment"
+            app:destination="@id/cropFragment" />
     </fragment>
     <fragment
         android:id="@+id/storyDetailFragment"
@@ -359,5 +366,13 @@
         <action
             android:id="@+id/action_followFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cropFragment"
+        android:name="com.d108.sduty.ui.common.CropFragment"
+        android:label="CropFragment">
+        <argument
+            android:name="flag"
+            app:argType="integer"/>
     </fragment>
 </navigation>

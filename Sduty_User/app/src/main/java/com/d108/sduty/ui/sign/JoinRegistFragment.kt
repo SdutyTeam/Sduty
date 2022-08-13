@@ -73,6 +73,7 @@ class JoinRegistFragment : Fragment() {
                     true -> {
                         requireContext().showToast("회원 가입이 완료되었습니다.")
                     }
+                    else -> {}
                 }
                 findNavController().navigate(JoinRegistFragmentDirections.actionJoinRegistFragmentToLoginFragment())
             }
