@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.d108.sduty.config.WebSecurityConfig;
 import com.d108.sduty.dto.AuthInfo;
 import com.d108.sduty.dto.User;
 import com.d108.sduty.repo.AuthInfoRepo;
 import com.d108.sduty.repo.UserRepo;
+import com.d108.sduty.utils.AES256Util;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,16 +21,26 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	AuthInfoRepo authInfoRepo;
+	@Autowired
+	private WebSecurityConfig security;
+	@Autowired
+	private AES256Util aes256Util;
 
 	@Transactional
 	@Override
 	public User insertUser(User user) throws Exception {
+		user.setTel(aes256Util.encrypt(user.getTel()));
 		return userRepo.save(user);
 	}
 
 	@Override
 	public Optional<User> selectUserById(String id) throws Exception {
-		return userRepo.findByid(id);
+		Optional<User> userOp = userRepo.findByid(id);
+		if(userOp.isPresent()) {
+			User user = userOp.get();
+			user.setTel(aes256Util.decrypt(user.getTel()));
+		}
+		return userOp;
 	}
 
 	@Override
@@ -39,12 +51,18 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public User updateUser(User user) throws Exception {
+		user.setTel(aes256Util.decrypt(user.getTel()));
 		return userRepo.save(user);
 	}
 	
 	@Override
 	public Optional<User> selectUser(int seq) throws Exception {
-		return userRepo.findById(seq);
+		Optional<User> userOp = userRepo.findById(seq);
+		if(userOp.isPresent()) {
+			User user = userOp.get();
+			user.setTel(aes256Util.decrypt(user.getTel()));
+		}
+		return userOp;
 	}
 	
 
@@ -56,6 +74,9 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public User updatePassword(User user) throws Exception {
+		if(user.getTel()!=null) {
+			user.setTel(aes256Util.decrypt(user.getTel()));
+		}
 		return userRepo.save(user);
 	}
 	
@@ -86,7 +107,5 @@ public class UserServiceImpl implements UserService {
 	public void deleteAuthInfo(AuthInfo authInfo) throws Exception {
 		authInfoRepo.deleteAuthInfo(authInfo);
 	}
-
-
 
 }

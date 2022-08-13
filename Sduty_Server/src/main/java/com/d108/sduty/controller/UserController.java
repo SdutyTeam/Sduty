@@ -41,31 +41,20 @@ public class UserController {
 	private NaverLoginService nService;
 	@Autowired
 	private WebSecurityConfig security = new WebSecurityConfig();
-	@Autowired
-	private PasswordEncoder pwEncoder;
 	
 	@ApiOperation(value = "로그인 > id, pass 확인 > User 리턴", response = User.class)
 	@PostMapping("")
 	public ResponseEntity<?> selectUser(@RequestBody User user) throws Exception {
 		Optional<User> maybeUser = userService.selectUserById(user.getId());
-		System.out.println(maybeUser.get());
-		System.out.println(user);
 		if(maybeUser.isPresent()) {
 			User selectedUser = maybeUser.get();
 			System.out.println(selectedUser);
 			//암호화 - 복호화
 			if(security.passwordEncoder().matches(user.getPass(), selectedUser.getPass())) {
-				System.out.println("암호화 로그인 완료!");
 				selectedUser.setPass("");
 				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
-
 			}
-			//TODO : 암호화 끝나면 삭제할 코드
-//			if(selectedUser.getPass().equals(user.getPass())) {
-//				selectedUser.setPass("");
-//				return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
-//			}
-			//
+			
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -201,6 +190,7 @@ public class UserController {
 		
 	}
 	
+	//TODO : 이름과 아이디 같이 받아야될듯..
 	@ApiOperation(value = "아이디 찾기 > String/401 리턴", response = HttpStatus.class)
 	@GetMapping("/id/{tel}")
 	public ResponseEntity<?> findIdByTel(@PathVariable String tel) throws Exception {
@@ -218,10 +208,6 @@ public class UserController {
 		//인증이 안되면 수정이 안되므로 거의 not null 확실		
 		User selected_user = userService.selectUserById(user.getId()).get();
 		//암호화
-//		String securePw = security.passwordEncoder().encode(user.getPass());
-//		selected_user.setPass(securePw);
-//		System.out.println("비번 변경 => 암호화");
-//		selected_user.setPass2(security.passwordEncoder().encode(user.getPass()));
 		selected_user.setPass(security.passwordEncoder().encode(user.getPass()));
 		User result = userService.updatePassword(selected_user);
 		if(result != null) {
@@ -246,7 +232,6 @@ public class UserController {
 	@PostMapping("/auth/check")
 	public ResponseEntity<?> getAuthCode(@RequestBody AuthInfo authInfo) throws Exception {
 		AuthInfo selectedCode = userService.selectAuthInfo(authInfo.getTel());
-		System.out.println("들어옴");
 		System.out.println(selectedCode);
 		System.out.println(new Date(System.currentTimeMillis()));
 		if (selectedCode != null) {
@@ -267,9 +252,6 @@ public class UserController {
 		//인증이 안되면 수정이 안되므로 거의 not null 확실		
 		User selected_user = userService.selectUserById(id).get();
 		//암호화
-//		String securePw = security.passwordEncoder().encode(user.getPass());
-//		selected_user.setPass(securePw);
-		System.out.println("비번 변경 => 암호화");
 		selected_user.setPass(security.passwordEncoder().encode(pw));		
 		User result = userService.updatePassword(selected_user);
 		if(result != null) {
