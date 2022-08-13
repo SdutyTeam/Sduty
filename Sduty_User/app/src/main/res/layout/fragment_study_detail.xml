@@ -43,24 +43,24 @@
             <ImageView
                 android:id="@+id/btn_study_setting"
                 android:visibility="gone"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/img_study_setting"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="15dp"/>
+                android:padding="12dp"/>
 
             <ImageView
                 android:id="@+id/btn_study_exit"
                 android:visibility="gone"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/icon_join"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="15dp"/>
+                android:padding="12dp"/>
 
             <LinearLayout
                 android:id="@+id/divider_a"

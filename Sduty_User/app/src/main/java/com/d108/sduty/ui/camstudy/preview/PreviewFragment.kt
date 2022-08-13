@@ -143,7 +143,7 @@ class PreviewFragment : Fragment() {
 
     private fun onEnterButtonClicked(v: View) {
         SendBirdCall.init(requireActivity().applicationContext, SENDBIRD_APP_ID)
-        viewModel.authenticate(mainViewModel.user.value!!.name)
+        viewModel.authenticate(mainViewModel.profile.value!!.nickname)
     }
 
     private fun bindPreview(cameraProvider : ProcessCameraProvider) {
