@@ -127,6 +127,13 @@ class JoinRegistFragment : Fragment() {
                     viewModel.getUsedId(binding.etId.text.toString())
                 }
             })
+            etName.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    viewModel.checkName(binding.etName.text.toString())
+                }
+            })
             spinnerEmail.apply {
                 adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mailList)
                 onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
@@ -147,6 +154,27 @@ class JoinRegistFragment : Fragment() {
                 }
             }, InputFilter.LengthFilter(15))
             etId.filters = filter
+
+            filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[0-9]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(8))
+
+            etPhoneEnd.filters = filter
+
+            filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[a-zA-Zㄱ-ㅎㄱ가-힣]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(15))
+            etName.filters = filter
 
             filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
                 val ps = Pattern.compile("^[a-zA-Z0-9!@#$%^&*]+\$")
@@ -175,7 +203,7 @@ class JoinRegistFragment : Fragment() {
                 "${etEmail.text}@${spinnerEmail.selectedItem}"
             }
             if(args.route == COMMON_JOIN) {
-                if(id.isEmpty() || pw.isEmpty() || name.isEmpty() || tel.isEmpty() || email.isEmpty()){
+                if(id.isEmpty() || pw.isEmpty() || name.isEmpty() || tel.isEmpty() || email.isEmpty() || tel.length < 11){
                     requireContext().showToast("모든 항목을 입력해 주세요.")
                 }else{
                     viewModel.join(User(id, pw, name, tel, email))

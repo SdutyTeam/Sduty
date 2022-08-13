@@ -19,6 +19,7 @@ import net.nurigo.sdk.message.model.Message
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest
 import retrofit2.http.Body
 import java.lang.Exception
+import java.util.regex.Pattern
 
 private const val TAG ="JoinViewModel"
 class JoinViewModel: ViewModel() {
@@ -172,6 +173,15 @@ class JoinViewModel: ViewModel() {
     fun checkPWLength(pw: String){
         Log.d(TAG, "checkPWLength: ${pw.length}")
         _isShortPW.value = pw.length < 8
+    }
+
+    private val _isWrongName = MutableLiveData<Boolean>(false)
+    val isWrongName: LiveData<Boolean>
+        get() = _isWrongName
+    fun checkName(name: String){
+        val ps = Pattern.compile("^[a-z가-힣]+\$")
+        _isWrongName.value = !ps.matcher(name).matches()
+
     }
 
 

@@ -53,8 +53,8 @@
             <!-- 공개 범위 설정 버튼 : 게시물의 공개 범위를 설정할 수 있다. -->
             <Button
                 android:id="@+id/btn_disclosure"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:text="공개 범위"
                 android:textSize="12sp"
                 android:background="@drawable/dialog_white_border"

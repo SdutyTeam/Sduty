@@ -238,6 +238,7 @@
                                 dateToYYYMMDD="@{mainVM.profile.birthday}"
                                 android:background="@null"
                                 android:singleLine="true"
+                                android:inputType="number"
                                 app:layout_constraintStart_toStartOf="parent"/>
 
                         </androidx.cardview.widget.CardView>

@@ -95,6 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_margin="2dp"
                         app:cardCornerRadius="10dp">
 
                         <EditText
@@ -111,6 +112,36 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout_error_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/layout_edit_name">
+
+                    <TextView
+                        android:id="@+id/tv_title_name_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginEnd="4dp"
+                        android:text="올바르지 않은 이름입니다"
+                        android:visibility="@{vm.isWrongName()? View.VISIBLE : View.GONE}"
+                        android:textColor="@color/red_300"
+                        android:textSize="14sp"/>
+
+                    <ImageView
+                        android:id="@+id/iv_name_error"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/stat_notify_error"
+                        android:visibility="@{vm.isWrongName ? View.VISIBLE : View.GONE}"
+                        app:tint="@color/red_300" />
+
+                </LinearLayout>
+
                 <!-- 이메일 입력( front ) 레이아웃 -->
                 <LinearLayout
                     android:id="@+id/layout_edit_email_front"
@@ -119,7 +150,7 @@
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/layout_edit_name">
+                    app:layout_constraintTop_toBottomOf="@id/layout_error_name">
 
                     <TextView
                         android:id="@+id/tv_title_email"
@@ -132,6 +163,7 @@
                         android:layout_width="84dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_margin="2dp"
                         app:cardCornerRadius="10dp">
 
                         <EditText
@@ -183,6 +215,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_margin="2dp"
                         app:cardCornerRadius="10dp">
                         <Spinner
                             android:id="@+id/spinner_email"
@@ -245,6 +278,7 @@
                             app:layout_constraintTop_toTopOf="parent"/>
 
                         <androidx.cardview.widget.CardView
+                            android:layout_margin="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -311,6 +345,7 @@
 
 
                         <androidx.cardview.widget.CardView
+                            android:layout_margin="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -381,6 +416,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_margin="2dp"
                             app:cardCornerRadius="10dp">
 
                             <EditText
@@ -454,6 +490,8 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_title_phone"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="16dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_marginBottom="2dp"
                     app:cardCornerRadius="10dp">
 
                     <EditText
@@ -484,6 +522,7 @@
                     android:id="@+id/card_phone_end"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
+                    android:layout_margin="2dp"
                     app:layout_constraintTop_toTopOf="@id/card_phone_font"
                     app:layout_constraintStart_toEndOf="@id/tv_phone_bar"
                     app:layout_constraintEnd_toStartOf="@id/btn_send_sms"
@@ -548,6 +587,8 @@
                         android:layout_height="36dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginBottom="2dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/btn_auth_code"
                         app:layout_constraintTop_toBottomOf="@id/tv_auth_code"
@@ -594,6 +635,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="가입"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_login_container"
+                android:backgroundTint="@color/app_purple_light"
+                android:visibility="@{vm.isSucceedAuth() ? View.GONE : View.VISIBLE }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
 

@@ -39,10 +39,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
             android:exported="true"
             android:fitsSystemWindows="true"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
