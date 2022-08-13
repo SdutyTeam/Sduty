@@ -114,6 +114,7 @@ class TimerFragment : Fragment() {
                     true -> {
                         timerViewModel.delayTimer()
                     }
+                    else -> {}
                 }
                 // 측정을 중지하였을 때
                 if (timerViewModel.timer.value!! > 0) {

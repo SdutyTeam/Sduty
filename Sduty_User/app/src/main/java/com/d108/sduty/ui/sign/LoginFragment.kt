@@ -66,7 +66,6 @@ class LoginFragment : Fragment() {
 
         initViewModel()
         initView()
-//        checkPermission()
     }
 
 
@@ -92,6 +91,7 @@ class LoginFragment : Fragment() {
             isLoginSucceed.observe(viewLifecycleOwner){
                 when(it){
                     false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
+                    else -> {}
                 }
             }
             isExistKakaoAccount.observe(viewLifecycleOwner){
@@ -103,6 +103,7 @@ class LoginFragment : Fragment() {
                         }
                         requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
                     }
+                    else -> {}
                 }
             }
             isExistNaverAccount.observe(viewLifecycleOwner){
@@ -114,6 +115,7 @@ class LoginFragment : Fragment() {
                         }
                         requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
                     }
+                    else -> {}
                 }
             }
             getJobListValue()
@@ -250,16 +252,15 @@ class LoginFragment : Fragment() {
             override fun onPermissionGranted() {
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
-                requireActivity().showToast("모든 권한을 허용해야 이용이 가능합니다.")
+                requireActivity().showToast("필수 권한을 허용해야 이용이 가능합니다.")
                 requireActivity().finish()
             }
 
         }
         TedPermission.create()
             .setPermissionListener(permissionListener)
-            .setRationaleMessage("asdfasdf")
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
+            .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
             .check()
     }
 }

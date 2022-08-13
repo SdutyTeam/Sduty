@@ -118,7 +118,7 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 if (resultCode == Activity.RESULT_OK) {
                     // Image Uri will not be null for RESULT_OK
                     val fileUri = data?.data!!
-
+                    Log.d(TAG, "initView: ${fileUri}")
                     // mProfileUri = fileUri
                     binding.apply {
                         //imgStory.setImageURI(fileUri)

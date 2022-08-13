@@ -64,6 +64,7 @@ class RegisterDialog() : DialogFragment() {
         viewModel.isJoinSucced.observe(viewLifecycleOwner){
             when(it) {
                 true -> requireContext().showToast("가입이 완료되었습니다. 로그인해 주세요")
+                else -> {}
             }
         }
     }

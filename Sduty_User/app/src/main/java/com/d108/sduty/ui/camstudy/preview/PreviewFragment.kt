@@ -124,6 +124,7 @@ class PreviewFragment : Fragment() {
                 Status.ERROR -> {
                     Toast.makeText(requireContext(), "ERROR / authViewModel.fetchedRoomId", Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
 
@@ -137,6 +138,7 @@ class PreviewFragment : Fragment() {
                         putExtra(EXTRA_ENTER_ERROR_MESSAGE, resource.message)
                     })
                 }
+                else -> {}
             }
         }
     }
