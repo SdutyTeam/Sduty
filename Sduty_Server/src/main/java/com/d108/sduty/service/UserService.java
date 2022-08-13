@@ -14,6 +14,7 @@ public interface UserService {
 	public Optional<User> selectUser(int seq) throws Exception;
 	public void deleteUser(int seq) throws Exception;
 	
+	public User findId(String name, String tel) throws Exception;
 	public Optional<User> selectByTel(String tel) throws Exception;
 	public User updatePassword(User user) throws Exception;
 	

@@ -1,5 +1,6 @@
 package com.d108.sduty.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,6 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	AuthInfoRepo authInfoRepo;
-	@Autowired
-	private WebSecurityConfig security;
 	@Autowired
 	private AES256Util aes256Util;
 
@@ -65,7 +64,18 @@ public class UserServiceImpl implements UserService {
 		return userOp;
 	}
 	
-
+	@Override
+	public User findId(String name, String tel) throws Exception {
+		List<User> userList = userRepo.findByName(name);
+		for(User user : userList) {
+			user.setTel(aes256Util.decrypt(user.getTel()));
+			if(user.getTel().equals(tel)) {
+				return user;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public Optional<User> selectByTel(String tel) throws Exception {
 		return userRepo.findByTel(tel);

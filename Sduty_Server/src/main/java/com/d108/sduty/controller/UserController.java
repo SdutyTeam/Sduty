@@ -190,13 +190,13 @@ public class UserController {
 		
 	}
 	
-	//TODO : 이름과 아이디 같이 받아야될듯..
+	//TODO : 이름과 아이디 같이 받아야 됨
 	@ApiOperation(value = "아이디 찾기 > String/401 리턴", response = HttpStatus.class)
-	@GetMapping("/id/{tel}")
-	public ResponseEntity<?> findIdByTel(@PathVariable String tel) throws Exception {
-		Optional<User> user = userService.selectByTel(tel);
-		if(user.isPresent())
-			return new ResponseEntity<String>(user.get().getId(), HttpStatus.OK);
+	@GetMapping("/id/{name}/{tel}")
+	public ResponseEntity<?> findIdByTel(@PathVariable String name, @PathVariable String tel) throws Exception {
+		User user = userService.findId(name, tel);
+		if(user!=null)
+			return new ResponseEntity<String>(user.getId(), HttpStatus.OK);
 		else
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
