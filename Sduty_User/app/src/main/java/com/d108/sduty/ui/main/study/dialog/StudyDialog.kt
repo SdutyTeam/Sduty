@@ -6,15 +6,12 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import com.d108.sduty.R
 import com.d108.sduty.utils.currentWindowMetricsPointCompat
-import org.w3c.dom.Text
 
 class StudyDialog(context: Context, titles: String, contents: String, btn_a: String, btn_b: String) {
     private val dialog = Dialog(context)
@@ -24,7 +21,6 @@ class StudyDialog(context: Context, titles: String, contents: String, btn_a: Str
     private val buttonAText = btn_a
     private val buttonBText = btn_b
     private lateinit var onClickListener: StudyDialog.OnDialogClickListener
-
 
     fun setOnClickListener(listener: StudyDialog.OnDialogClickListener)
     {

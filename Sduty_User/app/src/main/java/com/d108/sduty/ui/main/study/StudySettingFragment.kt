@@ -3,43 +3,41 @@ package com.d108.sduty.ui.main.study
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.EditText
+import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.*
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
-import com.d108.sduty.common.FLAG_STUDY
 import com.d108.sduty.common.FLAG_STUDY_REGIST
 import com.d108.sduty.databinding.FragmentStudySettingBinding
-import com.d108.sduty.model.dto.Member
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.study.dialog.StudyDialog
+import com.d108.sduty.ui.main.study.dialog.StudyRadioDialog
 import com.d108.sduty.ui.main.study.viewmodel.StudySettingViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
-import com.d108.sduty.utils.safeNavigate
-import com.d108.sduty.utils.showAlertDialog
-import com.d108.sduty.utils.showEditDialog
 import com.d108.sduty.utils.showToast
-import com.sendbird.calls.shadow.com.google.gson.Gson
-import java.text.SimpleDateFormat
+import com.gun0912.tedpermission.provider.TedPermissionProvider
+import org.w3c.dom.Text
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
+
 
 private const val TAG = "StudySettingFragment"
 class StudySettingFragment : Fragment() {
@@ -69,6 +67,7 @@ class StudySettingFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ResourceType")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,7 +79,7 @@ class StudySettingFragment : Fragment() {
         nickname = args.masterNickname
         studySettingViewModel.getMyStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
         studySettingViewModel.studyDetail(args.studySeq)
-        
+
         studySettingViewModel.myStudyInfo.observe(viewLifecycleOwner){
             val studyInfo = studySettingViewModel.myStudyInfo.value as Map<String, Any>
 
@@ -329,29 +328,46 @@ class StudySettingFragment : Fragment() {
                 val items = Array<String>(nicknameList.size - 1) { "" }
                 val itemseq = Array<Int>(seqList.size - 1){ 0 }
                 var j = 0
-                for(i in 0 until nicknameList.size){
-                    if(args.masterNickname != nicknameList[i]){
-                        items[j] = nicknameList[i]
-                        itemseq[j] = seqList[i]
-                        j++
+                if(nicknameList.size != 0){
+                    for(i in 0 until nicknameList.size){
+                        if(args.masterNickname != nicknameList[i]){
+                            items[j] = nicknameList[i]
+                            itemseq[j] = seqList[i]
+                            j++
+                        }
                     }
                 }
-                var selectedItem: String? = null
-                AlertDialog.Builder(context)
-                    .setTitle("그룹 장 변경")
-                    .setSingleChoiceItems(items, -1) { dialog, which ->
-                        selectedItem = items[which]        }
-                    .setPositiveButton("변경") { dialog, which ->
-                        for(i in items.indices){
-                            if(items[i] == selectedItem.toString()){
-                                studyDetail.masterSeq = itemseq[i]
-                                studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
-                                break
+
+                StudyRadioDialog(mainActivity, "그룹 장 변경", "선택하신 그룹원을 그룹 장으로 변경합니다.", "변경", "취소", items).let {
+                    it.show(this@StudySettingFragment.requireActivity().supportFragmentManager, "StudyRadioDialog")
+                    it.onClickListener = object :StudyRadioDialog.OnDialogClickListener{
+                        override fun onClicked(checkedRadioButtonId: Int) {
+                            for(i in items.indices){
+                                if(items[i] == items[checkedRadioButtonId]){
+                                    studyDetail.masterSeq = itemseq[i]
+                                    studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
+                                    break
+                                }
                             }
                         }
                     }
-                    .setNegativeButton("취소", null)
-                    .show()
+                }
+//                var selectedItem: String? = null
+//                AlertDialog.Builder(context)
+//                    .setTitle("그룹 장 변경")
+//                    .setSingleChoiceItems(items, -1) { dialog, which ->
+//                        selectedItem = items[which]        }
+//                    .setPositiveButton("변경") { dialog, which ->
+//                        for(i in items.indices){
+//                            if(items[i] == selectedItem.toString()){
+//                                studyDetail.masterSeq = itemseq[i]
+//                                studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
+//                                break
+//                            }
+//                        }
+//                    }
+//                    .setNegativeButton("취소", null)
+//                    .show()
             }
 
             ivStudyPeopleBan.setOnClickListener {
@@ -359,29 +375,31 @@ class StudySettingFragment : Fragment() {
                 val items = Array<String>(nicknameList.size - 1) { "" }
                 val itemseq = Array<Int>(seqList.size - 1){ 0 }
                 var j = 0
-                for(i in 0 until nicknameList.size){
-                    if(args.masterNickname != nicknameList[i]){
-                        items[j] = nicknameList[i]
-                        itemseq[j] = seqList[i]
-                        j++
+                if(nicknameList.size != 0){
+                    for(i in 0 until nicknameList.size){
+                        if(args.masterNickname != nicknameList[i]){
+                            items[j] = nicknameList[i]
+                            itemseq[j] = seqList[i]
+                            j++
+                        }
                     }
                 }
 
-                var selectedItem: String? = null
-                AlertDialog.Builder(context)
-                    .setTitle("그룹원 강퇴")
-                    .setSingleChoiceItems(items, -1) { dialog, which ->
-                        selectedItem = items[which]        }
-                    .setPositiveButton("강퇴") { dialog, which ->
-                        for(i in items.indices){
-                            if(items[i] == selectedItem.toString()){
-                                studySettingViewModel.studyQuit(args.studySeq, itemseq[i])
-                                break
+                StudyRadioDialog(mainActivity, "그룹원 강퇴", "선택하신 그룹원을 강퇴합니다.", "강퇴", "취소", items).let {
+                    it.show(this@StudySettingFragment.requireActivity().supportFragmentManager, "StudyRadioDialog")
+                    it.onClickListener = object :StudyRadioDialog.OnDialogClickListener{
+                        override fun onClicked(checkedRadioButtonId: Int) {
+                            for(i in items.indices){
+                                if(items[i] == items[checkedRadioButtonId]){
+                                    studySettingViewModel.studyQuit(args.studySeq, itemseq[i])
+                                    nicknameList.remove(items[i])
+                                    seqList.remove(itemseq[i])
+                                    break
+                                }
                             }
                         }
                     }
-                    .setNegativeButton("취소", null)
-                    .show()
+                }
             }
 
             btnStudyDelete.setOnClickListener {

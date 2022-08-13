@@ -46,7 +46,7 @@
     <string name="app_info_id">ID</string>
 
     <!-- PreviewFragment -->
-    <string name="preview_title">Enter room</string>
+    <string name="preview_title">캠 스터디 입장</string>
     <string name="preview_mute_my_audio">마이크 끄기</string>
     <string name="preview_turn_off_my_video">카메라 끄기</string>
     <string name="preview_enter">입장</string>

@@ -74,6 +74,8 @@ class StudyRegisteViewModel: ViewModel() {
                                 _createRoomId.postValue(Resource.error(e.message, e.code, null))
                             } else{
                                 _createRoomId.postValue(Resource.success(room.roomId))
+                                room.exit()
+
                             }
                         }
 

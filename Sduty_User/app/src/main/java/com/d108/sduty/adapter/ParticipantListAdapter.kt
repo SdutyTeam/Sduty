@@ -100,11 +100,11 @@ class ParticipantListAdapter(
                 )
                 .into(binding.participantListItemImageViewProfile)
 
-            binding.participantListItemTextViewName.text = if (participant?.user?.nickname.isNullOrEmpty()) {
-                context.getString(R.string.no_nickname)
-            } else {
-                participant?.user?.nickname
-            }
+//            binding.participantListItemTextViewName.text = if (participant?.user?.nickname.isNullOrEmpty()) {
+//                context.getString(R.string.no_nickname)
+//            } else {
+//                participant?.user?.nickname
+//            }
 
             binding.participantListItemTextViewUserId.text = if (participant?.user?.userId.isNullOrEmpty()) {
                 context.getString(R.string.no_nickname)
