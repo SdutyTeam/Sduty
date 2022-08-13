@@ -20,7 +20,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.canhub.cropper.CropImage
 import com.d108.sduty.R
 import com.d108.sduty.common.MODIFY
 import com.d108.sduty.common.PROFILE
@@ -36,7 +35,6 @@ import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.sign.viewmodel.ProfileViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.DateFormatUtil
-import com.d108.sduty.utils.UriPathUtil
 import com.d108.sduty.utils.showToast
 
 //프로필 등록 - 프로필 사진, 별명, 직업, 관심 분야, 생년월일, 자기소개
@@ -240,16 +238,6 @@ class ProfileRegistFragment : Fragment() {
 
             }
 
-        }
-    }
-    private fun openCropSelectDialog() {
-        CropSelectDialog().let {
-            it.onClickListener = object : CropSelectDialog.OnClickListener {
-                override fun onClick(flag: Int) {
-                    ProfileRegistFragmentDirections.actionProfileRegistFragmentToCropFragment(flag)
-                }
-            }
-            it.show(parentFragmentManager, null)
         }
     }
 }
