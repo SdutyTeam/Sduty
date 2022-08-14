@@ -90,11 +90,11 @@ class TimerViewModel() : ViewModel() {
         // 측정하던 정보가 남아 있을 경우
         if (savedStartTime.isNotEmpty() && !isRunningTimer.value!!) {
             val convertedStartTime =
-                convertTimeStringToDate(savedStartTime!!, "yyyy-MM-dd hh:mm:ss")
+                convertTimeStringToDate(savedStartTime!!, "yyyy-MM-dd HH:mm:ss")
             // 공부한 시간
             val studyTime = System.currentTimeMillis() - convertedStartTime.time
 
-            _startTime = convertTimeDateToString(convertedStartTime, "hh:mm:ss")
+            _startTime = convertTimeDateToString(convertedStartTime, "HH:mm:ss")
 
             _timer.value = (studyTime / 1000).toInt()
 
@@ -117,12 +117,12 @@ class TimerViewModel() : ViewModel() {
 
     // 측정 시작 시간을 저장한다.
     fun saveTime() {
-        _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
+        _startTime = convertTimeDateToString(Date(System.currentTimeMillis()), "HH:mm:ss")
 
         // 시작 시간을 디바이스에 저장
         ApplicationClass.timerPref.edit().putString(
             "StartTime",
-            convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd hh:mm:ss")
+            convertTimeDateToString(Date(System.currentTimeMillis()), "yyyy-MM-dd HH:mm:ss")
         ).apply()
     }
 
@@ -133,7 +133,7 @@ class TimerViewModel() : ViewModel() {
 
     // 시간 측정을 종료한다.
     fun stopTimer() {
-        _endTime = convertTimeDateToString(Date(System.currentTimeMillis()), "hh:mm:ss")
+        _endTime = convertTimeDateToString(Date(System.currentTimeMillis()), "HH:mm:ss")
 
         ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
         _isRunningTimer.postValue(false)
