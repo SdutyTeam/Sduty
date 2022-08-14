@@ -60,3 +60,4 @@ const val FLAG_CAMERA = 1
 
 const val FLAG_REPORT = 0
 const val FLAG_BLOCK = 1
+const val FLAG_DELETE = 2

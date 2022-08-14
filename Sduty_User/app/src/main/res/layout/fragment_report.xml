@@ -21,8 +21,8 @@
             <ImageView
                 android:id="@+id/common_top_title"
                 android:layout_width="97dp"
-                android:layout_height="0dp"
-                android:padding="12dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="16dp"
                 android:src="@drawable/img_logo_report"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"

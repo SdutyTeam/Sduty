@@ -27,10 +27,10 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:itemIconSize="30dp"
+            app:itemIconSize="32dp"
             app:itemTextColor="@drawable/bottom_nav_color"
             app:itemIconTint="@drawable/bottom_nav_color"
             android:background="@color/white"

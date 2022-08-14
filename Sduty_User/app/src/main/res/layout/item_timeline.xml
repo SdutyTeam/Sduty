@@ -75,8 +75,8 @@
 
             <ImageView
                 android:id="@+id/iv_favorite"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@{data.likes ? @drawable/img_1 : @drawable/ic_baseline_thumb_up_off_alt_black_24}"
                 tools:src="@drawable/img_1"
                 app:layout_constraintTop_toBottomOf="@id/iv_timeline_content"
@@ -107,8 +107,8 @@
 
             <ImageView
                 android:id="@+id/iv_comment"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@drawable/ic_baseline_comment_black_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -133,8 +133,8 @@
 
             <ImageView
                 android:id="@+id/iv_scrap"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@{data.scrap ? @drawable/ic_gradient_book_mark : @drawable/ic_baseline_bookmark_border_black_24}"
                 tools:src="@drawable/ic_gradient_book_mark"
                 app:layout_constraintTop_toTopOf="@id/iv_favorite"

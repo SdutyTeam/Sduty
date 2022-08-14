@@ -1,5 +1,6 @@
 package com.d108.sduty.ui.main.home
 
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
@@ -20,12 +21,14 @@ import com.d108.sduty.adapter.StoryAdapter
 import com.d108.sduty.adapter.paging.StoryPagingAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
+import com.d108.sduty.common.FLAG_REPORT
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentUserProfileBinding
 import com.d108.sduty.model.dto.Follow
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Story
+import com.d108.sduty.ui.main.home.dialog.BlockDialog
 import com.d108.sduty.ui.main.mypage.MyPageFragmentDirections
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
@@ -44,6 +47,11 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var storyAdapter: StoryPagingAdapter
     private lateinit var contributionAdapter: ContributionAdapter
+
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.displayBottomNav(true)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -123,6 +131,8 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     }else{
                         menu[0].title = "팔로우"
                     }
+                    menu[1].isVisible = false
+                    menu[2].isVisible = false
                     show()
                 }
             }

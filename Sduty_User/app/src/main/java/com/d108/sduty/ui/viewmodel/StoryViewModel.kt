@@ -275,6 +275,7 @@ class StoryViewModel: ViewModel() {
             Retrofit.storyApi.deleteStory(story.seq).let {
                 if (it.code() == 200) {
                     getAllTimelineListValue(story.writerSeq)
+                    getStoryPost(story.writerSeq)
                 }else if(it.code() == 401){
 
                 }

@@ -18,12 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.TimeLineAdapter
 import com.d108.sduty.adapter.paging.TimeLinePagingAdapter
-import com.d108.sduty.common.ALL_TAG
-import com.d108.sduty.common.FLAG_TIMELINE
-import com.d108.sduty.common.INTEREST_TAG
-import com.d108.sduty.common.JOB_TAG
+import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentTimeLineBinding
 import com.d108.sduty.model.dto.*
+import com.d108.sduty.ui.main.home.dialog.BlockDialog
 import com.d108.sduty.ui.main.home.dialog.PushInfoDialog
 import com.d108.sduty.ui.main.mypage.setting.viewmodel.SettingViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
@@ -110,11 +108,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                         PopupMenu(requireContext(), view).apply {
                             setOnMenuItemClickListener(this@TimeLineFragment)
                             inflate(R.menu.menu_story_own_writer)
-                            if (mainViewModel.checkFollowUser(timeline.story.writerSeq)) {
-                                menu[0].title = "언팔로우"
-                            } else {
-                                menu[0].title = "팔로우"
-                            }
+                            menu[0].isVisible = false
                             show()
                         }
                     }else {
@@ -205,10 +199,24 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                 }
             }
             R.id.story_delete ->{
-                storyViewModel.deleteStory(menuSelectedTimeline.story)
+                BlockDialog(FLAG_DELETE).let {
+                    it.onClickConfirmListener = object : BlockDialog.OnClickConfirmListener{
+                        override fun onClick() {
+                            storyViewModel.deleteStory(menuSelectedTimeline.story)
+                        }
+                    }
+                    it.show(parentFragmentManager, null)
+                }
             }
             R.id.block -> {
-                storyViewModel.blockStory(mainViewModel.user.value!!.seq, menuSelectedTimeline.story)
+                BlockDialog(FLAG_BLOCK).let {
+                    it.onClickConfirmListener = object : BlockDialog.OnClickConfirmListener{
+                        override fun onClick() {
+                            storyViewModel.blockStory(mainViewModel.user.value!!.seq, menuSelectedTimeline.story)
+                        }
+                    }
+                    it.show(parentFragmentManager, null)
+                }
             }
         }
         return true

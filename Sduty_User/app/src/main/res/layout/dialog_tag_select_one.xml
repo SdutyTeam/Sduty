@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_study_regist"
             android:text="전체 선택"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:padding="8dp"
             app:layout_constraintStart_toEndOf="@id/tv_info"
             app:layout_constraintBottom_toBottomOf="@id/tv_info"

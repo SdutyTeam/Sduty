@@ -29,10 +29,9 @@
             <ImageView
                 android:id="@+id/common_top_title"
                 android:layout_width="76dp"
-                android:layout_height="0dp"
-                android:padding="12dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="16dp"
                 android:src="@drawable/img_logo_timer"
-                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

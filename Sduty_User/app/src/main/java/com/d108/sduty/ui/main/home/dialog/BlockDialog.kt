@@ -11,6 +11,7 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.d108.sduty.R
 import com.d108.sduty.common.FLAG_BLOCK
+import com.d108.sduty.common.FLAG_DELETE
 import com.d108.sduty.common.FLAG_REPORT
 import com.d108.sduty.databinding.DialogBlockBinding
 import com.d108.sduty.utils.getDeviceSize
@@ -49,6 +50,11 @@ class BlockDialog(private val flag: Int) : DialogFragment() {
                     btnConfirm.text = "차단"
                     constReport.visibility = View.GONE
                 }
+                FLAG_DELETE -> {
+                    tvWarningMessage.text = "정말로 삭제하시겠어요?\n삭제한 게시물은 복구 할 수 없어요!"
+                    btnConfirm.text = "삭제"
+                    constReport.visibility = View.GONE
+                }
             }
 
             btnConfirm.setOnClickListener {
@@ -61,6 +67,11 @@ class BlockDialog(private val flag: Int) : DialogFragment() {
                     FLAG_BLOCK -> {
                         onClickConfirmListener.onClick()
                         requireContext().showToast("차단되었습니다.")
+                        dismiss()
+                    }
+                    FLAG_BLOCK -> {
+                        onClickConfirmListener.onClick()
+                        requireContext().showToast("삭제되었습니다.")
                         dismiss()
                     }
                 }
