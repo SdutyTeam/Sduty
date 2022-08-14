@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.d108.sduty.R
 import com.d108.sduty.adapter.AppListAdapter
 import com.d108.sduty.common.ApplicationClass.Companion.appLockPref
 import com.d108.sduty.databinding.FragmentAppLockBinding
@@ -102,7 +103,9 @@ class AppLockFragment : Fragment() {
     }
 
     private fun getAppList() {
-        allAppList = packages.map {
+        allAppList = packages.filter {
+            it.packageName != resources.getString(R.string.app_package_name)
+        }.map {
             val icon = packageManager.getApplicationIcon(it.packageName)
             val label = it.applicationInfo.loadLabel(packageManager).toString()
             val packageName = it.packageName
@@ -114,7 +117,7 @@ class AppLockFragment : Fragment() {
 
     private fun getUserAppList() {
         userAppList = packages.filter {
-            (it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 1
+            ((it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 1) && it.packageName != resources.getString(R.string.app_package_name)
         }.map {
             val icon = packageManager.getApplicationIcon(it.packageName)
             val label = it.applicationInfo.loadLabel(packageManager).toString()
@@ -138,8 +141,10 @@ class AppLockFragment : Fragment() {
                 // sharedPreference 에 저장
                 appLockPref.edit().putBoolean(appList[position].packageName, isBanned).apply()
 
-                allAppList.filter { appList[position].packageName == it.packageName }.map { it.isBanned = isBanned }
-                userAppList.filter { appList[position].packageName == it.packageName }.map { it.isBanned = isBanned }
+                allAppList.filter { appList[position].packageName == it.packageName }
+                    .map { it.isBanned = isBanned }
+                userAppList.filter { appList[position].packageName == it.packageName }
+                    .map { it.isBanned = isBanned }
 
                 appListAdapter.notifyItemChanged(position)
             }
