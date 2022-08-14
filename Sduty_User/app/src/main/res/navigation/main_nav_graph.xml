@@ -112,9 +112,6 @@
             android:id="@+id/action_myPageFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
         <action
-            android:id="@+id/action_myPageFragment_to_scrapFragment"
-            app:destination="@id/scrapFragment" />
-        <action
             android:id="@+id/action_myPageFragment_to_storyDetailFragment"
             app:destination="@id/storyDetailFragment" />
         <action
@@ -316,14 +313,6 @@
         android:id="@+id/appLockFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.AppLockFragment"
         android:label="AppLockFragment"/>
-    <fragment
-        android:id="@+id/scrapFragment"
-        android:name="com.d108.sduty.ui.main.mypage.ScrapFragment"
-        android:label="ScrapFragment">
-        <action
-            android:id="@+id/action_scrapFragment_to_storyDetailFragment"
-            app:destination="@id/storyDetailFragment" />
-    </fragment>
     <fragment
         android:id="@+id/achievementFragment"
         android:name="com.d108.sduty.ui.main.mypage.AchievementFragment"

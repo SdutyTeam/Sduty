@@ -43,7 +43,7 @@ class ApplicationClass : Application() {
 
         SendBirdCall.setLoggerLevel(SendBirdCall.LOGGER_INFO)
 
-        var gson = GsonBuilder().setLenient().create()
+        var gson = GsonBuilder().setLenient().setDateFormat("MMM dd, yyyy hh:mm:ss a").create()
         retrofit = Retrofit.Builder()
             .baseUrl(SERVER_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -59,5 +59,6 @@ class ApplicationClass : Application() {
         firstRunCheck = getSharedPreferences("FirstRun", MODE_PRIVATE)
         firstLoginCheck = getSharedPreferences("FirstLogin", MODE_PRIVATE)
         fcmTokenPrefs = getSharedPreferences("FcmToken", MODE_PRIVATE)
+        autoLoginState = getSharedPreferences("AutoLogin", MODE_PRIVATE)
     }
 }

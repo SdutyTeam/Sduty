@@ -638,7 +638,7 @@
                 android:textColor="@color/white"
                 android:background="@drawable/btn_login_container"
                 android:backgroundTint="@color/app_purple_light"
-                android:visibility="@{vm.isSucceedAuth() ? View.GONE : View.VISIBLE }"
+                android:visibility="@{vm.isSucceedAuth() ? View.VISIBLE : View.GONE }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
 

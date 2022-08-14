@@ -64,6 +64,9 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if(SettingsPreference().getAutoLoginState() && SettingsPreference().getUserId() != ""){
+            viewModel.getUserInfo(SettingsPreference().getUserId())
+        }
         initViewModel()
         initView()
     }
@@ -86,12 +89,17 @@ class LoginFragment : Fragment() {
         viewModel.apply {
             user.observe(viewLifecycleOwner) {
                 mainViewModel.setUserValue(it)
+                if(SettingsPreference().getAutoLoginState()){
+                    SettingsPreference().setUserId(it.id)
+                }
                 mainViewModel.getProfileValue(it.seq)
             }
             isLoginSucceed.observe(viewLifecycleOwner){
                 when(it){
                     false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
-                    else -> {}
+                    true -> {
+
+                    }
                 }
             }
             isExistKakaoAccount.observe(viewLifecycleOwner){

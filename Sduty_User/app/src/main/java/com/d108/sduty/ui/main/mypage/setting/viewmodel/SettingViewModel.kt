@@ -51,4 +51,11 @@ class SettingViewModel: ViewModel() {
             }
         }
     }
+
+    private val _isAutoLoginEnable = MutableLiveData<Boolean>(true)
+    val isAutoLoginEnable: LiveData<Boolean>
+        get() = _isAutoLoginEnable
+    fun setAutoLoginState(){
+        _isAutoLoginEnable.value = !_isAutoLoginEnable.value!!
+    }
 }

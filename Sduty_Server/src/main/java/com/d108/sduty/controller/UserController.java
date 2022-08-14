@@ -247,6 +247,15 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
 	}
 	
+	@GetMapping("/info/{id}")
+	public ResponseEntity<?> test(@PathVariable String id) throws Exception {
+		User selected_user = userService.selectUserById(id).get();
+		if(selected_user != null) {
+			return new ResponseEntity<User>(selected_user, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); 
+	}
+	
 	@GetMapping("/test/{id}/{pw}")
 	public ResponseEntity<?> test(@PathVariable String id, @PathVariable String pw) throws Exception {
 		//인증이 안되면 수정이 안되므로 거의 not null 확실		

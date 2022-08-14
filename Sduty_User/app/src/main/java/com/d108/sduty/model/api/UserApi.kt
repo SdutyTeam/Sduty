@@ -51,4 +51,7 @@ interface UserApi {
     @PUT("/user")
     suspend fun updateUser(@Body user: User): Response<Void>
 
+    @GET("/user/info/{id}")
+    suspend fun getUserInfo(@Path("id") id: String): Response<User>
+
 }

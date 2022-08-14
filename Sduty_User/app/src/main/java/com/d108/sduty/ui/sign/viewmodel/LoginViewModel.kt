@@ -89,6 +89,19 @@ class LoginViewModel: ViewModel() {
         }
     }
 
+    fun getUserInfo(userId: String){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.userApi.getUserInfo(userId).let { 
+                if(it.isSuccessful && it.body() != null){
+                    _user.postValue(it.body())
+                }else{
+                    Log.d(TAG, "getUserInfo: ${it.code()}")
+                }
+                    
+            }
+        }
+    }
+
 
     fun getJobListValue(){
         viewModelScope.launch(Dispatchers.IO){

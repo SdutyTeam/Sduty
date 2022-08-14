@@ -19,6 +19,14 @@ class SettingsPreference {
     fun getAutoLoginState(): Boolean{
         return ApplicationClass.autoLoginState.getBoolean("State", true)
     }
+
+    fun setUserId(userId: String){
+        ApplicationClass.userPref.edit().putString("UserId", userId).apply()
+    }
+
+    fun getUserId(): String{
+        return ApplicationClass.userPref.getString("UserId", "").toString()
+    }
 //    fun getDarkModeState(): Boolean{
 //        return ApplicationClass.darkModeState.getBoolean("State", true)
 //    }
