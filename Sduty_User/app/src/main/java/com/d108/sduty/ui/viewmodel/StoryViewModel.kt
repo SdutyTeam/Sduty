@@ -184,6 +184,7 @@ class StoryViewModel: ViewModel() {
             Retrofit.storyApi.getTimelineDetail(storySeq, userSeq).let {
                 if (it.isSuccessful && it.body() != null) {
                     _timeLine.postValue(it.body() as Timeline)
+                    _replyList.postValue((it.body() as Timeline).replies)
                     Log.d(TAG, "getTimelineValue: ${it.body()}")
                 }else{
                     Log.d(TAG, "getStoryValue: ${it.code()}")
