@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
-import com.d108.sduty.adapter.StudyMemeberAdapter
+import com.d108.sduty.adapter.CamStudyMemberAdapter
 import com.d108.sduty.databinding.FragmentCamstudyDetailBinding
 import com.d108.sduty.model.dto.Member
 import com.d108.sduty.ui.MainActivity
@@ -43,7 +43,7 @@ class CamStudyDetailFragment : Fragment() {
     lateinit var studyRoomId: String
     lateinit var studyName: String
 
-    private lateinit var studyMemberAdapter: StudyMemeberAdapter
+    private lateinit var camStudyMemberAdapter: CamStudyMemberAdapter
     private lateinit var studyMember: List<Map<String, Any>>
     private lateinit var memberList: ArrayList<Member>
 
@@ -116,31 +116,59 @@ class CamStudyDetailFragment : Fragment() {
                 if(alarm["mon"] == true){
                     binding.tvMon.setBackgroundResource(R.drawable.daily_click)
                     binding.tvMon.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    binding.tvMon.setBackgroundResource(R.drawable.border_study_solid)
+                    binding.tvMon.setTextColor(Color.parseColor("#979797"))
                 }
+
                 if(alarm["tue"] == true){
                     binding.tvTue.setBackgroundResource(R.drawable.daily_click)
                     binding.tvTue.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    binding.tvTue.setBackgroundResource(R.drawable.border_study_solid)
+                    binding.tvTue.setTextColor(Color.parseColor("#979797"))
                 }
+
                 if(alarm["wed"] == true){
                     binding.tvWed.setBackgroundResource(R.drawable.daily_click)
                     binding.tvWed.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    binding.tvWed.setBackgroundResource(R.drawable.border_study_solid)
+                    binding.tvWed.setTextColor(Color.parseColor("#979797"))
                 }
+
                 if(alarm["thu"] == true){
                     binding.tvThu.setBackgroundResource(R.drawable.daily_click)
                     binding.tvThu.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    binding.tvThu.setBackgroundResource(R.drawable.border_study_solid)
+                    binding.tvThu.setTextColor(Color.parseColor("#979797"))
                 }
+
                 if(alarm["fri"] == true){
                     binding.tvFri.setBackgroundResource(R.drawable.daily_click)
                     binding.tvFri.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    binding.tvFri.setBackgroundResource(R.drawable.border_study_solid)
+                    binding.tvFri.setTextColor(Color.parseColor("#979797"))
                 }
+
                 if(alarm["sat"] == true){
                     binding.tvSat.setBackgroundResource(R.drawable.daily_click)
                     binding.tvSat.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    binding.tvSat.setBackgroundResource(R.drawable.border_study_solid)
+                    binding.tvSat.setTextColor(Color.parseColor("#979797"))
                 }
+
                 if(alarm["sun"] == true){
                     binding.tvSun.setBackgroundResource(R.drawable.daily_click)
                     binding.tvSun.setTextColor(Color.parseColor("#9585EB"))
+                } else{
+                    binding.tvSun.setBackgroundResource(R.drawable.border_study_solid)
+                    binding.tvSun.setTextColor(Color.parseColor("#979797"))
                 }
+
                 binding.tvTime.text = "매주 " + alarm["time"].toString().substring(0 until 5)
 
                 binding.studyDetailIntroduce.setOnClickListener {
@@ -208,10 +236,10 @@ class CamStudyDetailFragment : Fragment() {
     }
 
     private fun initAdapter(){
-        studyMemberAdapter = memberList?.let { StudyMemeberAdapter(it) }!!
+        camStudyMemberAdapter = memberList?.let { CamStudyMemberAdapter(it) }!!
         binding.studyMember.apply {
             layoutManager = GridLayoutManager(context, 4)
-            adapter = studyMemberAdapter
+            adapter = camStudyMemberAdapter
         }
     }
 

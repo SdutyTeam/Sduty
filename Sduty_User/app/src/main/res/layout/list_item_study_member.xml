@@ -18,8 +18,8 @@
         <!-- 리사이클러 뷰에 들어가는 아이템 목록 -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             app:cardElevation="1dp"
 
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
                     android:id="@+id/iv_type_cam"
                     android:layout_width="40dp"
                     android:layout_height="36dp"
-                    android:src="@{studyMember.is_studying() == 0 ? @drawable/img_type_study : @drawable/img_type_study_off}"
+                    android:src="@{studyMember.is_studying() == 0 ? @drawable/img_type_study_off : @drawable/img_type_study}"
                     app:layout_constraintTop_toBottomOf="@+id/user_time"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
