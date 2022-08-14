@@ -83,3 +83,20 @@ fun dateToYYYMMDD(view: TextView, date: Date?){
     }
 
 }
+
+@BindingAdapter("emailStart")
+fun emailStart(view: TextView, email: String?){
+    if(email == null){
+        view.text = ""
+    }else {
+        view.text = email.substring(0, email.indexOf("@"))
+    }
+}
+@BindingAdapter("emailEnd")
+fun emailEnd(view: TextView, email: String?){
+    if(email == null){
+        view.text = ""
+    }else {
+        view.text = email.substring(email.indexOf("@") + 1, email.length)
+    }
+}

@@ -34,6 +34,12 @@ class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline,
                 constComments.setOnClickListener {
                     onClickTimelineItem.onReplyClicked(timeline)
                 }
+                tvContent.setOnClickListener{
+                    onClickTimelineItem.onReplyClicked(timeline)
+                }
+                tvNickname.setOnClickListener {
+                    onClickTimelineItem.onProfileClicked(timeline)
+                }
             }
         }
     }

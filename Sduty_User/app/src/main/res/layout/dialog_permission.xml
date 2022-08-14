@@ -251,7 +251,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="24dp"
-                    android:text="Sduty 앱은 필수 접근 권한이 없습니다\n선택적 접근 권한은 동의하지 않으셔도\n앱 이용이 가능하나, 해당 기능 이용이 제한됩니다."
+                    android:text="@string/permission_info"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

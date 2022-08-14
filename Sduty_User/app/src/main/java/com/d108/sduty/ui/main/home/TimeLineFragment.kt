@@ -166,7 +166,6 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     }
 
     private fun initViewModel(){
-        storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
         storyViewModel.pagingAllTimelineList.observe(viewLifecycleOwner){
             pageAdapter.submitData(this.lifecycle, it)
         }
@@ -181,6 +180,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         }
 
 
+        storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
         mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
         storyViewModel.isFollowSucceed.observe(viewLifecycleOwner){
             mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)

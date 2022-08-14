@@ -172,6 +172,8 @@
                             android:layout_height="36dp"
                             android:layout_marginHorizontal="8dp"
                             android:background="@null"
+                            emailStart="@{vm.socialUser.email}"
+                            android:enabled="@{vm.socialUser == null ? true : false}"
                             android:singleLine="true" />
 
                     </androidx.cardview.widget.CardView>
@@ -233,7 +235,9 @@
                             android:layout_marginHorizontal="8dp"
                             android:background="@null"
                             android:singleLine="true"
+                            emailEnd="@{vm.socialUser.email}"
                             android:visibility="@{!vm.isSelfInputEmail ? View.GONE : View.VISIBLE}"
+                            android:enabled="@{vm.socialUser == null ? true : false}"
                             />
                     </androidx.cardview.widget.CardView>
 

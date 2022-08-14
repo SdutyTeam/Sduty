@@ -31,7 +31,7 @@ class FollowAdapter(val mySeq: Int, var myProfile: Profile): RecyclerView.Adapte
                         else{
 
 
-//                            btnFollow.text = "팔로우"
+                            btnFollow.text = "프로필 보기"
 //                        btnFollow.visibility = View.VISIBLE
                         }
                     }

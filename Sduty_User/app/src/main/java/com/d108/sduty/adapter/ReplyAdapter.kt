@@ -23,6 +23,12 @@ class ReplyAdapter(val userSeq: Int): RecyclerView.Adapter<ReplyAdapter.ViewHold
                         onClickReplyListener.onClick(it, position)
                     }
                 }
+                ivProfile.setOnClickListener {
+                    onClickReplyListener.onClickProfile(list[absoluteAdapterPosition].userSeq)
+                }
+                tvNickname.setOnClickListener {
+                    onClickReplyListener.onClickProfile(list[absoluteAdapterPosition].userSeq)
+                }
             }
 
         }
@@ -42,5 +48,6 @@ class ReplyAdapter(val userSeq: Int): RecyclerView.Adapter<ReplyAdapter.ViewHold
     lateinit var onClickReplyListener: OnClickReplyListener
     interface OnClickReplyListener{
         fun onClick(view: View, position: Int)
+        fun onClickProfile(userSeq: Int)
     }
 }

@@ -109,6 +109,13 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                     show()
                 }
             }
+            override fun onClickProfile(userSeq: Int) {
+                if(userSeq == mainViewModel.user.value!!.seq){
+                    findNavController().safeNavigate(StoryDetailFragmentDirections.actionStoryDetailFragmentToMyPageFragment())
+                }else {
+                    findNavController().safeNavigate(StoryDetailFragmentDirections.actionStoryDetailFragmentToUserProfileFragment(userSeq))
+                }
+            }
         }
         binding.apply {
             vm = viewModel

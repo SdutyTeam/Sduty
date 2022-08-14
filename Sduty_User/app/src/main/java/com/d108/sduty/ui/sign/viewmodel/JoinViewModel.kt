@@ -78,6 +78,7 @@ class JoinViewModel: ViewModel() {
                 Retrofit.userApi.kakaoUserInfo(accessToken.value.toString()).let {
                     if(it.isSuccessful && it.body() != null){
                         _socialUser.postValue(it.body() as User)
+                        _isSelfInputEmail.postValue(true)
                     }
                 }
             }catch (e: Exception){
@@ -91,6 +92,7 @@ class JoinViewModel: ViewModel() {
                 Retrofit.userApi.naverUserInfo(accessToken.value.toString()).let {
                     if(it.isSuccessful && it.body() != null){
                         _socialUser.postValue(it.body() as User)
+                        _isSelfInputEmail.postValue(true)
                     }
                 }
             }catch (e: Exception){
@@ -174,7 +176,7 @@ class JoinViewModel: ViewModel() {
     val isWrongName: LiveData<Boolean>
         get() = _isWrongName
     fun checkName(name: String){
-        val ps = Pattern.compile("^[a-z가-힣]+\$")
+        val ps = Pattern.compile("^[a-zA-Z가-힣]+\$")
         _isWrongName.value = !ps.matcher(name).matches()
 
     }

@@ -50,7 +50,6 @@ class FollowFragment : Fragment() {
 
     private fun initViewModel(){
         viewModel.apply {
-
             if(args.flag == FLAG_FOLLOWER){
                 binding.tabFollow.selectTab(binding.tabFollow.getTabAt(0))
                 flagTab = FLAG_FOLLOWER

@@ -66,7 +66,6 @@ class JoinRegistFragment : Fragment() {
             setJoinFlag(args.route)
             socialUser.observe(viewLifecycleOwner){
                 binding.user = it
-                Log.d(TAG, "initViewModel: $it")
             }
             isJoinSucced.observe(viewLifecycleOwner){
                 when(it){
@@ -167,7 +166,7 @@ class JoinRegistFragment : Fragment() {
             etPhoneEnd.filters = filter
 
             filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
-                val ps = Pattern.compile("^[a-zA-Zㄱ-ㅎㄱ가-힣]+\$")
+                val ps = Pattern.compile("^[a-zA-Zㄱ-ㅎ가-힣]+\$")
                 if(!ps.matcher(src).matches()){
                     return@InputFilter ""
                 }else{
@@ -197,7 +196,7 @@ class JoinRegistFragment : Fragment() {
             val pw = etPw.text.toString()
             val name = etName.text.toString()
             val tel = "${etPhoneFront.text}${etPhoneEnd.text}"
-            val email = if(spinnerEmail.selectedItemPosition == mailList.size - 1){
+            val email = if(spinnerEmail.selectedItemPosition == mailList.size - 1 || viewModel.socialUser.value != null){
                 "${etEmail.text}@${etEmailEnd.text}"
             }else{
                 "${etEmail.text}@${spinnerEmail.selectedItem}"
