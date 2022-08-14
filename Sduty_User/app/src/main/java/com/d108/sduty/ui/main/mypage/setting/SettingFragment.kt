@@ -3,6 +3,7 @@ package com.d108.sduty.ui.main.mypage.setting
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,11 @@ import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
+import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.oauth.OAuthLoginCallback
 
 
 private const val TAG = "SettingFragment"
@@ -64,6 +70,8 @@ class SettingFragment : Fragment() {
             btnLogout.setOnClickListener {
                 requireActivity().showAlertDialog("로그아웃","로그아웃 하시겠습니까?", object : DialogInterface.OnClickListener{
                     override fun onClick(p0: DialogInterface?, p1: Int) {
+                        naverLogout()
+                        kakaoLogout()
                         clearActivity()
                     }
                 })
@@ -86,6 +94,8 @@ class SettingFragment : Fragment() {
                         when(which){
                             DialogInterface.BUTTON_POSITIVE -> {
                                 viewModel.resignUser(mainViewModel.user.value!!)
+                                naverDisconnect()
+                                kakaoDisconnect()
                                 clearActivity()
                             }
                         }
@@ -118,10 +128,56 @@ class SettingFragment : Fragment() {
 
 
     private fun clearActivity(){
+
+
         SettingsPreference().setUserId("")
         startActivity(Intent(requireContext(), MainActivity::class.java))
         requireActivity().finish()
     }
+
+    private fun kakaoLogout(){
+        UserApiClient.instance.logout{
+            if (it != null) {
+                Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", it)
+            }
+            else {
+                Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+            }
+        }
+    }
+    private fun kakaoDisconnect(){
+        UserApiClient.instance.unlink { error ->
+            if (error != null) {
+                Log.e(TAG, "연결 끊기 실패", error)
+            }
+            else {
+                Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+            }
+        }
+    }
+    private fun naverLogout(){
+        NaverIdLoginSDK.logout()
+    }
+
+    private fun naverDisconnect(){
+        NidOAuthLogin().callDeleteTokenApi(requireContext(), object : OAuthLoginCallback {
+            override fun onSuccess() {
+                //서버에서 토큰 삭제에 성공한 상태입니다.
+            }
+            override fun onFailure(httpStatus: Int, message: String) {
+                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+                Log.d(TAG, "errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}")
+                Log.d(TAG, "errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}")
+            }
+            override fun onError(errorCode: Int, message: String) {
+                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+                onFailure(errorCode, message)
+            }
+        })
+    }
+
 
     private fun updatePushState(){
         binding.apply {

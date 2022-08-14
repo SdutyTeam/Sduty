@@ -202,7 +202,6 @@ class CamStudyDetailFragment : Fragment() {
 
             btnJoinCamstudy.setOnClickListener {
                 checkPermission()
-                findNavController().safeNavigate(CamStudyDetailFragmentDirections.actionCamStudyDetailFragmentToPreviewFragment(studyRoomId, studyName))
             }
 
             btnStudySetting.setOnClickListener {
@@ -244,16 +243,15 @@ class CamStudyDetailFragment : Fragment() {
     private fun checkPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
+                findNavController().safeNavigate(CamStudyDetailFragmentDirections.actionCamStudyDetailFragmentToPreviewFragment(studyRoomId, studyName))
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
-                requireActivity().showToast("모든 권한을 허용해야 이용이 가능합니다.")
-                requireActivity().finish()
+                requireActivity().showToast("카메라 권한을 허용해야 이용이 가능합니다.")
             }
 
         }
         TedPermission.create()
             .setPermissionListener(permissionListener)
-            //.setRationaleMessage("asdfasdf")
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
             .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
             .check()
