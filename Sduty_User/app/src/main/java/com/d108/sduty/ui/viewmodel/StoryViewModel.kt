@@ -153,7 +153,6 @@ class StoryViewModel: ViewModel() {
 
     fun insertStory(story: Story, bitmap: Bitmap){
         viewModelScope.launch(Dispatchers.IO){
-            Log.d(TAG, "insertStory: ${story}")
             try {
                 val bitmapRequestBody = bitmap?.let {
                     BitmapRequestBody(it)
@@ -185,7 +184,6 @@ class StoryViewModel: ViewModel() {
                 if (it.isSuccessful && it.body() != null) {
                     _timeLine.postValue(it.body() as Timeline)
                     _replyList.postValue((it.body() as Timeline).replies)
-                    Log.d(TAG, "getTimelineValue: ${it.body()}")
                 }else{
                     Log.d(TAG, "getStoryValue: ${it.code()}")
                 }

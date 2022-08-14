@@ -23,7 +23,6 @@ class StoryDataSource(val flag: Int, private val storyApi: StoryApi, private val
                 SCRAP_STORY -> response = storyApi.getScrapList(userSeq, page, 18)
             }
             val body = response!!.body() as PagingResult<Story>
-            Log.d(TAG, "load: ${page}")
             if(response.isSuccessful && body.result.isNotEmpty()) {
                 LoadResult.Page(
                     data = body.result,

@@ -96,7 +96,6 @@ class PreviewFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.authenticationLiveData.observe(viewLifecycleOwner) { resource ->
-            Log.d("SignInActivity", "observe() resource: $resource")
             when (resource.status) {
                 Status.LOADING -> {
                     Log.d(TAG, "observeViewModel: LOADING")
@@ -113,13 +112,11 @@ class PreviewFragment : Fragment() {
         }
 
         viewModel.fetchedRoomId.observe(viewLifecycleOwner){
-            Log.d(TAG, "observeViewModel: ${it.status}")
             when (it.status) {
                 Status.SUCCESS -> {
                     val isAudioEnabled = !binding.previewAudioCheckbox.isChecked
                     val isVideoEnabled = !binding.previewVideoCheckbox.isChecked
                     viewModel.enter(it.data.toString(), isAudioEnabled, isVideoEnabled)
-                    Log.d(TAG, "observeViewModel: ${it.data.toString()}")
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireContext(), "ERROR / authViewModel.fetchedRoomId", Toast.LENGTH_SHORT).show()
@@ -129,7 +126,6 @@ class PreviewFragment : Fragment() {
         }
 
         viewModel.enterResult.observe(viewLifecycleOwner) { resource ->
-            Log.d(TAG, "observeViewModel: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> goToRoomActivity()
                 Status.ERROR -> {

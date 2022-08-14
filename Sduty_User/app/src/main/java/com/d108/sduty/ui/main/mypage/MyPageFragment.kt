@@ -68,7 +68,6 @@ class MyPageFragment : Fragment() {
             }
             pagingScrapList.observe(viewLifecycleOwner){
                 storyAdapter.submitData(this@MyPageFragment.lifecycle, it)
-                Log.d(TAG, "initViewModel: ${it}")
             }
             contributionList.observe(viewLifecycleOwner){
                 contributionAdapter.list = it

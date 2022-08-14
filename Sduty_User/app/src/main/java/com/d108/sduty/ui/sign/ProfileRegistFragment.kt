@@ -157,11 +157,10 @@ class ProfileRegistFragment : Fragment() {
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == Activity.RESULT_OK){
             val uri = it.data!!.getStringExtra("uri")
-            Log.d(TAG, "resultLauncher: ${uri}")
             binding.ivProfile.setImageURI(Uri.parse(uri))
             imageUrl = uri!!
         }else{
-            Log.d(TAG, "resultLauncher: NODATA!!!!!!!!!!!!!!!!!!!!!!!!")
+            Log.d(TAG, "resultLauncher: NODATA")
         }
     }
 
@@ -191,7 +190,6 @@ class ProfileRegistFragment : Fragment() {
                     interestHashtagSeqs.add(item.seq)
                 }
             }
-            Log.d(TAG, "saveProfile: ${birth}")
             if(birthInput.isEmpty()){
                 msg = "생년월일을 정확히 입력해 주세요"
             }else if(nickname.isEmpty()){
@@ -222,7 +220,6 @@ class ProfileRegistFragment : Fragment() {
                     var profile = mainViewModel.profile.value!!
                     profile.nickname = nickname
                     profile.birthday = birth!!
-                    Log.d(TAG, "saveProfile111: ${birth}")
                     profile.shortIntroduce = introduce
                     profile.job = jobHashtag!!.name
                     profile.mainAchievmentSeq = mainAchievement

@@ -168,7 +168,6 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private fun initViewModel(){
         storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
         storyViewModel.pagingAllTimelineList.observe(viewLifecycleOwner){
-            Log.d(TAG, "onViewCreated: $it")
             pageAdapter.submitData(this.lifecycle, it)
         }
         storyViewModel.pagingTimelineJobAndAllList.observe(viewLifecycleOwner){
@@ -213,6 +212,16 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     it.onClickConfirmListener = object : BlockDialog.OnClickConfirmListener{
                         override fun onClick() {
                             storyViewModel.blockStory(mainViewModel.user.value!!.seq, menuSelectedTimeline.story)
+                        }
+                    }
+                    it.show(parentFragmentManager, null)
+                }
+            }
+            R.id.report ->{
+                BlockDialog(FLAG_REPORT).let {
+                    it.onClickConfirmListener = object : BlockDialog.OnClickConfirmListener{
+                        override fun onClick() {
+                            storyViewModel.reportStory(menuSelectedTimeline.story)
                         }
                     }
                     it.show(parentFragmentManager, null)

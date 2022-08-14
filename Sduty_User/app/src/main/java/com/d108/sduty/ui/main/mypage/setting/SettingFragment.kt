@@ -44,13 +44,19 @@ class SettingFragment : Fragment() {
         binding.apply {
             btnPushAll.setOnCheckedChangeListener { buttonView, isChecked ->
                 when(isChecked){
-                    true -> btnPushPersonal.isChecked = true
+                    true -> {
+                        btnPushPersonal.isChecked = true
+                        updatePushState()
+                    }
                     else -> {}
                 }
             }
             btnPushPersonal.setOnCheckedChangeListener { buttonView, isChecked ->
                 when(isChecked){
-                    false -> btnPushAll.isChecked = false
+                    false -> {
+                        btnPushAll.isChecked = false
+                        updatePushState()
+                    }
                     else -> {}
                 }
             }
@@ -115,6 +121,18 @@ class SettingFragment : Fragment() {
         SettingsPreference().setUserId("")
         startActivity(Intent(requireContext(), MainActivity::class.java))
         requireActivity().finish()
+    }
+
+    private fun updatePushState(){
+        binding.apply {
+            if(btnPushAll.isChecked){
+                SettingsPreference().setPushState(2)
+            }else if(!btnPushAll.isChecked && btnPushPersonal.isChecked){
+                SettingsPreference().setPushState(1)
+            }else if(!btnPushAll.isChecked && !btnPushPersonal.isChecked){
+                SettingsPreference().setPushState(0)
+            }
+        }
     }
 
 

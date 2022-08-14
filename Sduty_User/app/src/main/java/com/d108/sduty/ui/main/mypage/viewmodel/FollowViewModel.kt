@@ -21,7 +21,6 @@ class FollowViewModel: ViewModel() {
             Retrofit.profileApi.getFollower(userSeq).let {
                 if(it.isSuccessful && it.body() != null){
                     _followerList.postValue(it.body() as MutableList<Follow>)
-                    Log.d(TAG, "getFollower: ${it.body()}")
                 }else{
                     Log.d(TAG, "getFollower: ${it.code()}")
                 }
@@ -38,7 +37,6 @@ class FollowViewModel: ViewModel() {
             Retrofit.profileApi.getFollowee(userSeq).let {
                 if(it.isSuccessful && it.body() != null){
                     _followeeList.postValue(it.body() as MutableList<Follow>)
-                    Log.d(TAG, "getFollowee: ${it.body()}")
                 }else{
                     Log.d(TAG, "getFollowee: ${it.code()}")
                 }

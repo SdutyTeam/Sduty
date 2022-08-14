@@ -90,14 +90,7 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                 binding.apply {
                     vm = viewModel
                     mainVM = mainViewModel
-                    Log.d(TAG, "initViewModel: main: ${it}")
                 }
-            }
-        }
-
-        mainViewModel.profile.observe(viewLifecycleOwner){
-            binding.apply {
-                Log.d(TAG, "initViewModel: story: ${it}")
             }
         }
     }

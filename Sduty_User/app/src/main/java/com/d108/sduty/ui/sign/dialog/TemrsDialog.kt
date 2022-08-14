@@ -55,7 +55,6 @@ class TemrsDialog(var mContext: Context) : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         termsFlag = arguments?.getString("flag").toString()
-        Log.d(TAG, "onViewCreated: ${termsFlag}")
         var string: String? = ""
         val stringBuilder = StringBuilder()
         when(requireArguments().getString("flag")){

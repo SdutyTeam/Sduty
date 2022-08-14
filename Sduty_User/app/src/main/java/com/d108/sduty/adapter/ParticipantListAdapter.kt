@@ -88,10 +88,6 @@ class ParticipantListAdapter(
     ): BaseViewHolder(binding.root) {
         override fun bind(participant: Participant?) {
             binding.participantListItemImageViewProfile.apply {
-                Log.d("TAG", "bind: ${participant?.user?.userId}")
-                Log.d("TAG", "bind: ${participant?.user?.nickname}")
-                Log.d("TAG", "bind: ${participant?.user?.profileUrl}")
-
                 layoutParams = layoutParams.apply {
                     width = context.dpToPixel(36)
                     height = context.dpToPixel(36)

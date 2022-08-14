@@ -40,7 +40,6 @@ class StudyRegisteViewModel: ViewModel() {
     fun studyCreate(study: Study){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d(TAG, "studyCreate: ${mapOf("Study" to study)}")
                 Retrofit.studyApi.studyCreate(mapOf("Study" to study)).let {
                     if(it.isSuccessful){
                         _createSuccess.postValue(true)
@@ -113,10 +112,8 @@ class StudyRegisteViewModel: ViewModel() {
     fun camStudyCreate(study: Study, alarm: Alarm){
         viewModelScope.launch(Dispatchers.IO) {
             val studyObj: Map<String, Objects> = mapOf("Study" to study, "Alarm" to alarm) as Map<String, Objects>
-            Log.d(TAG, "camStudyCreate: ${studyObj}")
             try {
                 Retrofit.studyApi.camStudyCreate(studyObj).let {
-                    Log.d(TAG, "camStudyCreate: ${it}")
                     if(it.isSuccessful){
                         _createSuccess.postValue(true)
                     }

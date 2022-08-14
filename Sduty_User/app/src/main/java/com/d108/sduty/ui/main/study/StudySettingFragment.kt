@@ -235,7 +235,6 @@ class StudySettingFragment : Fragment() {
                     studyDetail.alarm?.sat = btnSat.isChecked
                     studyDetail.alarm?.sun = btnSun.isChecked
                     studyDetail.alarm?.time = "${hour}:${minute}:00"
-                    Log.d(TAG, "onViewCreated: ${studyDetail}")
 
                     studySettingViewModel.studyUpdate(mainViewModel.profile.value!!.userSeq, args.studySeq, studyDetail)
                 }

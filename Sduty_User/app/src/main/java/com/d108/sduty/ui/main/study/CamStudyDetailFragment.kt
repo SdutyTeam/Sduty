@@ -79,8 +79,6 @@ class CamStudyDetailFragment : Fragment() {
                         member["total_time"] as String,
                         member["userSeq"].toString().toDouble().roundToInt()))
                 }
-                Log.d(TAG, "onViewCreated11: ${memberList}")
-
                 initAdapter()
 
 

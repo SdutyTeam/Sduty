@@ -84,11 +84,9 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             timeLine.observe(viewLifecycleOwner){
                 replyAdapter.list = timeLine.value!!.replies
                 binding.vm = viewModel
-                Log.d(TAG, "initViewModel: $it")
             }
             replyList.observe(viewLifecycleOwner){
                 replyAdapter.list = it
-                Log.d(TAG, "initViewModel: $it")
             }
             isFollowSucceed.observe(viewLifecycleOwner){
                 mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
@@ -226,12 +224,10 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 }
             }
             R.id.reply_delete ->{
-                Log.d(TAG, "onMenuItemClick: ###########")
                 BlockDialog(FLAG_DELETE).let {
                     it.onClickConfirmListener = object :BlockDialog.OnClickConfirmListener{
                         override fun onClick() {
                             viewModel.deleteReply(selectedReply)
-                            Log.d(TAG, "onClick: ${selectedReply}")
                         }
                     }
                     it.show(parentFragmentManager, null)

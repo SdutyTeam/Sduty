@@ -188,12 +188,10 @@ class TimerViewModel() : ViewModel() {
 
     // 선택된 날짜의 리포트를 요청
     private fun getReport(userSeq: Int, selectedDate: String) {
-        Log.d(TAG, "getReport: $userSeq $selectedDate")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.getReport(userSeq, selectedDate).let {
                 // 사용자 리포트
                 if (it.isSuccessful && it.body() != null) {
-                    Log.d(TAG, "getReport: body ${it.body()}")
                     val report = it.body() as Report
                     report.tasks = report.tasks.sortedBy { it.startTime }
                     _report.postValue(report)
@@ -210,7 +208,6 @@ class TimerViewModel() : ViewModel() {
 
     // 시간 측정 기록 저장
     private fun insertTask(report: Report) {
-        Log.d(TAG, "insertTask: ${report}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.insertTask(report).let {
                 if (it.isSuccessful) {
@@ -226,7 +223,6 @@ class TimerViewModel() : ViewModel() {
 
     // 삭제
     private fun deleteTask(userSeq: Int, seq: Int) {
-        Log.d(TAG, "deleteTask: ${seq}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.deleteTask(seq).let {
                 if (it.isSuccessful) {
@@ -242,7 +238,6 @@ class TimerViewModel() : ViewModel() {
 
     // 수정
     private fun updateTask(userSeq: Int, task: Task){
-        Log.d(TAG, "updateTask: ${task}")
         CoroutineScope(Dispatchers.IO).launch {
             Retrofit.timerApi.updateTask(task.seq, task).let {
                 if (it.isSuccessful) {

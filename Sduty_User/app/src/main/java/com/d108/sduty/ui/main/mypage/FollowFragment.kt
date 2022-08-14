@@ -66,7 +66,6 @@ class FollowFragment : Fragment() {
                 followAdapter.list = followerList.value!!
                 setMyFollowPage(false)
                 binding.tabFollow.getTabAt(0)!!.text = "팔로워 ${it.size}명"
-                Log.d(TAG, "initViewModel: ${it}")
             }
             followeeList.observe(viewLifecycleOwner){
                 binding.tabFollow.getTabAt(1)!!.text = "팔로잉 ${it.size}명"
@@ -77,7 +76,6 @@ class FollowFragment : Fragment() {
                 }
                 followAdapter.tabFlag = FLAG_FOLLOWEE
                 followAdapter.list = followeeList.value!!
-                Log.d(TAG, "initViewModel: ${it}")
             }
         }
         storyViewModel.isFollowSucceed.observe(viewLifecycleOwner){

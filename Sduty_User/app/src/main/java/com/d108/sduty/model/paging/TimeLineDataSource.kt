@@ -36,11 +36,7 @@ class TimeLineDataSource(
                 INTEREST_TIMELINE -> response = storyApi.getStoryInterestAndAllList(userSeq, interestName, page)
                 FOLLOW_TIMELINE -> response = storyApi.getAllTimelineFollowList(userSeq, page)
             }
-
-
-
             val body = response!!.body() as PagingResult<Timeline>
-            Log.d(TAG, "load: ${page}")
 
             if(response.isSuccessful && body.result.isNotEmpty()) {
                 LoadResult.Page(

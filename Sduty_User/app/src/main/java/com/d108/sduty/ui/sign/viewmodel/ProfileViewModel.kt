@@ -36,14 +36,12 @@ class ProfileViewModel: ViewModel() {
                 when {
                     it.code() == 200 -> {
                         _isUsedNickname.postValue(false)
-                        Log.d(TAG, "checkNickname: ${it.code()}")
                     }
                     it.code() == 401 -> {
                         _isUsedNickname.postValue(true)
-                        Log.d(TAG, "checkNickname: ${it.code()}")
                     }
                     else -> {
-                        Log.d(TAG, "checkNickname: ${it}")
+                        Log.d(TAG, "checkNickname: ${it.code()}")
                     }
                 }
             }
@@ -54,7 +52,6 @@ class ProfileViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             try {
                 val file = File(imageUrl)
-                Log.d(TAG, "insertProfile: ${imageUrl}")
                 var fileName = "profile/" + System.currentTimeMillis().toString()+".png"
                 profile.image = fileName
                 var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
@@ -87,7 +84,6 @@ class ProfileViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             try {
                 val file = File(imageUrl)
-                Log.d(TAG, "updateProfileImage: ${imageUrl}")
                 var fileName = "profile/" + System.currentTimeMillis().toString()+".png"
                 var requestBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 var imageBody : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,requestBody)

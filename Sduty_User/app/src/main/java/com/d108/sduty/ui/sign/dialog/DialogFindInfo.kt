@@ -43,7 +43,6 @@ class DialogFindInfo(val mContext: Context) : DialogFragment() {
 
         initView()
         initViewModel()
-        Log.d(TAG, "onViewCreated: $flag")
     }
 
     private fun initViewModel(){

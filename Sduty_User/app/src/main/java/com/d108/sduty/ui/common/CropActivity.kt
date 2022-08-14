@@ -300,10 +300,8 @@ open class CropActivity : AppCompatActivity(),
 
     override fun onCropImageComplete(view: CropImageView, result: CropImageView.CropResult) {
         setResult(result.uriContent, result.error, result.sampleSize)
-        Log.d(TAG, "onCropImageComplete: ${result.uriContent}")
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("uri", result.getUriFilePath(context, true))
-        Log.d(TAG, "onCropImageComplete: ${result.getUriFilePath(context, true)}")
         setResult(RESULT_OK, intent)
         finish()
     }

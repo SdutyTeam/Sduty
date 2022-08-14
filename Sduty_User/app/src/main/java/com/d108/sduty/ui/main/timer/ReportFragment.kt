@@ -66,7 +66,6 @@ class ReportFragment : Fragment() {
 
         // 뷰모델 초기화
         initViewModel()
-        Log.d(TAG, "onViewCreated: ")
         // 화면 초기화
         initView()
         // 해야할 일 갱신

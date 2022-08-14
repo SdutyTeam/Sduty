@@ -128,7 +128,6 @@ class StoryDecoFragment: Fragment() {
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == Activity.RESULT_OK){
             val uri = it.data!!.getStringExtra("uri")
-            Log.d(TAG, "resultLauncher: ${uri}")
             binding.imgPreview.setImageURI(Uri.parse(uri))
             imageUrl = uri!!
         }else{
@@ -146,7 +145,6 @@ class StoryDecoFragment: Fragment() {
                     adapter = spinnerAdapter
                     this.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
                         override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                            Log.d(TAG, "onItemSelected: ${timerViewModel.report.value}")
                             binding.tvTime.text = "${timerViewModel.report.value?.date} ${taskList[p2].startTime.substring(0, 5)} ~ ${taskList[p2].endTime.substring(0, 5)}"
                             binding.tvTimeGradient.text = "${timerViewModel.report.value?.date} ${taskList[p2].startTime.substring(0, 5)} ~ ${taskList[p2].endTime.substring(0, 5)}"
                         }

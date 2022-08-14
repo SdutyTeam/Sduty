@@ -29,7 +29,6 @@ class JoinViewModel: ViewModel() {
 
     fun setToken(token: String){
         _accessToken.value = token
-        Log.d(TAG, "setToken: $token")
     }
 
     private val _isJoinSucced = MutableLiveData<Boolean>()
@@ -40,7 +39,6 @@ class JoinViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Retrofit.userApi.join(user).let {
-                    Log.d("TAG", "join: ${it}")
                     if(it.isSuccessful){
                         _isJoinSucced.postValue(true)
                     }
@@ -141,9 +139,7 @@ class JoinViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             val code = authInfo.value
             code!!.code = inputCode
-            Log.d(TAG, "checkOTP: ${authInfo}")
             Retrofit.userApi.checkAuthCode(code).let {
-                Log.d(TAG, "checkOTP: ${it.code()}")
                 if(it.code() == 401){
                     _isSucceedAuth.postValue(false)
                     _authMsg.postValue("인증번호가 일치하지 않습니다.")
@@ -171,7 +167,6 @@ class JoinViewModel: ViewModel() {
     val isShortPW: LiveData<Boolean>
         get() = _isShortPW
     fun checkPWLength(pw: String){
-        Log.d(TAG, "checkPWLength: ${pw.length}")
         _isShortPW.value = pw.length < 8
     }
 

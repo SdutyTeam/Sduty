@@ -111,7 +111,6 @@ class StudySettingViewModel: ViewModel() {
             try {
                 val response = Retrofit.studyApi.studyDetail(studySeq)
                 if(response.isSuccessful && response.body() != null){
-                    Log.d(TAG, "studyDetail: ${response}")
                     _studyDetail.postValue(response.body() as Study)
                 }
             } catch (e: Exception){
@@ -124,7 +123,6 @@ class StudySettingViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = Retrofit.studyApi.getStudyName(id)
-                Log.d(TAG, "getStudyId@@@: {$response}")
                 if(response.code() == 200){
                     _isStudyId.postValue(false)
                 }
