@@ -1,6 +1,7 @@
 package com.d108.sduty.ui.main.mypage.setting
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d108.sduty.databinding.FragmentSettingBinding
+import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.main.mypage.setting.viewmodel.SettingViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.SettingsPreference
@@ -43,7 +45,7 @@ class SettingFragment : Fragment() {
             btnLogout.setOnClickListener {
                 requireActivity().showAlertDialog("로그아웃","로그아웃 하시겠습니까?", object : DialogInterface.OnClickListener{
                     override fun onClick(p0: DialogInterface?, p1: Int) {
-                        findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
+                        clearActivity()
                     }
                 })
 
@@ -65,6 +67,7 @@ class SettingFragment : Fragment() {
                         when(which){
                             DialogInterface.BUTTON_POSITIVE -> {
                                 viewModel.resignUser(mainViewModel.user.value!!)
+                                clearActivity()
                             }
                         }
                     }
@@ -80,13 +83,19 @@ class SettingFragment : Fragment() {
                 true -> {
                     requireActivity().showAlertDialog("회원 탈퇴", "탈퇴가 완료되었습니다.", null)
                     findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
-                    SettingsPreference().setUserId("")
+                    clearActivity()
                 }
                 else -> {}
             }
         }
     }
 
+
+    private fun clearActivity(){
+        SettingsPreference().setUserId("")
+        startActivity(Intent(requireContext(), MainActivity::class.java))
+        requireActivity().finish()
+    }
 
 
 

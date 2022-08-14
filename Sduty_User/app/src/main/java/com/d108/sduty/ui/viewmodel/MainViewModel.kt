@@ -65,4 +65,9 @@ class MainViewModel: ViewModel() {
         return _profile.value!!.follows?.get("${userSeq}")!= null
     }
 
+    fun clear(){
+        _user.value = null
+        _profile.value = null
+        _isRegisterProfile.value = false
+    }
 }
