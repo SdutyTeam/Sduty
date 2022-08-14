@@ -73,7 +73,7 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
         viewModel.apply {
             getContribution(args.userSeq)
-            getUserStoryList(args.userSeq)
+            getUserStoryList(mainViewModel.user.value!!.seq, args.userSeq)
 
             pagingStoryList.observe(viewLifecycleOwner){
                 storyAdapter.submitData(this@UserProfileFragment.lifecycle, it)

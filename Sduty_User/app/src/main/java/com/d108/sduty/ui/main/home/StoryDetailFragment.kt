@@ -160,7 +160,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                     "스토리를 삭제하시겠습니까?",
                     object : DialogInterface.OnClickListener {
                         override fun onClick(dialog: DialogInterface?, which: Int) {
-                            viewModel.deleteStory(viewModel.timeLine.value!!.story)
+                            viewModel.deleteStory(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story)
                             requireContext().showToast("삭제 되었습니다.")
                             findNavController().popBackStack()
                         }

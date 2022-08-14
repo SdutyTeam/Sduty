@@ -23,8 +23,8 @@ interface StoryApi {
     @GET("/story/{storySeq}/{userSeq}")
     suspend fun getTimelineDetail(@Path("storySeq") storySeq: Int, @Path("userSeq")userSeq: Int): Response<Timeline>
 
-    @GET("/story/writer/{userSeq}")
-    suspend fun getUserStoryList(@Path("userSeq")userSeq: Int, @Query("page")page: Int, @Query("size")pageSize: Int): Response<PagingResult<Story>>
+    @GET("/story/writer/{writerSeq}/{userSeq}")
+    suspend fun getUserStoryList(@Path("writerSeq")writerSeq: Int ,@Path("userSeq")userSeq: Int, @Query("page")page: Int, @Query("size")pageSize: Int): Response<PagingResult<Story>>
 
     @GET("/story/scrap/{user_seq}")
     suspend fun getScrapList(@Path("user_seq")userSeq: Int, @Query("page")page: Int, @Query("size")pageSize: Int): Response<PagingResult<Story>>

@@ -202,7 +202,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                 BlockDialog(FLAG_DELETE).let {
                     it.onClickConfirmListener = object : BlockDialog.OnClickConfirmListener{
                         override fun onClick() {
-                            storyViewModel.deleteStory(menuSelectedTimeline.story)
+                            storyViewModel.deleteStory(mainViewModel.user.value!!.seq, menuSelectedTimeline.story)
                         }
                     }
                     it.show(parentFragmentManager, null)

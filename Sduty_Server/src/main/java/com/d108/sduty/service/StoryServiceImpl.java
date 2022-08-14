@@ -74,7 +74,7 @@ public class StoryServiceImpl implements StoryService {
 		List<Story> storyList = new ArrayList<Story>();
 		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
 		for(Story s : storyPage) {
-			if(dislikes.contains(s.getWriterSeq())) {
+			if(dislikes.contains(s.getSeq())) {
 				continue;
 			}
 			storyList.add(s);

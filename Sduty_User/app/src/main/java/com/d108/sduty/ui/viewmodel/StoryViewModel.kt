@@ -94,7 +94,7 @@ class StoryViewModel: ViewModel() {
     // 스크랩 스토리 전체 조회
     private fun getScrapList(userSeq: Int) = Pager(
         config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
-        pagingSourceFactory = {StoryDataSource(SCRAP_STORY, Retrofit.storyApi, userSeq)}
+        pagingSourceFactory = {StoryDataSource(SCRAP_STORY, Retrofit.storyApi, userSeq, 0)}
     ).liveData
 
     private val userScrapPage = MutableLiveData<Int>()
@@ -107,18 +107,21 @@ class StoryViewModel: ViewModel() {
     }
 
     // 모든 스토리 전체 조회
-    private fun getStoryPost(userSeq: Int) = Pager(
+    private fun getStoryPost(userSeq: Int, writerSeq: Int) = Pager(
         config = PagingConfig(pageSize = 1, maxSize = 18, enablePlaceholders = false),
-        pagingSourceFactory = {StoryDataSource(ALL_STORY, Retrofit.storyApi, userSeq)}
+        pagingSourceFactory = {StoryDataSource(ALL_STORY, Retrofit.storyApi, userSeq, writerSeq)}
     ).liveData
-    private val userStoryPosts = MutableLiveData<Int>()
+    private val userStoryPosts = MutableLiveData<IntArray>()
 
     val pagingStoryList = userStoryPosts.switchMap {
-        getStoryPost(it).cachedIn(viewModelScope)
+        getStoryPost(it[0], it[1]).cachedIn(viewModelScope)
     }
 
-    fun getUserStoryList(userSeq: Int){
-        userStoryPosts.postValue(userSeq)
+    fun getUserStoryList(userSeq: Int, writerSeq: Int){
+        val array = IntArray(2)
+        array[0] = userSeq
+        array[1] = writerSeq
+        userStoryPosts.postValue(array)
     }
 
 
@@ -270,12 +273,12 @@ class StoryViewModel: ViewModel() {
         }
     }
 
-    fun deleteStory(story: Story){
+    fun deleteStory(userSeq: Int, story: Story){
         viewModelScope.launch(Dispatchers.IO){
             Retrofit.storyApi.deleteStory(story.seq).let {
                 if (it.code() == 200) {
                     getAllTimelineListValue(story.writerSeq)
-                    getStoryPost(story.writerSeq)
+                    getStoryPost(userSeq, story.writerSeq)
                 }else if(it.code() == 401){
 
                 }
@@ -448,7 +451,7 @@ class StoryViewModel: ViewModel() {
             Retrofit.storyApi.blockStory(userSeq, story.seq).let {
                 if(it.isSuccessful){
                     getAllTimelineListValue(userSeq)
-                    getStoryPost(story.writerSeq)
+                    getStoryPost(userSeq, story.writerSeq)
                 }else{
                     Log.d(TAG, "blockStory: ${it.code()}")
                 }

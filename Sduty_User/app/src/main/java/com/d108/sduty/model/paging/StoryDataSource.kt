@@ -12,14 +12,14 @@ import retrofit2.Response
 import java.lang.Exception
 
 private const val TAG ="TimeLineDataSource"
-class StoryDataSource(val flag: Int, private val storyApi: StoryApi, private val userSeq: Int): PagingSource<Int, Story>() {
+class StoryDataSource(val flag: Int, private val storyApi: StoryApi, private val userSeq: Int, private val writerSeq: Int): PagingSource<Int, Story>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Story> {
         return try{
             val page = params.key?: 0
             var response: Response<PagingResult<Story>>? = null
 
             when(flag){
-                ALL_STORY -> response = storyApi.getUserStoryList(userSeq, page, 18)
+                ALL_STORY -> response = storyApi.getUserStoryList(writerSeq, userSeq, page, 18)
                 SCRAP_STORY -> response = storyApi.getScrapList(userSeq, page, 18)
             }
             val body = response!!.body() as PagingResult<Story>

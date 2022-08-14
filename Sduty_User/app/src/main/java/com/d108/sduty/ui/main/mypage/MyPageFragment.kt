@@ -62,7 +62,7 @@ class MyPageFragment : Fragment() {
 //                storyAdapter.list = it
 //            }
 
-            getUserStoryList(mainViewModel.user.value!!.seq)
+            getUserStoryList(mainViewModel.user.value!!.seq, mainViewModel.user.value!!.seq)
             pagingStoryList.observe(viewLifecycleOwner){
                 storyAdapter.submitData(this@MyPageFragment.lifecycle, it)
             }
@@ -101,7 +101,7 @@ class MyPageFragment : Fragment() {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when(tab!!.position){
                         0 -> {
-                            viewModel.getUserStoryList(mainViewModel.user.value!!.seq)
+                            viewModel.getUserStoryList(mainViewModel.user.value!!.seq, mainViewModel.user.value!!.seq)
                         }
                         1 -> {
                             viewModel.getScrapStoryList(mainViewModel.user.value!!.seq)
@@ -112,7 +112,7 @@ class MyPageFragment : Fragment() {
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     when(tab!!.position){
                         0 -> {
-                            viewModel.getUserStoryList(mainViewModel.user.value!!.seq)
+                            viewModel.getUserStoryList(mainViewModel.user.value!!.seq, mainViewModel.user.value!!.seq)
                         }
                         1 -> {
                             viewModel.getScrapStoryList(mainViewModel.user.value!!.seq)
