@@ -189,17 +189,17 @@ public class StudyController {
 				user_info.put("is_studying", 0);
 			}
 			
-			Map<String, Object> report = reportService.getReport(participant.getSeq(), LocalDate.now().toString());
+			Map<String, Object> report = reportService.getReport(participant.getSeq(), LocalDate.now().toString());			
 			if(report==null) {
 				user_info.put("total_time", "00:00:00");
 			}
-			else {
-				user_info.put("total_time", report.get("total_time"));
+			else {				
+				user_info.put("total_time", report.get("totalTime"));
 			}
 			
 			list.add(user_info);
 		}
-		resultMap.put("members", list);
+		resultMap.put("members", list);		
 		//3. 캠스터디면, 알람
 //		if(study.isCamstudy()) {
 //			Alarm alarm = studyService.getAlarm(study_seq);
