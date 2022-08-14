@@ -63,13 +63,13 @@ class TaskDialog : DialogFragment() {
                         if (tvEndTime.text != "종료 시간" && tvEndTime.text.toString().isNotEmpty()) {
                             val startTime = convertTimeStringToDate(
                                 String.format("%02d:%02d:00", hour, min),
-                                "hh:mm:ss"
+                                "HH:mm:ss"
                             ).time
 
                             val endTime =
                                 convertTimeStringToDate(
                                     tvEndTime.text.toString(),
-                                    "hh:mm:ss"
+                                    "HH:mm:ss"
                                 ).time
 
                             if (endTime > startTime) {
@@ -106,11 +106,11 @@ class TaskDialog : DialogFragment() {
                             val startTime =
                                 convertTimeStringToDate(
                                     tvStartTime.text.toString(),
-                                    "hh:mm:ss"
+                                    "HH:mm:ss"
                                 ).time
                             val endTime = convertTimeStringToDate(
                                 String.format("%02d:%02d:00", hour, min),
-                                "hh:mm:ss"
+                                "HH:mm:ss"
                             ).time
 
                             if (endTime > startTime) {

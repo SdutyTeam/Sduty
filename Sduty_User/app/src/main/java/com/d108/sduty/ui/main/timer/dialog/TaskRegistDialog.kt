@@ -49,7 +49,7 @@ class TaskRegistDialog : DialogFragment() {
         binding.apply {
             val time = timerViewModel.timer.value!!
             val hour = time / 60 / 60
-            val min = time / 60
+            val min = (time / 60) % 60
             val sec = time % 60
             tvTimer.text = String.format("%02d:%02d:%02d", hour, min, sec)
 
