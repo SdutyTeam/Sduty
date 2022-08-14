@@ -330,9 +330,9 @@ class StoryViewModel: ViewModel() {
 
     fun deleteReply(reply: Reply){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.storyApi.deleteReply(reply.storySeq, reply.seq).let {
+            Retrofit.storyApi.deleteReply(reply.seq).let {
                 if (it.isSuccessful && it.body() != null) {
-                    _replyList.postValue(it.body() as MutableList<Reply>)
+                    _replyList.postValue(it.body())
                 }else{
                     Log.d(TAG, "deleteReply: ${it.code()}")
                 }

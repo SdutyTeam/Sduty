@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.ReplyAdapter
 import com.d108.sduty.common.FLAG_BLOCK
+import com.d108.sduty.common.FLAG_DELETE
 import com.d108.sduty.common.FLAG_REPORT
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
@@ -44,6 +45,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var replyAdapter: ReplyAdapter
+    private lateinit var selectedReply: Reply
 
     override fun onResume() {
         super.onResume()
@@ -86,6 +88,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             }
             replyList.observe(viewLifecycleOwner){
                 replyAdapter.list = it
+                Log.d(TAG, "initViewModel: $it")
             }
             isFollowSucceed.observe(viewLifecycleOwner){
                 mainViewModel.getProfileValue(mainViewModel.user.value!!.seq)
@@ -98,7 +101,17 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     }
 
     private fun initView(){
-        replyAdapter = ReplyAdapter()
+        replyAdapter = ReplyAdapter(mainViewModel.user.value!!.seq)
+        replyAdapter.onClickReplyListener = object : ReplyAdapter.OnClickReplyListener{
+            override fun onClick(view: View, position: Int) {
+                selectedReply = replyAdapter.list[position]
+                PopupMenu(requireContext(), view).apply {
+                    setOnMenuItemClickListener(this@StoryDetailFragment)
+                    inflate(R.menu.menu_reply)
+                    show()
+                }
+            }
+        }
         binding.apply {
             vm = viewModel
             tvRegister.setOnClickListener {
@@ -149,6 +162,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                     findNavController().safeNavigate(StoryDetailFragmentDirections.actionStoryDetailFragmentToUserProfileFragment(viewModel.timeLine.value!!.story.writerSeq))
                 }
             }
+
         }
     }
 
@@ -206,6 +220,18 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                         override fun onClick() {
                             viewModel.blockStory(mainViewModel.user.value!!.seq, viewModel.timeLine.value!!.story)
                             findNavController().popBackStack()
+                        }
+                    }
+                    it.show(parentFragmentManager, null)
+                }
+            }
+            R.id.reply_delete ->{
+                Log.d(TAG, "onMenuItemClick: ###########")
+                BlockDialog(FLAG_DELETE).let {
+                    it.onClickConfirmListener = object :BlockDialog.OnClickConfirmListener{
+                        override fun onClick() {
+                            viewModel.deleteReply(selectedReply)
+                            Log.d(TAG, "onClick: ${selectedReply}")
                         }
                     }
                     it.show(parentFragmentManager, null)

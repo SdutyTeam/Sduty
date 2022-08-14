@@ -42,6 +42,19 @@ class SettingFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
+            btnPushAll.setOnCheckedChangeListener { buttonView, isChecked ->
+                when(isChecked){
+                    true -> btnPushPersonal.isChecked = true
+                    else -> {}
+                }
+            }
+            btnPushPersonal.setOnCheckedChangeListener { buttonView, isChecked ->
+                when(isChecked){
+                    false -> btnPushAll.isChecked = false
+                    else -> {}
+                }
+            }
+
             btnLogout.setOnClickListener {
                 requireActivity().showAlertDialog("로그아웃","로그아웃 하시겠습니까?", object : DialogInterface.OnClickListener{
                     override fun onClick(p0: DialogInterface?, p1: Int) {
@@ -72,6 +85,13 @@ class SettingFragment : Fragment() {
                         }
                     }
                 })
+            }
+
+            btnAsk.setOnClickListener{
+                requireContext().showToast("다음 업데이트에서 제공될 예정입니다.")
+            }
+            btnNotice.setOnClickListener {
+                requireContext().showToast("다음 업데이트에서 제공될 예정입니다.")
             }
         }
 

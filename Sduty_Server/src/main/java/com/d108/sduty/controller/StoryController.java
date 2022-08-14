@@ -359,12 +359,13 @@ public class StoryController {
 	}
 	
 	@Transactional
-	@ApiOperation(value = "댓글 삭제 : ReplySeq > HttpStatus 리턴", response = HttpStatus.class)
+	@ApiOperation(value = "댓글 삭제 : ReplySeq > Reply 리턴", response = HttpStatus.class)
 	@DeleteMapping("/reply/{replySeq}")
 	public ResponseEntity<?> deleteReply(@PathVariable int replySeq) throws Exception {
-		try {
-			storyService.deleteReply(replySeq);
-			return new ResponseEntity<Void>(HttpStatus.OK);
+		try {			
+			Reply reply = storyService.deleteReply(replySeq);
+			List<Reply> list = storyService.selectReplyByStorySeq(reply.getStorySeq());
+			return new ResponseEntity<List<Reply>>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}

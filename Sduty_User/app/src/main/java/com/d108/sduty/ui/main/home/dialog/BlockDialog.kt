@@ -69,7 +69,7 @@ class BlockDialog(private val flag: Int) : DialogFragment() {
                         requireContext().showToast("차단되었습니다.")
                         dismiss()
                     }
-                    FLAG_BLOCK -> {
+                    FLAG_DELETE -> {
                         onClickConfirmListener.onClick()
                         requireContext().showToast("삭제되었습니다.")
                         dismiss()

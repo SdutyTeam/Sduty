@@ -1,20 +1,30 @@
 package com.d108.sduty.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ItemReplyBinding
 import com.d108.sduty.model.dto.Reply
 
-class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
+class ReplyAdapter(val userSeq: Int): RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
     var list = mutableListOf<Reply>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
     inner class ViewHolder(val binding: ItemReplyBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(){
-            binding.data = list[adapterPosition]
+        fun bind(position: Int){
+            binding.apply {
+                data = list[absoluteAdapterPosition]
+                if(userSeq == list[absoluteAdapterPosition].userSeq){
+                    btnOption.visibility = View.VISIBLE
+                    btnOption.setOnClickListener {
+                        onClickReplyListener.onClick(it, position)
+                    }
+                }
+            }
+
         }
     }
 
@@ -24,8 +34,13 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(position)
     }
 
     override fun getItemCount(): Int = list.size
+
+    lateinit var onClickReplyListener: OnClickReplyListener
+    interface OnClickReplyListener{
+        fun onClick(view: View, position: Int)
+    }
 }

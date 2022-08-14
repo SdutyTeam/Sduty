@@ -56,8 +56,8 @@ interface StoryApi {
     @PUT("/story/{story_seq}/reply")
     suspend fun updateReply(@Body reply: Reply, @Path("story_seq")storySeq: Int): Response<MutableList<Reply>>
 
-    @DELETE("/story/{story_seq}/reply/{reply_seq}")
-    suspend fun deleteReply(@Path("story_seq")storySeq: Int, @Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
+    @DELETE("/story/reply/{reply_seq}")
+    suspend fun deleteReply(@Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
 
     @POST("/story/like")
     suspend fun likeStory(@Body likes: Likes): Response<Void>

@@ -23,7 +23,7 @@ public interface StoryService {
 	List<Reply> selectReplyByStorySeq(int storySeq);
 	Reply insertReply(Reply reply);
 	Reply updateReply(Reply reply);
-	void deleteReply(int replySeq);
+	Reply deleteReply(int replySeq);
 	
 	void doDislike(int userSeq, int storySeq);
 	PagingResult<Story> findBywriterSeq(int writerSeq, int userSeq, Pageable pageable);
