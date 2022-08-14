@@ -234,11 +234,11 @@ public class StoryController {
 	}
 	
 	@ApiOperation(value = "작성자로 글 조회 : UserSeq > List<Story> 리턴", response = Story.class)
-	@GetMapping("/writer/{userSeq}")
-	public ResponseEntity<?> selectByWriterSeq(@PathVariable int userSeq, 
+	@GetMapping("/writer/{writerSeq}/{userSeq}")
+	public ResponseEntity<?> selectByWriterSeq(@PathVariable int writerSeq, @PathVariable int userSeq, 
 			@PageableDefault Pageable pageable) throws Exception {
 		System.out.println(pageable.getPageSize());
-		PagingResult<Story> listStory = storyService.findBywriterSeq(userSeq, pageable);
+		PagingResult<Story> listStory = storyService.findBywriterSeq(writerSeq, userSeq, pageable);
 		
 		if(listStory != null) {
 			return new ResponseEntity<PagingResult<Story>>(listStory, HttpStatus.OK);

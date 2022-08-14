@@ -13,8 +13,7 @@ import com.d108.sduty.dto.Story;
 
 public interface StoryService {
 	Story insertStory(Story story);
-	Story updateStory(Story story);
-	PagingResult<Story> findBywriterSeq(int userSeq, Pageable pageable);
+	Story updateStory(Story story);	
 	Story findById(int storySeq);
 	List<Story> findAll();
 	Page<Story> findAllByWriterSeqInOrderByRegtimeDesc(List<Integer> writerSeqs, Pageable pageable);
@@ -27,4 +26,5 @@ public interface StoryService {
 	void deleteReply(int replySeq);
 	
 	void doDislike(int userSeq, int storySeq);
+	PagingResult<Story> findBywriterSeq(int writerSeq, int userSeq, Pageable pageable);
 }

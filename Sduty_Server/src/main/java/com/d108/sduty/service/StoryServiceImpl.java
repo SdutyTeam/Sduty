@@ -69,9 +69,17 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public PagingResult<Story> findBywriterSeq(int userSeq, Pageable pageable) {
-		Page<Story> storyPage = storyRepo.findBywriterSeqOrderByRegtimeDesc(userSeq, pageable);
-		PagingResult result = new PagingResult<Story>(pageable.getPageNumber(), storyPage.getTotalPages() -1, storyPage.toList());
+	public PagingResult<Story> findBywriterSeq(int writerSeq, int userSeq, Pageable pageable) {
+		Page<Story> storyPage = storyRepo.findBywriterSeqOrderByRegtimeDesc(writerSeq, pageable);
+		List<Story> storyList = new ArrayList<Story>();
+		List<Integer> dislikes = dislikeRepo.findAllDislikes(userSeq);
+		for(Story s : storyPage) {
+			if(dislikes.contains(s.getWriterSeq())) {
+				continue;
+			}
+			storyList.add(s);
+		}
+		PagingResult result = new PagingResult<Story>(pageable.getPageNumber(), storyPage.getTotalPages() -1, storyList);
 		return result;
 	}
 

@@ -71,6 +71,6 @@ interface StoryApi {
     @GET("/story/test")
     suspend fun getAllPagingTimeline(@Query("userSeq")userSeq: Int, @Query("page")page: Int): Response<PagingResult<Timeline>>
 
-    @GET("/ban/{userSeq}/{storySeq}")
+    @GET("/story/ban/{userSeq}/{storySeq}")
     suspend fun blockStory(@Path("userSeq") userSeq: Int, @Path("storySeq") storySeq: Int): Response<Void>
 }
