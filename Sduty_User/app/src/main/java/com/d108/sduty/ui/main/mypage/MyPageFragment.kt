@@ -129,6 +129,12 @@ class MyPageFragment : Fragment() {
                 adapter = contributionAdapter
                 layoutManager = GridLayoutManager(requireContext(), 26)
             }
+<<<<<<< HEAD
+=======
+//            ivAchieve.setOnClickListener {
+//                findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToAchievementFragment())
+//            }
+>>>>>>> feature/FE/study
             ivSetting.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())
             }

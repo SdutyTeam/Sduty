@@ -1,14 +1,13 @@
 package com.d108.sduty.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ListItemStudyMemberBinding
 import com.d108.sduty.model.dto.Member
 
 
-class StudyMemeberAdapter(var list: List<Member>): RecyclerView.Adapter<StudyMemeberAdapter.ViewHolder>() {
+class StudyMemberAdapter(var list: List<Member>): RecyclerView.Adapter<StudyMemberAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: ListItemStudyMemberBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Member){
             binding.studyMember = item

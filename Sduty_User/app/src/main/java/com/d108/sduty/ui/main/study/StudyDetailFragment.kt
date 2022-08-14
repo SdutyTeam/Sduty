@@ -1,15 +1,11 @@
 package com.d108.sduty.ui.main.study
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -17,8 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
-import com.d108.sduty.adapter.MyStudyAdapter
-import com.d108.sduty.adapter.StudyMemeberAdapter
+import com.d108.sduty.adapter.StudyMemberAdapter
 import com.d108.sduty.databinding.FragmentStudyDetailBinding
 import com.d108.sduty.model.dto.Member
 import com.d108.sduty.ui.MainActivity
@@ -28,8 +23,6 @@ import com.d108.sduty.ui.main.study.viewmodel.StudyDetailViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
-import java.util.*
-import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
@@ -44,7 +37,7 @@ class StudyDetailFragment : Fragment() {
     lateinit var masterNickname: String
     lateinit var masterJob: String
 
-    private lateinit var studyMemberAdapter: StudyMemeberAdapter
+    private lateinit var studyMemberAdapter: StudyMemberAdapter
     private lateinit var studyMember: List<Map<String, Any>>
 
     private lateinit var memberList: ArrayList<Member>
@@ -167,7 +160,7 @@ class StudyDetailFragment : Fragment() {
     }
 
     private fun initAdapter(){
-        studyMemberAdapter = memberList?.let { StudyMemeberAdapter(it) }!!
+        studyMemberAdapter = memberList?.let { StudyMemberAdapter(it) }!!
         binding.studyMember.apply {
             layoutManager = GridLayoutManager(context, 4)
             adapter = studyMemberAdapter
