@@ -52,7 +52,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService{
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 			String email = kakao_account.getAsJsonObject().get("email").getAsString();
 
-			userInfo.put("nickname", nickname);
+			userInfo.put("name", nickname);
 			userInfo.put("email", email);
 
 		} catch (IOException e) {

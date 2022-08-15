@@ -17,7 +17,6 @@ class PreviewViewModel: ViewModel() {
     val enterResult: LiveData<Resource<Unit>> = _enterResult
 
     fun enter(roomId: String, isAudioEnabled: Boolean, isVideoEnabled: Boolean) {
-        Log.d(TAG, "enter: ${roomId} ${isAudioEnabled} ${isVideoEnabled}")
         val room = SendBirdCall.getCachedRoomById(roomId) ?: return
 
         _enterResult.postValue(Resource.loading(null))
@@ -85,6 +84,4 @@ class PreviewViewModel: ViewModel() {
             }
         })
     }
-
-
 }

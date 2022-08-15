@@ -2,6 +2,7 @@ package com.d108.sduty.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +14,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
 import com.d108.sduty.databinding.ItemParticipantListShareRoomIdBinding
 import com.d108.sduty.databinding.ItemParticipantListUserBinding
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.dpToPixel
 import com.sendbird.calls.Participant
 
 class ParticipantListAdapter(
     val roomId: String
 ) : RecyclerView.Adapter<ParticipantListAdapter.BaseViewHolder>() {
+
     var participants: List<Participant> = listOf()
         set(value) {
             field = value
@@ -68,7 +71,8 @@ class ParticipantListAdapter(
     override fun getItemViewType(position: Int): Int {
         return if (position < participants.size) {
             VIEW_TYPE_PARTICIPANT
-        } else {
+        }
+        else {
             VIEW_TYPE_SHARE_ROOM_ID
         }
     }
@@ -100,11 +104,11 @@ class ParticipantListAdapter(
                 )
                 .into(binding.participantListItemImageViewProfile)
 
-            binding.participantListItemTextViewName.text = if (participant?.user?.nickname.isNullOrEmpty()) {
-                context.getString(R.string.no_nickname)
-            } else {
-                participant?.user?.nickname
-            }
+//            binding.participantListItemTextViewName.text = if (participant?.user?.nickname.isNullOrEmpty()) {
+//                context.getString(R.string.no_nickname)
+//            } else {
+//                participant?.user?.nickname
+//            }
 
             binding.participantListItemTextViewUserId.text = if (participant?.user?.userId.isNullOrEmpty()) {
                 context.getString(R.string.no_nickname)
@@ -118,12 +122,12 @@ class ParticipantListAdapter(
         val binding: ItemParticipantListShareRoomIdBinding
     ): BaseViewHolder(binding.root) {
         override fun bind(participant: Participant?) {
-            binding.participantListItemImageViewProfile.apply {
-                layoutParams = layoutParams.apply {
-                    width = context.dpToPixel(24)
-                    height = context.dpToPixel(24)
-                }
-            }
+//            binding.participantListItemImageViewProfile.apply {
+//                layoutParams = layoutParams.apply {
+//                    width = context.dpToPixel(24)
+//                    height = context.dpToPixel(24)
+//                }
+//            }
 
             binding.root.setOnClickListener {
                 val sendIntent: Intent = Intent().apply {

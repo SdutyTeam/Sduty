@@ -17,13 +17,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.nurigo.sdk.message.model.Message
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest
+import retrofit2.http.Body
 import java.lang.Exception
+import java.util.regex.Pattern
 
 private const val TAG ="JoinViewModel"
 class JoinViewModel: ViewModel() {
     private val _accessToken = MutableLiveData<String>()
     val accessToken : LiveData<String>
         get() = _accessToken
+
+    fun setToken(token: String){
+        _accessToken.value = token
+    }
 
     private val _isJoinSucced = MutableLiveData<Boolean>()
     val isJoinSucced: LiveData<Boolean>
@@ -33,7 +39,6 @@ class JoinViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Retrofit.userApi.join(user).let {
-                    Log.d("TAG", "join: ${it}")
                     if(it.isSuccessful){
                         _isJoinSucced.postValue(true)
                     }
@@ -63,37 +68,38 @@ class JoinViewModel: ViewModel() {
             }
         }
     }
-//
-//    fun kakaoJoin(){
-//        viewModelScope.launch(Dispatchers.IO){
-//            try {
-//                Retrofit.userApi.kakaoJoin(accessToken.value.toString()).let {
-//                    if(it.isSuccessful && it.body() != null){
-//                        _isJoinSucced.postValue(true)
-//                    }else{
-//                        _isJoinSucced.postValue(false)
-//                    }
-//                }
-//            }catch (e: Exception){
-//                Log.d(TAG, "kakaoJoin: ${e.message}")
-//            }
-//        }
-//    }
-//    fun naverJoin(){
-//        viewModelScope.launch(Dispatchers.IO){
-//            try {
-//                Retrofit.userApi.naverJoin(accessToken.value.toString()).let {
-//                    if(it.isSuccessful && it.body() != null){
-//                        _isJoinSucced.postValue(true)
-//                    }else{
-//                        _isJoinSucced.postValue(false)
-//                    }
-//                }
-//            }catch (e: Exception){
-//                Log.d(TAG, "kakaoJoin: ${e.message}")
-//            }
-//        }
-//    }
+
+    private val _socialUser = MutableLiveData<User>()
+    val socialUser: LiveData<User>
+        get() = _socialUser
+    fun kakaoUserInfo(){
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                Retrofit.userApi.kakaoUserInfo(accessToken.value.toString()).let {
+                    if(it.isSuccessful && it.body() != null){
+                        _socialUser.postValue(it.body() as User)
+                        _isSelfInputEmail.postValue(true)
+                    }
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "kakaoJoin: ${e.message}")
+            }
+        }
+    }
+    fun naverUserInfo(){
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                Retrofit.userApi.naverUserInfo(accessToken.value.toString()).let {
+                    if(it.isSuccessful && it.body() != null){
+                        _socialUser.postValue(it.body() as User)
+                        _isSelfInputEmail.postValue(true)
+                    }
+                }
+            }catch (e: Exception){
+                Log.d(TAG, "kakaoJoin: ${e.message}")
+            }
+        }
+    }
 
 
     private val _authInfo = MutableLiveData<AuthInfo>()
@@ -105,14 +111,14 @@ class JoinViewModel: ViewModel() {
         get() = _isSucceedSendAuthInfo
 
     fun sendOTP(userPhoneNum: String){
-        val authCode = (100000..999999).random()
-        val message = Message(
-            from = "01049177914",
-            to = userPhoneNum,
-            text = "[Sduty] 인증 번호[${authCode}]를 입력해 주세요. "
-        )
         viewModelScope.launch(Dispatchers.IO){
-            val newAuthInfo = AuthInfo(authCode.toString(), userPhoneNum)
+            var authCode = (100000..999999).random()
+            val message = Message(
+                from = "01049177914",
+                to = userPhoneNum,
+                text = "[Sduty] 인증 번호[${authCode}]를 입력해 주세요. "
+            )
+            val newAuthInfo = AuthInfo(userPhoneNum, authCode.toString(), )
             _authInfo.postValue(newAuthInfo)
             ApplicationClass.messageService.sendOne(SingleMessageSendingRequest(message)) // SMS 보냄
             Retrofit.userApi.sendAuthInfo(newAuthInfo).let {
@@ -134,7 +140,7 @@ class JoinViewModel: ViewModel() {
     fun checkOTP(inputCode: String){
         viewModelScope.launch(Dispatchers.IO){
             val code = authInfo.value
-            code!!.authcode = inputCode
+            code!!.code = inputCode
             Retrofit.userApi.checkAuthCode(code).let {
                 if(it.code() == 401){
                     _isSucceedAuth.postValue(false)
@@ -146,6 +152,7 @@ class JoinViewModel: ViewModel() {
                 }
                 else if(it.isSuccessful){
                     _isSucceedAuth.postValue(true)
+                    _authMsg.postValue("인증 되었습니다.")
                 }
             }
         }
@@ -162,8 +169,16 @@ class JoinViewModel: ViewModel() {
     val isShortPW: LiveData<Boolean>
         get() = _isShortPW
     fun checkPWLength(pw: String){
-        Log.d(TAG, "checkPWLength: ${pw.length}")
         _isShortPW.value = pw.length < 8
+    }
+
+    private val _isWrongName = MutableLiveData<Boolean>(false)
+    val isWrongName: LiveData<Boolean>
+        get() = _isWrongName
+    fun checkName(name: String){
+        val ps = Pattern.compile("^[a-zA-Z가-힣]+\$")
+        _isWrongName.value = !ps.matcher(name).matches()
+
     }
 
 

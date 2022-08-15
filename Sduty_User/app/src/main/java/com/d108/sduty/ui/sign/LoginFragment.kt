@@ -8,17 +8,28 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.d108.sduty.R
-import com.d108.sduty.common.COMMON_JOIN
-import com.d108.sduty.common.KAKAO_JOIN
-import com.d108.sduty.common.NAVER_JOIN
+import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentLoginBinding
-import com.d108.sduty.ui.camstudy.preview.PreviewFragment
+import com.d108.sduty.ui.main.home.TimeLineFragment
+import com.d108.sduty.ui.main.mypage.MyPageFragment
+import com.d108.sduty.ui.main.study.MyStudyFragmentDirections
+import com.d108.sduty.ui.main.study.dialog.StudyCreateDialog
+import com.d108.sduty.ui.sign.dialog.DialogFindInfo
+import com.d108.sduty.ui.sign.dialog.PermissionDialog
+import com.d108.sduty.ui.sign.dialog.RegisterDialog
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.ui.sign.viewmodel.LoginViewModel
+import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
@@ -37,7 +48,7 @@ private const val TAG ="LoginFragment"
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by viewModels()
-    private val joinViewModel: JoinViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -46,56 +57,87 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if(SettingsPreference().getAutoLoginState() && SettingsPreference().getUserId() != ""){
+            viewModel.getUserInfo(SettingsPreference().getUserId())
+        }
         initViewModel()
         initView()
-        checkPermission()
     }
 
 
     private fun initViewModel(){
-        viewModel.user.observe(viewLifecycleOwner){
-            requireContext().showToast("${it.name}님 반갑습니다.")
-        }
-        viewModel.isLoginSucceed.observe(viewLifecycleOwner){
+        mainViewModel.isRegisterProfile.observe(viewLifecycleOwner){
             when(it){
-                true ->{
-//                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(COMMON_JOIN))
+                true -> {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToTimeLineFragment())
+                    requireContext().showToast("${mainViewModel.user.value!!.name}님 반갑습니다.")
                 }
-                false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
-            }
-        }
-        viewModel.isExistKakaoAccount.observe(viewLifecycleOwner){
-            when(it){
                 false -> {
-                    val listener = DialogInterface.OnClickListener { _, _ ->
-                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
-                            KAKAO_JOIN, viewModel.token.value.toString()))
-                    }
-                    requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProfileRegistFragment(REGISTER))
+                    requireContext().showToast("프로필 등록 후 이용해 주세요")
                 }
             }
         }
-        viewModel.isExistNaverAccount.observe(viewLifecycleOwner){
-            when(it){
-                false -> {
-                    val listener = DialogInterface.OnClickListener { _, _ ->
-                        findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
-                            NAVER_JOIN, viewModel.token.value.toString()))
+
+        viewModel.apply {
+            user.observe(viewLifecycleOwner) {
+                mainViewModel.setUserValue(it)
+                if(SettingsPreference().getAutoLoginState()){
+                    SettingsPreference().setUserId(it.id)
+                }
+                mainViewModel.getProfileValue(it.seq)
+            }
+            isLoginSucceed.observe(viewLifecycleOwner){
+                when(it){
+                    false -> requireContext().showToast("아이디와 비밀번호를 확인해 주세요")
+                    true -> {
+
                     }
-                    requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
                 }
             }
+            isExistKakaoAccount.observe(viewLifecycleOwner){
+                when(it){
+                    false -> {
+                        val listener = DialogInterface.OnClickListener { _, _ ->
+                            findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
+                                KAKAO_JOIN, viewModel.token.value.toString()))
+                        }
+                        requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
+                    }
+                    else -> {}
+                }
+            }
+            isExistNaverAccount.observe(viewLifecycleOwner){
+                when(it){
+                    false -> {
+                        val listener = DialogInterface.OnClickListener { _, _ ->
+                            findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(
+                                NAVER_JOIN, viewModel.token.value.toString()))
+                        }
+                        requireActivity().showAlertDialog("", "가입되지 않은 계정입니다. 가입 하시겠습니까?", listener)
+                    }
+                    else -> {}
+                }
+            }
+            getJobListValue()
         }
     }
 
     private fun initView() {
+
+        if(SettingsPreference().getFirstRunCheck()){
+            SettingsPreference().setFirstRunCheck(false)
+            PermissionDialog(requireContext()).show(parentFragmentManager, null)
+        }
+
+
         binding.apply {
             btnLogin.setOnClickListener {
                 val id = binding.etId.text.toString()
@@ -113,8 +155,11 @@ class LoginFragment : Fragment() {
                 naverLogin()
             }
             btnJoin.setOnClickListener {
-                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
-                    COMMON_JOIN))
+                // 원래 코드 : JoinFragment로 이동
+//                findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment(
+//                    COMMON_JOIN))
+                // 수정 : RegisterDialog 띄우기
+                openRegisterDialog()
             }
 
             var filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
@@ -137,6 +182,19 @@ class LoginFragment : Fragment() {
             }, InputFilter.LengthFilter(20))
 
             etPw.filters = filter
+
+            tvFindId.setOnClickListener{
+                DialogFindInfo(requireContext()).let {
+                    it.arguments = bundleOf("flag" to FIND_ID)
+                    it.show(parentFragmentManager.beginTransaction(),null)
+                }
+            }
+            tvFindPw.setOnClickListener{
+                DialogFindInfo(requireContext()).let {
+                    it.arguments = bundleOf("flag" to FIND_PW)
+                    it.show(parentFragmentManager.beginTransaction(),null)
+                }
+            }
         }
     }
 
@@ -183,13 +241,26 @@ class LoginFragment : Fragment() {
         }
     }
 
+    // 회원가입으로 이동하는 dialog (기존 JoinFragment를 다이얼로그로)
+    private fun openRegisterDialog() {
+        RegisterDialog().let {
+            // 클릭 리스너 정의
+            it.setOnClickListener(object : RegisterDialog.OnDialogClickListener {
+                override fun onClicked(joinType: Int) {
+                    findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToTermsFragment(joinType))
+                    it.dismiss()
+                }
+            })
+            it.show(parentFragmentManager, null)
+        }
+    }
+
     private fun checkPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
-                requireActivity().showToast("모든 권한을 허용해야 이용이 가능합니다.")
+                requireActivity().showToast("필수 권한을 허용해야 이용이 가능합니다.")
                 requireActivity().finish()
             }
 
@@ -197,7 +268,7 @@ class LoginFragment : Fragment() {
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
             .check()
     }
 }

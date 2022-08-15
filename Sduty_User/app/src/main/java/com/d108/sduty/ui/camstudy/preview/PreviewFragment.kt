@@ -13,11 +13,15 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentPreviewBinding
 import com.d108.sduty.ui.MainActivity
 import com.d108.sduty.ui.camstudy.room.RoomActivity
+import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.Status
 import com.google.common.util.concurrent.ListenableFuture
 import com.sendbird.calls.SendBirdCall
@@ -29,6 +33,8 @@ class PreviewFragment : Fragment() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
     private var preview: Preview? = null
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val args: PreviewFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +49,7 @@ class PreviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         previewView = binding.previewPreviewView
+
         setViewEventListeners()
         observeViewModel()
         initCameraPreview()        
@@ -59,7 +66,25 @@ class PreviewFragment : Fragment() {
 
     private fun setViewEventListeners() {
         binding.previewEnterButton.setOnClickListener(this::onEnterButtonClicked)
-        binding.previewImageViewClose.setOnClickListener { requireActivity().finish() }
+        binding.previewImageViewClose.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.previewAudioCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+
+            }
+        }
+        binding.previewVideoCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                binding.previewPreviewView.visibility = View.INVISIBLE
+                binding.imgPreview.visibility = View.VISIBLE
+            } else{
+                binding.previewPreviewView.visibility = View.VISIBLE
+                binding.imgPreview.visibility = View.INVISIBLE
+            }
+
+        }
+
     }
 
 
@@ -71,16 +96,15 @@ class PreviewFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.authenticationLiveData.observe(viewLifecycleOwner) { resource ->
-            Log.d("SignInActivity", "observe() resource: $resource")
             when (resource.status) {
                 Status.LOADING -> {
                     Log.d(TAG, "observeViewModel: LOADING")
                 }
                 Status.SUCCESS -> {
-                    val roomId = "6aab79c4-250b-4175-b2ee-8f8a2d2be6fd"
-//                    val isAudioEnabled = !binding.previewAudioCheckbox.isChecked
-//                    val isVideoEnabled = !binding.previewVideoCheckbox.isChecked
-//                    viewModel.enter(roomId, isAudioEnabled, isVideoEnabled)
+                    val roomId = args.roomId
+                    Log.d(TAG, "observeViewModelrroomm: ${args.roomId}")
+
+//                  viewModel.enter(roomId, isAudioEnabled, isVideoEnabled)
                     viewModel.fetchRoomById(roomId)
                 }
                 Status.ERROR -> Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
@@ -88,20 +112,20 @@ class PreviewFragment : Fragment() {
         }
 
         viewModel.fetchedRoomId.observe(viewLifecycleOwner){
-            Log.d(TAG, "observeViewModel: ${it.status}")
             when (it.status) {
                 Status.SUCCESS -> {
-                    viewModel.enter(it.data.toString(), true, true)
-                    Log.d(TAG, "observeViewModel: ${it.data.toString()}")
+                    val isAudioEnabled = !binding.previewAudioCheckbox.isChecked
+                    val isVideoEnabled = !binding.previewVideoCheckbox.isChecked
+                    viewModel.enter(it.data.toString(), isAudioEnabled, isVideoEnabled)
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireContext(), "ERROR / authViewModel.fetchedRoomId", Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
 
         viewModel.enterResult.observe(viewLifecycleOwner) { resource ->
-            Log.d(TAG, "observeViewModel: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> goToRoomActivity()
                 Status.ERROR -> {
@@ -110,14 +134,14 @@ class PreviewFragment : Fragment() {
                         putExtra(EXTRA_ENTER_ERROR_MESSAGE, resource.message)
                     })
                 }
+                else -> {}
             }
         }
     }
 
     private fun onEnterButtonClicked(v: View) {
         SendBirdCall.init(requireActivity().applicationContext, SENDBIRD_APP_ID)
-        viewModel.authenticate("aa")
-
+        viewModel.authenticate(mainViewModel.profile.value!!.nickname)
     }
 
     private fun bindPreview(cameraProvider : ProcessCameraProvider) {
@@ -130,14 +154,18 @@ class PreviewFragment : Fragment() {
         preview?.setSurfaceProvider(previewView.surfaceProvider)
 
         var camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+
+
+
     }
 
     private fun goToRoomActivity() {
-        Log.d(TAG, "goToRoomActivity: ")
-        val roomId = "6aab79c4-250b-4175-b2ee-8f8a2d2be6fd"
+        Log.d(TAG, "goToRoomActivity: ${args.roomId}")
+        val roomId = args.roomId
         val intent = Intent(requireContext(), RoomActivity::class.java).apply {
             putExtra(EXTRA_ROOM_ID, roomId)
             putExtra(EXTRA_IS_NEWLY_CREATED, false)
+            putExtra("studyName", args.studyName)
         }
         startActivity(intent)
     }

@@ -1,60 +1,188 @@
 package com.d108.sduty.ui.main.mypage.setting
 
+import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityManager
+import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
+import com.d108.sduty.adapter.AppListAdapter
+import com.d108.sduty.common.ApplicationClass.Companion.appLockPref
+import com.d108.sduty.databinding.FragmentAppLockBinding
+import com.d108.sduty.model.AppInfo
+import com.d108.sduty.ui.main.mypage.dialog.AccessibilityDialog
+import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.google.android.material.tabs.TabLayout
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val TAG = "AppLockFragment"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AppLockFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AppLockFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentAppLockBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val mainViewModel: MainViewModel by activityViewModels()
+
+    private lateinit var packageManager: PackageManager
+    private lateinit var packages: List<PackageInfo>
+
+    private lateinit var userAppList: List<AppInfo>
+    private lateinit var allAppList: List<AppInfo>
+
+    private lateinit var appListAdapter: AppListAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainViewModel.displayBottomNav(true)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_app_lock, container, false)
+        binding = FragmentAppLockBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AppLockFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AppLockFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        checkAccessibilityPermission()
+
+        initView()
     }
+
+    private fun initView() {
+        binding.apply {
+            // 탭 레이아웃 선택 이벤트
+            tabAppList.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when (tab!!.position) {
+                        0 -> {
+                            updateAdapter(userAppList)
+                        }
+                        1 -> {
+                            updateAdapter(allAppList)
+                        }
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    when (tab!!.position) {
+                        0 -> {
+                            updateAdapter(userAppList)
+                        }
+                        1 -> {
+                            updateAdapter(allAppList)
+                        }
+                    }
+                }
+            })
+        }
+
+        // 설치된 앱 목록을 받아온다.
+        packageManager = requireActivity().packageManager
+        packages = packageManager.getInstalledPackages(0)
+
+        // 앱 목록에서 전체 앱, 사용자 앱을 구분하여 리스트를 만든다.
+        getAppList()
+        getUserAppList()
+
+        // 초기화면은 사용자 앱 목록을 보여준다.
+        updateAdapter(userAppList)
+    }
+
+    private fun getAppList() {
+        allAppList = packages.filter {
+            it.packageName != resources.getString(R.string.app_package_name)
+        }.map {
+            val icon = packageManager.getApplicationIcon(it.packageName)
+            val label = it.applicationInfo.loadLabel(packageManager).toString()
+            val packageName = it.packageName
+            val isBanned = appLockPref.getBoolean(packageName, false)
+
+            AppInfo(icon, label, packageName, isBanned)
+        }.sortedBy { it.label }
+    }
+
+    private fun getUserAppList() {
+        userAppList = packages.filter {
+            ((it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 1) && it.packageName != resources.getString(R.string.app_package_name)
+        }.map {
+            val icon = packageManager.getApplicationIcon(it.packageName)
+            val label = it.applicationInfo.loadLabel(packageManager).toString()
+            val packageName = it.packageName
+            val isBanned = appLockPref.getBoolean(packageName, false)
+
+            AppInfo(icon, label, packageName, isBanned)
+        }.sortedBy { it.label }
+    }
+
+    // 리사이클러뷰 갱신
+    private fun updateAdapter(appList: List<AppInfo>) {
+        appListAdapter = AppListAdapter(requireActivity(), appList)
+        appListAdapter.onClickAppInfoItem = object : AppListAdapter.OnClickAppInfoItem {
+            override fun onClick(view: View, fragmentActivity: FragmentActivity, position: Int) {
+                checkAccessibilityPermission()
+
+                val isBanned = !appList[position].isBanned
+                appList[position].isBanned = isBanned
+
+                // sharedPreference 에 저장
+                appLockPref.edit().putBoolean(appList[position].packageName, isBanned).apply()
+
+                allAppList.filter { appList[position].packageName == it.packageName }
+                    .map { it.isBanned = isBanned }
+                userAppList.filter { appList[position].packageName == it.packageName }
+                    .map { it.isBanned = isBanned }
+
+                appListAdapter.notifyItemChanged(position)
+            }
+        }
+        binding.rvAppList.apply {
+            layoutManager = GridLayoutManager(context, 4)
+            adapter = appListAdapter
+        }
+    }
+
+    private fun checkAccessibilityPermission() {
+        val accessibilityManager =
+            requireActivity().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val list =
+            accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+
+        val result = list.find {
+            it.resolveInfo.serviceInfo.packageName == requireActivity().packageName
+        }
+
+        if (result == null) {
+            AccessibilityDialog().show(
+                this.requireActivity().supportFragmentManager,
+                "AccessibilityDialog"
+            )
+        }
+    }
+
+//    private fun setPermissions() {
+//        val permissionDialog = AlertDialog.Builder(requireContext())
+//        permissionDialog.apply {
+//            setTitle("접근성 권한 설정")
+//            setMessage("앱을 사용하기 위해 접근성 권한이 필요합니다.")
+//            setPositiveButton("허용", object : DialogInterface.OnClickListener {
+//                override fun onClick(p0: DialogInterface?, p1: Int) {
+//                    requireContext().startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+//                }
+//            }).create().show()
+//        }
+//    }
 }

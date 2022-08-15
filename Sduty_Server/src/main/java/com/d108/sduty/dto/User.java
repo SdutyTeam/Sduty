@@ -1,134 +1,110 @@
 package com.d108.sduty.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@ApiModel(value = "User: 유저 정보", description = "유저 상세 정보")
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class User {
+	@Id
 	@ApiModelProperty(value = "아이디")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_seq")
+	private int seq;
+	@Column(name = "user_id")
 	private String id;
-	private String pass;
+	@Column(name = "user_password")
+	private String pass;	
+	@Column(name = "user_name")
 	private String name;
-	private String tel;	
+	@Column(name = "user_tel")
+	private String tel;
+	@Column(name = "user_email")
 	private String email;
-	private String fcm_token;
+	@Column(name = "user_fcm_token")
+	private String fcmToken;
+	@Column(name = "user_regtime", updatable = false)
 	private Date regtime;
-	private boolean user_public;
-	
-	public User() {
-		super();
-	}
-
-	public User(String id, String pass, String name, String tel, String email) {
-		super();
-		this.id = id;
-		this.pass = pass;
-		this.name = name;
-		this.tel = tel;
-		this.email = email;
-	}
-
-	public User(String id, String pass, String name, String tel, String email, String fcm_token, Date regtime,
-			boolean user_public) {
-		super();
-		this.id = id;
-		this.pass = pass;
-		this.name = name;
-		this.tel = tel;
-		this.email = email;
-		this.fcm_token = fcm_token;
-		this.regtime = regtime;
-		this.user_public = user_public;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getPass() {
-		return pass;
-	}
-
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getFcm_token() {
-		return fcm_token;
-	}
-
-	public void setFcm_token(String fcm_token) {
-		this.fcm_token = fcm_token;
-	}
-
-	public Date getRegtime() {
-		return regtime;
-	}
-
-	public void setRegtime(Date regtime) {
-		this.regtime = regtime;
-	}
-
-	public boolean isUser_public() {
-		return user_public;
-	}
-
-	public void setUser_public(boolean user_public) {
-		this.user_public = user_public;
-	}
+	@Column(name = "user_public")
+	private int userPublic;
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("User [id=");
-		builder.append(id);
-		builder.append(", pass=");
-		builder.append(pass);
-		builder.append(", name=");
-		builder.append(name);
-		builder.append(", tel=");
-		builder.append(tel);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", fcm_token=");
-		builder.append(fcm_token);
-		builder.append(", regtime=");
-		builder.append(regtime);
-		builder.append(", user_public=");
-		builder.append(user_public);
-		builder.append("]");
-		return builder.toString();
+		return "User [seq=" + seq + ", id=" + id + ", pass=" + pass + ", name=" + name + ", tel=" + tel + ", email="
+				+ email + ", fcmToken=" + fcmToken + ", regtime=" + regtime + ", userPublic=" + userPublic + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((pass == null) ? 0 : pass.hashCode());
+		result = prime * result + seq;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (pass == null) {
+			if (other.pass != null)
+				return false;
+		} else if (!pass.equals(other.pass))
+			return false;
+		if (seq != other.seq)
+			return false;
+		return true;
+	}
+
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
+	@OneToMany(mappedBy = "masterSeq", fetch = FetchType.EAGER)
+	private Set<Study> masterStudies = new HashSet<Study>();
 	
-	
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
+	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.EAGER)
+	private Set<Qna> qnas = new HashSet<Qna>();
+
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
+	@ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER)
+	private Set<Study> studies = new HashSet<Study>();
 }

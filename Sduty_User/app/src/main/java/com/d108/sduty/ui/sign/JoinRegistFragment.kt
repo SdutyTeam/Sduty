@@ -9,14 +9,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d108.sduty.R
 import com.d108.sduty.common.COMMON_JOIN
+import com.d108.sduty.common.KAKAO_JOIN
+import com.d108.sduty.common.NAVER_JOIN
 import com.d108.sduty.databinding.FragmentJoinRegistBinding
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
@@ -38,29 +42,47 @@ class JoinRegistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentJoinRegistBinding.inflate(inflater, container, false)
-        initViewModel()
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViewModel()
         initView()
     }
 
     private fun initViewModel() {
         viewModel.apply {
+            setToken(args.token)
+            when(args.route){
+                KAKAO_JOIN -> {                    
+                    kakaoUserInfo()
+                }
+                NAVER_JOIN -> {                    
+                    naverUserInfo()
+                }
+            }
             setJoinFlag(args.route)
+            socialUser.observe(viewLifecycleOwner){
+                binding.user = it
+            }
             isJoinSucced.observe(viewLifecycleOwner){
                 when(it){
                     true -> {
                         requireContext().showToast("회원 가입이 완료되었습니다.")
-                        findNavController().safeNavigate(JoinRegistFragmentDirections.actionJoinRegistFragmentToLoginFragment())
                     }
+                    else -> {}
                 }
+                findNavController().navigate(JoinRegistFragmentDirections.actionJoinRegistFragmentToLoginFragment())
+            }
+            isSucceedSendAuthInfo.observe(viewLifecycleOwner){
+                binding.vm = viewModel
+            }
+            isSucceedAuth.observe(viewLifecycleOwner){
+                binding.vm = viewModel
             }
         }
-
     }
 
     private fun initView() {
@@ -68,14 +90,18 @@ class JoinRegistFragment : Fragment() {
             lifecycleOwner = this@JoinRegistFragment
             vm = viewModel
             btnSendSms.setOnClickListener {
-                val tel = "${etPhoneFront.text}+${etPhoneEnd.text}"
-                viewModel.sendOTP(tel)
+                val tel = "${etPhoneFront.text}${etPhoneEnd.text}"
+                if(tel.length == 11)
+                    viewModel.sendOTP(tel)
+                else{
+                    requireContext().showToast("정확한 번호를 입력해 주세요")
+                }
             }
             btnAuthCode.setOnClickListener {
-                viewModel.checkOTP(etAuthCode.text.toString())
+                    viewModel.checkOTP(etAuthCode.text.toString())
             }
             btnJoin.setOnClickListener {
-                checkJoinForm()
+                join()
             }
             etPw.addTextChangedListener(object : TextWatcher{
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -100,6 +126,13 @@ class JoinRegistFragment : Fragment() {
                     viewModel.getUsedId(binding.etId.text.toString())
                 }
             })
+            etName.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    viewModel.checkName(binding.etName.text.toString())
+                }
+            })
             spinnerEmail.apply {
                 adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mailList)
                 onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
@@ -122,6 +155,27 @@ class JoinRegistFragment : Fragment() {
             etId.filters = filter
 
             filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[0-9]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(8))
+
+            etPhoneEnd.filters = filter
+
+            filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
+                val ps = Pattern.compile("^[a-zA-Zㄱ-ㅎ가-힣]+\$")
+                if(!ps.matcher(src).matches()){
+                    return@InputFilter ""
+                }else{
+                    return@InputFilter null
+                }
+            }, InputFilter.LengthFilter(15))
+            etName.filters = filter
+
+            filter = arrayOf(InputFilter{src, start, end, dst, dstart, dend ->
                 val ps = Pattern.compile("^[a-zA-Z0-9!@#$%^&*]+\$")
                 if(!ps.matcher(src).matches()){
                     return@InputFilter ""
@@ -136,31 +190,28 @@ class JoinRegistFragment : Fragment() {
         }
     }
 
-    private fun checkJoinForm(){
+    private fun join(){
         binding.apply {
             val id = etId.text.toString()
             val pw = etPw.text.toString()
             val name = etName.text.toString()
             val tel = "${etPhoneFront.text}${etPhoneEnd.text}"
-            var email = ""
-            if(spinnerEmail.selectedItemPosition == mailList.size - 1){
-                email = "${etEmail.text}@${etEmailEnd.text}"
+            val email = if(spinnerEmail.selectedItemPosition == mailList.size - 1 || viewModel.socialUser.value != null){
+                "${etEmail.text}@${etEmailEnd.text}"
             }else{
-                email = "${etEmail.text}@${spinnerEmail.selectedItem}"
+                "${etEmail.text}@${spinnerEmail.selectedItem}"
             }
-            Log.d(TAG, "checkJoinForm: $email")
-            Log.d(TAG, "checkJoinForm: $tel")
-
-            when(args.route) {
-                COMMON_JOIN -> {
-
-                    if (
-                        viewModel.isSucceedAuth.value as Boolean){
-
-                    }else{
-                        requireContext().showToast("모든 항목을 입력해 주세요")
-                    }
-
+            if(args.route == COMMON_JOIN) {
+                if(id.isEmpty() || pw.isEmpty() || name.isEmpty() || tel.isEmpty() || email.isEmpty() || tel.length < 11){
+                    requireContext().showToast("모든 항목을 입력해 주세요.")
+                }else{
+                    viewModel.join(User(id, pw, name, tel, email))
+                }
+            }else{
+                if(name.isEmpty() || tel.isEmpty() || email.isEmpty()){
+                    requireContext().showToast("모든 항목을 입력해 주세요.")
+                }else{
+                    viewModel.join(User(email, email, name, tel, email))
                 }
             }
         }

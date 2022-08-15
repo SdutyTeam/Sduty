@@ -1,189 +1,69 @@
 package com.d108.sduty.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
 
-import org.apache.commons.dbcp2.Utils;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.d108.sduty.dto.AuthInfo;
-import com.d108.sduty.dto.User;
-import com.d108.sduty.service.KakaoLoginService;
-import com.d108.sduty.service.NaverLoginService;
-import com.d108.sduty.service.TestService;
-import com.d108.sduty.utils.TimeCompare;
+import com.d108.sduty.dto.Alarm;
+import com.d108.sduty.dto.Job;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-@Api(value = "User")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/test")
 public class TestController {
 	@Autowired
-	private TestService tService;
-	@Autowired
-	private KakaoLoginService kService;
-	@Autowired
-	private NaverLoginService nService;
+	private SchedulerFactoryBean schedulerFactoryBean;
 	
-	@ApiOperation(value = "로그인 > id, pass 확인 > User 리턴", response = User.class)
-	@PostMapping("")
-	public ResponseEntity<?> selectUser(@RequestBody User user){
-		User selectedUser = tService.selectUser(user.getId());
-		System.out.println(selectedUser);
-		if(selectedUser.getPass().equals(user.getPass())) {
-			selectedUser.setPass("");
-			return new ResponseEntity<User>(selectedUser, HttpStatus.OK);
+	//알람 추가
+	@GetMapping("")
+	public ResponseEntity<?> addAlarm(Alarm alarm){
+		//1. create cron
+		String[] time = alarm.getTime().split(":");
+		System.out.println(Arrays.toString(alarm.getTime().split(":")));
+		StringBuilder cron = new StringBuilder(time[2]+" "+time[1]+" "+time[0]+" ? * ");
+		//요일
+		if(alarm.isMon()) {cron.append("MON,");}
+		if(alarm.isTue()) {cron.append("TUE,");}
+		if(alarm.isWed()) {cron.append("WED,");}
+		if(alarm.isThu()) {cron.append("THU,");}
+		if(alarm.isFri()) {cron.append("FRI,");}
+		if(alarm.isSat()) {cron.append("SAT,");}
+		if(alarm.isSun()) {cron.append("SUN,");}
+		if(cron.charAt(cron.length()-1)!=',') {
+			System.out.println("선택한 요일 없으므로 scheduling X");
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-	}
-
-	@ApiOperation(value = "회원가입 > id 중복확인 > 200/401 리턴", response = HttpStatus.class)
-	@GetMapping("/join/{id}")
-	public ResponseEntity<?> isUsedId(@PathVariable String id){
-		int result = tService.isUsedId(id);
-		if(result > 0) {			
-			return new ResponseEntity<Void>(HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-	}
-	
-	@ApiOperation(value = "회원가입 > User 리턴", response = HttpStatus.class)
-	@PostMapping("/join")
-	public ResponseEntity<?> insertUser(@RequestBody User user){
-		int result = tService.insertUser(user);
-		if(result > 0) {			
-			return new ResponseEntity<User>(HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-	}
-	
-	@ApiOperation(value = "test> List<String>리턴", response = User.class)
-	@GetMapping("/test")
-	public ResponseEntity<?> test(){
-		List<String> list = new ArrayList<String>();
-		list.add("권용준");
-		list.add("김남희");
-		list.add("김정윤");
-		list.add("정봉진");
-		list.add("최영희");
-		list.add("편예린");
+		String result = cron.substring(0, cron.length()-1)+" *";
+		System.out.println(result);
+//		System.out.println(schedulerFactoryBean);
 		
-		return new ResponseEntity<List<String>>(list, HttpStatus.OK);
-	}
-	
-	@PostMapping("/kakao")
-	public ResponseEntity<?> kakaoLogin(@RequestBody String token){
-		Map<String, Object> userInfo = kService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user= tService.selectUser(email);
-		if(user != null) {
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}else {
-//			회원가입
-//			User newUser = new User(email, "", nickname, email);
-//			tService.insertUser(newUser);
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		//2. Job 추가
+		Scheduler scheduler = schedulerFactoryBean.getScheduler();
+		System.out.println(scheduler);
+		
+		JobDetail jd = JobBuilder.newJob(Job.class)
+				.withIdentity("alarm3", "Study")
+				.usingJobData("studySeq", 3)
+				.withDescription("Study Scheduling")
+				.build();
+		try {
+			scheduler.scheduleJob(jd, TriggerBuilder.newTrigger()
+		            .withSchedule(CronScheduleBuilder.cronSchedule(result)).build());
+		} catch(SchedulerException e) {
+			e.printStackTrace();
 		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
-	@PostMapping("/naver")
-	public ResponseEntity<?> naverLogin(@RequestBody String token){
-		Map<String, Object> userInfo = nService.getUserInfo(token);
-		String email = userInfo.get("email").toString();
-		String nickname = userInfo.get("nickname").toString();
-		User user= tService.selectUser(email);
-		if(user != null) {
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}else {
-//			회원가입
-//			User newUser = new User(email, "", nickname, email);
-//			tService.insertUser(newUser);
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-		}		
-	}
-	
-//	@PostMapping("/kakao/join")
-//	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
-//		Map<String, Object> userInfo = kService.getUserInfo(token);
-//		String email = userInfo.get("email").toString();
-//		String nickname = userInfo.get("nickname").toString();
-//		User user = new User(email, "", nickname, email);
-//		int result = tService.insertUser(user);
-//		if(result > 0) {
-//			return new ResponseEntity<User>(user, HttpStatus.OK);
-//		}
-//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-//	}
-//	
-//	@PostMapping("/naver/join")
-//	public ResponseEntity<?> naverJoin(@RequestBody String token){
-//		Map<String, Object> userInfo = nService.getUserInfo(token);
-//		String email = userInfo.get("email").toString();
-//		String nickname = userInfo.get("nickname").toString();
-//		User user = new User(email, "", nickname, email);
-//		int result = tService.insertUser(user);
-//		if(result > 0) {
-//			return new ResponseEntity<User>(user, HttpStatus.OK);
-//		}
-//		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);		
-//	}
-	
-	@PostMapping("/auth")
-	public ResponseEntity<?> authTest(@RequestBody AuthInfo authInfo){
-		tService.deleteAuthInfo(authInfo);
-		int result = tService.insertAuthInfo(authInfo);
-		if(result > 0) {
-			return new ResponseEntity<Void>(HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT); 
-	}
-	
-	@PostMapping("/auth/check")
-	public ResponseEntity<?> getAuthCode(@RequestBody AuthInfo authInfo){
-		AuthInfo selectedCode = tService.selectAuthInfo(authInfo.getPhone());
-		System.out.println(selectedCode);
-		System.out.println(new Date(System.currentTimeMillis()));
-		if(selectedCode != null) {
-			if(selectedCode.getAuthcode().equals(authInfo.getAuthcode())) { // 인증코드 비교
-				if(TimeCompare.compare(selectedCode.getExpire_time())) { // 인증 만료시간 확인
-					tService.deleteAuthInfo(authInfo);					
-					return new ResponseEntity<Void>(HttpStatus.OK); // 인증완료
-				}
-				else {
-					return new ResponseEntity<Void>(HttpStatus.GONE); // 인증시간 만료
-				}
-			}
-		}		
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED); // 인증번호 불일치
-	}
-	
-	
 
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

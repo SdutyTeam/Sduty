@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/group_call_constraint_layout_header"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:background="@color/background_500"
             app:layout_constraintTop_toTopOf="parent">
 

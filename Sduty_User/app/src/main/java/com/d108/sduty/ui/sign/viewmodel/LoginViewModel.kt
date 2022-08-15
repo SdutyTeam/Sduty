@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,12 +49,12 @@ class LoginViewModel: ViewModel() {
         get() = _isExistKakaoAccount
 
     fun kakaoLogin(token: String){
+        Log.d(TAG, "kakaoLogin: $token")
         viewModelScope.launch(Dispatchers.IO){
-            Log.d(TAG, "kakaoLogin: ")
             Retrofit.userApi.kakaoLogin(token).let {
                 if(it.code() == 401){ // UNAUTHORIZED
                     _isExistKakaoAccount.postValue(false)
-                    Log.d(TAG, "kakaoLogin: ${it}")
+                    Log.d(TAG, "kakaoLogin: ${it.code()}")
 
                 }else if(it.isSuccessful && it.body() != null){
                     _user.postValue(it.body())
@@ -85,5 +87,39 @@ class LoginViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+    fun getUserInfo(userId: String){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.userApi.getUserInfo(userId).let { 
+                if(it.isSuccessful && it.body() != null){
+                    _user.postValue(it.body())
+                }else{
+                    Log.d(TAG, "getUserInfo: ${it.code()}")
+                }
+                    
+            }
+        }
+    }
+
+
+    fun getJobListValue(){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.tagApi.getJobList().let {
+                if(it.isSuccessful && it.body() != null){
+                    setTagMap(it.body() as MutableList<JobHashtag>)
+                }else{
+                    Log.d(TAG, "getJobListValue: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    private fun setTagMap(list: MutableList<JobHashtag>){
+        val map = hashMapOf<Int, String>()
+        for(item in list) {
+            map[item.seq] = item.name
+        }
+        ApplicationClass.jobTagMap = map
     }
 }

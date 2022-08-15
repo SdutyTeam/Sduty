@@ -2,68 +2,44 @@ package com.d108.sduty.dto;
 
 import java.util.Date;
 
-public class AuthInfo {
-	private int id;
-	private String authcode;
-	private String phone;
-	private Date expireTime;
-	public AuthInfo() {
-		super();
-	}
-	
-	public AuthInfo(int id, String authcode, String phone) {
-		super();
-		this.id = id;
-		this.authcode = authcode;
-		this.phone = phone;
-	}
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-	public AuthInfo(int id, String authcode, String phone, Date expire_time) {
-		super();
-		this.id = id;
-		this.authcode = authcode;
-		this.phone = phone;
-		this.expireTime = expire_time;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getAuthcode() {
-		return authcode;
-	}
-	public void setAuthcode(String authcode) {
-		this.authcode = authcode;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	public Date getExpire_time() {
-		return expireTime;
-	}
-	public void setExpire_time(Date expire_time) {
-		this.expireTime = expire_time;
-	}
+import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@Service
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name="identification")
+public class AuthInfo {
+	
+	@Id
+	private int id;
+	private String tel;
+	private String code;
+	private Date expire;
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("AuthCode [id=");
+		builder.append("AuthInfo [id=");
 		builder.append(id);
-		builder.append(", authcode=");
-		builder.append(authcode);
-		builder.append(", phone=");
-		builder.append(phone);
-		builder.append(", expire_time=");
-		builder.append(expireTime);
+		builder.append(", tel=");
+		builder.append(tel);
+		builder.append(", code=");
+		builder.append(code);
+		builder.append(", expire=");
+		builder.append(expire);
 		builder.append("]");
 		return builder.toString();
 	}
 	
 	
-
 }
