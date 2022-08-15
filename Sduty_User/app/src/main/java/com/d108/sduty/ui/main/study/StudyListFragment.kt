@@ -3,6 +3,7 @@ package com.d108.sduty.ui.main.study
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -154,19 +155,23 @@ class StudyListFragment : Fragment(){
                                     dialogPass.showDialog()
                                     dialogPass.setOnClickListener(object : StudyPasswordDialog.OnDialogClickListener{
                                         override fun onClicked(etPassword: EditText) {
-                                            if(studyList[position].joinNumber < studyList[position].limitNumber){
+                                            if(studyList[position].joinNumber == studyList[position].limitNumber){
+                                                context?.showToast("스터디 인원 수가 많아 참가할 수 없습니다.")
+                                            } else{
                                                 if(etPassword.text.toString() == studyList[position].password){
                                                     studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
                                                 } else{
                                                     context?.showToast("비밀번호가 틀렸습니다.")
                                                 }
-                                            } else{
-                                                context?.showToast("스터디 인원 수가 많아 참가할 수 없습니다.")
                                             }
                                         }
                                     })
                                 } else{
-                                    studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                    if(studyList[position].joinNumber == studyList[position].limitNumber){
+                                        context?.showToast("스터디 인원 수가 많아 참가할 수 없습니다.")
+                                    } else{
+                                        studyListViewModel.studyJoin(studyList[position].seq, mainViewModel.profile.value!!.userSeq)
+                                    }
                                 }
 
                             }

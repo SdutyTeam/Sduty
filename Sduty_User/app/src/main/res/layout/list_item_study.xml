@@ -17,27 +17,41 @@
         android:layout_margin="12dp"
         android:layout_gravity="center">
 
-        <TextView
-            android:id="@+id/study_name"
+
+        <LinearLayout
+            android:id="@+id/study_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="그룹 이름"
-            android:text="@{studyList.name}"
-            android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            />
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/img_study_detail_lock"
+                android:visibility="@{studyList.password == null ? View.GONE : View.VISIBLE}"/>
+
+            <TextView
+                android:id="@+id/study_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="그룹 이름"
+                android:text="@{studyList.name}"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/study_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="그룹 카테고리"
-            android:text="@{studyList.category}"
+            android:text="@{studyList.category + ` 스터디`}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/study_name"
+            app:layout_constraintTop_toBottomOf="@id/study_title"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             />
