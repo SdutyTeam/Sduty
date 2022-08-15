@@ -96,7 +96,9 @@ class CamStudyDetailFragment : Fragment() {
 
                 if((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt() == mainViewModel.profile.value!!.userSeq){
                     binding.btnStudySetting.visibility = View.VISIBLE
+                    binding.btnStudyExit.visibility = View.GONE
                 } else{
+                    binding.btnStudySetting.visibility = View.GONE
                     binding.btnStudyExit.visibility = View.VISIBLE
                 }
 
