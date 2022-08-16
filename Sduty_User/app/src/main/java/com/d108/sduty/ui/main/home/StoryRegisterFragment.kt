@@ -32,6 +32,7 @@ import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
 
 //게시물 등록 - 글 내용입력, 이미지 추가/ 미리보기, 카메라 or 이미지 선택, 태그 선택
