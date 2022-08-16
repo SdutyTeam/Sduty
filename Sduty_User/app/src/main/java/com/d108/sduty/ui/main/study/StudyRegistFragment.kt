@@ -217,7 +217,7 @@ class StudyRegistFragment : Fragment() {
                 studyRegisteViewModel.createSuccess.observe(viewLifecycleOwner){
                     if(it){
                         // 성공적으로 스터디 생성 - 스터디 이동? 내 스터디 리스트?
-                        findNavController().navigate(StudyRegistFragmentDirections.actionStudyRegistFragmentToMyStudyFragment())
+                        findNavController().popBackStack()
                     }
                 }
                 if(pass == ""){

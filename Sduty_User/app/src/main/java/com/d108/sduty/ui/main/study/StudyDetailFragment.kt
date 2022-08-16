@@ -116,8 +116,6 @@ class StudyDetailFragment : Fragment() {
                 }
 
 
-                
-
                 studyDetailViewModel.masterNickname((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt())
                 studyDetailViewModel.studyMasterNickName.observe(viewLifecycleOwner) {
                     masterNickname = it.nickname
@@ -160,6 +158,16 @@ class StudyDetailFragment : Fragment() {
 
     private fun initAdapter(){
         studyMemberAdapter = memberList?.let { StudyMemberAdapter(it) }!!
+        studyMemberAdapter.onClickMemberListener = object : StudyMemberAdapter.OnClickMemberListener {
+            override fun onClick(member: Member) {
+                if(member.userSeq == mainViewModel.user.value!!.seq) {
+                    findNavController().safeNavigate(StudyDetailFragmentDirections.actionStudyDetailFragmentToMyPageFragment())
+                }else{
+                    findNavController().safeNavigate(StudyDetailFragmentDirections.actionStudyDetailFragmentToUserProfileFragment(member.userSeq!!))
+                }
+            }
+
+        }
         binding.studyMember.apply {
             layoutManager = GridLayoutManager(context, 4)
             adapter = studyMemberAdapter

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.d108.sduty.dto.Admin;
 import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.service.AdminService;
@@ -89,8 +91,8 @@ public class AdminController {
 	// 신고 관리
 	@ApiOperation(value = "신고된 게시물 목록 조회")
 	@GetMapping("/bad-story")
-	public ResponseEntity<?> getBadStories(){
-		return new ResponseEntity<List<Story>>(adminService.getBadStories(), HttpStatus.OK);
+	public ResponseEntity<?> getBadStories(Pageable pageable){
+		return new ResponseEntity<PagingResult<Story>>(adminService.getBadStories(pageable), HttpStatus.OK);
 	}
 	
 	// 데일리 질문
