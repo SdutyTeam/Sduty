@@ -9,13 +9,15 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AES256Util {
 	//128bit
 	//비밀키의 키 값 = 이건 노출되면 안되는 정보.. 어떻게 처리하지?
-	private static final String KEY = "6w9z$C&F)J@NcRfU";
+	@Value("${external.secret.key}")
+	private String KEY;
 	private static final int IVSIZE = 16;//128bit = 16bytes
 	
 	public String encrypt(String plainText) throws Exception{
