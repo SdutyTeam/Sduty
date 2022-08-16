@@ -13,7 +13,7 @@ class StoryDataSource(private val adminApi: AdminApi): PagingSource<Int, Story>(
             val page = params.key?: 0
             val response = adminApi.getReportStory(page, 18)
             val body = response.body() as PagingResult<Story>
-            Log.d(TAG, "load: ${response.body()}")
+            Log.d(TAG, "load: ${body.result} ")
             if(response.isSuccessful && body.result.isNotEmpty()) {
 
                 LoadResult.Page(
