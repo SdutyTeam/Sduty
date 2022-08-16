@@ -9,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ApplicationClass: Application() {
     companion object{
         lateinit var retrofit: Retrofit
+        lateinit var jobTagMap: HashMap<Int, String>
     }
 
     override fun onCreate() {

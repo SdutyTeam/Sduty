@@ -69,8 +69,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public PagingResult<Story> getBadStories(Pageable pageable) {
-		Page<Story> pageStory = storyRepo.findByWarningGreaterThan(0, pageable);
+	public PagingResult<Story> getBadStories(Pageable pageable) {				
+		Page<Story> pageStory = storyRepo.findByWarningGreaterThanOrderByRegtimeDesc(0, pageable);
+		System.out.println(pageStory.toList());
 		return new PagingResult<Story>(pageable.getPageNumber(), pageStory.getTotalPages(), pageStory.toList());
 	}
 

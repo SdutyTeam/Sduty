@@ -2,7 +2,6 @@ package com.d108.sduty_admin.model.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.liveData
 import com.d108.sduty_admin.common.ApplicationClass
 import com.d108.sduty_admin.model.api.AdminApi
 import com.d108.sduty_admin.model.paging.StoryDataSource
@@ -14,14 +13,18 @@ class Repository private constructor(){
     private val adminApi: AdminApi = retrofit.create(AdminApi::class.java)
 
 
-    suspend fun getReportStory(page: Int, pageSize: Int) = adminApi.getReportStory(page, pageSize)
-
     fun getAllReportStory() = Pager(
         config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
         pagingSourceFactory = {StoryDataSource(adminApi)}
     ).flow
 
+    suspend fun getTimelineDetail(storySeq: Int) = adminApi.getTimelineDetail(storySeq, 0)
 
+    suspend fun getJobList() = adminApi.getJobList()
+
+    suspend fun deleteStory(storySeq: Int) = adminApi.deleteStory(storySeq)
+
+    suspend fun deleteReply(replySeq: Int)  = adminApi.deleteReply(replySeq)
 
 
 

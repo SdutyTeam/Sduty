@@ -24,8 +24,8 @@ public interface StoryRepo extends JpaRepository<Story, Integer>{
 	@Query(value="SELECT distinct dayofyear(substr(story_regtime, 1,10)) as dayofyear FROM sduty.story where story_writer_seq = ?1", nativeQuery=true)
 	List<Integer> findAllRegtime(int userSeq);
 	
-	Page<Story> findByWarningGreaterThan(int zero, Pageable pageable);
-	
+	Page<Story> findByWarningGreaterThanOrderByRegtimeDesc(int zero, Pageable pageable);
+	List<Story> findByWarningGreaterThan(int zero);
 	@Query(value="select * from story as s where story_public = 2 and story_job_hashtag = ?1 and datediff(now(), story_regtime) < 7 order by rand() limit 1", nativeQuery=true)
 	Story findRecommanded(String storyJobHashtag);
 	Page<Story> findAllByOrderByRegtimeDesc(Pageable pageable);

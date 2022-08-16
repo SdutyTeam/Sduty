@@ -1,7 +1,5 @@
 package com.d108.sduty_admin.model.api
 
-import com.d108.sduty.sduty_admin.dto.Timeline
-import com.d108.sduty_admin.R
 import com.d108.sduty_admin.model.dto.*
 import com.d108.sduty_admin.model.paging.PagingResult
 import retrofit2.Response
@@ -53,5 +51,14 @@ interface AdminApi {
 
     @GET("/story/{storySeq}/{userSeq}")
     suspend fun getTimelineDetail(@Path("storySeq") storySeq: Int, @Path("userSeq")userSeq: Int): Response<Timeline>
+
+    @GET("/tag/job")
+    suspend fun getJobList(): Response<List<JobHashtag>>
+
+    @DELETE("/story/{story_seq}")
+    suspend fun deleteStory(@Path("story_seq")storySeq: Int): Response<Void>
+
+    @DELETE("/story/reply/{reply_seq}")
+    suspend fun deleteReply(@Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
 
 }
