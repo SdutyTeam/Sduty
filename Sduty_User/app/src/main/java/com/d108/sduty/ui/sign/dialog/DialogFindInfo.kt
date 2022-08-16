@@ -74,10 +74,10 @@ class DialogFindInfo(val mContext: Context) : DialogFragment() {
             btnConfirm.setOnClickListener {
                 when(flag){
                     FIND_ID ->{
-                        if(etPhone.text.isEmpty() || etPhone.text.length != 11){
-                            requireContext().showToast("올바른 번호를 입력해 주세요")
+                        if(etName.text.isEmpty() || etPhone.text.isEmpty() || etPhone.text.length != 11){
+                            requireContext().showToast("올바른 정보를 입력해 주세요")
                         }else{
-                            viewModel.findId(etPhone.text.toString())
+                            viewModel.findId(etName.text.toString(), etPhone.text.toString())
                         }
                     }
                     FIND_PW ->{

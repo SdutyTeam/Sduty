@@ -36,4 +36,7 @@ interface ProfileApi {
     @Multipart
     @PUT("/profile/image")
     suspend fun updateProfileImage(@Part imageFile: MultipartBody.Part, @Part("profile") profile: RequestBody): Response<Profile>
+
+    @PUT("/profile/timer/{userSeq}/{flag}")
+    suspend fun updateIsStudying(@Path("userSeq") userSeq: Int, @Path("flag") flag: Int): Response<Void>
 }

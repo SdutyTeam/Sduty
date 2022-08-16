@@ -143,7 +143,6 @@ class TaskRegistDialog : DialogFragment() {
                 if (title.isNotEmpty()) {
                     timerViewModel.saveTask(report)
                     timerViewModel.getTodayReport(mainViewModel.user.value!!.seq)
-                    timerViewModel.stopTimer()
                     dismiss()
                 } else {
                     ConfirmDialog().apply {
@@ -175,7 +174,6 @@ class TaskRegistDialog : DialogFragment() {
         }
 
         timerViewModel.resetDelayTimer()
-        timerViewModel.stopTimer()
     }
 
     override fun onResume() {

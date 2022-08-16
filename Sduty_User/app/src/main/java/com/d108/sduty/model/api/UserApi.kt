@@ -36,8 +36,8 @@ interface UserApi {
     @POST("/user/auth/check")
     suspend fun checkAuthCode(@Body authInfo: AuthInfo): Response<Void>
 
-    @GET("/user/id/{tel}")
-    suspend fun findId(@Path("tel")tel: String): Response<String>
+    @GET("/user/id/{name}/{tel}")
+    suspend fun findId(@Path("name") name: String, @Path("tel") tel: String): Response<String>
 
     @PUT("/user/pwd")
     suspend fun changePw(@Body user: User): Response<Void>

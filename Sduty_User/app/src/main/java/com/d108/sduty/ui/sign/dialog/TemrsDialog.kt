@@ -59,7 +59,7 @@ class TemrsDialog(var mContext: Context) : DialogFragment() {
         val stringBuilder = StringBuilder()
         when(requireArguments().getString("flag")){
             "terms" -> inputStream = requireContext().assets.open("Terms.txt")
-            "privacy" -> inputStream = requireContext().assets.open("PrivacyPolish.txt.txt")
+            "privacy" -> inputStream = requireContext().assets.open("PrivacyPolish.txt")
         }
         val reader = BufferedReader(InputStreamReader(inputStream))
         while (true) {

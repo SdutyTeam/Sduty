@@ -84,7 +84,7 @@ class TimerViewModel() : ViewModel() {
     }
 
     // 앱이 종료 되었을 경우 측정 시간을 복구한다.
-    fun restoreTime() {
+    fun restoreTime(userSeq: Int) {
         val savedStartTime = ApplicationClass.timerPref.getString("StartTime", "")!!
 
         // 측정하던 정보가 남아 있을 경우
@@ -98,13 +98,14 @@ class TimerViewModel() : ViewModel() {
 
             _timer.value = (studyTime / 1000).toInt()
 
-            startTimer()
+            startTimer(userSeq)
         }
     }
 
     // 시간 측정을 시작한다.
-    fun startTimer() {
+    fun startTimer(userSeq: Int) {
         _isRunningTimer.value = true
+        updateIsStudying(userSeq, true)
 
         timerTask = timer(period = 1000) {
             _timer.postValue(timer.value!! + 1)
@@ -132,7 +133,9 @@ class TimerViewModel() : ViewModel() {
     }
 
     // 시간 측정을 종료한다.
-    fun stopTimer() {
+    fun stopTimer(userSeq: Int) {
+        updateIsStudying(userSeq, false)
+
         _endTime = convertTimeDateToString(Date(System.currentTimeMillis()), "HH:mm:ss")
 
         ApplicationClass.timerPref.edit().putString("StartTime", "").apply()
@@ -245,6 +248,21 @@ class TimerViewModel() : ViewModel() {
                     getTodayReport(userSeq)
                 } else {
                     Log.e(TAG, "saveTask: ${it.code()}")
+                    _isErredConnection.postValue(true)
+                }
+            }
+        }
+    }
+
+    // 공부 진행 중 상태 변경
+    private fun updateIsStudying(userSeq: Int, isStudying: Boolean){
+        val flag = if(isStudying) 1 else 0
+        CoroutineScope(Dispatchers.IO).launch {
+            Retrofit.profileApi.updateIsStudying(userSeq, flag).let {
+                if (it.isSuccessful){
+                    Log.d(TAG, "updateIsStudying: $isStudying")
+                } else {
+                    Log.d(TAG, "updateIsStudying: ${it.code()}")
                     _isErredConnection.postValue(true)
                 }
             }

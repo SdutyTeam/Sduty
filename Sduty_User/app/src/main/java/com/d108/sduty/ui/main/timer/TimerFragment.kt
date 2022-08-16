@@ -106,19 +106,15 @@ class TimerFragment : Fragment() {
 
             // 공부 시작, 종료
             ivTimer.setOnClickListener {
-                when (timerViewModel.isRunningTimer.value) {
+                when (timerViewModel.isRunningTimer.value as Boolean) {
                     false -> {
-                        timerViewModel.startTimer()
+                        timerViewModel.startTimer(mainViewModel.user.value!!.seq)
                         timerViewModel.saveTime()
                     }
                     true -> {
                         timerViewModel.delayTimer()
+                        DelayDialog().show(requireActivity().supportFragmentManager, "DelayDialog")
                     }
-                    else -> {}
-                }
-                // 측정을 중지하였을 때
-                if (timerViewModel.timer.value!! > 0) {
-                    DelayDialog().show(requireActivity().supportFragmentManager, "DelayDialog")
                 }
             }
 
@@ -139,7 +135,7 @@ class TimerFragment : Fragment() {
             // 첫 화면은 오늘 날짜로 설정
             tvToday.text = today
             timerViewModel.selectDate(mainViewModel.user.value!!.seq, today)
-            timerViewModel.restoreTime()
+            timerViewModel.restoreTime(mainViewModel.user.value!!.seq)
         }
     }
 

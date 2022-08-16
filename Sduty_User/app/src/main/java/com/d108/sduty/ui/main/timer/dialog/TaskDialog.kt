@@ -192,7 +192,6 @@ class TaskDialog : DialogFragment() {
                 if (title.isNotEmpty()) {
                     timerViewModel.saveTask(report)
                     timerViewModel.getTodayReport(mainViewModel.user.value!!.seq)
-                    timerViewModel.stopTimer()
                     dismiss()
                 } else {
                     ConfirmDialog().apply {

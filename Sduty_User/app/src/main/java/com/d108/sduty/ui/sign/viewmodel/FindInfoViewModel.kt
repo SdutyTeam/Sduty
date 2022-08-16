@@ -32,9 +32,9 @@ class FindInfoViewModel: ViewModel() {
     val isSucceedFindId: LiveData<Boolean>
         get() = _isSucceedFindId
 
-    fun findId(tel: String){
+    fun findId(name:String, tel: String){
         viewModelScope.launch(Dispatchers.IO){
-            Retrofit.userApi.findId(tel).let {
+            Retrofit.userApi.findId(name, tel).let {
                 if(it.isSuccessful && it.body() != null){
                     userId = it.body().toString()
                     sendSMS(tel)
