@@ -7,11 +7,14 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Admin;
 import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.User;
@@ -66,8 +69,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Story> getBadStories() {
-		return storyRepo.findByWarningGreaterThan(0);
+	public PagingResult<Story> getBadStories(Pageable pageable) {
+		Page<Story> pageStory = storyRepo.findByWarningGreaterThan(0, pageable);
+		return new PagingResult<Story>(pageable.getPageNumber(), pageStory.getTotalPages(), pageStory.toList());
 	}
 
 	@Override
