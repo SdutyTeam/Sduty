@@ -248,9 +248,9 @@ public class StoryController {
 	
 	@Transactional
 	@ApiOperation(value= "게시글 신고 : StorySeq > HttpStatus", response = HttpStatus.class)
-	@PutMapping("/report/{storySeq}")
-	public ResponseEntity<?> reportStory(@PathVariable int storySeq) {
-		Story updatingStory = storyService.findById(storySeq);
+	@PutMapping("/report")
+	public ResponseEntity<?> reportStory(@RequestBody Story inputStory) {
+		Story updatingStory = storyService.findById(inputStory.getSeq());
 		if(updatingStory !=null ) {
 			updatingStory.setWarning(updatingStory.getWarning() + 1);
 			Story story = storyService.insertStory(updatingStory);
