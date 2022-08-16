@@ -8,23 +8,17 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
-import com.d108.sduty.common.FLAG_STUDY
 import com.d108.sduty.common.FLAG_STUDY_REGIST
 import com.d108.sduty.common.SENDBIRD_APP_ID
 import com.d108.sduty.databinding.FragmentStudyRegistBinding
@@ -34,9 +28,7 @@ import com.d108.sduty.ui.main.study.viewmodel.StudyRegisteViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.Status
-import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
-import com.sendbird.calls.Room
 import com.sendbird.calls.SendBirdCall
 import com.sendbird.calls.SendBirdError
 

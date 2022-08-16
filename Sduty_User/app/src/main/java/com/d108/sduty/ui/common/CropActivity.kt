@@ -2,7 +2,6 @@ package com.d108.sduty.ui.common
 
 import android.Manifest
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat

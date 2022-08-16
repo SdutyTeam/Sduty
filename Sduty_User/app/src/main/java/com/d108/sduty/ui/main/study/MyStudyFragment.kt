@@ -2,7 +2,6 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.adapter.MyStudyAdapter
-import com.d108.sduty.adapter.StudyListAdapter
 import com.d108.sduty.databinding.FragmentMyStudyBinding
 import com.d108.sduty.model.dto.Study
 import com.d108.sduty.ui.MainActivity

@@ -1,20 +1,16 @@
 package com.d108.sduty.ui.main.study
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,10 +28,6 @@ import com.d108.sduty.ui.main.study.viewmodel.StudySettingViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.showToast
-import com.gun0912.tedpermission.provider.TedPermissionProvider
-import org.w3c.dom.Text
-import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 

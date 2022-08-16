@@ -1,11 +1,8 @@
 package com.d108.sduty.ui.main.home
 
-import android.app.ProgressDialog.show
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.PopupMenu
@@ -26,15 +23,10 @@ import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentStoryDetailBinding
 import com.d108.sduty.model.dto.*
 import com.d108.sduty.ui.main.home.dialog.BlockDialog
-import com.d108.sduty.ui.main.study.StudyDetailFragmentDirections
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
-import com.d108.sduty.utils.navigateBack
-import com.d108.sduty.utils.safeNavigate
-import com.d108.sduty.utils.showAlertDialog
-import com.d108.sduty.utils.showToast
-import com.google.android.material.navigation.NavigationView
+import com.d108.sduty.utils.*
 
 // 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩
 private const val TAG ="StoryDetailFragment"
@@ -61,7 +53,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         val displaymetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
-        val deviceWidth = displaymetrics.widthPixels
+        val deviceWidth = displaymetrics.widthPixels - convertDpToPx(requireContext(), 24f)
         val deviceHeight = deviceWidth / 3 * 4
         binding.apply {
             ivTimelineContent.layoutParams.width = deviceWidth

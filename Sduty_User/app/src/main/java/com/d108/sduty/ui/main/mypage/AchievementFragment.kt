@@ -1,18 +1,15 @@
 package com.d108.sduty.ui.main.mypage
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.d108.sduty.R
 import com.d108.sduty.adapter.AchievementAdapter
 import com.d108.sduty.databinding.FragmentAchievementBinding
 import com.d108.sduty.model.dto.Achievement
 import com.d108.sduty.ui.main.mypage.dialog.DialogAchivement
-import com.d108.sduty.utils.safeNavigate
 
 // 업적 페이지 - 업적 내용, 달성한 업적, 달성 가능한 업적, 숨겨진 업적 표시
 private const val TAG ="AchievementFragment"

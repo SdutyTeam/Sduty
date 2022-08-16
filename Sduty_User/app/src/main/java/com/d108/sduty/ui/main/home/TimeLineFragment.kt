@@ -6,21 +6,26 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
-import com.d108.sduty.adapter.TimeLineAdapter
 import com.d108.sduty.adapter.paging.TimeLinePagingAdapter
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentTimeLineBinding
-import com.d108.sduty.model.dto.*
+import com.d108.sduty.model.dto.Follow
+import com.d108.sduty.model.dto.Likes
+import com.d108.sduty.model.dto.Scrap
+import com.d108.sduty.model.dto.Timeline
 import com.d108.sduty.ui.main.home.dialog.BlockDialog
 import com.d108.sduty.ui.main.home.dialog.PushInfoDialog
 import com.d108.sduty.ui.main.mypage.setting.viewmodel.SettingViewModel
@@ -41,9 +46,6 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val storyViewModel: StoryViewModel by activityViewModels()
     private val settingViewModel: SettingViewModel by viewModels()
-    private lateinit var timeLineAdapter: TimeLineAdapter
-    private var selectedPosition = 0
-    private var timeLineList = mutableListOf<Timeline>()
 
     private lateinit var pageAdapter: TimeLinePagingAdapter
     private lateinit var menuSelectedTimeline: Timeline
@@ -87,7 +89,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         }
         getFirebaseToken()
 
-        pageAdapter = TimeLinePagingAdapter(requireActivity())
+        pageAdapter = TimeLinePagingAdapter(requireActivity(), requireContext())
         pageAdapter.apply {
             onClickTimelineItem = object : TimeLinePagingAdapter.TimeLineClickListener{
                 override fun onFavoriteClicked(timeline: Timeline, position: Int) {

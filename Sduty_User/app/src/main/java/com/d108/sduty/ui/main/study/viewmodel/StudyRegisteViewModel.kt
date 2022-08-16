@@ -17,7 +17,6 @@ import com.sendbird.calls.handler.RoomHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.math.log
 
 private const val TAG = "StudyRegistViewModel"
 

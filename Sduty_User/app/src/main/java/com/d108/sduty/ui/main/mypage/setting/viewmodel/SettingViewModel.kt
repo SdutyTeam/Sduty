@@ -5,14 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.sharedpreference.FCMPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 private const val TAG ="SettingViewModel"
 class SettingViewModel: ViewModel() {

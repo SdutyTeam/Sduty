@@ -1,31 +1,23 @@
 package com.d108.sduty.ui.main.home
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.SelectedTagAdapter
-import com.d108.sduty.adapter.TagAdapter
 import com.d108.sduty.common.ALL_TAG
 import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.common.NOT_PROFILE
@@ -38,11 +30,9 @@ import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
-import com.d108.sduty.utils.UriPathUtil
 import com.d108.sduty.utils.navigateBack
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
-import com.github.dhaval2404.imagepicker.ImagePicker
 
 //게시물 등록 - 글 내용입력, 이미지 추가/ 미리보기, 카메라 or 이미지 선택, 태그 선택
 private const val TAG ="StoryRegisterFragment"
@@ -54,13 +44,10 @@ class StoryRegisterFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val tagViewModel: TagViewModel by viewModels()
     // (공개 범위) 0 : 전체 공개, 1 : 팔로워만, 2 : 나만 보기
     private var disclosure = 0
-    private var imageUrl: String? = null
 
     private var selectedTagList = mutableListOf<String>()
-    private var jobHashtag: JobHashtag? = null
     private var interestHashtagList: MutableList<Int>? = null
     private val tagAdapter = SelectedTagAdapter(ALL_TAG)
-    private var storyImage: Bitmap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

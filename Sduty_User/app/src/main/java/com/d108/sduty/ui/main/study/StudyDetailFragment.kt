@@ -2,7 +2,6 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,6 @@ import com.d108.sduty.ui.main.study.viewmodel.StudyDetailViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 // 스터디 상세 -

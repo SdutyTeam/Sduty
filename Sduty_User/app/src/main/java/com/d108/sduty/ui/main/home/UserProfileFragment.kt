@@ -1,13 +1,8 @@
 package com.d108.sduty.ui.main.home
 
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.annotation.IdRes
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,25 +12,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.ContributionAdapter
-import com.d108.sduty.adapter.StoryAdapter
 import com.d108.sduty.adapter.paging.StoryPagingAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
-import com.d108.sduty.common.FLAG_REPORT
-import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.databinding.FragmentUserProfileBinding
 import com.d108.sduty.model.dto.Follow
-import com.d108.sduty.model.dto.InterestHashtag
-import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Story
-import com.d108.sduty.ui.main.home.dialog.BlockDialog
-import com.d108.sduty.ui.main.mypage.MyPageFragmentDirections
-import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.safeNavigate
-import com.d108.sduty.utils.showAlertDialog
-import com.d108.sduty.utils.showToast
 
 //사용자 프로필 - 사용자 닉네임, 프로필 사진, 숫자 표시(게시물, 팔로우, 팔로워), 한줄소개,
 // 잔디그래프,게시물(그리드+스크롤) , 더 보기, 업적

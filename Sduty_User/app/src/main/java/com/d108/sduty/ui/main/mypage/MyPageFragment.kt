@@ -1,27 +1,20 @@
 package com.d108.sduty.ui.main.mypage
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.flatMap
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.ContributionAdapter
-import com.d108.sduty.adapter.StoryAdapter
 import com.d108.sduty.adapter.paging.StoryPagingAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
 import com.d108.sduty.common.MODIFY
 import com.d108.sduty.databinding.FragmentMyPageBinding
 import com.d108.sduty.model.dto.Story
-import com.d108.sduty.ui.sign.viewmodel.TagViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.safeNavigate

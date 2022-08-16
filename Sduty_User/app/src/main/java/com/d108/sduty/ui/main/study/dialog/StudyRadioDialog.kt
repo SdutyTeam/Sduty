@@ -4,10 +4,12 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.RadioButton
 import androidx.fragment.app.DialogFragment
-import com.d108.sduty.R
 import com.d108.sduty.databinding.DialogRadioStudyBinding
 
 private const val TAG = "StudyRadioDialog"

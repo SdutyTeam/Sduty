@@ -1,14 +1,11 @@
 package com.d108.sduty.model.paging
 
-import android.util.Log
-import android.util.LogPrinter
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.d108.sduty.common.ALL_TIMELINE
 import com.d108.sduty.common.FOLLOW_TIMELINE
 import com.d108.sduty.common.INTEREST_TIMELINE
 import com.d108.sduty.common.JOB_TIMELINE
-import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.api.StoryApi
 import com.d108.sduty.model.dto.Timeline
 import retrofit2.Response

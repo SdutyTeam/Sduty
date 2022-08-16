@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.d108.sduty.databinding.DialogTagStudyFieldBinding
-import com.d108.sduty.databinding.DialogTaskBinding
 import com.d108.sduty.utils.getDeviceSize
 
 class TagStudyFieldDialog: DialogFragment() {

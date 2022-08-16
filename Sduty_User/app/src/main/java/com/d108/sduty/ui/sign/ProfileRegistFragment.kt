@@ -30,7 +30,6 @@ import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.JobHashtag
 import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.ui.common.CropImageActivity
-import com.d108.sduty.ui.common.CropSelectDialog
 import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.sign.viewmodel.ProfileViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel

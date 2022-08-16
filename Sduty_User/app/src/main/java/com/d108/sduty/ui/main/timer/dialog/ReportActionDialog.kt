@@ -1,10 +1,10 @@
 package com.d108.sduty.ui.main.timer.dialog
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.d108.sduty.R
 
 // TODO: Rename parameter arguments, choose names that match
