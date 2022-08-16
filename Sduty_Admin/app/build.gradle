@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.d108.sduty_admin"
         minSdk 21
-        targetSdk 30
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -65,4 +65,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.6'
+
+    // Paging 3
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
 }
