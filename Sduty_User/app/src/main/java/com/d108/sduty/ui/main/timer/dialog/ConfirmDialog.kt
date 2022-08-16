@@ -56,12 +56,9 @@ class ConfirmDialog : DialogFragment() {
     private fun removeTimer() {
         binding.apply {
             btnRemove.setOnClickListener {
-                // DelayDialog 종료
+                // TaskRegistDialog 종료
                 val fragment = requireActivity().supportFragmentManager.findFragmentByTag("TaskRegistDialog")
                 requireActivity().supportFragmentManager.beginTransaction().remove(fragment!!).commit()
-
-                // Timer 측정 종료
-                timerViewModel.stopTimer()
 
                 // ConfirmDialog 종료
                 dismiss()
