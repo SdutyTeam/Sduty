@@ -197,7 +197,7 @@ class StudySettingFragment : Fragment() {
         studySettingViewModel.isDeleteStudy.observe(viewLifecycleOwner){
             if(it){
                 context?.showToast("스터디 그룹이 삭제되었습니다.")
-                findNavController().navigate(StudySettingFragmentDirections.actionStudySettingFragmentToMyStudyFragment())
+                findNavController().popBackStack()
             }
         }
 

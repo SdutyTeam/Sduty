@@ -13,6 +13,9 @@ class CamStudyMemberAdapter(var list: List<Member>): RecyclerView.Adapter<CamStu
     inner class ViewHolder(val binding: ListItemCamstudyMemberBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Member){
             binding.studyMember = item
+            binding.constCamstudyMember.setOnClickListener {
+                onClickMemberListener.onClick(item)
+            }
         }
     }
 
@@ -29,5 +32,9 @@ class CamStudyMemberAdapter(var list: List<Member>): RecyclerView.Adapter<CamStu
 
     override fun getItemCount(): Int = list.size
 
+    lateinit var onClickMemberListener: OnClickMemberListener
+    interface OnClickMemberListener{
+        fun onClick(member: Member)
+    }
 
 }

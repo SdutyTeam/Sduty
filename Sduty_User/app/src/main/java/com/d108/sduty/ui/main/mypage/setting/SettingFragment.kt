@@ -96,7 +96,6 @@ class SettingFragment : Fragment() {
                                 viewModel.resignUser(mainViewModel.user.value!!)
                                 naverDisconnect()
                                 kakaoDisconnect()
-                                clearActivity()
                             }
                         }
                     }
@@ -118,7 +117,6 @@ class SettingFragment : Fragment() {
             when(it){
                 true -> {
                     requireActivity().showAlertDialog("회원 탈퇴", "탈퇴가 완료되었습니다.", null)
-                    findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
                     clearActivity()
                 }
                 else -> {}

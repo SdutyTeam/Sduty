@@ -236,6 +236,15 @@ class CamStudyDetailFragment : Fragment() {
 
     private fun initAdapter(){
         camStudyMemberAdapter = memberList?.let { CamStudyMemberAdapter(it) }!!
+        camStudyMemberAdapter.onClickMemberListener = object : CamStudyMemberAdapter.OnClickMemberListener{
+            override fun onClick(member: Member) {
+                if(member.userSeq == mainViewModel.user.value!!.seq) {
+                    findNavController().safeNavigate(CamStudyDetailFragmentDirections.actionCamStudyDetailFragmentToMyPageFragment())
+                }else{
+                    findNavController().safeNavigate(CamStudyDetailFragmentDirections.actionCamStudyDetailFragmentToUserProfileFragment(member.userSeq!!))
+                }
+            }
+        }
         binding.studyMember.apply {
             layoutManager = GridLayoutManager(context, 4)
             adapter = camStudyMemberAdapter

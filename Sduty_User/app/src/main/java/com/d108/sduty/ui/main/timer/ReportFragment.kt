@@ -167,7 +167,7 @@ class ReportFragment : Fragment() {
             }
 
             fabTimer.setOnClickListener {
-                findNavController().safeNavigate(ReportFragmentDirections.actionReportFragmentToTimerFragment())
+                findNavController().popBackStack()
             }
         }
 
