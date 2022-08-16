@@ -2,16 +2,32 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reportStoryFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.d108.sduty_admin.ui.login.LoginFragment"
         android:label="LoginFragment" >
         <action
-            android:id="@+id/action_loginFragment_to_reportStoryFragment"
-            app:destination="@id/reportStoryFragment" />
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.d108.sduty_admin.ui.home.HomeFragment"
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/action_homeFragment_to_reportStoryFragment"
+            app:destination="@id/reportStoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_noticeFragment"
+            app:destination="@id/noticeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_qnAFragment"
+            app:destination="@id/qnAFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/reportStoryFragment"
         android:name="com.d108.sduty_admin.ui.home.report.ReportStoryFragment"
@@ -40,4 +56,12 @@
         android:id="@+id/qnADetailFragment"
         android:name="com.d108.sduty_admin.ui.home.qna.QnADetailFragment"
         android:label="QnADetailFragment" />
+
+
+    <fragment
+        android:id="@+id/noticeFragment"
+        android:name="com.d108.sduty_admin.ui.home.notice.NoticeFragment"
+        android:label="NoticeFragment">
+
+    </fragment>
 </navigation>
