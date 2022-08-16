@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/reportStoryFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.d108.sduty_admin.ui.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_reportStoryFragment"
+            app:destination="@id/reportStoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportStoryFragment"
+        android:name="com.d108.sduty_admin.ui.home.report.ReportStoryFragment"
+        android:label="ReportStoryFragment" >
+        <action
+            android:id="@+id/action_reportStoryFragment_to_reportStoryDetailFragment"
+            app:destination="@id/reportStoryDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportStoryDetailFragment"
+        android:name="com.d108.sduty_admin.ui.home.report.ReportStoryDetailFragment"
+        android:label="ReportStoryDetailFragment">
+        <argument
+            android:name="storySeq"
+            app:argType="integer"/>
+    </fragment>
+    <fragment
+        android:id="@+id/qnAFragment"
+        android:name="com.d108.sduty_admin.ui.home.qna.QnAFragment"
+        android:label="QnAFragment" >
+        <action
+            android:id="@+id/action_qnAFragment_to_qnADetailFragment"
+            app:destination="@id/qnADetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/qnADetailFragment"
+        android:name="com.d108.sduty_admin.ui.home.qna.QnADetailFragment"
+        android:label="QnADetailFragment" />
+</navigation>

@@ -1,10 +1,9 @@
 package com.d108.sduty_admin.model.api
 
+import com.d108.sduty.sduty_admin.dto.Timeline
 import com.d108.sduty_admin.R
-import com.d108.sduty_admin.model.dto.Admin
-import com.d108.sduty_admin.model.dto.DailyQuestion
-import com.d108.sduty_admin.model.dto.Notice
-import com.d108.sduty_admin.model.dto.Qna
+import com.d108.sduty_admin.model.dto.*
+import com.d108.sduty_admin.model.paging.PagingResult
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -48,5 +47,11 @@ interface AdminApi {
 
     @DELETE("/admin/qna/{qna_seq}")
     suspend fun deleteQna(@Path("qna_seq")seq: Int): Response<Void>
+
+    @GET("/admin/bad-story")
+    suspend fun getReportStory(@Query("page") page: Int, @Query("size") pageSize: Int): Response<PagingResult<Story>>
+
+    @GET("/story/{storySeq}/{userSeq}")
+    suspend fun getTimelineDetail(@Path("storySeq") storySeq: Int, @Path("userSeq")userSeq: Int): Response<Timeline>
 
 }
