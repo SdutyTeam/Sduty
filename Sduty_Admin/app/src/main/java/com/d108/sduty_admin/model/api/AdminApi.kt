@@ -54,4 +54,6 @@ interface AdminApi {
     @GET("/story/{storySeq}/{userSeq}")
     suspend fun getTimelineDetail(@Path("storySeq") storySeq: Int, @Path("userSeq")userSeq: Int): Response<Timeline>
 
+    @GET("setting/notice")
+    suspend fun getNoticeList(): Response<List<Notice>>
 }

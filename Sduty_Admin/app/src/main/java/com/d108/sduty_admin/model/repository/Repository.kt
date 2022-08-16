@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.liveData
 import com.d108.sduty_admin.common.ApplicationClass
 import com.d108.sduty_admin.model.api.AdminApi
+import com.d108.sduty_admin.model.dto.Notice
 import com.d108.sduty_admin.model.paging.StoryDataSource
 
 class Repository private constructor(){
@@ -13,8 +14,11 @@ class Repository private constructor(){
 
     private val adminApi: AdminApi = retrofit.create(AdminApi::class.java)
 
-
     suspend fun getReportStory(page: Int, pageSize: Int) = adminApi.getReportStory(page, pageSize)
+
+    suspend fun getNoticeList() = adminApi.getNoticeList()
+
+    suspend fun insertNotice(notice: Notice) = adminApi.insertNotice(notice)
 
     fun getAllReportStory() = Pager(
         config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
