@@ -419,9 +419,17 @@
         android:label="SettingFragment">
         <action
             android:id="@+id/action_settingFragment_to_appLockFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/appLockFragment" />
         <action
             android:id="@+id/action_settingFragment_to_questionListFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/questionListFragment" />
     </fragment>
     <fragment
@@ -494,6 +502,10 @@
         android:label="QuestionListFragment" >
         <action
             android:id="@+id/action_questionListFragment_to_questionFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/questionFragment" />
     </fragment>
 </navigation>
