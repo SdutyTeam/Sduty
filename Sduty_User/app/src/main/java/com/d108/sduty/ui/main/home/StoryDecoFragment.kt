@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.d108.sduty.adapter.TaskSpinnerAdapter
 import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.common.NOT_PROFILE
@@ -130,7 +131,10 @@ class StoryDecoFragment: Fragment() {
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == Activity.RESULT_OK){
             val uri = it.data!!.getStringExtra("uri")
-            binding.imgPreview.setImageURI(Uri.parse(uri))
+            Glide.with(requireContext())
+                .load(Uri.parse(uri).path)
+                .into(binding.imgPreview)
+//            binding.imgPreview.setImageURI(Uri.parse(uri))
             imageUrl = uri!!
         }else{
             findNavController().popBackStack()
