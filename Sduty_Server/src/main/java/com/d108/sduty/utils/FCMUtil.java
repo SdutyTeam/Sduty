@@ -20,7 +20,7 @@ public class FCMUtil {
 	//전체 보내기
 	public void send_FCM_All(List<String>list, Map<String, String> map) {
 		for(int i = 0; i < list.size(); i++) {
-			send_FCM(list.get(i), map.get("title"), map.get("content"));
+			send_FCM(list.get(i), MESSAGE_TITLE, map.get("message"));
 		}
 	}
 	
