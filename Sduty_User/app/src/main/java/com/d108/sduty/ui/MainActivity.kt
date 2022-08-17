@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         }
 //        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
 
+        viewModel.startTimer()
     }
 
 

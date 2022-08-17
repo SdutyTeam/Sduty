@@ -8,8 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.model.dto.User
+import com.d108.sduty.utils.SettingsPreference
+import com.d108.sduty.utils.convertTimeStringToDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.concurrent.timer
 
 private const val TAG ="MainViewModel"
 class MainViewModel: ViewModel() {
@@ -58,6 +62,29 @@ class MainViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+    // 측정 중인 시간
+    private val _timer = MutableLiveData<Int>(0)
+    val timer: LiveData<Int>
+        get() = _timer
+    private var timerTask: Timer? = null
+
+    // 시간 측정을 시작한다.
+    fun startTimer() {
+        val state = SettingsPreference().getAppUseTimeState()
+
+        if(state){
+            val time = SettingsPreference().getAppUseTimeValue()
+            val timeValue = convertTimeStringToDate(time, "HH:mm:ss").time.toInt()
+            timerTask = timer(period = 1000) {
+                _timer.postValue(timer.value!! + 1)
+                if(_timer.value == timeValue){
+                    //다이얼로그 출력
+                }
+            }
+        }
+
     }
 
     fun checkFollowUser(userSeq: Int): Boolean{

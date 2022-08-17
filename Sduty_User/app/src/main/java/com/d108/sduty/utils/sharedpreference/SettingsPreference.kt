@@ -33,6 +33,22 @@ class SettingsPreference {
 //        ApplicationClass.darkModeState.edit().putBoolean("State", accept).apply()
 //    }
 
+    fun setAppUseTimeState(state: Boolean){
+        ApplicationClass.appUseTimePref.edit().putBoolean("State", state).apply()
+    }
+
+    fun getAppUseTimeState(): Boolean{
+        return ApplicationClass.appUseTimePref.getBoolean("State", false)
+    }
+
+    fun setAppUseTimeValue(time: String){
+        ApplicationClass.appUseTimePref.edit().putString("Time", time).apply()
+    }
+
+    fun getAppUseTimeValue(): String{
+        return ApplicationClass.appUseTimePref.getString("Time", "00:00:00").toString()
+    }
+
     fun getFirstRunCheck(): Boolean{
         return ApplicationClass.firstRunCheck.getBoolean("State", true)
     }
