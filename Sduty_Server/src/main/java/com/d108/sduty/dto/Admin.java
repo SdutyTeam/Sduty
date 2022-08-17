@@ -33,7 +33,5 @@ public class Admin {
 	
 	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.EAGER)
 	private Set<Notice> notices = new HashSet<>();
-	
-	@OneToMany(mappedBy = "adminSeq", fetch = FetchType.EAGER)
-	private Set<Qna> qnas = new HashSet<>(); 
+		
 }

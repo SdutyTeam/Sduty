@@ -43,8 +43,7 @@ public class SettingServiceImpl implements SettingService {
 	public Qna updateQuestion(int qnaSeq, Qna qna) {
 		Optional<Qna> qnaOp = qnaRepo.findById(qnaSeq);
 		if(qnaOp.isPresent()) {
-			Qna originQna = qnaOp.get();
-			originQna.setCategory(qna.getCategory());
+			Qna originQna = qnaOp.get();			
 			originQna.setTitle(qna.getTitle());
 			originQna.setContent(qna.getContent());
 			return qnaRepo.save(originQna);
