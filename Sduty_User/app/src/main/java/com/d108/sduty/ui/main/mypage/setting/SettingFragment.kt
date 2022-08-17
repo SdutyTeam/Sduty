@@ -108,7 +108,7 @@ class SettingFragment : Fragment() {
                 findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToQuestionListFragment())
             }
             btnNotice.setOnClickListener {
-                requireContext().showToast("다음 업데이트에서 제공될 예정입니다.")
+                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToNoticeFragment())
             }
         }
 
@@ -190,6 +190,7 @@ class SettingFragment : Fragment() {
             }
         }
     }
+
 
 
 

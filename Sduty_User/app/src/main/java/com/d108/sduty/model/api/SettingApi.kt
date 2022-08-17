@@ -1,5 +1,6 @@
 package com.d108.sduty.model.api
 
+import com.d108.sduty.model.dto.Notice
 import com.d108.sduty.model.dto.Qna
 import retrofit2.Response
 import retrofit2.http.Body
@@ -14,5 +15,6 @@ interface SettingApi {
     @POST("setting/qna")
     suspend fun insertQna(@Body qna: Qna): Response<Void>
 
-
+    @GET("/setting/notice")
+    suspend fun getNoticeList(): Response<List<Notice>>
 }

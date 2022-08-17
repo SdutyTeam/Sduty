@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.Notice
 import com.d108.sduty.model.dto.Qna
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.utils.SettingsPreference
@@ -76,6 +77,22 @@ class SettingViewModel: ViewModel() {
                 }else{
                     Log.d(TAG, "getQnaList: ${it.code()}")
                 }
+            }
+        }
+    }
+
+    private val _noticeList = MutableLiveData<List<Notice>>()
+    val noticeList: LiveData<List<Notice>>
+        get() = _noticeList
+    fun getNoticeList(){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.settingApi.getNoticeList()
+                if(response.isSuccessful && response.body() != null){
+                    _noticeList.postValue(response.body() as List<Notice>)
+                }
+            } catch (e: java.lang.Exception){
+                Log.d(TAG, "getNoticeList: ${e.message}")
             }
         }
     }
