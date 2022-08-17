@@ -36,6 +36,8 @@ import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.sharedpreference.FCMPreference
 import com.d108.sduty.utils.showToast
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -92,7 +94,11 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         pageAdapter = TimeLinePagingAdapter(requireActivity(), requireContext())
         pageAdapter.apply {
             onClickTimelineItem = object : TimeLinePagingAdapter.TimeLineClickListener{
-                override fun onFavoriteClicked(timeline: Timeline, position: Int) {
+                override fun onFavoriteClicked(view: View, timeline: Timeline, position: Int) {
+                    YoYo.with(Techniques.Tada)
+                        .duration(180)
+                        .repeat(3)
+                        .playOn(view)
                     storyViewModel.likeStoryInTimeLine(Likes(mainViewModel.user.value!!.seq, timeline.story.seq))
                     changeLikes(position)
                 }

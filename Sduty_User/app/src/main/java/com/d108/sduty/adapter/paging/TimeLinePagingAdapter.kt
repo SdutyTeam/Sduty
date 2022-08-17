@@ -22,7 +22,7 @@ class TimeLinePagingAdapter(val activity: Activity, val mContext: Context): Pagi
             binding.apply {
                 data = timeline
                 ivFavorite.setOnClickListener {
-                    onClickTimelineItem.onFavoriteClicked(timeline, bindingAdapterPosition)
+                    onClickTimelineItem.onFavoriteClicked(it, timeline, bindingAdapterPosition)
                 }
                 ivMenu.setOnClickListener {
                     onClickTimelineItem.onMenuClicked(it, timeline)
@@ -81,7 +81,7 @@ class TimeLinePagingAdapter(val activity: Activity, val mContext: Context): Pagi
     }
 
     interface TimeLineClickListener{
-        fun onFavoriteClicked(timeline: Timeline, position: Int)
+        fun onFavoriteClicked(view: View, timeline: Timeline, position: Int)
         fun onScrapClicked(timeline: Timeline, position: Int)
         fun onReplyClicked(timeline: Timeline)
         fun onMenuClicked(view: View, timeline: Timeline)

@@ -27,6 +27,8 @@ import com.d108.sduty.ui.sign.dialog.TagSelectDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
 import com.d108.sduty.utils.*
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 
 // 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩
 private const val TAG ="StoryDetailFragment"
@@ -124,6 +126,10 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             }
             ivFavorite.setOnClickListener {
+                YoYo.with(Techniques.Tada)
+                    .duration(180)
+                    .repeat(3)
+                    .playOn(it)
                 viewModel.likeStory(Likes(mainViewModel.user.value!!.seq, args.seq), mainViewModel.user.value!!.seq)
             }
             ivScrap.setOnClickListener {
