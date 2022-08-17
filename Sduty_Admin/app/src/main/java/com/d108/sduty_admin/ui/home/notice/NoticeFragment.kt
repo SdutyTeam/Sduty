@@ -1,10 +1,12 @@
 package com.d108.sduty_admin.ui.home.notice
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,10 +45,16 @@ class NoticeFragment : Fragment() {
             }
         }
 
+        noticeListViewModel.noticeDelete.observe(viewLifecycleOwner) {
+            if(it){
+                Toast.makeText(context, "선택한 공지사항이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         binding.apply {
 
             btnNoticeCreate.setOnClickListener {
-                findNavController().navigate(NoticeFragmentDirections.actionNoticeFragmentToNoticeCreateFragment())
+                findNavController().navigate(NoticeFragmentDirections.actionNoticeFragmentToNoticeCreateFragment("create"))
             }
 
             commonTopBack.setOnClickListener {
@@ -62,11 +70,11 @@ class NoticeFragment : Fragment() {
         noticeAdapter.apply {
             onClickNoticeItem = object : NoticeAdapter.NoticeListClickListener{
                 override fun onEditClicked(view: View, position: Int) {
-                    TODO("Not yet implemented")
+                    findNavController().navigate(NoticeFragmentDirections.actionNoticeFragmentToNoticeCreateFragment("edit", noticeList[position].content, noticeList[position].seq))
                 }
 
                 override fun onDeleteClicked(view: View, position: Int) {
-                    TODO("Not yet implemented")
+                    noticeListViewModel.deleteNotice(noticeAdapter.list[position].seq)
                 }
             }
         }
