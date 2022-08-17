@@ -61,6 +61,9 @@ class ReportStoryFragment : Fragment() {
                 adapter = storyAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)
             }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 

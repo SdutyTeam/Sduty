@@ -43,7 +43,7 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	
+
 	@Autowired
 	private UserRepo userRepo;
 
@@ -101,10 +101,10 @@ public class AdminController {
 	// 신고 관리
 	@ApiOperation(value = "신고된 게시물 목록 조회")
 	@GetMapping("/bad-story")
-	public ResponseEntity<?> getBadStories(Pageable pageable){
+	public ResponseEntity<?> getBadStories(Pageable pageable) {
 		return new ResponseEntity<PagingResult<Story>>(adminService.getBadStories(pageable), HttpStatus.OK);
 	}
-	
+
 	// 데일리 질문
 	@ApiOperation(value = "데일리질문 등록")
 	@PostMapping("/question")
@@ -151,8 +151,8 @@ public class AdminController {
 	public ResponseEntity<?> getQnas() {
 		List<Qna> list = adminService.getQnas();
 		List<Qna> newList = new ArrayList<Qna>();
-		for(Qna q: list) {
-			if(q.getAnsWriter().isEmpty()) {
+		for (Qna q : list) {
+			if (q.getAnsWriter().isEmpty()) {
 				newList.add(q);
 			}
 		}
@@ -189,29 +189,31 @@ public class AdminController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
-	
+
 	@PostMapping("/fcm")
-	public ResponseEntity<?> sendFCM(@RequestBody Map<String, String> message){
-		List<User> userList = userRepo.findAllByUserPublicGreaterThan(1);		
+	public ResponseEntity<?> sendFCM(@RequestBody Map<String, String> message) {
+		List<User> userList = userRepo.findAllByUserPublicGreaterThan(1);
 		FCMUtil fcmUtil = new FCMUtil();
 		List<String> tokenList = new ArrayList<String>();
-		for(User user : userList) {
+		for (User user : userList) {
 			tokenList.add(user.getFcmToken());
-		}				
+		}
 		fcmUtil.send_FCM_All(tokenList, message);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/fcm/{userSeq}")
-	public ResponseEntity<?> sendFCMOne(@PathVariable int userSeq){
-		User user = userRepo.findById(userSeq).get();
+	public ResponseEntity<?> sendFCMOne(@PathVariable int userSeq) {
+		Optional<User> user = userRepo.findBySeq(userSeq);
+
 		FCMUtil fcmUtil = new FCMUtil();
-		if(user.getUserPublic() > 0) {
-			fcmUtil.send_FCM(user.getFcmToken(), "SDUTY", "1:1 문의 답변이 등록되었습니다.");
-			return new ResponseEntity<Void>(HttpStatus.OK);
-		}else {
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		if (user.isPresent()) {
+			if (user.get().getUserPublic() > 0) {
+				fcmUtil.send_FCM(user.get().getFcmToken(), "SDUTY", "1:1 문의 답변이 등록되었습니다.");
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
 		}
-		
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+
 	}
 }

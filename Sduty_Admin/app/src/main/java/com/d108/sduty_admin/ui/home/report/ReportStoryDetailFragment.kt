@@ -77,6 +77,9 @@ class ReportStoryDetailFragment : Fragment() {
                     it.show(parentFragmentManager, null)
                 }
             }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 

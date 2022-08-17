@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.d108.sduty_admin.R
 import com.d108.sduty_admin.databinding.FragmentPushBinding
 
@@ -46,6 +47,9 @@ class PushFragment : Fragment() {
                         setNegativeButton("취소", null)
                     }.show()
                 }
+            }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
             }
         }
     }
