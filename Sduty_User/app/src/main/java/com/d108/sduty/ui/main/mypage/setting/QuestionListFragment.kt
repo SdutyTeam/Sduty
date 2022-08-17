@@ -42,7 +42,9 @@ class QuestionListFragment : Fragment() {
         qnaAdapter = QnaAdapter()
         qnaAdapter.onClickQnaListener = object :QnaAdapter.OnClickQnaListener{
             override fun onClick(qna: Qna) {
-                findNavController().safeNavigate(QuestionListFragmentDirections.actionQuestionListFragmentToQuestionFragment(qna.seq))
+                QuestionDetailDialog(qna).let {
+                    it.show(parentFragmentManager, null)
+                }
             }
         }
         binding.apply {
