@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.d108.sduty.dto.Notice;
 import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.User;
+import com.d108.sduty.repo.QnaRepo;
 import com.d108.sduty.service.SettingService;
 import com.d108.sduty.service.UserService;
 
@@ -32,13 +34,15 @@ public class SettingController {
 	private UserService userService;
 	@Autowired
 	private SettingService settingService;
+	@Autowired
+	private QnaRepo qnaRepo;
 	
 	@ApiOperation(value = "내 문의사항 목록 조회")
 	@GetMapping("/qna/{user_seq}")
-	public ResponseEntity<?> getQnaList(@RequestParam int user_seq) throws Exception{
-		Optional<User> userOp = userService.selectUser(user_seq);
-		if(userOp.isPresent()) {			
-			return null;
+	public ResponseEntity<?> getQnaList(@PathVariable int user_seq) throws Exception{
+		List<Qna> list = qnaRepo.findAllByUserSeqOrderBySeqDesc(user_seq);
+		if(list != null) {
+			return new ResponseEntity<List<Qna>>(list, HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
