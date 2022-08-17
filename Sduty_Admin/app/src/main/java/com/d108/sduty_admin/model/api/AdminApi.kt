@@ -61,4 +61,6 @@ interface AdminApi {
     @DELETE("/story/reply/{reply_seq}")
     suspend fun deleteReply(@Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
 
+    @GET("setting/notice")
+    suspend fun getNoticeList(): Response<List<Notice>>
 }
