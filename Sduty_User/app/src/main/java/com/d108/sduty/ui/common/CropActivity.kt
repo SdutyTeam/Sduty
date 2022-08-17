@@ -163,7 +163,7 @@ open class CropActivity : AppCompatActivity(),
      * and customised with the app layout if need.
      */
     open fun showImageSourceDialog() {
-        CropSelectDialog().let{
+        CropSelectDialog(this).let{
             it.onClickListener = object : CropSelectDialog.OnClickListener{
                 override fun onClick(flag: Int) {
                     when(flag){
@@ -174,17 +174,6 @@ open class CropActivity : AppCompatActivity(),
             }
             it.show(supportFragmentManager, null)
         }
-//
-//        AlertDialog.Builder(this)
-//            .setCancelable(false)
-//            .setTitle(com.canhub.cropper.R.string.pick_image_chooser_title)
-//            .setItems(
-//                arrayOf(
-//                    getString(com.canhub.cropper.R.string.pick_image_camera),
-//                    getString(com.canhub.cropper.R.string.pick_image_gallery),
-//                )
-//            ) { _, position -> openSource(if (position == 0) Source.CAMERA else Source.GALLERY) }
-//            .show()
     }
 
     public override fun onStart() {

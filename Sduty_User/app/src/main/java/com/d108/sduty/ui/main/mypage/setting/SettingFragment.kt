@@ -47,6 +47,9 @@ class SettingFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
             btnPushAll.setOnCheckedChangeListener { buttonView, isChecked ->
                 when(isChecked){
                     true -> {

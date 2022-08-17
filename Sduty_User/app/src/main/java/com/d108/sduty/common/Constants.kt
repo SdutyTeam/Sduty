@@ -57,6 +57,7 @@ const val FOLLOW_TIMELINE = 3
 
 const val FLAG_GALLERY = 0
 const val FLAG_CAMERA = 1
+const val FLAG_NO_SELECT = 2
 
 const val FLAG_REPORT = 0
 const val FLAG_BLOCK = 1
