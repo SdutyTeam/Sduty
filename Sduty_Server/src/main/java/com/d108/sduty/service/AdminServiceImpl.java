@@ -161,8 +161,7 @@ public class AdminServiceImpl implements AdminService {
 		if(qnaOp.isPresent()) {
 			Qna originQna = qnaOp.get();
 			originQna.setAnswer(null);
-			originQna.setAdminSeq(null);
-			originQna.setAnswerRegtime(null);
+			originQna.setAnsWriter(null);			
 			return qnaRepo.save(originQna);
 		}
 		return null;

@@ -23,21 +23,16 @@ public class Qna {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="qna_seq")
 	private int seq;
+	@Column(name="ques_user_seq")
+	private int userSeq;
 	@Column(name="ques_title")
 	private String title;
 	@Column(name="ques_content")
-	private String content;
-	@Column(name="ques_category")
-	private String category;
+	private String content;	
 	@Column(name="ques_writer")
-	private int writerSeq;
-	@Column(name="ques_regtime")
-	@CreationTimestamp
-	private LocalDateTime regtime;
-	@Column(name="ans_content")
-	private String answer;
+	private String writer;
 	@Column(name="ans_writer")
-	private Integer adminSeq;
-	@Column(name="ans_regtime")
-	private LocalDateTime answerRegtime;
+	private String ansWriter;
+	@Column(name="ans_content")
+	private String answer;	
 }

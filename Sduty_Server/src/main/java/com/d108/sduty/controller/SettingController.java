@@ -37,9 +37,8 @@ public class SettingController {
 	@GetMapping("/qna/{user_seq}")
 	public ResponseEntity<?> getQnaList(@RequestParam int user_seq) throws Exception{
 		Optional<User> userOp = userService.selectUser(user_seq);
-		if(userOp.isPresent()) {
-			Set<Qna> qnas = userOp.get().getQnas();
-			return new ResponseEntity<Set<Qna>>(qnas, HttpStatus.OK);
+		if(userOp.isPresent()) {			
+			return null;
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -54,7 +53,7 @@ public class SettingController {
 	}
 	
 	@ApiOperation(value="문의사항 상세보기")
-	@GetMapping("/qna/{qna_seq}")
+	@GetMapping("/qna/detail/{qna_seq}")
 	public ResponseEntity<?> getQnaDetail(@RequestParam int qna_seq){
 		Qna qna = settingService.getQnaDetail(qna_seq);
 		if(qna!=null) {
