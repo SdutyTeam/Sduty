@@ -15,7 +15,8 @@ import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.User;
 
 public interface AdminService {
-	public Optional<Admin> getAdmin(String adminId);
+	public Admin registAdmin(Admin admin);
+	public Optional<Admin> loginAdmin(String adminId, String adminPass);
 	public boolean registNotice(Notice notice);
 	public Notice updateNotice(Notice notice);
 	public void deleteNotice(int noticeSeq);

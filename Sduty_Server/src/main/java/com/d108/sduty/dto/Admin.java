@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,8 +34,10 @@ public class Admin {
 	private String name;
 	
 	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.EAGER)
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	private Set<Notice> notices = new HashSet<>();
 	
 	@OneToMany(mappedBy = "adminSeq", fetch = FetchType.EAGER)
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	private Set<Qna> qnas = new HashSet<>(); 
 }

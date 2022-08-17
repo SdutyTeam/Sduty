@@ -36,6 +36,17 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+	
+	@ApiOperation(value="회원가입")
+	@PostMapping("/regist")
+	public ResponseEntity<?> regist(@RequestBody Admin admin){
+		Admin result = adminService.registAdmin(admin);
+		if(result != null) {
+			result.setPassword("");
+			return new ResponseEntity<Admin>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
 
 	@ApiOperation(value = "로그인")
 	@PostMapping("/login")
@@ -47,12 +58,11 @@ public class AdminController {
 		}
 		String id = idNode.asText();
 		String password = passwordNode.asText();
-		Optional<Admin> adminOp = adminService.getAdmin(id);
+		Optional<Admin> adminOp = adminService.loginAdmin(id, password);
 		if (adminOp.isPresent()) {
 			Admin adminObject = adminOp.get();
-			if (password.equals(adminObject.getPassword())) {
-				return new ResponseEntity<Admin>(adminObject, HttpStatus.OK);
-			}
+			adminObject.setPassword("");
+			return new ResponseEntity<Admin>(adminObject, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
