@@ -41,8 +41,9 @@ public class SettingController {
 	@GetMapping("/qna/{user_seq}")
 	public ResponseEntity<?> getQnaList(@PathVariable int user_seq) throws Exception{
 		List<Qna> list = qnaRepo.findAllByUserSeqOrderBySeqDesc(user_seq);
+		System.out.println(list);
 		if(list != null) {
-			return new ResponseEntity<List<Qna>>(list, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<List<Qna>>(list, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}

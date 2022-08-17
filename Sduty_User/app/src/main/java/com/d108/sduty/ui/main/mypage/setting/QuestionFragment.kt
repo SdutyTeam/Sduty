@@ -45,6 +45,10 @@ class QuestionFragment : Fragment() {
                     findNavController().popBackStack()
                 }
             }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
         }
     }
 

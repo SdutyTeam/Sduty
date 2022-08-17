@@ -9,9 +9,10 @@ import retrofit2.http.Path
 
 interface SettingApi {
     @GET("/setting/qna/{user_seq}")
-    suspend fun getQnaList(@Path("user_seq") userSeq: Int): Response<Set<Qna>>
+    suspend fun getQnaList(@Path("user_seq") userSeq: Int): Response<MutableList<Qna>>
 
     @POST("setting/qna")
     suspend fun insertQna(@Body qna: Qna): Response<Void>
+
 
 }

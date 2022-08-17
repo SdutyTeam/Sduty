@@ -63,4 +63,20 @@ class SettingViewModel: ViewModel() {
             }
         }
     }
+
+    private val _qnaList = MutableLiveData<MutableList<Qna>>()
+    val qnaList: LiveData<MutableList<Qna>>
+        get() = _qnaList
+    fun getQnaList(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.settingApi.getQnaList(userSeq).let {
+                if(it.isSuccessful && it.body() != null){
+                    _qnaList.postValue(it.body())
+                    Log.d(TAG, "getQnaList: ${it.body()}")
+                }else{
+                    Log.d(TAG, "getQnaList: ${it.code()}")
+                }
+            }
+        }
+    }
 }

@@ -421,8 +421,8 @@
             android:id="@+id/action_settingFragment_to_appLockFragment"
             app:destination="@id/appLockFragment" />
         <action
-            android:id="@+id/action_settingFragment_to_questionFragment"
-            app:destination="@id/questionFragment" />
+            android:id="@+id/action_settingFragment_to_questionListFragment"
+            app:destination="@id/questionListFragment" />
     </fragment>
     <fragment
         android:id="@+id/appLockFragment"
@@ -487,5 +487,17 @@
     <fragment
         android:id="@+id/questionFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.QuestionFragment"
-        android:label="QuestionFragment" />
+        android:label="QuestionFragment">
+        <argument
+            android:name="seq"
+            app:argType="integer"/>
+    </fragment>
+    <fragment
+        android:id="@+id/questionListFragment"
+        android:name="com.d108.sduty.ui.main.mypage.setting.QuestionListFragment"
+        android:label="QuestionListFragment" >
+        <action
+            android:id="@+id/action_questionListFragment_to_questionFragment"
+            app:destination="@id/questionFragment" />
+    </fragment>
 </navigation>

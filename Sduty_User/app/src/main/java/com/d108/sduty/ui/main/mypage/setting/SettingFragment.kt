@@ -105,7 +105,7 @@ class SettingFragment : Fragment() {
             }
 
             btnAsk.setOnClickListener{
-                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToQuestionFragment())
+                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToQuestionListFragment())
             }
             btnNotice.setOnClickListener {
                 requireContext().showToast("다음 업데이트에서 제공될 예정입니다.")
