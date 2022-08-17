@@ -38,6 +38,9 @@ class HomeFragment : Fragment() {
             layoutQna.setOnClickListener {
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToQnAFragment())
             }
+            layoutPush.setOnClickListener {
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToPushFragment())
+            }
 
         }
     }

@@ -10,13 +10,32 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_reportStoryFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/reportStoryFragment" />
         <action
             android:id="@+id/action_homeFragment_to_noticeFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/noticeFragment" />
         <action
             android:id="@+id/action_homeFragment_to_qnAFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/qnAFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_pushFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/pushFragment" />
     </fragment>
 
     <fragment
@@ -25,6 +44,10 @@
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
@@ -33,6 +56,10 @@
         android:label="ReportStoryFragment" >
         <action
             android:id="@+id/action_reportStoryFragment_to_reportStoryDetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/reportStoryDetailFragment" />
     </fragment>
     <fragment
@@ -49,6 +76,10 @@
         android:label="QnAFragment" >
         <action
             android:id="@+id/action_qnAFragment_to_qnADetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/qnADetailFragment" />
     </fragment>
     <fragment
@@ -62,6 +93,10 @@
         android:label="NoticeFragment" >
         <action
             android:id="@+id/action_noticeFragment_to_noticeCreateFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/noticeCreateFragment" />
     </fragment>
 
