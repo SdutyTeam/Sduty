@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import com.d108.sduty.R
 import com.d108.sduty.model.dto.Study

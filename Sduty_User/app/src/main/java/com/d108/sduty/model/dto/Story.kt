@@ -1,7 +1,6 @@
 package com.d108.sduty.model.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import java.util.*
 
 data class Story(
     val seq: Int,

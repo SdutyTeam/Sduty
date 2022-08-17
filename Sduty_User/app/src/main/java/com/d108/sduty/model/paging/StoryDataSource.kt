@@ -7,9 +7,7 @@ import com.d108.sduty.common.ALL_STORY
 import com.d108.sduty.common.SCRAP_STORY
 import com.d108.sduty.model.api.StoryApi
 import com.d108.sduty.model.dto.Story
-import com.d108.sduty.model.dto.Timeline
 import retrofit2.Response
-import java.lang.Exception
 
 private const val TAG ="TimeLineDataSource"
 class StoryDataSource(val flag: Int, private val storyApi: StoryApi, private val userSeq: Int, private val writerSeq: Int): PagingSource<Int, Story>() {

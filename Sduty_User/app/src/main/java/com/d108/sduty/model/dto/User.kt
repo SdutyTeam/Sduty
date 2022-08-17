@@ -1,8 +1,5 @@
 package com.d108.sduty.model.dto
 
-import com.kakao.sdk.common.util.SdkLogLevel
-import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 import java.util.*
 
 data class User(

@@ -4,15 +4,14 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -21,12 +20,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.databinding.FragmentReportBinding
 import com.d108.sduty.model.dto.Report
-import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.timer.adapter.TaskListAdapter
 import com.d108.sduty.ui.main.timer.dialog.TaskDialog
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
-import com.d108.sduty.utils.*
+import com.d108.sduty.utils.convertDpToPx
+import com.d108.sduty.utils.convertTimeDateToString
+import com.d108.sduty.utils.showToast
 import java.util.*
 
 private const val TAG = "ReportFragment"

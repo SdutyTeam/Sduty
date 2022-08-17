@@ -1,7 +1,7 @@
 package com.d108.sduty.ui.camstudy.room
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.d108.sduty.R
 import com.d108.sduty.common.EXTRA_IS_NEWLY_CREATED
 import com.d108.sduty.common.EXTRA_ROOM_ID

@@ -8,8 +8,6 @@ import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
 import com.d108.sduty.common.ApplicationClass.Companion.appLockPref
 import com.d108.sduty.common.ApplicationClass.Companion.timerPref
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 private const val TAG = "AppLockAccessibilityService"
 class AppLockAccessibilityService : AccessibilityService() {

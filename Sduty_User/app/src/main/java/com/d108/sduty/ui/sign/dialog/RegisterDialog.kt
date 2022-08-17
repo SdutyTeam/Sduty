@@ -1,7 +1,5 @@
 package com.d108.sduty.ui.sign.dialog
 
-import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,8 +8,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.d108.sduty.R
 import com.d108.sduty.common.COMMON_JOIN
-import com.d108.sduty.common.KAKAO_JOIN
-import com.d108.sduty.common.NAVER_JOIN
 import com.d108.sduty.databinding.DialogRegisterBinding
 import com.d108.sduty.ui.sign.viewmodel.JoinViewModel
 import com.d108.sduty.utils.showToast

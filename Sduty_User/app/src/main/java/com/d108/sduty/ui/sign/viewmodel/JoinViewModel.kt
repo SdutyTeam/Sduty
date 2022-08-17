@@ -1,6 +1,5 @@
 package com.d108.sduty.ui.sign.viewmodel
 
-import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,8 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.nurigo.sdk.message.model.Message
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest
-import retrofit2.http.Body
-import java.lang.Exception
 import java.util.regex.Pattern
 
 private const val TAG ="JoinViewModel"

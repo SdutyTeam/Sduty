@@ -3,13 +3,11 @@ package com.d108.sduty.ui.main.home.dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import com.d108.sduty.R
 import com.d108.sduty.common.FLAG_BLOCK
 import com.d108.sduty.common.FLAG_DELETE
 import com.d108.sduty.common.FLAG_REPORT

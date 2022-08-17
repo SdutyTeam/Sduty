@@ -1,7 +1,6 @@
 package com.d108.sduty.utils
 
 import android.util.Log
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -1,20 +1,12 @@
 package com.d108.sduty.ui.main.timer.adapter
 
-import android.content.Context
-import android.graphics.Color
-import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.toColor
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.engine.Resource
-import com.d108.sduty.R
 import com.d108.sduty.databinding.ListItemTaskBinding
 import com.d108.sduty.model.dto.Task
-import kotlin.math.absoluteValue
 
 class TaskListAdapter(val fragmentActivity: FragmentActivity, var list: List<Task>, val colorPalette: List<Int>) :
     RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {

@@ -2,12 +2,10 @@ package com.d108.sduty.model.api
 
 import com.d108.sduty.model.dto.*
 import com.d108.sduty.model.paging.PagingResult
-import com.d108.sduty.utils.Resource
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
-import java.sql.Time
 
 interface StoryApi {
     @GET("/story/all/{userSeq}")

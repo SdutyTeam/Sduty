@@ -1,11 +1,10 @@
 package com.d108.sduty.ui.main.mypage.setting
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.d108.sduty.R
+import androidx.fragment.app.Fragment
 import com.d108.sduty.databinding.FragmentQuestionBinding
 
 // 1:1 문의 - 문의 내역 조회, 1:1 문의 등록

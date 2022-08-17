@@ -1,11 +1,8 @@
 package com.d108.sduty.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.d108.sduty.common.FLAG_FOLLOWEE
 import com.d108.sduty.common.FLAG_FOLLOWER
 import com.d108.sduty.databinding.ItemFollowBinding
 import com.d108.sduty.model.dto.Follow

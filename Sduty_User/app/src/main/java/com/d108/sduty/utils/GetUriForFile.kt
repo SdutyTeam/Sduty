@@ -6,11 +6,7 @@ import android.util.Log
 import androidx.core.content.FileProvider
 import com.canhub.cropper.common.CommonValues
 import com.canhub.cropper.common.CommonVersionCheck
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
 import java.nio.file.Files
 import java.nio.file.Paths
 

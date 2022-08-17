@@ -8,13 +8,11 @@ import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
 import com.d108.sduty.model.dto.Report
 import com.d108.sduty.model.dto.Task
-import com.d108.sduty.model.dto.User
 import com.d108.sduty.utils.convertTimeDateToString
 import com.d108.sduty.utils.convertTimeStringToDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.timer
 

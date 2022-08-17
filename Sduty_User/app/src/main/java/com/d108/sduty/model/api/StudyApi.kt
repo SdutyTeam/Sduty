@@ -1,6 +1,5 @@
 package com.d108.sduty.model.api
 
-import com.d108.sduty.model.dto.Alarm
 import com.d108.sduty.model.dto.Study
 import retrofit2.Response
 import retrofit2.http.*

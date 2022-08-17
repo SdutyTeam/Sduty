@@ -1,7 +1,6 @@
 package com.d108.sduty.model.dto
 
 import java.util.*
-import kotlin.collections.HashSet
 
 data class Profile(var userSeq: Int = 2,
                    var nickname: String,
