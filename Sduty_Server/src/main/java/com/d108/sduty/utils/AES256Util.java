@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AES256Util {
 	//128bit
-	//비밀키의 키 값 = 이건 노출되면 안되는 정보.. 어떻게 처리하지?
+	//비밀키의 키 값 = 이건 노출되면 안되는 정보
 	@Value("${external.secret.key}")
 	private String KEY;
 	private static final int IVSIZE = 16;//128bit = 16bytes
