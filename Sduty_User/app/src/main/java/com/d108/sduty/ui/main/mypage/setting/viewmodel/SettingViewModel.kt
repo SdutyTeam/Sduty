@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.Qna
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.sharedpreference.FCMPreference
@@ -50,10 +51,16 @@ class SettingViewModel: ViewModel() {
         }
     }
 
-    private val _isAutoLoginEnable = MutableLiveData<Boolean>(true)
-    val isAutoLoginEnable: LiveData<Boolean>
-        get() = _isAutoLoginEnable
-    fun setAutoLoginState(){
-        _isAutoLoginEnable.value = !_isAutoLoginEnable.value!!
+
+    fun insertQna(qna: Qna){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.settingApi.insertQna(qna).let {
+                if(it.isSuccessful){
+
+                }else{
+                    Log.d(TAG, "insertQna: ${it.code()}")
+                }
+            }
+        }
     }
 }

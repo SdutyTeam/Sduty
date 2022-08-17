@@ -420,6 +420,9 @@
         <action
             android:id="@+id/action_settingFragment_to_appLockFragment"
             app:destination="@id/appLockFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_questionFragment"
+            app:destination="@id/questionFragment" />
     </fragment>
     <fragment
         android:id="@+id/appLockFragment"
@@ -481,4 +484,8 @@
             app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/userProfileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/questionFragment"
+        android:name="com.d108.sduty.ui.main.mypage.setting.QuestionFragment"
+        android:label="QuestionFragment" />
 </navigation>
