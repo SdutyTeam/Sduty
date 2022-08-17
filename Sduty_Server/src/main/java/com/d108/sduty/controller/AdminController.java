@@ -201,4 +201,17 @@ public class AdminController {
 		fcmUtil.send_FCM_All(tokenList, message);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	@GetMapping("/fcm/{userSeq}")
+	public ResponseEntity<?> sendFCMOne(@PathVariable int userSeq){
+		User user = userRepo.findById(userSeq).get();
+		FCMUtil fcmUtil = new FCMUtil();
+		if(user.getUserPublic() > 0) {
+			fcmUtil.send_FCM(user.getFcmToken(), "SDUTY", "1:1 문의 답변이 등록되었습니다.");
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		
+	}
 }

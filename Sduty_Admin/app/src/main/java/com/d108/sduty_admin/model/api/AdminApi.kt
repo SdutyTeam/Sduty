@@ -66,4 +66,7 @@ interface AdminApi {
 
     @POST("/admin/fcm")
     suspend fun sendFCM(@Body message: Map<String, String>): Response<Void>
+
+    @GET("/admin/fcm/{userSeq}")
+    suspend fun sendFCMOne(@Path("userSeq") userSeq: Int): Response<Void>
 }

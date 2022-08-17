@@ -33,9 +33,22 @@ class QnaViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             repository.updateQna(qna).let {
                 if(it.isSuccessful && it.body() != null){
+                    sendFCM(qna.writerSeq)
                     getQna()
                 }else{
                     Log.d(TAG, "getQna: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    fun sendFCM(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.sendFCMOne(userSeq).let {
+                if(it.isSuccessful){
+
+                }else{
+                    Log.d(TAG, "sendFCM: ${it.code()}")
                 }
             }
         }

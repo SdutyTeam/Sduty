@@ -46,6 +46,8 @@ class Repository private constructor(){
 
     suspend fun updateQna(qna: Qna) = adminApi.updateQna(qna)
 
+    suspend fun sendFCMOne(userSeq: Int) = adminApi.sendFCMOne(userSeq)
+
 
 
     companion object{
