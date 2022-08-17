@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/tv_notice"
-            android:layout_width="280dp"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
