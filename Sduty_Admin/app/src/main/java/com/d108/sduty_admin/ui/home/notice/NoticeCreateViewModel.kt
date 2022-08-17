@@ -19,6 +19,10 @@ class NoticeCreateViewModel: ViewModel() {
     val createSuccess: LiveData<Boolean>
         get() = _createSuccess
 
+    private val _updateSuccess = MutableLiveData<Boolean>()
+    val updateSuccess: LiveData<Boolean>
+        get() = _updateSuccess
+
     fun createNotice(notice: Notice){
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -27,6 +31,21 @@ class NoticeCreateViewModel: ViewModel() {
                     _createSuccess.postValue(true)
                 } else if(response.code() == 500){
                     _createSuccess.postValue(false)
+                }
+            } catch (e: Exception){
+                Log.d(TAG, "createNotice: ${e.message}")
+            }
+        }
+    }
+
+    fun updateNotice(notice: Notice, seq: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = repository.updateNotice(notice, seq)
+                if(response.isSuccessful){
+                    _updateSuccess.postValue(true)
+                } else if(response.code() == 500){
+                    _updateSuccess.postValue(false)
                 }
             } catch (e: Exception){
                 Log.d(TAG, "createNotice: ${e.message}")

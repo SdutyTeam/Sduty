@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/pushFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -69,6 +69,21 @@
         android:id="@+id/noticeCreateFragment"
         android:name="com.d108.sduty_admin.ui.home.notice.NoticeCreateFragment"
         android:label="NoticeCreateFragment" >
+
+        <argument
+            android:name="type"
+            android:defaultValue=""
+            app:argType="string" />
+
+        <argument
+            android:name="content"
+            android:defaultValue=""
+            app:argType="string" />
+
+        <argument
+            android:name="seq"
+            android:defaultValue= "0"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/pushFragment"

@@ -19,6 +19,10 @@ class NoticeViewModel: ViewModel() {
     val noticeList: LiveData<List<Notice>>
         get() = _noticeList
 
+    private val _noticeDelete = MutableLiveData<Boolean>()
+    val noticeDelete: LiveData<Boolean>
+        get() = _noticeDelete
+
     fun getNoticeList(){
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -30,7 +34,22 @@ class NoticeViewModel: ViewModel() {
                 Log.d(TAG, "getNoticeList: ${e.message}")
             }
         }
+    }
 
+    fun deleteNotice(seq: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = repository.deleteNotice(seq)
+                if(response.isSuccessful){
+                    _noticeDelete.postValue(true)
+                    getNoticeList()
+                } else if(response.code() == 500) {
+                    _noticeDelete.postValue(false)
+                }
+            } catch (e: Exception){
+                Log.d(TAG, "deleteNotice: ${e.message}")
+            }
+        }
     }
 
 }
