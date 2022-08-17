@@ -149,7 +149,14 @@ public class AdminController {
 	@ApiOperation(value = "1:1문의 목록 조회")
 	@GetMapping("/qna")
 	public ResponseEntity<?> getQnas() {
-		return new ResponseEntity<List<Qna>>(adminService.getQnas(), HttpStatus.OK);
+		List<Qna> list = adminService.getQnas();
+		List<Qna> newList = new ArrayList<Qna>();
+		for(Qna q: list) {
+			if(q.getAnsWriter().isEmpty()) {
+				newList.add(q);
+			}
+		}
+		return new ResponseEntity<List<Qna>>(newList, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "1:1문의 상세 조회")

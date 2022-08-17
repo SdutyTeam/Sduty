@@ -6,6 +6,7 @@ import com.d108.sduty_admin.common.ApplicationClass
 import com.d108.sduty_admin.model.api.AdminApi
 import com.d108.sduty_admin.model.dto.Admin
 import com.d108.sduty_admin.model.dto.Notice
+import com.d108.sduty_admin.model.dto.Qna
 import com.d108.sduty_admin.model.paging.StoryDataSource
 
 class Repository private constructor(){
@@ -40,6 +41,10 @@ class Repository private constructor(){
     suspend fun deleteReply(replySeq: Int)  = adminApi.deleteReply(replySeq)
 
     suspend fun sendFCM(message: Map<String, String>) = adminApi.sendFCM(message)
+
+    suspend fun getQnaList() = adminApi.getQna()
+
+    suspend fun updateQna(qna: Qna) = adminApi.updateQna(qna)
 
 
 

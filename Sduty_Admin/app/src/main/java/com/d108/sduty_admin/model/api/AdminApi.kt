@@ -35,13 +35,13 @@ interface AdminApi {
 
     // 1:1문의 게시판?? 파이어베이스??
     @GET("/admin/qna")
-    suspend fun getQna(): Response<List<Qna>>
+    suspend fun getQna(): Response<MutableList<Qna>>
 
     @GET("/admin/qna/{qna_seq}")
     suspend fun getQnaDeatil(@Path("qna_seq")seq: Int): Response<Qna>
 
     @POST("/admin/qna")
-    suspend fun insertQna(@Body qna: Qna): Response<Qna>
+    suspend fun updateQna(@Body qna: Qna): Response<Qna>
 
     @DELETE("/admin/qna/{qna_seq}")
     suspend fun deleteQna(@Path("qna_seq")seq: Int): Response<Void>
