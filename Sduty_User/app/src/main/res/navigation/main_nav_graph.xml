@@ -487,11 +487,7 @@
     <fragment
         android:id="@+id/questionFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.QuestionFragment"
-        android:label="QuestionFragment">
-        <argument
-            android:name="seq"
-            app:argType="integer"/>
-    </fragment>
+        android:label="QuestionFragment"/>
     <fragment
         android:id="@+id/questionListFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.QuestionListFragment"

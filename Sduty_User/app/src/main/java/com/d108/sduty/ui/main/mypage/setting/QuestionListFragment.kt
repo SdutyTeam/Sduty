@@ -52,6 +52,12 @@ class QuestionListFragment : Fragment() {
                 adapter = qnaAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
+            btnCreateNotice.setOnClickListener {
+                findNavController().navigate(QuestionListFragmentDirections.actionQuestionListFragmentToQuestionFragment())
+            }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 
