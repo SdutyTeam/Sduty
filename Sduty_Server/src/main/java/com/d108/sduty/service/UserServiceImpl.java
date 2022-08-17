@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public User updateUser(User user) throws Exception {
-		user.setTel(aes256Util.decrypt(user.getTel()));
+		user.setTel(user.getTel());
 		return userRepo.save(user);
 	}
 	
