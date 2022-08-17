@@ -1,6 +1,9 @@
 package com.d108.sduty.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Admin;
@@ -23,7 +27,10 @@ import com.d108.sduty.dto.Notice;
 import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.Story;
+import com.d108.sduty.dto.User;
+import com.d108.sduty.repo.UserRepo;
 import com.d108.sduty.service.AdminService;
+import com.d108.sduty.utils.FCMUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -37,16 +44,8 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
-	@ApiOperation(value="회원가입")
-	@PostMapping("/regist")
-	public ResponseEntity<?> regist(@RequestBody Admin admin){
-		Admin result = adminService.registAdmin(admin);
-		if(result != null) {
-			result.setPassword("");
-			return new ResponseEntity<Admin>(result, HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-	}
+	@Autowired
+	private UserRepo userRepo;
 
 	@ApiOperation(value = "로그인")
 	@PostMapping("/login")
@@ -58,11 +57,12 @@ public class AdminController {
 		}
 		String id = idNode.asText();
 		String password = passwordNode.asText();
-		Optional<Admin> adminOp = adminService.loginAdmin(id, password);
+		Optional<Admin> adminOp = adminService.getAdmin(id);
 		if (adminOp.isPresent()) {
 			Admin adminObject = adminOp.get();
-			adminObject.setPassword("");
-			return new ResponseEntity<Admin>(adminObject, HttpStatus.OK);
+			if (password.equals(adminObject.getPassword())) {
+				return new ResponseEntity<Admin>(adminObject, HttpStatus.OK);
+			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -181,5 +181,17 @@ public class AdminController {
 			return new ResponseEntity<Qna>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@PostMapping("/fcm")
+	public ResponseEntity<?> sendFCM(@RequestBody Map<String, String> message){
+		List<User> userList = userRepo.findAllByUserPublicGreaterThan(1);		
+		FCMUtil fcmUtil = new FCMUtil();
+		List<String> tokenList = new ArrayList<String>();
+		for(User user : userList) {
+			tokenList.add(user.getFcmToken());
+		}				
+		fcmUtil.send_FCM_All(tokenList, message);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.d108.sduty.config.WebSecurityConfig;
 import com.d108.sduty.dto.Admin;
 import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
@@ -38,34 +37,10 @@ public class AdminServiceImpl implements AdminService {
 	private QnaRepo qnaRepo;
 	@Autowired
 	private StoryRepo storyRepo;
-	@Autowired
-	private WebSecurityConfig security;
-	
-
-	@Override
-	public Admin registAdmin(Admin admin) {
-		if(admin.getId()!=null && admin.getPassword()!=null && admin.getName()!=null) {
-			if(adminRepo.findByid(admin.getId()).isPresent()) {
-				return null;
-			}
-			admin.setSeq(0);
-			admin.setPassword(security.passwordEncoder().encode(admin.getPassword()));
-			return adminRepo.save(admin);
-		}
-		return null;
-	}
 	
 	@Override
-	public Optional<Admin> loginAdmin(String id, String pass) {
-		Optional<Admin> adminOp = adminRepo.findByid(id);
-		if(adminOp.isPresent()) {
-			Admin admin = adminOp.get();
-			if(security.passwordEncoder().matches(pass, admin.getPassword())) {
-				return adminOp;
-			}
-			
-		}
-		return null;
+	public Optional<Admin> getAdmin(String id) {
+		return adminRepo.findByid(id);
 	}
 
 	@Override
