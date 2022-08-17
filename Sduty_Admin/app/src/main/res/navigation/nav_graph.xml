@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/pushFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -70,4 +70,8 @@
         android:name="com.d108.sduty_admin.ui.home.notice.NoticeCreateFragment"
         android:label="NoticeCreateFragment" >
     </fragment>
+    <fragment
+        android:id="@+id/pushFragment"
+        android:name="com.d108.sduty_admin.ui.home.push.PushFragment"
+        android:label="PushFragment" />
 </navigation>

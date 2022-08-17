@@ -32,6 +32,8 @@ class Repository private constructor(){
 
     suspend fun deleteReply(replySeq: Int)  = adminApi.deleteReply(replySeq)
 
+    suspend fun sendFCM(message: Map<String, String>) = adminApi.sendFCM(message)
+
 
 
     companion object{
