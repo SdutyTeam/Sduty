@@ -15,16 +15,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             >
+            <!-- AppBar 뒤로 돌아가기 버튼 : 타임라인으로 돌아감 -->
             <ImageView
-                android:id="@+id/common_top_title"
-                android:layout_width="97dp"
-                android:layout_height="29dp"
-                android:src="@drawable/img_logo_report"
-                android:gravity="center"
+                android:id="@+id/iv_back"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginLeft="20dp"/>
+                android:src="@drawable/img_back"
+                android:padding="13dp"
+                />
+
+            <ImageView
+                android:id="@+id/common_top_title"
+                android:layout_width="121dp"
+                android:layout_height="29dp"
+                android:src="@drawable/img_logo_app_lock"
+                android:gravity="center"
+                app:layout_constraintStart_toEndOf="@id/iv_back"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="10dp"/>
 
             <View
                 android:id="@+id/divider"

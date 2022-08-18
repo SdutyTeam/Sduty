@@ -21,6 +21,7 @@ import com.d108.sduty.databinding.FragmentAppLockBinding
 import com.d108.sduty.model.AppInfo
 import com.d108.sduty.ui.main.mypage.dialog.AccessibilityDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.navigateBack
 import com.google.android.material.tabs.TabLayout
 
 private const val TAG = "AppLockFragment"
@@ -61,6 +62,10 @@ class AppLockFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
+            ivBack.setOnClickListener {
+                navigateBack(requireActivity())
+            }
+
             // 탭 레이아웃 선택 이벤트
             tabAppList.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
