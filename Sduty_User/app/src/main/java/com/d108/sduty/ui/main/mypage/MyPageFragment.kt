@@ -119,7 +119,7 @@ class MyPageFragment : Fragment() {
             }
             recylerContribution.apply {
                 adapter = contributionAdapter
-                layoutManager = GridLayoutManager(requireContext(), 26)
+                layoutManager = GridLayoutManager(requireContext(), 7, GridLayoutManager.HORIZONTAL, false)
             }
             ivSetting.setOnClickListener {
                 findNavController().safeNavigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())

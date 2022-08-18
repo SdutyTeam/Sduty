@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.d108.sduty.R
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.paging.StoryPagingAdapter
@@ -121,7 +122,7 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                 findNavController().safeNavigate(UserProfileFragmentDirections.actionUserProfileFragmentToFollowFragment(args.userSeq, FLAG_FOLLOWEE))
             }
             recylerContribution.apply {
-                layoutManager = GridLayoutManager(requireContext(), 26)
+                layoutManager = GridLayoutManager(requireContext(), 7, GridLayoutManager.HORIZONTAL, false)
                 adapter = contributionAdapter
             }
         }

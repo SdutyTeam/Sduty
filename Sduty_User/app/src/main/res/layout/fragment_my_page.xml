@@ -64,6 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -75,11 +76,12 @@
                     app:contentScrim="@android:color/transparent"
                     app:expandedTitleGravity="bottom|center"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/const_profile_top"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginHorizontal="8dp"
                         android:layout_marginTop="16dp"
                         android:background="@color/white"
                         app:layout_constraintTop_toTopOf="parent">
@@ -91,20 +93,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" >
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:layout_width="88dp"
                                 android:layout_height="88dp"
-                                android:src="@drawable/img_bg_gradient"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:src="@drawable/img_bg_gradient" />
 
                             <!-- 배경 투명화된 이미지가 입력됐을 때, 테두리 유지용 -->
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
-                                android:src="@color/white"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:src="@color/white" />
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/iv_profile"
@@ -112,10 +114,9 @@
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:layout_gravity="center"
-                                tools:src="@drawable/ic_empty_image"/>
+                                tools:src="@drawable/ic_empty_image" />
 
                         </FrameLayout>
-
 
 
                         <!-- 사용자 정보 표시 영역 -->
@@ -123,12 +124,12 @@
                             android:id="@+id/const_tv_profile"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_marginHorizontal="12dp"
-                            app:layout_constraintTop_toTopOf="@id/frame_profile_img"
+                            android:orientation="vertical"
                             app:layout_constraintBottom_toBottomOf="@id/frame_profile_img"
+                            app:layout_constraintEnd_toStartOf="@id/const_count_story_follow"
                             app:layout_constraintStart_toEndOf="@id/frame_profile_img"
-                            app:layout_constraintEnd_toStartOf="@id/const_count_story_follow">
+                            app:layout_constraintTop_toTopOf="@id/frame_profile_img">
 
                             <TextView
                                 android:id="@+id/tv_nickname"
@@ -137,26 +138,26 @@
                                 android:text="@{vm.profile.nickname}"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
-                                tools:text="nheenhee"/>
+                                tools:text="nheenhee" />
 
                             <TextView
                                 android:id="@+id/tv_job"
                                 profileHashTagText="@{vm.profile}"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="14sp"
-                                android:textColor="@color/app_purple_light"
                                 android:layout_marginTop="4dp"
-                                tools:text="직업 영역"/>
+                                android:textColor="@color/app_purple_light"
+                                android:textSize="14sp"
+                                tools:text="직업 영역" />
 
                             <TextView
                                 android:id="@+id/tv_introduce"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
                                 android:text="@{vm.profile.shortIntroduce}"
                                 android:textSize="14sp"
-                                android:layout_marginTop="4dp"
-                                tools:text="자기 소개가 표시되는 공간~~"/>
+                                tools:text="자기 소개가 표시되는 공간~~" />
 
                         </LinearLayout>
 
@@ -165,75 +166,75 @@
                             android:id="@+id/const_count_story_follow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_marginEnd="8dp"
-                            app:layout_constraintTop_toTopOf="@id/const_tv_profile"
+                            android:orientation="vertical"
                             app:layout_constraintBottom_toBottomOf="@id/const_tv_profile"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/const_tv_profile"
-                            app:layout_constraintEnd_toEndOf="parent">
+                            app:layout_constraintTop_toTopOf="@id/const_tv_profile">
 
                             <LinearLayout
-                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="게시물 "/>
+                                    android:text="게시물 " />
 
                                 <TextView
                                     android:id="@+id/tv_count_story"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    tools:text="100"
-                                    android:textStyle="bold"
                                     android:text="@{vm.profile.cntStory + ``}"
-                                    android:textSize="14sp"/>
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    tools:text="100" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/tv_count_follow"
-                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp">
+                                android:layout_marginTop="8dp"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="팔로우 "/>
+                                    android:text="팔로우 " />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    tools:text="1K"
-                                    android:textStyle="bold"
                                     android:text="@{vm.profile.followees +``}"
-                                    android:textSize="14sp"/>
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    tools:text="1K" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/tv_count_follower"
-                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp">
+                                android:layout_marginTop="8dp"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="팔로워 "/>
+                                    android:text="팔로워 " />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    tools:text="100K"
-                                    android:textStyle="bold"
                                     android:text="@{vm.profile.followers +``}"
-                                    android:textSize="14sp"/>
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    tools:text="100K" />
 
                             </LinearLayout>
                         </LinearLayout>
@@ -243,35 +244,33 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_marginTop="20dp"
-                            android:text="프로필 편집"
-                            android:textSize="16sp"
-                            android:gravity="center"
                             android:background="@drawable/button_app_blue"
+                            android:gravity="center"
+                            android:text="프로필 편집"
                             android:textColor="@color/white"
+                            android:textSize="16sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/frame_profile_img"
-                            />
+                            app:layout_constraintTop_toBottomOf="@id/frame_profile_img" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyler_contribution"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:layout_marginBottom="12dp"
                             android:scrollbars="none"
-                            app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
-
-                            />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/btn_edit_profile" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/const_tab"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layout_collapseMode="none"
-                            app:layout_constraintTop_toBottomOf="@id/recyler_contribution"
                             android:layout_marginVertical="10dp"
-                            >
+                            app:layout_collapseMode="none"
+                            app:layout_constraintTop_toBottomOf="@id/recyler_contribution">
 
                             <com.google.android.material.tabs.TabLayout
                                 android:id="@+id/tab_myPage"
@@ -279,8 +278,7 @@
                                 android:layout_height="wrap_content"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:tabIconTint="@color/tab_color_selector"
-                                app:tabIndicatorColor="@color/onlight_04"
-                                >
+                                app:tabIndicatorColor="@color/onlight_04">
 
                                 <com.google.android.material.tabs.TabItem
                                     android:layout_width="wrap_content"
