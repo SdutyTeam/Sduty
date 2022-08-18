@@ -116,4 +116,7 @@ dependencies {
     // ViewAnimation
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
     implementation "com.airbnb.android:lottie:5.1.1"
+
+    //Swipe Refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

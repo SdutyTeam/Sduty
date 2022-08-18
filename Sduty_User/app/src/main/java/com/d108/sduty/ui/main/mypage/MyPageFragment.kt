@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.d108.sduty.adapter.ContributionAdapter
 import com.d108.sduty.adapter.paging.StoryPagingAdapter
 import com.d108.sduty.common.FLAG_FOLLOWEE
@@ -22,7 +23,7 @@ import com.google.android.material.tabs.TabLayout
 
 // 마이페이지 - 내 닉네임, 프로필 사진, 숫자 표시(게시물, 팔로우, 팔로워), 한줄소개, 프로필 편집, 통계, 잔디그래프, 탭(내 게시물/ 스크랩), 내 게시물(그리드+스크롤) , 설정, 업적
 private const val TAG ="MyPageFragment"
-class MyPageFragment : Fragment() {
+class MyPageFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentMyPageBinding
     private val viewModel: StoryViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -49,12 +50,17 @@ class MyPageFragment : Fragment() {
         initViewModel()
     }
 
+    override fun onRefresh() {
+        if(binding.tabMyPage.getTabAt(0)!!.isSelected){
+            viewModel.getUserStoryList(mainViewModel.user.value!!.seq, mainViewModel.user.value!!.seq)
+        }else{
+            viewModel.getScrapStoryList(mainViewModel.user.value!!.seq)
+        }
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     private fun initViewModel() {
         viewModel.apply {
-//            userSto.observe(viewLifecycleOwner){
-//                storyAdapter.list = it
-//            }
-
             getUserStoryList(mainViewModel.user.value!!.seq, mainViewModel.user.value!!.seq)
             pagingStoryList.observe(viewLifecycleOwner){
                 storyAdapter.submitData(this@MyPageFragment.lifecycle, it)
@@ -68,9 +74,6 @@ class MyPageFragment : Fragment() {
             if(viewModel.contributionList.value == null) {
                 getContribution(mainViewModel.user.value!!.seq)
             }
-//            if(viewModel.userStoryList.value == null) {
-//                getUserStoryListValue(mainViewModel.user.value!!.seq)
-//            }
             getProfileValue(mainViewModel.user.value!!.seq)
 
         }
@@ -89,6 +92,7 @@ class MyPageFragment : Fragment() {
         binding.apply {
             lifecycleOwner = this@MyPageFragment
             vm = viewModel
+            swipeRefresh.setOnRefreshListener(this@MyPageFragment)
             tabMyPage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when(tab!!.position){

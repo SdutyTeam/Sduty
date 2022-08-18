@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.d108.sduty.R
 import com.d108.sduty.adapter.CamStudyMemberAdapter
 import com.d108.sduty.databinding.FragmentCamstudyDetailBinding
@@ -31,7 +32,7 @@ import kotlin.math.roundToInt
 
 // 캠 스터디 상세
 private const val TAG = "CamStudyDetailFragment"
-class CamStudyDetailFragment : Fragment() {
+class CamStudyDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mainActivity: MainActivity
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentCamstudyDetailBinding
@@ -59,6 +60,11 @@ class CamStudyDetailFragment : Fragment() {
     ): View? {
         binding = FragmentCamstudyDetailBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onRefresh() {
+        camStudyDetailViewModel.getCamStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
+        binding.swipeRefresh.isRefreshing = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,7 +104,7 @@ class CamStudyDetailFragment : Fragment() {
                     binding.btnStudySetting.visibility = View.GONE
                     binding.btnStudyExit.visibility = View.VISIBLE
                 }
-
+                binding.swipeRefresh.setOnRefreshListener(this)
 
                 binding.studyDetailCategory.text = "#캠스터디" + "#" + (studyInfo["study"] as Map<String, Any>)["category"].toString()
 

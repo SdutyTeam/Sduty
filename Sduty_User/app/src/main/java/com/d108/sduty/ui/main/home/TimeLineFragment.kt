@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.d108.sduty.R
 import com.d108.sduty.adapter.paging.TimeLinePagingAdapter
 import com.d108.sduty.common.*
@@ -43,7 +44,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 // 타임라인 - 게시글(스크롤 뷰), 게시글 쓰기, 닉네임(게시글 상세페이지 이동) 더보기(신고, 스크랩, 팔로잉) ,좋아요, 댓글, 필터, 데일리 질문, 추천 팔로우
 private const val TAG ="TimeLineFragment"
-class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
+class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRefreshLayout.OnRefreshListener   {
     private lateinit var binding: FragmentTimeLineBinding
     private val mainViewModel: MainViewModel by activityViewModels()
     private val storyViewModel: StoryViewModel by activityViewModels()
@@ -51,6 +52,8 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
 
     private lateinit var pageAdapter: TimeLinePagingAdapter
     private lateinit var menuSelectedTimeline: Timeline
+    private var mTagFlag = ALL_TAG
+    private var mTagName = ""
     override fun onResume() {
         super.onResume()
         mainViewModel.displayBottomNav(true)
@@ -72,6 +75,11 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         initViewModel()
 
 
+    }
+
+    override fun onRefresh() {
+        getTimelineList()
+        binding.swipeRefresh.isRefreshing = false
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -143,7 +151,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         }
         binding.apply {
             lifecycleOwner = this@TimeLineFragment
-
+            swipeRefresh.setOnRefreshListener(this@TimeLineFragment)
             ivRegisterStory.setOnClickListener {
                 findNavController().safeNavigate(
                     TimeLineFragmentDirections
@@ -160,11 +168,9 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
                     it.show(parentFragmentManager, null)
                     it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
                         override fun onDismiss(tagName: String, flag: Int) {
-                            when(flag){
-                                JOB_TAG -> storyViewModel.getTimelineJobAndAllList(mainViewModel.user.value!!.seq, tagName)
-                                INTEREST_TAG -> storyViewModel.getTimelineInterestAndAllList(mainViewModel.user.value!!.seq, tagName)
-                                ALL_TAG -> storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
-                            }
+                            mTagFlag = flag
+                            mTagName = tagName
+                            getTimelineList()
                         }
                     }
                 }
@@ -265,6 +271,21 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         val notificationManager =
             requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun getTimelineList(){
+        Log.d(TAG, "getTimelineList: ${mTagFlag}  ,  ${mTagName}")
+        when(mTagFlag){
+            JOB_TAG -> {
+                storyViewModel.getTimelineJobAndAllList(mainViewModel.user.value!!.seq, mTagName)
+            }
+            INTEREST_TAG -> {
+                storyViewModel.getTimelineInterestAndAllList(mainViewModel.user.value!!.seq, mTagName)
+            }
+            ALL_TAG -> {
+                storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
+            }
+        }
     }
 
 }

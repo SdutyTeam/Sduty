@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.d108.sduty.R
 import com.d108.sduty.adapter.StudyListAdapter
 import com.d108.sduty.common.FLAG_STUDY
@@ -28,7 +29,7 @@ import com.d108.sduty.utils.showToast
 
 // 스터디 전체 리스트
 private const val TAG = "StudyListFragment"
-class StudyListFragment : Fragment(){
+class StudyListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener{
     private lateinit var mainActivity: MainActivity
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentStudyListBinding
@@ -53,6 +54,11 @@ class StudyListFragment : Fragment(){
         return binding.root
     }
 
+    override fun onRefresh() {
+        studyListViewModel.getStudyList()
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,6 +80,7 @@ class StudyListFragment : Fragment(){
         studyListViewModel.getStudyList()
 
         binding.apply {
+            swipeRefresh.setOnRefreshListener(this@StudyListFragment)
             tbCategory.setOnClickListener {
                 TagSelectOneFragment(requireContext(), FLAG_STUDY).let{
                     it.show(parentFragmentManager, null)

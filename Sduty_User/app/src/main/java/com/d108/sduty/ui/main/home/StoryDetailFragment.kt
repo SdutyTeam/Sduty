@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.d108.sduty.R
 import com.d108.sduty.adapter.ReplyAdapter
 import com.d108.sduty.common.FLAG_BLOCK
@@ -32,7 +33,7 @@ import com.daimajia.androidanimations.library.YoYo
 
 // 게시글 상세 - 게시글 사진, 더보기, 좋아요, 댓글 등록, 조회, 스크랩
 private const val TAG ="StoryDetailFragment"
-class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
+class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRefreshLayout.OnRefreshListener  {
     private lateinit var binding: FragmentStoryDetailBinding
     private val viewModel: StoryViewModel by viewModels()
     private val args: StoryDetailFragmentArgs by navArgs()
@@ -72,6 +73,11 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
     }
 
+    override fun onRefresh() {
+        viewModel.getTimelineValue(args.seq, mainViewModel.user.value!!.seq)
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     private fun initViewModel() {
         viewModel.apply {
             getTimelineValue(args.seq, mainViewModel.user.value!!.seq)
@@ -93,6 +99,7 @@ class StoryDetailFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     }
 
     private fun initView(){
+        binding.swipeRefresh.setOnRefreshListener(this)
         replyAdapter = ReplyAdapter(mainViewModel.user.value!!.seq)
         replyAdapter.onClickReplyListener = object : ReplyAdapter.OnClickReplyListener{
             override fun onClick(view: View, position: Int) {
