@@ -127,6 +127,9 @@ class FollowFragment : Fragment() {
                 adapter = followAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 }

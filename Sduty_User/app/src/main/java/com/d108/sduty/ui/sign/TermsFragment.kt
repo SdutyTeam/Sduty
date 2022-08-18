@@ -37,7 +37,7 @@ class TermsFragment : Fragment() {
     private fun initView() {
         binding.apply {
             commonTopBack.setOnClickListener {
-                // 뒤로 가기
+                findNavController().popBackStack()
             }
             btnAccept.setOnClickListener {
                 if(radioSelectPrivacy.isChecked && radioSelectTerms.isChecked){
