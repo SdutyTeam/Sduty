@@ -9,9 +9,14 @@ import com.d108.sduty.databinding.ListItemAppInfoBinding
 import com.d108.sduty.model.AppInfo
 
 
-class AppListAdapter(val fragmentActivity: FragmentActivity, var list: List<AppInfo>) :
+class AppListAdapter(val fragmentActivity: FragmentActivity) :
     RecyclerView.Adapter<AppListAdapter.ViewHolder>() {
 
+    var list = listOf<AppInfo>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     inner class ViewHolder(private val binding: ListItemAppInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AppInfo) {
