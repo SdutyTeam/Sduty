@@ -1,5 +1,7 @@
 package com.d108.sduty.ui.main.timer
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -103,6 +105,7 @@ class TimerFragment : Fragment() {
             ivTimer.setOnClickListener {
                 when (timerViewModel.isRunningTimer.value as Boolean) {
                     false -> {
+                        animationView.playAnimation()
                         timerViewModel.startTimer(mainViewModel.user.value!!.seq)
                         timerViewModel.saveTime()
                     }
