@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
@@ -46,6 +47,7 @@ class GroupCallFragment : Fragment() {
     }
 
     private fun initView(roomId: String) {
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val room = SendBirdCall.getCachedRoomById(roomId)
 
         // views
