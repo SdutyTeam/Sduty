@@ -6,10 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.get
@@ -27,16 +24,15 @@ import com.d108.sduty.model.dto.Follow
 import com.d108.sduty.model.dto.Likes
 import com.d108.sduty.model.dto.Scrap
 import com.d108.sduty.model.dto.Timeline
+import com.d108.sduty.ui.common.LoadingDialog
 import com.d108.sduty.ui.main.home.dialog.BlockDialog
 import com.d108.sduty.ui.main.home.dialog.PushInfoDialog
 import com.d108.sduty.ui.main.mypage.setting.viewmodel.SettingViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
-import com.d108.sduty.utils.SettingsPreference
-import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.*
 import com.d108.sduty.utils.sharedpreference.FCMPreference
-import com.d108.sduty.utils.showToast
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.google.android.gms.tasks.OnCompleteListener
@@ -49,6 +45,8 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRef
     private val mainViewModel: MainViewModel by activityViewModels()
     private val storyViewModel: StoryViewModel by activityViewModels()
     private val settingViewModel: SettingViewModel by viewModels()
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
 
     private lateinit var pageAdapter: TimeLinePagingAdapter
     private lateinit var menuSelectedTimeline: Timeline
@@ -71,9 +69,9 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRef
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadingDialog.show(parentFragmentManager, null)
         initView()
         initViewModel()
-
 
     }
 
@@ -162,6 +160,10 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRef
             recyclerTimeline.apply {
                 adapter = pageAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
+                    override fun onGlobalLayout() {
+                    }
+                })
             }
             ivFilter.setOnClickListener {
                 TagSelectOneFragment(requireContext(), FLAG_TIMELINE).let{
@@ -182,6 +184,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRef
     private fun initViewModel(){
         storyViewModel.pagingAllTimelineList.observe(viewLifecycleOwner){
             pageAdapter.submitData(this.lifecycle, it)
+            loadingDialog.dismiss()
         }
         storyViewModel.pagingTimelineJobAndAllList.observe(viewLifecycleOwner){
             pageAdapter.submitData(this.lifecycle, it)
@@ -287,5 +290,4 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRef
             }
         }
     }
-
 }

@@ -27,7 +27,7 @@ import com.d108.sduty.utils.safeNavigate
 //사용자 프로필 - 사용자 닉네임, 프로필 사진, 숫자 표시(게시물, 팔로우, 팔로워), 한줄소개,
 // 잔디그래프,게시물(그리드+스크롤) , 더 보기, 업적
 private const val TAG = "UserProfileFragment"
-class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRefreshLayout.OnRefreshListener   {
+class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener{
     private lateinit var binding: FragmentUserProfileBinding
     private val viewModel: StoryViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -55,12 +55,6 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Swipe
         initView()
         initViewModel()
     }
-
-    override fun onRefresh() {
-        binding.swipeRefresh.isRefreshing = false
-        viewModel.getUserStoryList(mainViewModel.user.value!!.seq, args.userSeq)
-    }
-
     private fun initViewModel() {
 
         viewModel.apply {
@@ -98,7 +92,6 @@ class UserProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Swipe
         binding.apply {
             vm = viewModel
             mainVM = mainViewModel
-            swipeRefresh.setOnRefreshListener(this@UserProfileFragment)
             recylerStory.apply {
                 layoutManager = GridLayoutManager(requireContext(), 3)
                 adapter = storyAdapter

@@ -105,6 +105,7 @@ class AppLockFragment : Fragment() {
             packages = packageManager.getInstalledPackages(0)
             getAppList()
             getUserAppList()
+            updateAdapter(userAppList)
         }
         // 초기화면은 사용자 앱 목록을 보여준다.
         updateAdapter(userAppList)
