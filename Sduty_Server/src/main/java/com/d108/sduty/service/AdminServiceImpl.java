@@ -7,11 +7,14 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.d108.sduty.dto.Admin;
 import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.Story;
 import com.d108.sduty.dto.User;
@@ -66,8 +69,10 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Story> getBadStories() {
-		return storyRepo.findByWarningGreaterThan(0);
+	public PagingResult<Story> getBadStories(Pageable pageable) {				
+		Page<Story> pageStory = storyRepo.findByWarningGreaterThanOrderByRegtimeDesc(0, pageable);
+		System.out.println(pageStory.toList());
+		return new PagingResult<Story>(pageable.getPageNumber(), pageStory.getTotalPages(), pageStory.toList());
 	}
 
 	@Override
@@ -142,8 +147,8 @@ public class AdminServiceImpl implements AdminService {
 		if(qnaOp.isPresent()) {
 			Qna originQna = qnaOp.get();
 			originQna.setAnswer(qna.getAnswer());
-			originQna.setAdminSeq(qna.getAdminSeq());
-			originQna.setAnswerRegtime(LocalDateTime.now());
+			originQna.setAnsWriter(qna.getAnsWriter());
+//			originQna.setAnswerRegtime(LocalDateTime.now());
 			return qnaRepo.save(originQna);
 		}
 		return null;
@@ -156,8 +161,7 @@ public class AdminServiceImpl implements AdminService {
 		if(qnaOp.isPresent()) {
 			Qna originQna = qnaOp.get();
 			originQna.setAnswer(null);
-			originQna.setAdminSeq(null);
-			originQna.setAnswerRegtime(null);
+			originQna.setAnsWriter(null);			
 			return qnaRepo.save(originQna);
 		}
 		return null;

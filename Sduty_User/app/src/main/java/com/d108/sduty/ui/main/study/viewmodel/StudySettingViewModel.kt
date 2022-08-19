@@ -6,11 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.Profile
 import com.d108.sduty.model.dto.Study
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 private const val TAG = "StudySettingViewModel"
 class StudySettingViewModel: ViewModel() {

@@ -1,6 +1,5 @@
 package com.d108.sduty.ui.sign
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +37,7 @@ class TermsFragment : Fragment() {
     private fun initView() {
         binding.apply {
             commonTopBack.setOnClickListener {
-                // 뒤로 가기
+                findNavController().popBackStack()
             }
             btnAccept.setOnClickListener {
                 if(radioSelectPrivacy.isChecked && radioSelectTerms.isChecked){

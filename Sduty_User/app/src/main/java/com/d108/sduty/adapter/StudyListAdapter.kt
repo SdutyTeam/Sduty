@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.d108.sduty.databinding.ListItemMystudyBinding
 import com.d108.sduty.databinding.ListItemStudyBinding
 import com.d108.sduty.model.dto.Study
 

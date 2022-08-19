@@ -3,15 +3,11 @@ package com.d108.sduty.ui.sign.dialog
 import android.content.Context
 import android.graphics.Point
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.d108.sduty.R
 import com.d108.sduty.databinding.DialogTermsBinding
 import java.io.BufferedReader
 import java.io.IOException

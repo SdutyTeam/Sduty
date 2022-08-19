@@ -11,6 +11,9 @@ class StudyMemberAdapter(var list: List<Member>): RecyclerView.Adapter<StudyMemb
     inner class ViewHolder(val binding: ListItemStudyMemberBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Member){
             binding.studyMember = item
+            binding.constStudyMember.setOnClickListener {
+                onClickMemberListener.onClick(item)
+            }
         }
     }
 
@@ -27,5 +30,9 @@ class StudyMemberAdapter(var list: List<Member>): RecyclerView.Adapter<StudyMemb
 
     override fun getItemCount(): Int = list.size
 
+    lateinit var onClickMemberListener: OnClickMemberListener
+    interface OnClickMemberListener{
+        fun onClick(member: Member)
+    }
 
 }

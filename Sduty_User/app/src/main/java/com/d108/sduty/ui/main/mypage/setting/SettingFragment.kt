@@ -19,7 +19,6 @@ import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showAlertDialog
 import com.d108.sduty.utils.showToast
-import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
@@ -48,6 +47,9 @@ class SettingFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
             btnPushAll.setOnCheckedChangeListener { buttonView, isChecked ->
                 when(isChecked){
                     true -> {
@@ -96,7 +98,6 @@ class SettingFragment : Fragment() {
                                 viewModel.resignUser(mainViewModel.user.value!!)
                                 naverDisconnect()
                                 kakaoDisconnect()
-                                clearActivity()
                             }
                         }
                     }
@@ -104,10 +105,10 @@ class SettingFragment : Fragment() {
             }
 
             btnAsk.setOnClickListener{
-                requireContext().showToast("다음 업데이트에서 제공될 예정입니다.")
+                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToQuestionListFragment())
             }
             btnNotice.setOnClickListener {
-                requireContext().showToast("다음 업데이트에서 제공될 예정입니다.")
+                findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToNoticeFragment())
             }
         }
 
@@ -118,7 +119,6 @@ class SettingFragment : Fragment() {
             when(it){
                 true -> {
                     requireActivity().showAlertDialog("회원 탈퇴", "탈퇴가 완료되었습니다.", null)
-                    findNavController().safeNavigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
                     clearActivity()
                 }
                 else -> {}
@@ -190,6 +190,7 @@ class SettingFragment : Fragment() {
             }
         }
     }
+
 
 
 

@@ -2,7 +2,6 @@ package com.d108.sduty.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.d108.sduty.R
 import com.d108.sduty.databinding.ItemParticipantListShareRoomIdBinding
 import com.d108.sduty.databinding.ItemParticipantListUserBinding
-import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.dpToPixel
 import com.sendbird.calls.Participant
 

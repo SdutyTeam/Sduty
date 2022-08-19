@@ -18,6 +18,10 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_termsFragment"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit"
             app:destination="@id/termsFragment" />
         <action
             android:id="@+id/action_loginFragment_to_profileRegistFragment"
@@ -31,6 +35,10 @@
         android:label="TermsFragment">
         <action
             android:id="@+id/action_termsFragment_to_joinRegistFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/joinRegistFragment" />
         <argument
             android:name="route"
@@ -57,6 +65,10 @@
         android:label="JoinRegistFragment">
         <action
             android:id="@+id/action_joinRegistFragment_to_profileRegistFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/profileRegistFragment"
             app:popUpTo="@id/main_nav_graph"
             app:popUpToInclusive="true" />
@@ -84,6 +96,8 @@
             android:id="@+id/action_profileRegistFragment_to_timeLineFragment"
             app:popUpTo="@id/main_nav_graph"
             app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
             app:destination="@id/timeLineFragment" />
     </fragment>
     <fragment
@@ -93,15 +107,32 @@
         tools:layout="@layout/fragment_time_line">
         <action
             android:id="@+id/action_timeLineFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment" />
+            app:destination="@id/myPageFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            />
         <action
             android:id="@+id/action_timeLineFragment_to_storyRegisterFragment"
+            app:enterAnim="@anim/slide_down_enter"
+            app:exitAnim="@anim/slide_down_exit"
+            app:popEnterAnim="@anim/slide_up_enter"
+            app:popExitAnim="@anim/slide_up_exit"
             app:destination="@id/storyRegisterFragment" />
         <action
             android:id="@+id/action_timeLineFragment_to_storyDetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/storyDetailFragment" />
         <action
             android:id="@+id/action_timeLineFragment_to_userProfileFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
@@ -110,21 +141,37 @@
         android:label="MyPageFragment">
         <action
             android:id="@+id/action_myPageFragment_to_settingFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/settingFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_storyDetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/storyDetailFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_achievementFragment"
             app:destination="@id/achievementFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_followFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/followFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_reportFragment"
             app:destination="@id/reportFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_profileRegistFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/profileRegistFragment" />
     </fragment>
     <fragment
@@ -139,9 +186,15 @@
 
         <action
             android:id="@+id/action_storyRegisterFragment_to_storyDecoFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/storyDecoFragment" />
         <action
             android:id="@+id/action_storyRegisterFragment_to_timeLineFragment"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
             app:popUpToInclusive="true"
             app:popUpTo="@navigation/main_nav_graph"
             app:destination="@id/timeLineFragment" />
@@ -155,9 +208,17 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_storyDetailFragment_to_userProfileFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/userProfileFragment" />
         <action
             android:id="@+id/action_storyDetailFragment_to_myPageFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/myPageFragment" />
     </fragment>
     <fragment
@@ -166,6 +227,10 @@
         android:label="TimerFragment">
         <action
             android:id="@+id/action_timerFragment_to_reportFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/reportFragment" />
     </fragment>
 
@@ -173,9 +238,6 @@
         android:id="@+id/reportFragment"
         android:name="com.d108.sduty.ui.main.timer.ReportFragment"
         android:label="ReportFragment">
-        <action
-            android:id="@+id/action_reportFragment_to_timerFragment"
-            app:destination="@id/timerFragment" />
     </fragment>
     <fragment
         android:id="@+id/myStudyFragment"
@@ -183,15 +245,26 @@
         android:label="StudyFragment">
         <action
             android:id="@+id/action_myStudyFragment_to_studyDetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/studyDetailFragment" />
         <action
             android:id="@+id/action_myStudyFragment_to_camStudyDetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@+id/camStudyDetailFragment" />
         <action
             android:id="@+id/action_myStudyFragment_to_studyRegistFragment"
             app:destination="@id/studyRegistFragment"
             app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_stop" />
+            app:exitAnim="@anim/slide_stop"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit"
+            />
         <action
             android:id="@+id/action_myStudyFragment_to_studyListFragment"
             app:destination="@+id/studyListFragment" />
@@ -199,15 +272,37 @@
     <fragment
         android:id="@+id/studyDetailFragment"
         android:name="com.d108.sduty.ui.main.study.StudyDetailFragment"
+        app:enterAnim="@anim/slide_right_enter"
+        app:exitAnim="@anim/slide_right_exit"
+        app:popEnterAnim="@anim/slide_left_enter"
+        app:popExitAnim="@anim/slide_left_exit"
         android:label="StudyDetailFragment">
 
         <action
             android:id="@+id/action_studyDetailFragment_to_studySettingFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@+id/studySettingFragment" />
 
         <argument
             android:name="studySeq"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_studyDetailFragment_to_userProfileFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_studyDetailFragment_to_myPageFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/myPageFragment" />
 
 
     </fragment>
@@ -218,14 +313,36 @@
 
         <action
             android:id="@+id/action_camStudyDetailFragment_to_previewFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@+id/previewFragment" />
         <action
             android:id="@+id/action_camStudyDetailFragment_to_studySettingFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@+id/studySettingFragment" />
 
         <argument
             android:name="studySeq"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_camStudyDetailFragment_to_userProfileFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_camStudyDetailFragment_to_myPageFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/myPageFragment" />
 
     </fragment>
     <fragment
@@ -235,9 +352,6 @@
         <argument
             android:name="type"
             app:argType="boolean" />
-        <action
-            android:id="@+id/action_studyRegistFragment_to_myStudyFragment"
-            app:destination="@id/myStudyFragment" />
     </fragment>
     <fragment
         android:id="@+id/studyListFragment"
@@ -245,15 +359,16 @@
         android:label="StudyListFragment">
         <action
             android:id="@+id/action_studyListFragment_to_studySearchFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@+id/studySearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/studySettingFragment"
         android:name="com.d108.sduty.ui.main.study.StudySettingFragment"
         android:label="StudySettingFragment">
-        <action
-            android:id="@+id/action_studySettingFragment_to_myStudyFragment"
-            app:destination="@id/myStudyFragment" />
 
         <argument
             android:name="studySeq"
@@ -281,7 +396,7 @@
     <fragment
         android:id="@+id/studySearchFragment"
         android:name="com.d108.sduty.ui.main.study.StudySearchFragment"
-        android:label="StudySearchFragment"></fragment>
+        android:label="StudySearchFragment"/>
     <fragment
         android:id="@+id/storyDecoFragment"
         android:name="com.d108.sduty.ui.main.home.StoryDecoFragment"
@@ -292,6 +407,8 @@
             app:argType="string" />
         <action
             android:id="@+id/action_storyDecoFragment_to_storyRegisterFragment"
+            app:enterAnim="@anim/slide_left_enter"
+            app:exitAnim="@anim/slide_left_exit"
             app:destination="@id/storyRegisterFragment"
             app:popUpTo="@id/main_nav_graph"
             app:popUpToInclusive="true" />
@@ -302,16 +419,33 @@
         android:label="SettingFragment">
         <action
             android:id="@+id/action_settingFragment_to_appLockFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/appLockFragment" />
         <action
-            android:id="@+id/action_settingFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@navigation/main_nav_graph"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_settingFragment_to_questionListFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/questionListFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_noticeFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/noticeFragment" />
     </fragment>
     <fragment
         android:id="@+id/appLockFragment"
         android:name="com.d108.sduty.ui.main.mypage.setting.AppLockFragment"
+        app:enterAnim="@anim/slide_right_enter"
+        app:exitAnim="@anim/slide_right_exit"
+        app:popEnterAnim="@anim/slide_left_enter"
+        app:popExitAnim="@anim/slide_left_exit"
         android:label="AppLockFragment"/>
     <fragment
         android:id="@+id/achievementFragment"
@@ -327,9 +461,17 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_userProfileFragment_to_storyDetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/storyDetailFragment" />
         <action
             android:id="@+id/action_userProfileFragment_to_followFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/followFragment" />
     </fragment>
     <fragment
@@ -344,9 +486,37 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_followFragment_to_myPageFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/myPageFragment" />
         <action
             android:id="@+id/action_followFragment_to_userProfileFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
             app:destination="@id/userProfileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/questionFragment"
+        android:name="com.d108.sduty.ui.main.mypage.setting.QuestionFragment"
+        android:label="QuestionFragment"/>
+    <fragment
+        android:id="@+id/questionListFragment"
+        android:name="com.d108.sduty.ui.main.mypage.setting.QuestionListFragment"
+        android:label="QuestionListFragment" >
+        <action
+            android:id="@+id/action_questionListFragment_to_questionFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/questionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noticeFragment"
+        android:name="com.d108.sduty.ui.main.mypage.setting.NoticeFragment"
+        android:label="NoticeFragment" />
 </navigation>

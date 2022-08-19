@@ -24,6 +24,7 @@ import com.d108.sduty.dto.User;
 import com.d108.sduty.service.KakaoLoginService;
 import com.d108.sduty.service.NaverLoginService;
 import com.d108.sduty.service.UserService;
+import com.d108.sduty.utils.AES256Util;
 import com.d108.sduty.utils.TimeCompare;
 
 import io.swagger.annotations.Api;
@@ -41,6 +42,9 @@ public class UserController {
 	private NaverLoginService nService;
 	@Autowired
 	private WebSecurityConfig security = new WebSecurityConfig();
+	
+	@Autowired
+	private AES256Util aes256Util;
 	
 	@ApiOperation(value = "로그인 > id, pass 확인 > User 리턴", response = User.class)
 	@PostMapping("")
@@ -260,8 +264,10 @@ public class UserController {
 	public ResponseEntity<?> test(@PathVariable String id, @PathVariable String pw) throws Exception {
 		//인증이 안되면 수정이 안되므로 거의 not null 확실		
 		User selected_user = userService.selectUserById(id).get();
+		System.out.println(selected_user);
 		//암호화
-		selected_user.setPass(security.passwordEncoder().encode(pw));		
+		selected_user.setPass(security.passwordEncoder().encode(pw));
+		selected_user.setTel(aes256Util.encrypt(selected_user.getTel()));
 		User result = userService.updatePassword(selected_user);
 		if(result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);

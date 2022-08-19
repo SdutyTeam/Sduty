@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -88,6 +89,8 @@ class DelayDialog : DialogFragment() {
                         "TaskRegistDialog"
                     )
                 }
+
+                Toast.makeText(requireActivity(), "측정을 종료 하였습니다!", Toast.LENGTH_SHORT).show()
 
                 timerViewModel.resetDelayTimer()
                 timerViewModel.stopTimer(mainViewModel.user.value!!.seq)

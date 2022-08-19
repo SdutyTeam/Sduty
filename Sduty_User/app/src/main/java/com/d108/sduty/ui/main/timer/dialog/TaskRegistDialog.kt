@@ -1,10 +1,8 @@
 package com.d108.sduty.ui.main.timer.dialog
 
-import android.app.TimePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.InputType
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -15,7 +13,6 @@ import com.d108.sduty.model.dto.Task
 import com.d108.sduty.ui.main.timer.viewmodel.TimerViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.convertTimeDateToString
-import com.d108.sduty.utils.convertTimeStringToDate
 import com.d108.sduty.utils.getDeviceSize
 import java.util.*
 

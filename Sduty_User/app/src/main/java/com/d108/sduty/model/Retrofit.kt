@@ -29,4 +29,7 @@ object Retrofit {
         retrofit.create(TagApi::class.java)
     }
 
+    val settingApi: SettingApi by lazy {
+        retrofit.create(SettingApi::class.java)
+    }
 }

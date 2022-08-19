@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.d108.sduty_admin.ui.home.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_reportStoryFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/reportStoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_noticeFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/noticeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_qnAFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/qnAFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_pushFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/pushFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.d108.sduty_admin.ui.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportStoryFragment"
+        android:name="com.d108.sduty_admin.ui.home.report.ReportStoryFragment"
+        android:label="ReportStoryFragment" >
+        <action
+            android:id="@+id/action_reportStoryFragment_to_reportStoryDetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/reportStoryDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportStoryDetailFragment"
+        android:name="com.d108.sduty_admin.ui.home.report.ReportStoryDetailFragment"
+        android:label="ReportStoryDetailFragment">
+        <argument
+            android:name="storySeq"
+            app:argType="integer"/>
+    </fragment>
+    <fragment
+        android:id="@+id/qnAFragment"
+        android:name="com.d108.sduty_admin.ui.home.qna.QnAFragment"
+        android:label="QnAFragment" >
+        <action
+            android:id="@+id/action_qnAFragment_to_qnADetailFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/qnADetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/qnADetailFragment"
+        android:name="com.d108.sduty_admin.ui.home.qna.QnADetailFragment"
+        android:label="QnADetailFragment" />
+
+    <fragment
+        android:id="@+id/noticeFragment"
+        android:name="com.d108.sduty_admin.ui.home.notice.NoticeFragment"
+        android:label="NoticeFragment" >
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeCreateFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:destination="@id/noticeCreateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/noticeCreateFragment"
+        android:name="com.d108.sduty_admin.ui.home.notice.NoticeCreateFragment"
+        android:label="NoticeCreateFragment" >
+
+        <argument
+            android:name="type"
+            android:defaultValue=""
+            app:argType="string" />
+
+        <argument
+            android:name="content"
+            android:defaultValue=""
+            app:argType="string" />
+
+        <argument
+            android:name="seq"
+            android:defaultValue= "0"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/pushFragment"
+        android:name="com.d108.sduty_admin.ui.home.push.PushFragment"
+        android:label="PushFragment" />
+</navigation>

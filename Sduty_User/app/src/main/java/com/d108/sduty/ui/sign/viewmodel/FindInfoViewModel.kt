@@ -9,7 +9,6 @@ import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.common.FIND_ID
 import com.d108.sduty.common.FIND_PW
 import com.d108.sduty.model.Retrofit
-import com.d108.sduty.model.dto.AuthInfo
 import com.d108.sduty.model.dto.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

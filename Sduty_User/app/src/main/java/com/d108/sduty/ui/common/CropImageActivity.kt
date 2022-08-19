@@ -10,7 +10,6 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
-import com.d108.sduty.R
 import com.d108.sduty.common.NOT_PROFILE
 import com.d108.sduty.common.PROFILE
 import com.d108.sduty.databinding.ActivityCropImageBinding

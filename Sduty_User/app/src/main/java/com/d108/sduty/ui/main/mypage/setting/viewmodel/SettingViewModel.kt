@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d108.sduty.common.ApplicationClass
 import com.d108.sduty.model.Retrofit
+import com.d108.sduty.model.dto.Notice
+import com.d108.sduty.model.dto.Qna
 import com.d108.sduty.model.dto.User
 import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.sharedpreference.FCMPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 private const val TAG ="SettingViewModel"
 class SettingViewModel: ViewModel() {
@@ -52,10 +52,48 @@ class SettingViewModel: ViewModel() {
         }
     }
 
-    private val _isAutoLoginEnable = MutableLiveData<Boolean>(true)
-    val isAutoLoginEnable: LiveData<Boolean>
-        get() = _isAutoLoginEnable
-    fun setAutoLoginState(){
-        _isAutoLoginEnable.value = !_isAutoLoginEnable.value!!
+
+    fun insertQna(qna: Qna){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.settingApi.insertQna(qna).let {
+                if(it.isSuccessful){
+
+                }else{
+                    Log.d(TAG, "insertQna: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    private val _qnaList = MutableLiveData<MutableList<Qna>>()
+    val qnaList: LiveData<MutableList<Qna>>
+        get() = _qnaList
+    fun getQnaList(userSeq: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            Retrofit.settingApi.getQnaList(userSeq).let {
+                if(it.isSuccessful && it.body() != null){
+                    _qnaList.postValue(it.body())
+                    Log.d(TAG, "getQnaList: ${it.body()}")
+                }else{
+                    Log.d(TAG, "getQnaList: ${it.code()}")
+                }
+            }
+        }
+    }
+
+    private val _noticeList = MutableLiveData<List<Notice>>()
+    val noticeList: LiveData<List<Notice>>
+        get() = _noticeList
+    fun getNoticeList(){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.settingApi.getNoticeList()
+                if(response.isSuccessful && response.body() != null){
+                    _noticeList.postValue(response.body() as List<Notice>)
+                }
+            } catch (e: java.lang.Exception){
+                Log.d(TAG, "getNoticeList: ${e.message}")
+            }
+        }
     }
 }

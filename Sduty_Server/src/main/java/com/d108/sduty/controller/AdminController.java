@@ -1,9 +1,13 @@
 package com.d108.sduty.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,14 +18,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d108.sduty.dto.Admin;
 import com.d108.sduty.dto.DailyQuestion;
 import com.d108.sduty.dto.Notice;
+import com.d108.sduty.dto.PagingResult;
 import com.d108.sduty.dto.Qna;
 import com.d108.sduty.dto.Story;
+import com.d108.sduty.dto.User;
+import com.d108.sduty.repo.UserRepo;
 import com.d108.sduty.service.AdminService;
+import com.d108.sduty.utils.FCMUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -34,6 +43,9 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+
+	@Autowired
+	private UserRepo userRepo;
 
 	@ApiOperation(value = "로그인")
 	@PostMapping("/login")
@@ -89,10 +101,10 @@ public class AdminController {
 	// 신고 관리
 	@ApiOperation(value = "신고된 게시물 목록 조회")
 	@GetMapping("/bad-story")
-	public ResponseEntity<?> getBadStories(){
-		return new ResponseEntity<List<Story>>(adminService.getBadStories(), HttpStatus.OK);
+	public ResponseEntity<?> getBadStories(Pageable pageable) {
+		return new ResponseEntity<PagingResult<Story>>(adminService.getBadStories(pageable), HttpStatus.OK);
 	}
-	
+
 	// 데일리 질문
 	@ApiOperation(value = "데일리질문 등록")
 	@PostMapping("/question")
@@ -137,7 +149,14 @@ public class AdminController {
 	@ApiOperation(value = "1:1문의 목록 조회")
 	@GetMapping("/qna")
 	public ResponseEntity<?> getQnas() {
-		return new ResponseEntity<List<Qna>>(adminService.getQnas(), HttpStatus.OK);
+		List<Qna> list = adminService.getQnas();
+		List<Qna> newList = new ArrayList<Qna>();
+		for (Qna q : list) {
+			if (q.getAnsWriter().isEmpty()) {
+				newList.add(q);
+			}
+		}
+		return new ResponseEntity<List<Qna>>(newList, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "1:1문의 상세 조회")
@@ -169,5 +188,32 @@ public class AdminController {
 			return new ResponseEntity<Qna>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+
+	@PostMapping("/fcm")
+	public ResponseEntity<?> sendFCM(@RequestBody Map<String, String> message) {
+		List<User> userList = userRepo.findAllByUserPublicGreaterThan(1);
+		FCMUtil fcmUtil = new FCMUtil();
+		List<String> tokenList = new ArrayList<String>();
+		for (User user : userList) {
+			tokenList.add(user.getFcmToken());
+		}
+		fcmUtil.send_FCM_All(tokenList, message);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@GetMapping("/fcm/{userSeq}")
+	public ResponseEntity<?> sendFCMOne(@PathVariable int userSeq) {
+		Optional<User> user = userRepo.findBySeq(userSeq);
+
+		FCMUtil fcmUtil = new FCMUtil();
+		if (user.isPresent()) {
+			if (user.get().getUserPublic() > 0) {
+				fcmUtil.send_FCM(user.get().getFcmToken(), "SDUTY", "1:1 문의 답변이 등록되었습니다.");
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+
 	}
 }

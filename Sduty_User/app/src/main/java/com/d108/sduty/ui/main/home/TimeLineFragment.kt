@@ -8,45 +8,50 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.d108.sduty.R
-import com.d108.sduty.adapter.TimeLineAdapter
 import com.d108.sduty.adapter.paging.TimeLinePagingAdapter
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.FragmentTimeLineBinding
-import com.d108.sduty.model.dto.*
+import com.d108.sduty.model.dto.Follow
+import com.d108.sduty.model.dto.Likes
+import com.d108.sduty.model.dto.Scrap
+import com.d108.sduty.model.dto.Timeline
+import com.d108.sduty.ui.common.LoadingDialog
 import com.d108.sduty.ui.main.home.dialog.BlockDialog
 import com.d108.sduty.ui.main.home.dialog.PushInfoDialog
 import com.d108.sduty.ui.main.mypage.setting.viewmodel.SettingViewModel
 import com.d108.sduty.ui.sign.dialog.TagSelectOneFragment
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.ui.viewmodel.StoryViewModel
-import com.d108.sduty.utils.SettingsPreference
-import com.d108.sduty.utils.safeNavigate
+import com.d108.sduty.utils.*
 import com.d108.sduty.utils.sharedpreference.FCMPreference
-import com.d108.sduty.utils.showToast
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
 // 타임라인 - 게시글(스크롤 뷰), 게시글 쓰기, 닉네임(게시글 상세페이지 이동) 더보기(신고, 스크랩, 팔로잉) ,좋아요, 댓글, 필터, 데일리 질문, 추천 팔로우
 private const val TAG ="TimeLineFragment"
-class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
+class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener, SwipeRefreshLayout.OnRefreshListener   {
     private lateinit var binding: FragmentTimeLineBinding
     private val mainViewModel: MainViewModel by activityViewModels()
     private val storyViewModel: StoryViewModel by activityViewModels()
     private val settingViewModel: SettingViewModel by viewModels()
-    private lateinit var timeLineAdapter: TimeLineAdapter
-    private var selectedPosition = 0
-    private var timeLineList = mutableListOf<Timeline>()
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
 
     private lateinit var pageAdapter: TimeLinePagingAdapter
     private lateinit var menuSelectedTimeline: Timeline
+    private var mTagFlag = ALL_TAG
+    private var mTagName = ""
     override fun onResume() {
         super.onResume()
         mainViewModel.displayBottomNav(true)
@@ -64,10 +69,15 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadingDialog.show(parentFragmentManager, null)
         initView()
         initViewModel()
 
+    }
 
+    override fun onRefresh() {
+        getTimelineList()
+        binding.swipeRefresh.isRefreshing = false
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -87,10 +97,14 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         }
         getFirebaseToken()
 
-        pageAdapter = TimeLinePagingAdapter(requireActivity())
+        pageAdapter = TimeLinePagingAdapter(requireActivity(), requireContext())
         pageAdapter.apply {
             onClickTimelineItem = object : TimeLinePagingAdapter.TimeLineClickListener{
-                override fun onFavoriteClicked(timeline: Timeline, position: Int) {
+                override fun onFavoriteClicked(view: View, timeline: Timeline, position: Int) {
+                    YoYo.with(Techniques.Tada)
+                        .duration(180)
+                        .repeat(3)
+                        .playOn(view)
                     storyViewModel.likeStoryInTimeLine(Likes(mainViewModel.user.value!!.seq, timeline.story.seq))
                     changeLikes(position)
                 }
@@ -135,7 +149,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         }
         binding.apply {
             lifecycleOwner = this@TimeLineFragment
-
+            swipeRefresh.setOnRefreshListener(this@TimeLineFragment)
             ivRegisterStory.setOnClickListener {
                 findNavController().safeNavigate(
                     TimeLineFragmentDirections
@@ -146,17 +160,19 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
             recyclerTimeline.apply {
                 adapter = pageAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
+                    override fun onGlobalLayout() {
+                    }
+                })
             }
             ivFilter.setOnClickListener {
                 TagSelectOneFragment(requireContext(), FLAG_TIMELINE).let{
                     it.show(parentFragmentManager, null)
                     it.onDismissDialogListener = object : TagSelectOneFragment.OnDismissDialogListener{
                         override fun onDismiss(tagName: String, flag: Int) {
-                            when(flag){
-                                JOB_TAG -> storyViewModel.getTimelineJobAndAllList(mainViewModel.user.value!!.seq, tagName)
-                                INTEREST_TAG -> storyViewModel.getTimelineInterestAndAllList(mainViewModel.user.value!!.seq, tagName)
-                                ALL_TAG -> storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
-                            }
+                            mTagFlag = flag
+                            mTagName = tagName
+                            getTimelineList()
                         }
                     }
                 }
@@ -168,6 +184,7 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
     private fun initViewModel(){
         storyViewModel.pagingAllTimelineList.observe(viewLifecycleOwner){
             pageAdapter.submitData(this.lifecycle, it)
+            loadingDialog.dismiss()
         }
         storyViewModel.pagingTimelineJobAndAllList.observe(viewLifecycleOwner){
             pageAdapter.submitData(this.lifecycle, it)
@@ -259,4 +276,18 @@ class TimeLineFragment : Fragment(), PopupMenu.OnMenuItemClickListener   {
         notificationManager.createNotificationChannel(channel)
     }
 
+    private fun getTimelineList(){
+        Log.d(TAG, "getTimelineList: ${mTagFlag}  ,  ${mTagName}")
+        when(mTagFlag){
+            JOB_TAG -> {
+                storyViewModel.getTimelineJobAndAllList(mainViewModel.user.value!!.seq, mTagName)
+            }
+            INTEREST_TAG -> {
+                storyViewModel.getTimelineInterestAndAllList(mainViewModel.user.value!!.seq, mTagName)
+            }
+            ALL_TAG -> {
+                storyViewModel.getAllTimelineListValue(mainViewModel.user.value!!.seq)
+            }
+        }
+    }
 }

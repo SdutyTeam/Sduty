@@ -7,12 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.d108.sduty.databinding.DialogPushInfoBinding
-import com.d108.sduty.utils.SettingsPreference
 import com.d108.sduty.utils.getDeviceSize
-import com.d108.sduty.utils.showToast
 
 
 private const val TAG ="PushInfoDialog"

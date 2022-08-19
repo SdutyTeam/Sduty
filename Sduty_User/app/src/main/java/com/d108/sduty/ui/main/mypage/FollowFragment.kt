@@ -1,7 +1,6 @@
 package com.d108.sduty.ui.main.mypage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -127,6 +126,9 @@ class FollowFragment : Fragment() {
             recyclerFollow.apply {
                 adapter = followAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
+            commonTopBack.setOnClickListener {
+                findNavController().popBackStack()
             }
         }
     }

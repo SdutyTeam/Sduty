@@ -6,13 +6,11 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,7 +21,11 @@ import com.d108.sduty.databinding.FragmentAppLockBinding
 import com.d108.sduty.model.AppInfo
 import com.d108.sduty.ui.main.mypage.dialog.AccessibilityDialog
 import com.d108.sduty.ui.viewmodel.MainViewModel
+import com.d108.sduty.utils.navigateBack
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val TAG = "AppLockFragment"
 
@@ -35,7 +37,7 @@ class AppLockFragment : Fragment() {
     private lateinit var packageManager: PackageManager
     private lateinit var packages: List<PackageInfo>
 
-    private lateinit var userAppList: List<AppInfo>
+    private var userAppList = listOf<AppInfo>()
     private lateinit var allAppList: List<AppInfo>
 
     private lateinit var appListAdapter: AppListAdapter
@@ -57,21 +59,25 @@ class AppLockFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         checkAccessibilityPermission()
-
         initView()
     }
 
     private fun initView() {
         binding.apply {
+            animationView.speed = 2f
+            animationView.playAnimation()
+            ivBack.setOnClickListener {
+                navigateBack(requireActivity())
+            }
             // 탭 레이아웃 선택 이벤트
             tabAppList.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab!!.position) {
                         0 -> {
-                            updateAdapter(userAppList)
+                            appListAdapter.list = userAppList
                         }
                         1 -> {
-                            updateAdapter(allAppList)
+                            appListAdapter.list = allAppList
                         }
                     }
                 }
@@ -80,24 +86,27 @@ class AppLockFragment : Fragment() {
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     when (tab!!.position) {
                         0 -> {
-                            updateAdapter(userAppList)
+                            appListAdapter.list = userAppList
                         }
                         1 -> {
-                            updateAdapter(allAppList)
+                            appListAdapter.list = allAppList
                         }
                     }
                 }
             })
         }
 
-        // 설치된 앱 목록을 받아온다.
-        packageManager = requireActivity().packageManager
-        packages = packageManager.getInstalledPackages(0)
+
 
         // 앱 목록에서 전체 앱, 사용자 앱을 구분하여 리스트를 만든다.
-        getAppList()
-        getUserAppList()
-
+        CoroutineScope(Dispatchers.IO).launch {
+            // 설치된 앱 목록을 받아온다.
+            packageManager = requireActivity().packageManager
+            packages = packageManager.getInstalledPackages(0)
+            getAppList()
+            getUserAppList()
+            updateAdapter(userAppList)
+        }
         // 초기화면은 사용자 앱 목록을 보여준다.
         updateAdapter(userAppList)
     }
@@ -126,11 +135,19 @@ class AppLockFragment : Fragment() {
 
             AppInfo(icon, label, packageName, isBanned)
         }.sortedBy { it.label }
+        CoroutineScope(Dispatchers.Main).launch {
+            appListAdapter.list = userAppList
+            binding.apply {
+                animationView.pauseAnimation()
+                animationView.visibility = View.GONE
+            }
+        }
+
     }
 
     // 리사이클러뷰 갱신
     private fun updateAdapter(appList: List<AppInfo>) {
-        appListAdapter = AppListAdapter(requireActivity(), appList)
+        appListAdapter = AppListAdapter(requireActivity())
         appListAdapter.onClickAppInfoItem = object : AppListAdapter.OnClickAppInfoItem {
             override fun onClick(view: View, fragmentActivity: FragmentActivity, position: Int) {
                 checkAccessibilityPermission()
@@ -164,7 +181,6 @@ class AppLockFragment : Fragment() {
         val result = list.find {
             it.resolveInfo.serviceInfo.packageName == requireActivity().packageName
         }
-
         if (result == null) {
             AccessibilityDialog().show(
                 this.requireActivity().supportFragmentManager,

@@ -2,7 +2,6 @@ package com.d108.sduty.ui.main.study
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.d108.sduty.R
 import com.d108.sduty.adapter.StudyMemberAdapter
 import com.d108.sduty.databinding.FragmentStudyDetailBinding
@@ -23,12 +23,11 @@ import com.d108.sduty.ui.main.study.viewmodel.StudyDetailViewModel
 import com.d108.sduty.ui.viewmodel.MainViewModel
 import com.d108.sduty.utils.safeNavigate
 import com.d108.sduty.utils.showToast
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 // 스터디 상세 -
 private const val TAG = "StudyDetailFragment"
-class StudyDetailFragment : Fragment() {
+class StudyDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mainActivity: MainActivity
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentStudyDetailBinding
@@ -49,6 +48,11 @@ class StudyDetailFragment : Fragment() {
         super.onAttach(context)
         mainViewModel.displayBottomNav(false)
         mainActivity = context as MainActivity
+    }
+
+    override fun onRefresh() {
+        studyDetailViewModel.getMyStudyInfo(mainViewModel.profile.value!!.userSeq, args.studySeq)
+        binding.swipeRefresh.isRefreshing = false
     }
 
     override fun onCreateView(
@@ -115,8 +119,8 @@ class StudyDetailFragment : Fragment() {
                     dialog.showDialog()
                 }
 
+                binding.swipeRefresh.setOnRefreshListener(this)
 
-                
 
                 studyDetailViewModel.masterNickname((studyInfo["study"] as Map<String, Any>)["masterSeq"].toString().toDouble().roundToInt())
                 studyDetailViewModel.studyMasterNickName.observe(viewLifecycleOwner) {
@@ -160,6 +164,16 @@ class StudyDetailFragment : Fragment() {
 
     private fun initAdapter(){
         studyMemberAdapter = memberList?.let { StudyMemberAdapter(it) }!!
+        studyMemberAdapter.onClickMemberListener = object : StudyMemberAdapter.OnClickMemberListener {
+            override fun onClick(member: Member) {
+                if(member.userSeq == mainViewModel.user.value!!.seq) {
+                    findNavController().safeNavigate(StudyDetailFragmentDirections.actionStudyDetailFragmentToMyPageFragment())
+                }else{
+                    findNavController().safeNavigate(StudyDetailFragmentDirections.actionStudyDetailFragmentToUserProfileFragment(member.userSeq!!))
+                }
+            }
+
+        }
         binding.studyMember.apply {
             layoutManager = GridLayoutManager(context, 4)
             adapter = studyMemberAdapter

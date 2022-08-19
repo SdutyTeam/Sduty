@@ -1,11 +1,9 @@
 package com.d108.sduty.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ListItemCamstudyMemberBinding
-import com.d108.sduty.databinding.ListItemStudyMemberBinding
 import com.d108.sduty.model.dto.Member
 
 
@@ -13,6 +11,9 @@ class CamStudyMemberAdapter(var list: List<Member>): RecyclerView.Adapter<CamStu
     inner class ViewHolder(val binding: ListItemCamstudyMemberBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Member){
             binding.studyMember = item
+            binding.constCamstudyMember.setOnClickListener {
+                onClickMemberListener.onClick(item)
+            }
         }
     }
 
@@ -29,5 +30,9 @@ class CamStudyMemberAdapter(var list: List<Member>): RecyclerView.Adapter<CamStu
 
     override fun getItemCount(): Int = list.size
 
+    lateinit var onClickMemberListener: OnClickMemberListener
+    interface OnClickMemberListener{
+        fun onClick(member: Member)
+    }
 
 }

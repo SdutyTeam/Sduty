@@ -2,7 +2,6 @@ package com.d108.sduty.ui.common
 
 import android.Manifest
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -165,7 +163,7 @@ open class CropActivity : AppCompatActivity(),
      * and customised with the app layout if need.
      */
     open fun showImageSourceDialog() {
-        CropSelectDialog().let{
+        CropSelectDialog(this).let{
             it.onClickListener = object : CropSelectDialog.OnClickListener{
                 override fun onClick(flag: Int) {
                     when(flag){
@@ -176,17 +174,6 @@ open class CropActivity : AppCompatActivity(),
             }
             it.show(supportFragmentManager, null)
         }
-//
-//        AlertDialog.Builder(this)
-//            .setCancelable(false)
-//            .setTitle(com.canhub.cropper.R.string.pick_image_chooser_title)
-//            .setItems(
-//                arrayOf(
-//                    getString(com.canhub.cropper.R.string.pick_image_camera),
-//                    getString(com.canhub.cropper.R.string.pick_image_gallery),
-//                )
-//            ) { _, position -> openSource(if (position == 0) Source.CAMERA else Source.GALLERY) }
-//            .show()
     }
 
     public override fun onStart() {

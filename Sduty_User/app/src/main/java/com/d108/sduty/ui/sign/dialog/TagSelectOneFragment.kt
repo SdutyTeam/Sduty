@@ -10,13 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d108.sduty.adapter.TagAdapter
 import com.d108.sduty.common.*
 import com.d108.sduty.databinding.DialogTagSelectOneBinding
-import com.d108.sduty.ui.main.timer.adapter.TaskListAdapter
 import com.d108.sduty.ui.sign.viewmodel.TagViewModel
 
 private const val TAG = "TagSelectOneFragment"

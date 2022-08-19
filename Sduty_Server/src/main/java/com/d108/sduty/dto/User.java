@@ -99,10 +99,6 @@ public class User {
 	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@OneToMany(mappedBy = "masterSeq", fetch = FetchType.EAGER)
 	private Set<Study> masterStudies = new HashSet<Study>();
-	
-	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
-	@OneToMany(mappedBy = "writerSeq", fetch = FetchType.EAGER)
-	private Set<Qna> qnas = new HashSet<Qna>();
 
 	@JsonProperty(access=JsonProperty.Access.READ_ONLY)
 	@ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER)

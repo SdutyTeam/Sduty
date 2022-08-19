@@ -1,19 +1,22 @@
 package com.d108.sduty.ui.common
 
+import android.app.Activity
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.DialogFragment
 import com.d108.sduty.R
 import com.d108.sduty.common.FLAG_CAMERA
 import com.d108.sduty.common.FLAG_GALLERY
+import com.d108.sduty.common.FLAG_NO_SELECT
 import com.d108.sduty.databinding.DialogCropSelectBinding
 
 private const val TAG ="CropSelectDialog"
-class CropSelectDialog : DialogFragment() {
+class CropSelectDialog(val activity: Activity) : DialogFragment() {
     private lateinit var binding: DialogCropSelectBinding
+    private var flag = FLAG_NO_SELECT
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,13 +33,22 @@ class CropSelectDialog : DialogFragment() {
 
         binding.apply {
             cardCamera.setOnClickListener {
+                flag = FLAG_CAMERA
                 onClickListener.onClick(FLAG_CAMERA)
                 dismiss()
             }
             cardGallery.setOnClickListener {
+                flag = FLAG_GALLERY
                 onClickListener.onClick(FLAG_GALLERY)
                 dismiss()
             }
+        }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if(flag == FLAG_NO_SELECT){
+            activity.finish()
         }
     }
 
@@ -48,14 +60,10 @@ class CropSelectDialog : DialogFragment() {
     private fun showDialog() {
         dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // TRANSPARENT?
-
         dialog?.window?.attributes?.windowAnimations = R.style.RegisterDialogAnimation
         dialog?.window?.setGravity(Gravity.BOTTOM)
-
         dialog?.setCanceledOnTouchOutside(true)
         dialog?.setCancelable(true)
-        dialog?.setCancelable(false)
         dialog?.show()
-
     }
 }

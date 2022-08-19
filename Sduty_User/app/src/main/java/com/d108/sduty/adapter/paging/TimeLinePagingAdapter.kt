@@ -1,6 +1,7 @@
 package com.d108.sduty.adapter.paging
 
 import android.app.Activity
+import android.content.Context
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.d108.sduty.databinding.ItemTimelineBinding
 import com.d108.sduty.model.dto.Timeline
+import com.d108.sduty.utils.convertDpToPx
 
 private const val TAG ="TimeLinePagingAdapter"
-class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline, TimeLinePagingAdapter.ViewHolder>(
+class TimeLinePagingAdapter(val activity: Activity, val mContext: Context): PagingDataAdapter<Timeline, TimeLinePagingAdapter.ViewHolder>(
     IMAGE_COMPARATOR
 ) {
     inner class ViewHolder(val binding: ItemTimelineBinding): RecyclerView.ViewHolder(binding.root){
@@ -20,7 +22,7 @@ class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline,
             binding.apply {
                 data = timeline
                 ivFavorite.setOnClickListener {
-                    onClickTimelineItem.onFavoriteClicked(timeline, bindingAdapterPosition)
+                    onClickTimelineItem.onFavoriteClicked(it, timeline, bindingAdapterPosition)
                 }
                 ivMenu.setOnClickListener {
                     onClickTimelineItem.onMenuClicked(it, timeline)
@@ -70,7 +72,7 @@ class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline,
         }
         val displaymetrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(displaymetrics)
-        val deviceWidth = displaymetrics.widthPixels
+        val deviceWidth = displaymetrics.widthPixels - convertDpToPx(mContext, 30f)
         val deviceHeight = deviceWidth / 3 * 4
         holder.binding.apply {
             ivTimelineContent.layoutParams.width = deviceWidth
@@ -79,7 +81,7 @@ class TimeLinePagingAdapter(val activity: Activity): PagingDataAdapter<Timeline,
     }
 
     interface TimeLineClickListener{
-        fun onFavoriteClicked(timeline: Timeline, position: Int)
+        fun onFavoriteClicked(view: View, timeline: Timeline, position: Int)
         fun onScrapClicked(timeline: Timeline, position: Int)
         fun onReplyClicked(timeline: Timeline)
         fun onMenuClicked(view: View, timeline: Timeline)

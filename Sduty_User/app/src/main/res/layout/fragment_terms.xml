@@ -192,7 +192,8 @@
                 android:layout_height="56dp"
                 android:text="동의 후 본인 인증"
                 android:textSize="16dp"
-                android:backgroundTint="@color/background_200"
+                android:backgroundTint="@color/app_purple_light"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

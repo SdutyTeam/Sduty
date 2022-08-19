@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="app_blue_light">#C6D4FF</color>
+    <color name="app_purple">#A346C8</color>
+    <color name="app_purple_light">#9585EB</color>
+    <color name="app_blue">#5A83FF</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
@@ -80,4 +84,15 @@
     <color name="navy_50">#f6f8fc</color>
     <color name="navy_10">#fafbfd</color>
     <color name="white">#ffffff</color>
+
+    <!-- sduty color -->
+    <color name="sduty_light_blue">#c6d4ff</color>
+    <color name="sduty_main_blue">#7b9cff</color>
+    <color name="sduty_light_purple">#d8abeb</color>
+    <color name="sduty_main_purple">#b56bd3</color>
+    <color name="sduty_mix_violet">#9585eb</color>
+    <color name="sduty_action_red">#EB8585</color>
+    <color name="sduty_action_off">#979797</color>
+
 </resources>
+

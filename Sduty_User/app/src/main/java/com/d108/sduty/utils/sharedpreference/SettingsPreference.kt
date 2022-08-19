@@ -1,7 +1,6 @@
 package com.d108.sduty.utils
 
 import com.d108.sduty.common.ApplicationClass
-import com.google.gson.Gson
 
 class SettingsPreference {
     companion object

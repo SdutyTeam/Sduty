@@ -1,10 +1,7 @@
 package com.d108.sduty_admin.model.api
 
-import com.d108.sduty_admin.R
-import com.d108.sduty_admin.model.dto.Admin
-import com.d108.sduty_admin.model.dto.DailyQuestion
-import com.d108.sduty_admin.model.dto.Notice
-import com.d108.sduty_admin.model.dto.Qna
+import com.d108.sduty_admin.model.dto.*
+import com.d108.sduty_admin.model.paging.PagingResult
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -38,15 +35,38 @@ interface AdminApi {
 
     // 1:1문의 게시판?? 파이어베이스??
     @GET("/admin/qna")
-    suspend fun getQna(): Response<List<Qna>>
+    suspend fun getQna(): Response<MutableList<Qna>>
 
     @GET("/admin/qna/{qna_seq}")
     suspend fun getQnaDeatil(@Path("qna_seq")seq: Int): Response<Qna>
 
     @POST("/admin/qna")
-    suspend fun insertQna(@Body qna: Qna): Response<Qna>
+    suspend fun updateQna(@Body qna: Qna): Response<Qna>
 
     @DELETE("/admin/qna/{qna_seq}")
     suspend fun deleteQna(@Path("qna_seq")seq: Int): Response<Void>
 
+    @GET("/admin/bad-story")
+    suspend fun getReportStory(@Query("page") page: Int, @Query("size") pageSize: Int): Response<PagingResult<Story>>
+
+    @GET("/story/{storySeq}/{userSeq}")
+    suspend fun getTimelineDetail(@Path("storySeq") storySeq: Int, @Path("userSeq")userSeq: Int): Response<Timeline>
+
+    @GET("/tag/job")
+    suspend fun getJobList(): Response<List<JobHashtag>>
+
+    @DELETE("/story/{story_seq}")
+    suspend fun deleteStory(@Path("story_seq")storySeq: Int): Response<Void>
+
+    @DELETE("/story/reply/{reply_seq}")
+    suspend fun deleteReply(@Path("reply_seq")replySeq: Int): Response<MutableList<Reply>>
+
+    @GET("/setting/notice")
+    suspend fun getNoticeList(): Response<List<Notice>>
+
+    @POST("/admin/fcm")
+    suspend fun sendFCM(@Body message: Map<String, String>): Response<Void>
+
+    @GET("/admin/fcm/{userSeq}")
+    suspend fun sendFCMOne(@Path("userSeq") userSeq: Int): Response<Void>
 }
