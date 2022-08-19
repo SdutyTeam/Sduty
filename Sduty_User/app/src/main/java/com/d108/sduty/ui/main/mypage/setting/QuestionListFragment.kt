@@ -70,4 +70,7 @@ class QuestionListFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
 }
