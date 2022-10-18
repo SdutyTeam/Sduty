@@ -17,7 +17,7 @@ import com.d108.sduty.repo.ImageRepo;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-	private final String FILE_URL = "/home/ubuntu/S07P12D108/Sduty_Server/src/main/resources/image/";
+	private final String FILE_URL = "/home/sduty_files/";
 //	private final String FILE_URL = "C:\\SSAFY\\Sduty\\Sduty_Server\\src\\main\\resources\\image\\";
 	
 	@Autowired
