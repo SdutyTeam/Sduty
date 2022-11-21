@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.d108.sduty.R
 import com.d108.sduty.common.ApplicationClass
+import com.d108.sduty.common.IMAGE_URL
 import com.d108.sduty.common.SERVER_URL
 import com.d108.sduty.model.dto.InterestHashtag
 import com.d108.sduty.model.dto.Profile
@@ -20,7 +21,7 @@ private const val TAG ="BindingAdapter"
 @BindingAdapter("loadImage")
 fun loadImage(view: ImageView, src: String?){
     Glide.with(view.context)
-        .load(Uri.parse("${SERVER_URL}/image/${src}"))
+        .load(Uri.parse("${IMAGE_URL}${src}"))
         .error(R.drawable.empty_image)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(view)

@@ -2,6 +2,7 @@ package com.d108.sduty.common
 
 const val SERVER_URL = "https://d108.kro.kr:8090" // AWS
 //const val SERVER_URL = "http://gumid108.kro.kr:8090" // TEST
+const val IMAGE_URL = "https://jeongbj.s3.ap-northeast-2.amazonaws.com/sduty/image/"
 
 const val SOLAPI_API_KEY = "NCSOR6GTURVMA4XT"
 const val SOLAPI_API_SECRET_KEY = "BENC5C7DNBGXLVJLZLLTN5WB5FSJCDOL"

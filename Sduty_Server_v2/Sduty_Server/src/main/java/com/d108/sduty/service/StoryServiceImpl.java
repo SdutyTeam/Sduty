@@ -1,27 +1,15 @@
 package com.d108.sduty.service;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.d108.sduty.dto.*;
+import com.d108.sduty.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.d108.sduty.dto.Dislike;
-import com.d108.sduty.dto.PagingResult;
-import com.d108.sduty.dto.Reply;
-import com.d108.sduty.dto.Story;
-import com.d108.sduty.dto.StoryInterest;
-import com.d108.sduty.dto.Timeline;
-import com.d108.sduty.repo.DislikeRepo;
-import com.d108.sduty.repo.ProfileRepo;
-import com.d108.sduty.repo.ReplyRepo;
-import com.d108.sduty.repo.StoryInterestHashtagRepo;
-import com.d108.sduty.repo.StoryRepo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StoryServiceImpl implements StoryService {

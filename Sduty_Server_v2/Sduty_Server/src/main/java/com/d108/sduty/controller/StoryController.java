@@ -174,7 +174,7 @@ public class StoryController {
 		//Story Image Uploaded
 		String fileName = imageFile.getOriginalFilename();
 		story.setImageSource(fileName);
-		imageService.fileUpload(imageFile);
+//		imageService.fileUpload(imageFile);
 		//imageService.insertImage(new Image("0", fileName, FILE_STORY_URL)); 필요 없는 것 같아요.
 		
 		//MultipartFile mpfImage = 
