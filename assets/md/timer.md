@@ -3,7 +3,7 @@
 공부한 시간을 측정하고 나만의 리포트를 만들 수 있어요
 
 <div align="center">
-    <img src="../gif/타이머&리포트.gif"/>
+    <img src="../gif/timer.gif"/>
 </div>
 
 1. 공부한 시간을 측정하고 기록

@@ -3,7 +3,7 @@
 공부한 기록을 다른 사람들과 공유할 수 있어요.
 
 <div align="center">
-    <img src="../gif/타임라인.gif"/>
+    <img src="../gif/timeline.gif"/>
 </div>
 
 1. 꾸준한 공부 기록 공유와 관리

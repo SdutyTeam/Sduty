@@ -3,7 +3,7 @@
 사람들과 함께 공부해요.
 
 <div align="center">
-    <img src="../gif/스터디.gif"/>
+    <img src="../gif/study.gif"/>
 </div>
 
 1. 자신의 목표와 일치하는 스터디 검색
