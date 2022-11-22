@@ -12,7 +12,7 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
 ## 🎇 기획 배경
 
 <p align="center">
-    <img src = "./assets/png/기획_배경.png">
+    <img src = "./assets/png/background.png">
 </p>
 
 공부할 때 딴짓 하게 되시는 분들,
@@ -30,7 +30,7 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
 ## 🖥️ 시스템 아키텍처
 
 <p align="center">
-    <img src = "./assets/png/시스템_아키텍처.png">
+    <img src = "./assets/png/architecture.png">
 </p>
 
 저희 서비스의 아키텍처입니다. 깃랩에서 `Push Event`가 발생하면 Webhook에 의해 젠킨스로 소스 파일이 전송됩니다. 해당 소스 파일을 이용해 `[build - test - deploy]`로 이루어지는 CI/CD 환경을 구축하였습니다.
@@ -40,7 +40,7 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
 ## 📱 기술 스택
 
 <p align="center">
-    <img src = "./assets/png/기술_스택.png">
+    <img src = "./assets/png/tech_stack.png">
 </p>
 
 <br>
@@ -49,11 +49,11 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
 
 저희 서비스의 기능은 크게 타임라인, 타이머&리포트, 스터디 기능으로 나뉩니다. 
 
-❤️ [타임라인](./assets/md/타임라인.md)
+❤️ [타임라인](./assets/md/timeline.md)
 
-🧡 [타이머&리포트](./assets/md/타이머&리포트.md)
+🧡 [타이머&리포트](./assets/md/timer.md)
 
-💛 [스터디](./assets/md/스터디.md)
+💛 [스터디](./assets/md/study.md)
 
 <br>
 
