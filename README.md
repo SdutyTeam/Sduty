@@ -1,7 +1,7 @@
 # 💬 Sduty
 
 <p align="center">
-    <img src = "./assets/png/메인_배너.png">
+    <img src = "./assets/png/main_banner.png">
 </p>
 
 타임라인 공부 인증 스터디 앱, `Sduty`입니다.
