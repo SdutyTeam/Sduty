@@ -8,35 +8,35 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface ProfileApi {
-    @GET("/profile/check/{nickname}")
+    @GET("profile/check/{nickname}")
     suspend fun getUsedId(@Path("nickname") nickname: String): Response<Void>
 
     @Multipart
-    @POST("/profile")
+    @POST("profile")
     suspend fun insertProfile(@Part imageFile: MultipartBody.Part, @Part("profile") profile: RequestBody) : Response<Profile>
 
-    @GET("/profile/{userSeq}")
+    @GET("profile/{userSeq}")
     suspend fun getProfileValue(@Path("userSeq")userSeq: Int): Response<Profile>
 
-    @POST("/profile/follow")
+    @POST("profile/follow")
     suspend fun doFollow(@Body follow: Follow): Response<Void>
 
-    @GET("/profile/follower/{userSeq}")
+    @GET("profile/follower/{userSeq}")
     suspend fun getFollower(@Path("userSeq") userSeq: Int): Response<MutableList<Follow>>
 
-    @GET("/profile/followee/{userSeq}")
+    @GET("profile/followee/{userSeq}")
     suspend fun getFollowee(@Path("userSeq") userSeq: Int): Response<MutableList<Follow>>
 
-    @GET("/profile/chart/{userSeq}")
+    @GET("profile/chart/{userSeq}")
     suspend fun getGrass(@Path("userSeq") userSeq: Int): Response<List<Boolean>>
 
-    @PUT("/profile")
+    @PUT("profile")
     suspend fun updateProfile(@Body profile: Profile): Response<Profile>
 
     @Multipart
-    @PUT("/profile/image")
+    @PUT("profile/image")
     suspend fun updateProfileImage(@Part imageFile: MultipartBody.Part, @Part("profile") profile: RequestBody): Response<Profile>
 
-    @PUT("/profile/timer/{userSeq}/{flag}")
+    @PUT("profile/timer/{userSeq}/{flag}")
     suspend fun updateIsStudying(@Path("userSeq") userSeq: Int, @Path("flag") flag: Int): Response<Void>
 }

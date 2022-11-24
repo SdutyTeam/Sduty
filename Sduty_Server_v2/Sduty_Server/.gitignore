@@ -40,3 +40,4 @@ bin/
 gen/
 /.metadata/
 Servers/
+.gradle
