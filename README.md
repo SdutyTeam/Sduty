@@ -49,11 +49,39 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
 
 저희 서비스의 기능은 크게 타임라인, 타이머&리포트, 스터디 기능으로 나뉩니다. 
 
-❤️ [타임라인](./assets/md/timeline.md)
+❤️ 타임라인
 
-🧡 [타이머&리포트](./assets/md/timer.md)
+- [타임라인](./assets/md/timeline.md)
 
-💛 [스터디](./assets/md/study.md)
+- [스토리 등록](./assets/md/add_story.md)
+
+- [스크랩](./assets/md/scrap.md)
+
+- [좋아요, 댓글](./assets/md/like_reply.md)
+
+- [타임라인 필터링](./assets/md/timeline_filtering.md)
+
+- [마이페이지](./assets/md/my_page.md)
+
+⏱ 타이머 & 리포트
+
+- [타이머](./assets/md/timer.md)
+
+- [리포트](./assets/md/report.md)
+
+👨‍👩‍👧‍👦 스터디
+
+- [일반 스터디](./assets/md/study.md)
+
+- [캠 스터디](./assets/md/cam_study.md)
+
+✨ 부가 기능
+
+- [앱 잠금](./assets/md/app_lock.md)
+
+- [공지사항, 문의](./assets/md/notice_help.md)
+
+[회원 관리]
 
 <br>
 
