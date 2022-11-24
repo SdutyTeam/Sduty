@@ -81,8 +81,6 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
 
 - [공지사항, 문의](./assets/md/notice_help.md)
 
-[회원 관리]
-
 <br>
 
 ## 🔖 프로젝트 빌드 방법
