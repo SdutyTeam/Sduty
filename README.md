@@ -89,7 +89,7 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
 
 <div align="center">
     <span style="display:inline-block">
-        <a href="./exec/포팅메뉴얼.docx">
+        <a href="./exec/공통_구미1반_D108_포팅메뉴얼.pdf">
             <img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
         </a>
     </span>
