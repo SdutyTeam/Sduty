@@ -7,7 +7,10 @@
 타임라인 공부 인증 스터디 앱, `Sduty`입니다.
 
 Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무적으로 공부하자라는 의미를 담았습니다.
-<br>
+<br><br><br>
+## 🛹 PlayStore
+https://play.google.com/store/apps/details?id=com.d108.sduty
+<br><br>
 
 ## 🎇 기획 배경
 
@@ -106,3 +109,30 @@ Study의 t와 d의 위치를 바꾼 애너그램으로 `Study` + `duty` 의무�
         <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
     </a>
 </div>
+
+
+---
+<br>
+## :angel: 팀원 소개
+<table>
+    <tr>
+        <td height="140px" align="center"> <a href="https://github.com/taxfdi6371">
+            <img src="https://avatars.githubusercontent.com/u/53108175?v=4" width="140px" /> <br><br> 권용준 <br></a> Android <br><br></td>
+        <td height="140px" align="center"> <a href="https://github.com/nhee-dev">
+            <img src="https://avatars.githubusercontent.com/u/49919262?v=4" width="140px" /> <br><br> 김남희 <br></a> Android <br><br></td>
+        <td height="140px" align="center"> <a href="https://github.com/YunsHub">
+            <img src="https://avatars.githubusercontent.com/u/115425807?v=4" width="140px" /> <br><br> 김정윤 <br></a> Android <br><br></td>
+        <td height="140px" align="center"> <a href="https://github.com/JeongBJ">
+            <img src="https://avatars.githubusercontent.com/u/85900947?v=4" width="140px" /> <br><br> 정봉진 <br></a> Android <br>Backend<br></td>
+            <td height="140px" align="center"> <a href="https://github.com/pmi4202">
+            <img src="https://avatars.githubusercontent.com/u/49026286?v=4" width="140px" /> <br><br> 편예린 <br></a> Backend <br><br></td>
+    </tr>
+    <tr>
+        <td align="center"> 팀장<br> 회원 관리<br> 타이머, 리포트 <br> 다른 앱 잠금
+        <td align="center"> 회원 관리<br>  UI / UX <br> 스토리
+        <td align="center"> 회원 관리<br> 스터디 <br> 캠 스터디
+        <td align="center"> 회원 관리 <br> 타임 라인 <br> API 설계 <br> 서버 배포
+        <td align="center"> DB, API 설계 <br> Security
+    </tr>
+</table>
+
