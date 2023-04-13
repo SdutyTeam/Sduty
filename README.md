@@ -92,7 +92,7 @@ https://play.google.com/store/apps/details?id=com.d108.sduty
 
 <div align="center">
     <span style="display:inline-block">
-        <a href="./exec/공통_구미1반_D108_포팅메뉴얼.pdf">
+        <a href="./exec/SDUTY_빌드_메뉴얼.pdf">
             <img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
         </a>
     </span>
